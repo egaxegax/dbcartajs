@@ -1,0 +1,325 @@
+<html>
+<head>
+    <title>Scale example</title>
+  <script type="text/javascript">
+      function dbCarta(pid) {
+          if (!(parent = document.getElementById(pid))) 
+              parent = document.body;
+          parent.innerHTML = "<canvas id='dbcarta'>This browser or document mode doesn't support canvas</canvas>";
+          this.dw = dw = document.getElementById('dbcarta');
+          // private
+          dw.createMeridians = function () {
+              var lonlat = [];
+              var x = -180,
+                  scale_x = 180;
+              while (x <= scale_x) {
+                  var lon = [];
+                  var y = -90;
+                  while (y <= 90) {
+                      lon.push([x, y]);
+                      y += 90;
+                  }
+                  lonlat.push( ['.Longtitude', [x, y].toString(), lon, x.toString(), lon[0]] );
+                  x += 30;
+              }
+              var y = -90;
+              while (y <= 90) {
+                  var centerof = [-180, y];
+                  var prev = centerof;
+                  var x = -180;
+                  while (x < scale_x) {
+                      x += 90;
+                      var lat = [prev, [x, y]],
+                          prev = [x, y];
+                      lonlat.push( ['.Latitude', [x, y].toString(), lat, y.toString(), centerof] );
+                      centerof = "";
+                  }
+                  y += 30;
+              }
+              this.loadCarta(lonlat);
+          }
+          // public
+          dw.labelPoint = function() {
+              if (this.getContext) {
+                  var ctx = this.getContext("2d");
+                  ctx.clearRect(-this.width, -this.height, this.width*20, this.height*20);
+                  ctx.beginPath();
+                  ctx.lineWidth = 3/this.m.scale;
+                  ctx.strokeStyle = "blue";
+                  ctx.rect(0, 0, 300, 250);
+                  ctx.stroke();
+                  ctx.beginPath();
+                  ctx.lineWidth = 5/this.m.scale;
+                  ctx.strokeStyle = "red";
+                  ctx.rect(150, 200, 300, 150);
+                  ctx.stroke();
+                  ctx.beginPath();
+                  ctx.lineJoin = "round";
+                  ctx.lineWidth = 10/this.m.scale;
+                  ctx.strokeStyle = "green";
+                  ctx.lineTo(250, 50);
+                  //ctx.lineTo(250+150, 50+250);
+                  ctx.rect(250, 50, 150, 250);
+                  ctx.stroke();
+                  ctx.beginPath();
+                  ctx.lineJoin = "round";
+                  ctx.lineWidth = 10/this.m.scale;
+                  ctx.strokeStyle = "magenta";
+                  ctx.rect(500, 200, 500, 300);
+                  ctx.stroke();
+                  var centerof = this.centerOf();
+                  var cleft = this.offsetLeft,
+                      ctop = this.offsetTop,
+                      wx = window.scrollX,
+                      wy = window.scrollY;
+                  ctx.beginPath();
+                  ctx.lineWidth = 5/this.m.scale;
+                  ctx.strokeStyle = "black";
+                  ctx.rect(centerof[0]+wx/this.m.scale-this.m.offset_x, centerof[1]+wy/this.m.scale-this.m.offset_y, 0, 0);
+                  ctx.stroke();
+                  ctx.lineWidth = .5/this.m.scale;
+                  ctx.strokeText("Привет Мир", 3+centerof[0]+wx, centerof[1]+wy);
+                  //this.paintCarta([[0,0],[30,90]]);
+                  this.loadCarta([['Line', 'm1', [[-60,15],[60,15],[60,-10],[-60,-10]]]]);
+                  this.createMeridians();
+                  // viewport
+                  var rect = this.viewsizeOf();
+                  var left = rect[0], top = rect[1],
+                      right = rect[2], bottom = rect[3];
+                  for (var i in this.mflood) {
+                      var m = this.mflood[i];
+                      if (!m['centerof'] || !m['label'])
+                          continue;
+                      if (m['ftype'] == '.Longtitude') {
+                          if (m['centerof'][0] >= left && m['centerof'][0] <= right)
+                              this.paintCarta([[m['centerof'][0], top]], m['ftype'], m['label']);
+                      } else if (m['ftype'] == '.Latitude') {
+                          if (m['centerof'][1] >= bottom && m['centerof'][1] <= top)
+                              this.paintCarta([[left, m['centerof'][1]]], m['ftype'], m['label']);
+                      }
+                  }
+              }
+          }
+          dw.changeProject = function() {
+              this.m.scaleX = this.m.halfX * 2.0;
+              this.m.scaleY = this.m.halfX;
+              this.m.halfY = this.m.scaleY / 2.0;
+          }
+          dw.centerPoint = function(cx, cy) {
+              if (this.getContext) {
+                  var ctx = this.getContext("2d");
+                  ctx.translate(cx, cy);
+              }
+          }
+          dw.loadCarta = function(data) {
+              for (var i in data) {
+                  var d = data[i],
+                      ftype = d[0],
+                      tag = d[1];
+                  var coords = d[2],
+                      label = 3 in d ? d[3] : '',
+                      centerof = 4 in d ? d[4] : '';
+                  var ftag = ftype + '_' + tag;
+                  var mflood = {};
+                  this.mflood[ftag] = {
+                      'ftype': ftype,
+                      'coords': coords,
+                      'label': label,
+                      'centerof': centerof
+                  };
+                  this.paintCarta(coords, ftype);
+              }
+          }
+          dw.paintCarta = function(coords, ftype, ftext) {
+              if (this.getContext) {
+                  var ctx = this.getContext("2d");
+                  var m = this.mopt[ftype];
+                  ctx.lineWidth = ('width' in m ? m['width'] : 1) / this.m.scale;
+                  if (ftext) {
+                      ctx.strokeStyle = "black";
+                      //ctx.font = 1 + "em arial";
+                      if ('anchor' in m) {
+                          ctx.textAlign = m['anchor'][0];
+                          ctx.textBaseline = m['anchor'][1];
+                      }
+                      points = this.toPoints(coords[0], 1);
+                      ctx.fillText(ftext, points[0], points[1]);
+                  } else if (m['class'] == 'Line') {
+                      if ('bg' in m) ctx.fillStyle = m['bg'];    
+                      ctx.strokeStyle = m['fg'];
+                      ctx.beginPath();
+                      for (var i in coords) {
+                          points = this.toPoints(coords[i], 1);
+                          ctx.lineTo(points[0], points[1]);
+                      }
+                      ctx.stroke();
+                  }
+              }
+          }
+          dw.scaleCarta = function(scale) {
+              if (this.getContext) {
+                  var ctx = this.getContext("2d");
+                  var centerof = this.centerOf();
+                  var wx = window.scrollX,
+                      wy = window.scrollY,
+                      offx = this.m.offset_x,
+                      offy = this.m.offset_y;
+                  var rect = this.sizeOf();
+                  var ratio = scale/this.m.scale;
+                  ctx.scale(ratio, ratio);
+                  var cx = offx - offx/ratio,
+                      cy = offy - offy/ratio;
+                  cx += centerof[0]/ratio - centerof[0];
+                  cy += centerof[1]/ratio - centerof[1];
+                  //cx += wx/ratio - wx;
+                  //cy += wy/ratio - wy;
+                  this.centerPoint(cx, cy);
+                  this.m.scale = scale;
+              }
+          }
+          dw.sizeOf = function() {
+              var cleft = this.offsetLeft,
+                  ctop = this.offsetTop,
+                  cw = this.offsetWidth,
+                  ch = this.offsetHeight,
+                  dw = document.body.clientWidth,
+                  dh = document.body.clientHeight,
+                  wx = window.scrollX,
+                  wy = window.scrollY,
+                  bw = parseInt(this.style.borderWidth);
+              var mleft = ( wx - cleft ) > 0 ? wx - cleft - bw : 0,
+                  mtop = ( wy - ctop ) > 0 ? wy - ctop - bw : 0,
+                  mright = (dw - wx - cleft > cw ? cw : wx + dw - cleft) - bw,
+                  mbottom = (dh - wy - ctop > ch ? ch : wy + dh - ctop) - bw;
+              return [mleft, mtop, mright, mbottom];
+          }
+          dw.centerOf = function() {
+              var rect = this.sizeOf();
+              return [ (rect[0] + rect[2]) / 2.0,
+                       (rect[1] + rect[3]) / 2.0 ];
+          }
+          dw.viewsizeOf = function() {
+              var rect = this.sizeOf();
+              var m = this.fromPoints(rect.slice(0,2));
+              var n = this.fromPoints(rect.slice(2,4));
+              var mleft = m[0], mtop = m[1],
+                  mright = n[0], mbottom = n[1];
+              return [mleft, mtop, mright, mbottom];
+          }
+          dw.viewcenterOf = function() {
+              var rect = this.viewsizeOf();
+              return [ (rect[0] + rect[2]) / 2.0,
+                       (rect[1] + rect[3]) / 2.0 ];
+          }
+          // --------------------------------
+          dw.toPoints = function(coords) {
+              return [ coords[0] * this.m.delta + this.m.halfX,
+                      -coords[1] * this.m.delta + this.m.halfY ];
+          }
+          dw.fromPoints = function(points) {
+              var rect = this.sizeOf();
+              var x =  (points[0] / this.m.scale - this.m.halfX / this.m.scale - this.m.offset_x) / this.m.delta,
+                  y = -(points[1] / this.m.scale - this.m.halfY / this.m.scale - this.m.offset_y) / this.m.delta;
+              if (x < -180) x = -180; else if (x > 180) x = 180;
+              if (y > 90) y = 90; else if (y < -90) y = -90;
+              return [x, y];
+          }
+          // events
+          dw.onmousemove = function(ev, callback) {
+              if ('onmousemove' in this.clfunc) {
+                  var cleft = this.offsetLeft,
+                      ctop = this.offsetTop,
+                      wx = window.scrollX,
+                      wy = window.scrollY,
+                      bw = parseInt(this.style.borderWidth);
+                  var cx = (ev.clientX - cleft - bw + wx),
+                      cy = (ev.clientY - ctop - bw + wy);
+                  this.clfunc.onmousemove(this.fromPoints([cx, cy]));
+              }
+          }
+          dw.onclick = function(ev) {
+              var cleft = this.offsetLeft,
+                  ctop = this.offsetTop,
+                  cw = this.offsetWidth,
+                  ch = this.offsetHeight,
+                  wx = window.scrollX,
+                  wy = window.scrollY,
+                  bw = parseInt(this.style.borderWidth);
+              var centerof = this.centerOf();
+              /* delta center */
+              var cx = -(ev.clientX - cleft - bw + wx - centerof[0]) / this.m.scale,
+                  cy = -(ev.clientY - ctop - bw + wy - centerof[1]) / this.m.scale;
+              /* offset */
+              var dx = cx + this.m.offset_x,
+                  dy = cy + this.m.offset_y;
+              if ((dx < centerof[0] && dx > centerof[0] - cw) &&
+                  (dy < centerof[1] && dy > centerof[1] - ch)) {
+                this.m.offset_x = dx;
+                this.m.offset_y = dy;
+                this.centerPoint(cx, cy);
+                this.labelPoint();
+                if ('onclick' in this.clfunc)
+                    this.clfunc.onclick();
+              }
+          }
+          // init
+          dw.init = function() {
+              // styles
+              this.dw.style.border = "1px solid lightgray";
+              this.dw.style.backgroundColor = "rgb(186,196,205)";
+              this.dw.width = cw = "1000";
+              this.dw.height = "500";
+              /* dict of base layers */
+              this.dw.mopt = {
+                  '.Arctic':      {'class': 'Polygon', 'fg': 'rgb(210,221,195)', 'bg': 'rgb(210,221,195)'},
+                  '.Mainland':    {'class': 'Polygon', 'fg': 'rgb(135,159,103)', 'bg': 'rgb(135,159,103)'},
+                  '.Water':       {'class': 'Polygon', 'fg': 'rgb(186,196,205)', 'bg': 'rgb(186,196,205)'},
+                  '.WaterLine':   {'class': 'Line', 'fg': 'rgb(186,196,205)', 'smooth': 1},
+                  '.Latitude':    {'class': 'Line', 'fg': 'rgb(164,164,164)', 'anchor': ['start', 'bottom']},
+                  '.Longtitude':  {'class': 'Line', 'fg': 'rgb(164,164,164)', 'anchor': ['start', 'top']},
+                  'DotPort':      {'class': 'Dot', 'fg': 'rgb(34,104,234)', 'anchor': ['start', 'top']},
+                  'Area':         {'class': 'Polygon', 'fg': 'rgb(0,130,200)', 'bg': ''},
+                  'Line':         {'class': 'Line', 'fg': 'rgb(0,130,200)'},
+                  'Figure':       {'class': 'Line', 'fg': 'rgb(0,130,200)', 'width': 2},
+                  'CurrFigure':   {'class': 'Line', 'fg': 'rgb(0,130,200)', 'anchor': 'ne', 'width': 2},
+                  'UserLine':     {'class': 'Line', 'fg': 'rgb(0,0,0)', 'anchor': 'nw'} };
+              this.dw.m = {};
+              this.dw.m.delta = cw / 360.0;
+              this.dw.m.halfX = cw / 2.0;
+              this.dw.m.scale = 1;
+              this.dw.m.offset_x = 0;
+              this.dw.m.offset_y = 0;
+              this.dw.m.center_x = 0;
+              this.dw.m.center_y = 0;
+              this.dw.clfunc = {};
+              this.dw.mflood= {};
+              // onload
+              this.dw.scaleCarta(1);
+              this.dw.changeProject();
+              this.dw.labelPoint();
+          }()
+      }
+      function scale() {
+        	if (dbcarta !== undefined) {
+              dbcarta.dw.scaleCarta(document.getElementById("scale").value);
+              dbcarta.dw.labelPoint();
+          }
+      }
+      function init() {
+          dbcarta = new dbCarta('dwlayout');
+          dbcarta.dw.clfunc.onmousemove = function(v) {
+              document.getElementById("coords").innerHTML = " X: " + v[0] + " Y: " + v[1];
+          }
+      }
+  </script>
+</head>
+<body onload="init();" style="padding:0;margin:0">
+    <div>
+            <br>
+            <button onclick="scale()">Do scaling</button>
+            <input size="3" type="text" id="scale" name="scale" value="1"></text>
+            <span id="coords"> X: Y:</span>
+    </div>
+    <div id="dwlayout"></div>
+</body>
+</html>
