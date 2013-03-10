@@ -1,0 +1,78 @@
+<html>
+<head>
+  <title>dbCartajs - HTML5 Canvas map - sample</title>
+  <script type="text/javascript" src="../proj4js-combined.js"></script>
+  <script type="text/javascript" src="../dbcarta.js"></script>
+  <script type="text/javascript" src="demodata/continents.js"></script>
+  <script type="text/javascript">
+  /* Load continents as substrate. */
+  function loadConts() {
+    if ('CONTINENTS' in window) {
+      var data = [];
+      for(var i in window.CONTINENTS) {
+        var label = window.CONTINENTS[i][0],
+            poly = window.CONTINENTS[i][1];
+        for(var j in poly) {
+          var ftype = (label == 'Antarctica' || label == 'Greenland' ? '.Arctic' : '.Mainland');
+          data.push([ftype, label + "." + j, poly[j]]);
+        }
+      }
+      if ('dbcarta' in window)
+        dbcarta.loadCarta(data);
+    }
+  }
+  function scale() {
+    if ('dbcarta' in window) {
+      var scale = parseFloat(document.getElementById("scale").value);
+      dbcarta.scaleCarta(scale);
+      dbcarta.draw();
+    }
+  }
+  function trans(t) {
+    if ('dbcarta' in window && dbcarta.project == 2) {
+      var transx = parseFloat(document.getElementById("transx").value),
+          transy = parseFloat(document.getElementById("transy").value);
+      if (t == undefined) {
+        dbcarta.translateCarta(transx, transy);
+        dbcarta.draw();
+      } else if (parseInt(t) > 0){
+        if (window.mtimer)
+          window.mtimer = window.clearInterval(window.mtimer);
+        else
+          window.mtimer = window.setInterval("trans()", parseInt(t)*1000);
+      }
+    }
+  }
+  function proj() {
+    if ('dbcarta' in window) {
+      dbcarta.changeProject(2);
+      dbcarta.draw();
+    }
+  }
+  function init() {
+    dbcarta = new dbCarta('dwlayout');
+    loadConts();
+    dbcarta.run();
+    dbcarta.clfunc.onmousemove = function(v) {
+      mcoord = document.getElementById("coords");
+      mcoord.innerHTML = " X: Y:";
+      if (v) mcoord.innerHTML = " X: " + v[0].toFixed(2) + " Y: " + v[1].toFixed(2);
+    }
+  }
+  </script>
+</head>
+<body onload="init()">
+  <div>
+    <button  onclick="scale()">scale</button>
+    <input size="3" type="text" id="scale" name="scale" value="1"></text>
+    <button  onclick="trans()">trans</button>
+    <button  onclick="trans(1)">auto</button>
+    <input size="3" type="text" id="transx" name="transx" value="0"></text>
+    <input size="3" type="text" id="transy" name="transy" value="0"></text>
+    <button  onclick="proj()">proj</button>
+    <div id="coords"> X: Y:</div>
+  </div>
+  <div id="dwlayout"></div>
+  dbCartajs sample. 
+</body>
+</html>
