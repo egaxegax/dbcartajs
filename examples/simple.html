@@ -24,6 +24,7 @@
   function scale() {
     if ('dbcarta' in window) {
       var scale = parseFloat(document.getElementById("scale").value);
+      dbcarta.scaleCarta(1); // fix labels
       dbcarta.scaleCarta(scale);
       dbcarta.draw();
     }
@@ -73,6 +74,5 @@
     <div id="coords"> X: Y:</div>
   </div>
   <div id="dwlayout"></div>
-  dbCartajs sample. 
 </body>
 </html>

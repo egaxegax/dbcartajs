@@ -19,11 +19,9 @@ function dbCarta(pid) {
   }
   this.initialize = function() {
     this.dw = document.createElement('canvas');
-    this.dw.id = 'dbcarta';
-    this.dw.textContent = "This browser or document mode doesn't support canvas";
-    if (!(parent = document.getElementById(pid)))
-      parent = document.body;
-    parent.appendChild(this.dw);
+    if (!(p = document.getElementById(pid)))
+      p = document.body;
+    p.appendChild(this.dw);
     /* styles */
     this.dw.style.width = "100%";
     this.dw.width = cw = this.dw.offsetWidth;
@@ -50,6 +48,8 @@ function dbCarta(pid) {
     this.dw.m.scale = 1;
     this.dw.m.offset_x = 0;
     this.dw.m.offset_y = 0;
+    this.dw.m.scaleoff_x = 0;
+    this.dw.m.scaleoff_y = 0;
     this.dw.m.center_x = 0;
     this.dw.m.center_y = 0;
     this.dw.clfunc = {};
@@ -103,36 +103,6 @@ function dbCarta(pid) {
       if (this.getContext) {
         var ctx = this.getContext("2d");
         this.clearCarta();
-        /*ctx.beginPath();
-        ctx.lineWidth = 3/this.m.scale;
-        ctx.strokeStyle = "blue";
-        ctx.rect(0, 0, 300, 150);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.lineWidth = 5/this.m.scale;
-        ctx.strokeStyle = "red";
-        ctx.rect(150, 200, 300, 150);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.lineJoin = "round";
-        ctx.lineWidth = 10/this.m.scale;
-        ctx.strokeStyle = "green";
-        ctx.lineTo(250, 50);
-        //ctx.lineTo(250+150, 50+250);
-        ctx.rect(250, 50, 150, 250);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.lineJoin = "round";
-        ctx.lineWidth = 10/this.m.scale;
-        ctx.strokeStyle = "magenta";
-        ctx.rect(500, 200, 500, 300);
-        ctx.stroke();
-        var centerof = this.centerOf();
-        ctx.beginPath();
-        ctx.lineWidth = 5/this.m.scale;
-        ctx.strokeStyle = "black";
-        ctx.rect((centerof[0]), (centerof[1]), 0, 0);
-        ctx.stroke();*/
         /* viewport */
         var rect = this.viewsizeOf();
         var left = rect[0], top = rect[1],
@@ -180,16 +150,6 @@ function dbCarta(pid) {
         ctx.restore();
       }
     },
-    clearRect: function(x, y, w, h) {
-      if (this.getContext) {
-        var ctx = this.getContext("2d");
-        var pw = this.width,
-            ph = this.height;
-        var p = this.toPoints([x, y]),
-            s = this.toPoints([w, h]);
-        ctx.clearRect(p[0], p[1], s[0] - pw / 2.0, s[1] - ph / 2.0);
-      }
-    },
     loadCarta: function(data) {
       for (var i in data) {
         var d = data[i],
@@ -214,15 +174,18 @@ function dbCarta(pid) {
         var m = this.mopt[ftype];
         ctx.lineWidth = ('width' in m ? m['width'] : 1) / this.m.scale;
         if (ftext) {
-          ctx.strokeStyle = "black";
           ctx.fillStyle = "black";
-          ctx.font = 10 + "pt arial";
           if ('anchor' in m) {
             ctx.textAlign = m['anchor'][0];
             ctx.textBaseline = m['anchor'][1];
           }
-          if (points = this.toPoints(coords[0], 1))
-            ctx.fillText(ftext, points[0], points[1]);
+          if (points = this.toPoints(coords[0], 1)) {
+            ctx.save();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.fillText(ftext, (this.m.offset_x + this.m.scaleoff_x + points[0]) * this.m.scale,
+                                (this.m.offset_y + this.m.scaleoff_y + points[1]) * this.m.scale);
+            ctx.restore();
+          }
         } else if (m['class'] == 'Dot') {
         } else {
           ctx.strokeStyle = m['fg'];
@@ -243,15 +206,15 @@ function dbCarta(pid) {
       if (this.getContext) {
         var ctx = this.getContext("2d");
         var centerof = this.centerOf();
-        var offx = this.m.offset_x,
-            offy = this.m.offset_y;
         var ratio = scale/this.m.scale;
         ctx.scale(ratio, ratio);
-        var cx = offx - offx/ratio,
-            cy = offy - offy/ratio;
-        cx += centerof[0]/ratio - centerof[0];
-        cy += centerof[1]/ratio - centerof[1];
-        this.centerPoint(cx, cy);
+        var cx = centerof[0]/ratio - centerof[0];
+            cy = centerof[1]/ratio - centerof[1];
+        var offx = this.m.offset_x - this.m.offset_x/ratio,
+            offy = this.m.offset_y - this.m.offset_y/ratio;
+        this.centerPoint(cx + offx, cy + offy);
+        this.m.scaleoff_x = cx;
+        this.m.scaleoff_y = cy;
         this.m.scale = scale;
       }
     },
@@ -267,7 +230,7 @@ function dbCarta(pid) {
     centerOf: function() {
       var rect = this.sizeOf();
       return [ (rect[0] + rect[2]) / 2.0,
-           (rect[1] + rect[3]) / 2.0 ];
+               (rect[1] + rect[3]) / 2.0 ];
     },
     viewsizeOf: function() {
       var rect = this.sizeOf();
@@ -280,7 +243,7 @@ function dbCarta(pid) {
     viewcenterOf: function() {
       var rect = this.viewsizeOf();
       return [ (rect[0] + rect[2]) / 2.0,
-           (rect[1] + rect[3]) / 2.0 ];
+               (rect[1] + rect[3]) / 2.0 ];
     },
     // --------------------------------
     toPoints: function(coords, dosphere) {
@@ -288,11 +251,11 @@ function dbCarta(pid) {
         if (!(coords = this.transformCoords('epsg:4326', 'ortho', coords))) return;
       }
       return [ coords[0] * this.m.delta + this.m.halfX,
-          -coords[1] * this.m.delta + this.m.halfY ];
+              -coords[1] * this.m.delta + this.m.halfY ];
     },
     fromPoints: function(points, dosphere) {
       var coords = [ (points[0] / this.m.scale - this.m.halfX / this.m.scale - this.m.offset_x) / this.m.delta,
-              -(points[1] / this.m.scale - this.m.halfY / this.m.scale - this.m.offset_y) / this.m.delta ];
+                    -(points[1] / this.m.scale - this.m.halfY / this.m.scale - this.m.offset_y) / this.m.delta ];
       if (dosphere && this.project == 2) {
         if (!(coords = this.transformCoords('ortho', 'epsg:4326', coords))) return;
       }
@@ -342,7 +305,7 @@ function dbCarta(pid) {
         if (!isNaN(destpt.x) && !isNaN(destpt.y)) {
           if (sourceproj.projName == 'longlat') {
             return [ destpt.x / destproj.a * Proj4js.common.R2D,
-                 destpt.y / destproj.a * Proj4js.common.R2D ];
+                     destpt.y / destproj.a * Proj4js.common.R2D ];
           } else if (sourceproj.projName == 'ortho') {
             if (Math.sqrt(coords[0]*coords[0] + coords[1]*coords[1]) < sourceproj.a + 0.00001) {
               return [ destpt.x, destpt.y ];
@@ -369,14 +332,15 @@ function dbCarta(pid) {
         var ctx = this.getContext("2d");
         ctx.save();
         ctx.setTransform(1, 0, 0, 1, 0, 0);
-        var wcrd = ctx.measureText('X xxxx.xx X xxxx.xx').width,
-            hcrd = ctx.measureText('x').width * 2;
+        var wcrd = ctx.measureText('X 0000.00 X 0000.00').width,
+            hcrd = ctx.measureText('X').width * 2;
         var tleft = this.width,
             ttop = this.height;
         ctx.clearRect(tleft - wcrd, ttop - hcrd, wcrd, hcrd);
         if (coords) {
           ctx.textBaseline = 'bottom';
           ctx.textAlign = 'end';
+          ctx.fillStyle = "black";
           ctx.fillText('X ' + coords[0].toFixed(2) + ' Y ' + coords[1].toFixed(2), tleft, ttop);
         }
         ctx.restore();
