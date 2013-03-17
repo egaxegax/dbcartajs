@@ -36,8 +36,8 @@ function dbCarta(pid) {
       '.WaterLine': {'class': 'Line', 'fg': 'rgb(186,196,205)', 'smooth': 1},
       '.Latitude':  {'class': 'Line', 'fg': 'rgb(164,164,164)', 'anchor': ['start', 'bottom']},
       '.Longtitude':{'class': 'Line', 'fg': 'rgb(164,164,164)', 'anchor': ['start', 'top']},
-      'DotPort':    {'class': 'Dot', 'fg': 'rgb(34,104,234)', 'anchor': ['end', 'bottom']},
-      'Area':       {'class': 'Polygon', 'fg': 'rgb(0,130,200)', 'bg': ''},
+      'DotPort':    {'class': 'Dot', 'fg': 'rgb(34,104,234)', 'anchor': ['start', 'middle'], 'size': 1},
+      'Area':       {'class': 'Polygon', 'fg': 'rgb(0,130,200)', 'bg': 'rgb(0,130,200)'},
       'Line':       {'class': 'Line', 'fg': 'rgb(0,130,200)'},
       'Figure':     {'class': 'Line', 'fg': 'rgb(0,130,200)', 'width': 2},
       'CurrFigure': {'class': 'Line', 'fg': 'rgb(0,130,200)', 'anchor': 'ne', 'width': 2},
@@ -53,7 +53,17 @@ function dbCarta(pid) {
     this.dw.m.center_x = 0;
     this.dw.m.center_y = 0;
     this.dw.clfunc = {};
-    this.dw.mflood= {};
+    this.dw.mflood = {};
+    this.dw.proj = {};
+    if ('Proj4js' in window) {
+      this.dw.proj = {
+        0: 'epsg:4326',    // longlat
+        101: '+proj=merc +units=m +lat_ts=0',  // merc
+        201: '+proj=laea +units=m',
+        202: '+proj=nsper +units=m +h=40000000 +a=6378136 +b=6378140', 
+        203: '+proj=ortho +units=m +a=6378137 +b=6378137'
+      }
+    }
     return this.dw;
   }
   this.extend(this.initialize(), {
@@ -77,7 +87,7 @@ function dbCarta(pid) {
         var y = -90;
         while (y <= 90) {
           lon.push([x, y]);
-          y += 90;
+          y += 180;
         }
         lonlat.push( ['.Longtitude', [x, y].toString(), lon, x.toString(), lon[0]] );
         x += 30;
@@ -88,11 +98,11 @@ function dbCarta(pid) {
         var prev = centerof;
         var x = -180;
         while (x < scale_x) {
-          x += 90;
+          x += 180;
           var lat = [prev, [x, y]],
               prev = [x, y];
           lonlat.push( ['.Latitude', [x, y].toString(), lat, y.toString(), centerof] );
-          centerof = "";
+          centerof = undefined;
         }
         y += 30;
       }
@@ -107,30 +117,44 @@ function dbCarta(pid) {
         var rect = this.viewsizeOf();
         var left = rect[0], top = rect[1],
             right = rect[2], bottom = rect[3];
-        if (left < -180) left = -180; else if (right > 180) right = 180;
-        if (top > 90) top = 90; else if (bottom < -90) bottom = -90;
+        if (this.project == 101) {
+          if (left < -179) left = -179; else if (right > 179) right = 179;
+          if (top > 84) top = 84; else if (bottom < -84) bottom = -84;
+        } else {
+          if (left < -180) left = -180; else if (right > 180) right = 180;
+          if (top > 90) top = 90; else if (bottom < -90) bottom = -90;
+        }
         for (var i in this.mflood) {
           var m = this.mflood[i];
-          if (m['ftype'] == '.Longtitude') {
-            if (this.project == 2) {
+          if (m['ftype'] == '.Longtitude' && m['centerof']) {
+            if (this.isSpherical()) {
                if (m['centerof'][0] >-180 && m['centerof'][0] <= 180)
-                 this.paintCarta([[m['centerof'][0], 0]], m['ftype'], m['label']);
-            } else if (m['centerof'][0] >= left && m['centerof'][0] <= right) {
-               this.paintCarta([[m['centerof'][0], top]], m['ftype'], m['label']);
-            }
-          } else if (m['ftype'] == '.Latitude') {
-            if (this.project == 2) {
-              this.paintCarta([[0, m['centerof'][1]]], m['ftype'], m['label']);
-            } else if (m['centerof'][1] >= bottom && m['centerof'][1] <= top) {
-              this.paintCarta([[left, m['centerof'][1]]], m['ftype'], m['label']);
-            }
+                 m['centerof'] = [m['centerof'][0], 0];
+            } else
+              m['centerof'] = [m['centerof'][0], top];
+          } else if (m['ftype'] == '.Latitude' && m['centerof']) {
+            if (this.isSpherical())
+              m['centerof'] = [0, m['centerof'][1]];
+            else
+              m['centerof'] = [left, m['centerof'][1]];
           }
-          this.paintCarta(m['coords'], m['ftype']);
+          this.paintCarta(m['coords'], m['ftype'], m['label'], m['centerof']);
         }
       }
     },
     changeProject: function(new_project) {
-      this.m.halfY = this.m.halfX / 2.0;
+      if (new_project == 101) {
+        this.m.halfY = this.m.halfX * 84/90.0;
+      } else
+        this.m.halfY = this.m.halfX / 2.0;
+      if (this.isSpherical(new_project)) {
+        var centerof = this.centerOf();
+        viewcenterof = this.viewcenterOf();
+        this.initProj(viewcenterof[0] - this.m.center_x, viewcenterof[1] - this.m.center_y);
+      } else {
+        var centerof = this.toPoints([[this.m.center_x, this.m.center_y]], false);
+      }
+      this.centerCarta(centerof[0] + this.m.offset_x, centerof[1] + this.m.offset_y);
       if ('Proj4js' in window) {
         this.project = new_project;
       }
@@ -139,6 +163,26 @@ function dbCarta(pid) {
       if (this.getContext) {
         var ctx = this.getContext("2d");
         ctx.translate(cx, cy);
+      }
+    },
+    centerCarta: function(cx, cy, doscale) {
+      var pw = this.m.halfX * 2,
+          ph = this.m.halfY * 2;
+      var centerof = this.centerOf();
+      var offx = centerof[0] - cx;
+          offy = centerof[1] - cy;
+      if (doscale) {
+        offx /= this.m.scale;
+        offy /= this.m.scale;
+      }
+      /* offset */
+      var dx = offx + this.m.offset_x,
+          dy = offy + this.m.offset_y;
+      if ((dx <= centerof[0] && dx >= centerof[0] - pw) && 
+          (dy <= centerof[1] && dy >= centerof[1] - ph)) {
+        this.m.offset_x = dx;
+        this.m.offset_y = dy;
+        this.centerPoint(offx, offy);
       }
     },
     clearCarta: function() {
@@ -150,55 +194,67 @@ function dbCarta(pid) {
         ctx.restore();
       }
     },
-    loadCarta: function(data) {
+    loadCarta: function(data, dopaint) {
       for (var i in data) {
         var d = data[i],
             ftype = d[0],
             tag = d[1];
         var coords = d[2],
             label = 3 in d ? d[3] : '',
-            centerof = 4 in d ? d[4] : '';
+            centerof = 4 in d ? d[4] : undefined;
         var ftag = ftype + '_' + tag;
         var mflood = {};
         this.mflood[ftag] = {
           'ftype': ftype,
-          'coords': this.approxPoints(coords),
+          'coords': coords,
           'label': label,
           'centerof': centerof
         }
+        if (dopaint)
+          this.paintCarta(coords, ftype, label, centerof);
       }
     },
-    paintCarta: function(coords, ftype, ftext) {
+    paintCarta: function(coords, ftype, ftext, centerof) {
       if (this.getContext) {
         var ctx = this.getContext("2d");
         var m = this.mopt[ftype];
-        ctx.lineWidth = ('width' in m ? m['width'] : 1) / this.m.scale;
-        if (ftext) {
-          ctx.fillStyle = "black";
-          if ('anchor' in m) {
-            ctx.textAlign = m['anchor'][0];
-            ctx.textBaseline = m['anchor'][1];
+        var points = this.approxCoords(coords, true, 10),
+            centerof = this.approxCoords([centerof], true),
+            msize = ('size' in m ? m['size'] : 0) / this.m.scale,
+            mwidth = ('width' in m ? m['width'] : 1) / this.m.scale;
+        ctx.lineWidth = mwidth;
+        if (m['class'] == 'Dot') {
+          if (points.length) {
+            centerof = points;
+            ctx.strokeStyle = m['fg'];
+            ctx.beginPath();
+            ctx.arc(points[0][0], points[0][1], msize, 0, Math.PI*2);
+            ctx.stroke();
+            ctx.fillStyle = m['fg'];
+            ctx.fill();
           }
-          if (points = this.toPoints(coords[0], 1)) {
-            ctx.save();
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.fillText(ftext, (this.m.offset_x + this.m.scaleoff_x + points[0]) * this.m.scale,
-                                (this.m.offset_y + this.m.scaleoff_y + points[1]) * this.m.scale);
-            ctx.restore();
-          }
-        } else if (m['class'] == 'Dot') {
         } else {
           ctx.strokeStyle = m['fg'];
           ctx.beginPath();
-          for (var i in coords) {
-            if (points = this.toPoints(coords[i], 1))
-              ctx.lineTo(points[0], points[1]);
-          }
+          for (var i in points)
+            ctx.lineTo(points[i][0], points[i][1]);
           ctx.stroke();
           if (m['class'] == 'Polygon') {
             ctx.fillStyle = m['bg'];
             ctx.fill();
           }
+        }
+        if (ftext && centerof.length) {
+          ctx.fillStyle = "black";
+          if ('anchor' in m) {
+            ctx.textAlign = m['anchor'][0];
+            ctx.textBaseline = m['anchor'][1];
+          }
+          ctx.save();
+          ctx.setTransform(1, 0, 0, 1, 0, 0);
+          ctx.fillText(ftext, (this.m.offset_x + this.m.scaleoff_x + centerof[0][0] + msize*2) * this.m.scale,
+                              (this.m.offset_y + this.m.scaleoff_y + centerof[0][1]) * this.m.scale);
+          ctx.restore();
         }
       }
     },
@@ -218,11 +274,16 @@ function dbCarta(pid) {
         this.m.scale = scale;
       }
     },
-    translateCarta: function(dx, dy) {
-      /* proj4 init */
+    initProj: function(dx, dy) {
       this.m.center_x += dx;
       this.m.center_y += dy;
-      if ('Proj4js' in window) Proj4js.defs['ORTHO'] = "+proj=ortho +units=m +a=6378137 +b=6378137 +lat_0=" + this.m.center_x + " +lon_0=" + this.m.center_y;
+      for (var i in this.proj) {
+        Proj4js.defs[String(i)] = this.proj[i] + " +lon_0=" + this.m.center_x + " +lat_0=" + this.m.center_y;
+      }
+    },
+    isSpherical: function(project) {
+      project = project || this.project;
+      return (project > 200 && project < 300);
     },
     sizeOf: function() {
       return [0, 0, this.width, this.height];
@@ -234,8 +295,8 @@ function dbCarta(pid) {
     },
     viewsizeOf: function() {
       var rect = this.sizeOf();
-      var m = this.fromPoints([rect[0], rect[1]], 0);
-      var n = this.fromPoints([rect[2], rect[3]], 0);
+      var m = this.fromPoints([rect[0], rect[1]], false);
+      var n = this.fromPoints([rect[2], rect[3]], false);
       var mleft = m[0], mtop = m[1],
           mright = n[0], mbottom = n[1];
       return [mleft, mtop, mright, mbottom];
@@ -246,18 +307,18 @@ function dbCarta(pid) {
                (rect[1] + rect[3]) / 2.0 ];
     },
     // --------------------------------
-    toPoints: function(coords, dosphere) {
-      if (dosphere && this.project == 2) {
-        if (!(coords = this.transformCoords('epsg:4326', 'ortho', coords))) return;
+    toPoints: function(coords, dotransform) {
+      if (dotransform && this.project != 0) {
+        if (!(coords = this.transformCoords('epsg:4326', String(this.project), coords))) return;
       }
       return [ coords[0] * this.m.delta + this.m.halfX,
               -coords[1] * this.m.delta + this.m.halfY ];
     },
-    fromPoints: function(points, dosphere) {
+    fromPoints: function(points, dotransform) {
       var coords = [ (points[0] / this.m.scale - this.m.halfX / this.m.scale - this.m.offset_x) / this.m.delta,
                     -(points[1] / this.m.scale - this.m.halfY / this.m.scale - this.m.offset_y) / this.m.delta ];
-      if (dosphere && this.project == 2) {
-        if (!(coords = this.transformCoords('ortho', 'epsg:4326', coords))) return;
+      if (dotransform && this.project != 0) {
+        if (!(coords = this.transformCoords(String(this.project), 'epsg:4326', coords))) return;
       }
       return coords;
     },
@@ -266,27 +327,35 @@ function dbCarta(pid) {
           y = coords2[0][1] * Math.PI/180.0,
           x1 = coords2[1][0] * Math.PI/180.0,
           y1 = coords2[1][1] * Math.PI/180.0;
-      return 6378.136 * Math.acos(Math.cos(y) * Math.cos(y1) * Math.cos(x - x1) + Math.sin(y) * Math.sin(y1));
+      return Math.acos(Math.cos(y) * Math.cos(y1) * Math.cos(x - x1) + Math.sin(y) * Math.sin(y1)) * 180.0/Math.PI;
     },
-    approxPoints: function(coords) {
-      var approx_pts = coords;
-      for (var i=0; i<coords.length-1; i++) {
-        var x = coords[i][0],
-            y = coords[i][1],
-            x1 = coords[i+1][0],
-            y1 = coords[i+1][1];
-        if (i==0)
-          approx_pts = [[x, y]];
-        var d = this.distance([[x, y], [x1, y1]]),
-            scalestep = 1;
-        /* by step 100 km */
-        if (d > 1000)
-          scalestep = parseInt(d / 500.0);
-        var _x = x, _y = y;
-        for (var j=0; j<scalestep; j++) {
-          _x += (x1 - x) / scalestep;
-          _y += (y1 - y) / scalestep;
-          approx_pts.push([_x, _y]);
+    approxCoords: function(coords, dopoints, step) {
+      var i, approx_pts = [],
+          step = step || 1;
+      for (var j in coords) {
+        if (!coords[j]) {
+          continue;
+        } else if (!i) {
+          if (pts = (dopoints ? this.toPoints(coords[j], true) : coords[j]))
+            approx_pts.push(pts);
+          i = j;
+        } else {
+          var x = coords[i][0],
+              y = coords[i][1],
+              x1 = coords[j][0],
+              y1 = coords[j][1];
+          var d = this.distance([[x, y], [x1, y1]]),
+              scalestep = 1;
+          if (d > step)
+            scalestep = parseInt(d / step);
+          var _x = x, _y = y;
+          for (var k=0; k<scalestep; k++) {
+            _x += (x1 - x) / scalestep;
+            _y += (y1 - y) / scalestep;
+            if (pts = (dopoints ? this.toPoints([_x, _y], true) : [_x, _y]))
+              approx_pts.push(pts);
+          }
+          i = j;
         }
       }
       return approx_pts;
@@ -304,17 +373,16 @@ function dbCarta(pid) {
         var destpt = Proj4js.transform(sourceproj, destproj, sourcept);
         if (!isNaN(destpt.x) && !isNaN(destpt.y)) {
           if (sourceproj.projName == 'longlat') {
-            return [ destpt.x / destproj.a * Proj4js.common.R2D,
-                     destpt.y / destproj.a * Proj4js.common.R2D ];
-          } else if (sourceproj.projName == 'ortho') {
-            if (Math.sqrt(coords[0]*coords[0] + coords[1]*coords[1]) < sourceproj.a + 0.00001) {
-              return [ destpt.x, destpt.y ];
+            if (!isNaN(destpt.z)) {
+              return [ destpt.x / destproj.a * Proj4js.common.R2D,
+                       destpt.y / destproj.a * Proj4js.common.R2D ];
             }
+          } else {
+            return [ destpt.x, destpt.y ];
           }
         }
-      } else {
+      } else
         return coords;
-      }
     },
     // - events -----------------------------
     onmousemove: function(ev, callback) {
@@ -325,7 +393,7 @@ function dbCarta(pid) {
           bw = parseInt(this.style.borderWidth) / 2.0;
       var cx = this.canvasX(ev.clientX - cleft - bw + wx),
           cy = this.canvasY(ev.clientY - ctop - bw + wy);
-      var coords = this.fromPoints([cx, cy], 1);
+      var coords = this.fromPoints([cx, cy], true);
       if ('onmousemove' in this.clfunc)
         this.clfunc.onmousemove(coords);
       if (this.getContext) {
@@ -349,34 +417,23 @@ function dbCarta(pid) {
     onclick: function(ev) {
       var cleft = this.offsetLeft,
           ctop = this.offsetTop,
-          cw = this.offsetWidth,
-          ch = this.offsetHeight,
           wx = window.scrollX,
           wy = window.scrollY,
           bw = parseInt(this.style.borderWidth) / 2.0;
-      var centerof = this.centerOf();
-      /* delta center */
-      var cx = -(this.canvasX(ev.clientX - cleft - bw + wx) - centerof[0]) / this.m.scale,
-          cy = -(this.canvasY(ev.clientY - ctop - bw + wy )- centerof[1]) / this.m.scale;
-      /* offset */
-      var dx = cx + this.m.offset_x,
-          dy = cy + this.m.offset_y;
-      if ((dx < centerof[0] && dx > centerof[0] - this.canvasX(cw)) && 
-          (dy < centerof[1] && dy > centerof[1] - this.canvasY(ch))) {
-        this.m.offset_x = dx;
-        this.m.offset_y = dy;
-        this.centerPoint(cx, cy);
-        this.draw();
-        if ('onclick' in this.clfunc)
-          this.clfunc.onclick();
-      }
+      var cx = this.canvasX(ev.clientX - cleft - bw + wx),
+          cy = this.canvasY(ev.clientY - ctop - bw + wy);
+      this.centerCarta(cx, cy, true);
+      this.draw();
+      if ('onclick' in this.clfunc)
+        this.clfunc.onclick();
     },
     // ---------------------------------
     run: function() {
-      this.createMeridians(); 
-      this.scaleCarta(1);
+      this.createMeridians();
+      this.initProj(0, 0);
       this.changeProject(0);
-      this.translateCarta(300, 0);
+      //var points = this.toPoints([180, 0], 1);
+      //this.centerCarta(points[0], points[1]);
       this.draw();
     }
   });

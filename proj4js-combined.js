@@ -2370,13 +2370,13 @@ Proj4js.Proj.merc = {
           lat*Proj4js.common.R2D < -90.0 && 
           lon*Proj4js.common.R2D > 180.0 && 
           lon*Proj4js.common.R2D < -180.0) {
-      Proj4js.reportError("merc:forward: llInputOutOfRange: "+ lon +" : " + lat);
+      p.z = Proj4js.reportError("merc:forward: llInputOutOfRange: "+ lon +" : " + lat);
       return null;
     }
 
     var x,y;
     if(Math.abs( Math.abs(lat) - Proj4js.common.HALF_PI)  <= Proj4js.common.EPSLN) {
-      Proj4js.reportError("merc:forward: ll2mAtPoles");
+      p.z = Proj4js.reportError("merc:forward: ll2mAtPoles");
       return null;
     } else {
       if (this.sphere) {
@@ -2410,7 +2410,7 @@ Proj4js.Proj.merc = {
       lat = Proj4js.common.phi2z(this.e,ts);
       if(lat == -9999) {
         Proj4js.reportError("merc:inverse: lat = -9999");
-        return null;
+        lon = lat = undefined;
       }
     }
     lon = Proj4js.common.adjust_lon(this.long0+ x / (this.a * this.k0));
@@ -2907,6 +2907,7 @@ Proj4js.Proj.ortho = {
     rh = Math.sqrt(p.x * p.x + p.y * p.y);
     if (rh > this.a + .0000001) {
       Proj4js.reportError("orthoInvDataError");
+      p.x = p.y = undefined;
     }
     z = Proj4js.common.asinz(rh / this.a);
 
@@ -5468,7 +5469,7 @@ Proj4js.Proj.nsper = {
     g = this.sin_p15 * sinphi + this.cos_p15 * cosphi * coslon;
     if (g < (1.0/ this.p15))
     {
-      Proj4js.reportError("nsperFwdPointError");
+      p.z = Proj4js.reportError("nsperFwdPointError");
     }
     ksp = (this.p15 - 1.0)/(this.p15 - g);
     p.x = this.x0 + this.a * ksp * cosphi * Math.sin(dlon);
