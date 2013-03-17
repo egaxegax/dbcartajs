@@ -152,6 +152,7 @@ function dbCarta(pid) {
         viewcenterof = this.viewcenterOf();
         this.initProj(viewcenterof[0] - this.m.center_x, viewcenterof[1] - this.m.center_y);
       } else {
+        this.initProj(-this.m.center_x, -this.m.center_y);
         var centerof = this.toPoints([[this.m.center_x, this.m.center_y]], false);
       }
       this.centerCarta(centerof[0] + this.m.offset_x, centerof[1] + this.m.offset_y);
