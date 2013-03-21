@@ -4,23 +4,8 @@
   <script type="text/javascript" src="../proj4js-combined.js"></script>
   <script type="text/javascript" src="../dbcarta.js"></script>
   <script type="text/javascript" src="demodata/continents.js"></script>
+  <script type="text/javascript" src="demodata/loaddata.js"></script>
   <script type="text/javascript">
-  /* Load continents as substrate. */
-  function loadConts() {
-    if ('CONTINENTS' in window) {
-      var data = [];
-      for(var i in window.CONTINENTS) {
-        var label = window.CONTINENTS[i][0],
-            poly = window.CONTINENTS[i][1];
-        for(var j in poly) {
-          var ftype = (label == 'Antarctica' || label == 'Greenland' ? '.Arctic' : '.Mainland');
-          data.push([ftype, label + "." + j, poly[j]]);
-        }
-      }
-      if ('dbcarta' in window)
-        dbcarta.loadCarta(data);
-    }
-  }
   function scale() {
     if ('dbcarta' in window) {
       var scale = parseFloat(document.getElementById("scale").value);
@@ -30,11 +15,11 @@
     }
   }
   function trans() {
-    if ('dbcarta' in window && dbcarta.isSpherical(dbcarta.project)) {
+    if ('dbcarta' in window && dbcarta.isSpherical()) {
       var transx = parseFloat(document.getElementById("transx").value),
           transy = parseFloat(document.getElementById("transy").value);
       if (!isNaN(transx) && !isNaN(transy)) {
-        dbcarta.initProj(transx, transy);
+        dbcarta.initProj(dbcarta.project, transx, transy);
         dbcarta.draw();
       }
     }
@@ -47,8 +32,9 @@
   }
   function draw() {
     if ('dbcarta' in window) {
-       try {coords = eval(document.getElementById('getcoords').value)} catch (e) { alert("Invalid coords!"); return; }
-       dbcarta.loadCarta([[ document.getElementById("ftype").value, '1', coords ]], 1);
+       try {coords = eval(document.getElementById('getcoords').value); coords.length; } 
+       catch (e) { alert("Invalid coords!\nUse:\n[[1,2],[3,4],..]"); return; }
+       dbcarta.loadCarta([[ document.getElementById("ftype").value, Math.random(), coords, 'MyTest' ]], 1);
     }
   }
   function init() {
@@ -123,7 +109,7 @@
     el2.appendChild(document.createTextNode(el2.value));
     el.appendChild(el2);      
     el2 = document.createElement("option");
-    el2.value = "Dot";
+    el2.value = "DotPort";
     el2.appendChild(document.createTextNode(el2.value));
     el.appendChild(el2);      
     col.appendChild(el);
@@ -147,7 +133,7 @@
     document.body.appendChild(mtab);
     dbcarta = new dbCarta();
     loadConts();
-    dbcarta.loadCarta([['DotPort', '1', [[-25,40]], 'hello']]);
+    dbcarta.loadCarta([['DotPort', '1', [[-25,40]], 'Point 1']]);
     dbcarta.run();
     dbcarta.clfunc.onmousemove = function(v) {
       mcoord = document.getElementById("coords");

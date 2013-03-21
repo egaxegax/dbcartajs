@@ -1,0 +1,47 @@
+<html>
+<head>
+  <title>dbCartajs - HTML5 Canvas map - World's cities sample</title>
+  <script type="text/javascript" src="../proj4js-combined.js"></script>
+  <script type="text/javascript" src="../dbcarta.js"></script>
+  <script type="text/javascript" src="demodata/continents.js"></script>
+  <script type="text/javascript" src="demodata/cities.js"></script>
+  <script type="text/javascript" src="demodata/loaddata.js"></script>
+  <script type="text/javascript">
+  function init() {
+    var el, el2, row, col, mtab;
+    mtab = document.createElement("table");
+    mtab.width = "100%";
+    row = document.createElement("tr");
+    mtab.appendChild(row);
+
+    col = document.createElement("td");
+    col.width = "15%";
+    el = document.createElement("select");
+    el.id = "proj";
+    var projlist = {0:'longlat', 101:'merc', 203:'ortho', 202:'nsper', 201:'laea'};
+    for(var i in projlist) {
+      el2 = document.createElement("option");
+      el2.value = i;
+      el2.appendChild(document.createTextNode(projlist[i]));
+      el.appendChild(el2);  
+    }
+    col.appendChild(el);
+    el = document.createElement('button');
+    el.appendChild(document.createTextNode("proj"));
+    col.appendChild(el);
+    row.appendChild(col);
+
+    col = document.createElement("td");
+    col.id = "canvasmap";
+    col.align = "center";
+    row.appendChild(col);
+
+    document.body.appendChild(mtab);
+    dbcarta = new dbCarta("canvasmap");
+    loadConts();
+    dbcarta.run();
+  }
+  </script>
+</head>
+<body onload="init()"></body>
+</html>
