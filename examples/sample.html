@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
   <title>dbCartajs - HTML5 Canvas map - sample</title>
@@ -129,12 +130,13 @@
     col.align = "center";
     col.width = "20%";
     row.appendChild(col);
-
     document.body.appendChild(mtab);
+
     dbcarta = new dbCarta();
-    loadConts();
+    dbcarta.loadCarta(loadConts());
+    dbcarta.loadCarta(dbcarta.createMeridians());
     dbcarta.loadCarta([['DotPort', '1', [[-25,40]], 'Point 1']]);
-    dbcarta.run();
+    dbcarta.draw();
     dbcarta.clfunc.onmousemove = function(v) {
       mcoord = document.getElementById("coords");
       mcoord.innerHTML = " X: Y:";

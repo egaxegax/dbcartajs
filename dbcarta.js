@@ -7,14 +7,10 @@
 function dbCarta(pid) {
   this.extend = function(destination, source) {
     destination = destination || {};
-    if(source) {
-      for(var property in source) {
-        var value = source[property];
-        if(value !== undefined) {
-          destination[property] = value;
-        }
-      }
-    }
+    if(source)
+      for(var property in source)
+        if(source[property] !== undefined)
+          destination[property] = source[property];
     return destination;
   }
   this.initialize = function() {
@@ -78,12 +74,15 @@ function dbCarta(pid) {
           ph = this.height;
       var node = ev.target,
           points = [ev.clientX, ev.clientY];
+      points[0] += window.pageXOffset;
+      points[1] += window.pageYOffset;
       while (node) {
          points[0] -= node.offsetLeft - node.scrollLeft;
          points[1] -= node.offsetTop - node.scrollTop;
          node = node.offsetParent;
       }
-      return points;
+      return [ points[0] / cw * pw,
+               points[1] / ch * ph ];
     },
     // -----------------------------------
     createMeridians: function () {
@@ -113,7 +112,7 @@ function dbCarta(pid) {
         }
         y += 30;
       }
-      this.loadCarta(lonlat);
+      return lonlat;
     },
     // ----------------------------------
     drawCoords: function(coords) {
@@ -442,7 +441,8 @@ function dbCarta(pid) {
         return coords;
     },
     // - events -----------------------------
-    onmousemove: function(ev, callback) {
+    onmousemove: function(ev) {
+      if (!ev) return;
       var points = this.canvasXY(ev);
       var coords = this.fromPoints(points, true);
       this.drawCoords(coords);
@@ -450,6 +450,7 @@ function dbCarta(pid) {
         this.clfunc.onmousemove(coords);
     },
     onclick: function(ev) {
+      if (!ev) return;
       var points = this.canvasXY(ev);
       if (scale = this.checkScale(points[0], points[1])) {
         this.scaleCarta(1); // fix labels
@@ -459,15 +460,6 @@ function dbCarta(pid) {
       this.draw();
       if ('onclick' in this.clfunc)
         this.clfunc.onclick();
-    },
-    // ---------------------------------
-    run: function() {
-      this.createMeridians();
-      //this.changeProject(0); // longlat default
-      //this.scaleCarta(1);
-      //var points = this.toPoints([180, 0], 1);
-      //this.centerCarta(points[0], points[1]);
-      this.draw();
     }
   });
   return this.dw;

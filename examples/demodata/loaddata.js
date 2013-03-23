@@ -3,8 +3,8 @@
  */
 /* Load continents as substrate. */
 function loadConts() {
+  var data = [];
   if ('CONTINENTS' in window) {
-    var data = [];
     for(var i in window.CONTINENTS) {
       var label = window.CONTINENTS[i][0],
           poly = window.CONTINENTS[i][1];
@@ -13,23 +13,22 @@ function loadConts() {
         data.push([ftype, label + "." + j, poly[j]]);
       }
     }
-    if ('dbcarta' in window)
-      dbcarta.loadCarta(data);
+    window.CONTINENTS = undefined;
   }
+  return data;
 }
 /* Load cities data to select list EL. */
-function loadCities(el) {
+function loadCities() {
+  var data = {};
   if ('CITIES' in window) {
-    var data = [];
-    for(var i in window.CONTINENTS) {
-      var label = window.CONTINENTS[i][0],
-          poly = window.CONTINENTS[i][1];
-      for(var j in poly) {
-        var ftype = (label == 'Antarctica' || label == 'Greenland' ? '.Arctic' : '.Mainland');
-        data.push([ftype, label + "." + j, poly[j]]);
-      }
+    for(var i in window.CITIES) {
+      var cityname = window.CITIES[i][0],
+          countryname = window.CITIES[i][1],
+          coords = window.CITIES[i][2];
+      if (!(countryname in data)) data[countryname] = {};
+      data[countryname][cityname] = coords.join();
     }
-    if ('dbcarta' in window)
-      dbcarta.loadCarta(data);
+    window.CITIES = undefined;
   }
+  return data;
 }
