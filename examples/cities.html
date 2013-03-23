@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>dbCartajs - HTML5 Canvas map - World's cities sample</title>
-  <script type="text/javascript" src="../proj4js-combined.js"></script>
-  <script type="text/javascript" src="../dbcarta.js"></script>
-  <script type="text/javascript" src="demodata/continents.js"></script>
-  <script type="text/javascript" src="demodata/cities.js"></script>
-  <script type="text/javascript" src="demodata/loaddata.js"></script>
-  <script type="text/javascript">
+<title>dbCartajs - HTML5 Canvas map - World's cities sample</title>
+<script type="text/javascript" src="../proj4js-combined.js"></script>
+<script type="text/javascript" src="../dbcarta.js"></script>
+<script type="text/javascript" src="demodata/continents.js"></script>
+<script type="text/javascript" src="demodata/cities.js"></script>
+<script type="text/javascript" src="demodata/loaddata.js"></script>
+<script type="text/javascript">
   function draw() {
     if ('dbcarta' in window) {
       var centerof;
       for (var i=0; i<citylist.options.length; i++) {
         var opt = citylist.options[i];
         if (opt.selected) {
-          var coords = eval("[["+opt.value+"]]");
-          if (!centerof) centerof = coords[0];
-          dbcarta.loadCarta([['DotPort', opt.text, coords, opt.text]]);
+          var coords = eval("["+opt.value+"]");
+          if (!centerof) centerof = coords;
+          dbcarta.loadCarta([['DotPort', opt.text, [coords], opt.text]]);
         }
       }
       if (centerof) {
@@ -43,7 +43,7 @@
     col.style.borderStyle = "solid";
     col.style.verticalAlign = "top";
     var el = document.createElement('div');
-    el.appendChild(document.createTextNode("World's cities:"));    
+    el.appendChild(document.createTextNode("Cities by country:"));    
     col.appendChild(el);
     var citylist = el2 = document.createElement("select");
     el2.id = "citylist"
@@ -88,7 +88,7 @@
       citylist.appendChild(el);
     }
   }
-  </script>
+</script>
 </head>
-<body onload="init()"></body>
+<body onload="init()"><h2 style="margin:0; background:rgb(230,230,230);">World's Cities Demo</h2></body>
 </html>

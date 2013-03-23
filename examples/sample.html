@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>dbCartajs - HTML5 Canvas map - sample</title>
-  <script type="text/javascript" src="../proj4js-combined.js"></script>
-  <script type="text/javascript" src="../dbcarta.js"></script>
-  <script type="text/javascript" src="demodata/continents.js"></script>
-  <script type="text/javascript" src="demodata/loaddata.js"></script>
-  <script type="text/javascript">
+<title>dbCartajs - HTML5 Canvas map - sample</title>
+<script type="text/javascript" src="../proj4js-combined.js"></script>
+<script type="text/javascript" src="../dbcarta.js"></script>
+<script type="text/javascript" src="demodata/continents.js"></script>
+<script type="text/javascript" src="demodata/loaddata.js"></script>
+<script type="text/javascript">
   function scale() {
     if ('dbcarta' in window) {
       var scale = parseFloat(document.getElementById("scale").value);
@@ -39,15 +39,15 @@
     }
   }
   function init() {
-    var el, el2, row, col, mtab;
-    mtab = document.createElement("table");
+    var mtab = document.createElement("table");
     mtab.width = "100%";
-    row = document.createElement("tr");
+    var row = document.createElement("tr");
+    row.style.backgroundColor = "rgb(230,230,230)";
     mtab.appendChild(row);
 
-    col = document.createElement("td");
+    var col = document.createElement("td");
     col.width = "15%";
-    el = document.createElement("input");
+    var el = document.createElement("input");
     el.type = "text";
     el.size= "3";
     el.id = "scale";
@@ -101,7 +101,7 @@
     col.width = "35%";
     el = document.createElement("select");
     el.id = "ftype";
-    el2 = document.createElement("option");
+    var el2 = document.createElement("option");
     el2.value = "Line";
     el2.appendChild(document.createTextNode(el2.value));
     el.appendChild(el2);
@@ -143,7 +143,7 @@
       if (v) mcoord.innerHTML = " X: " + v[0].toFixed(2) + " Y: " + v[1].toFixed(2);
     }
   }
-  </script>
+</script>
 </head>
 <body onload="init()"></body>
 </html>

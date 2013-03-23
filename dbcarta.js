@@ -137,8 +137,8 @@ function dbCarta(pid) {
     drawScale: function() {
       var cw = this.width,
           ch = this.height,
-          hrect = 40,
-          wrect = 18,
+          hrect = 60,
+          wrect = 26,
           tleft = cw - wrect,
           ttop = ch/2.0 - hrect/2.0;
       if (this.getContext) {
@@ -161,8 +161,8 @@ function dbCarta(pid) {
     checkScale: function(cx, cy) {
       var cw = this.width,
           ch = this.height,
-          hrect = 40,
-          wrect = 18,
+          hrect = 60,
+          wrect = 26,
           tleft = cw - wrect,
           ttop = ch/2.0 - hrect/2.0;
       if (cx > tleft && cx < cw && cy > ttop && cy < ttop + hrect/2.0) {

@@ -17,7 +17,7 @@ function loadConts() {
   }
   return data;
 }
-/* Load cities data to select list EL. */
+/* Load city's data. */
 function loadCities() {
   var data = {};
   if ('CITIES' in window) {
@@ -31,4 +31,19 @@ function loadCities() {
     window.CITIES = undefined;
   }
   return data;
+}
+/* Load country's data. */
+function loadCountries() {
+  var data = {};
+  if ('COUNTRIES' in window) {
+    for(var i in window.COUNTRIES) {
+      var name = window.COUNTRIES[i][0],
+          abbr =  window.COUNTRIES[i][1],
+          poly = window.COUNTRIES[i][2];
+      if (!(abbr in data)) data[abbr] = {};
+      data[abbr] = [name, poly];
+    }
+    window.COUNTRIES = undefined;
+  }
+   return data;
 }

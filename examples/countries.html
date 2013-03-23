@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>dbCartajs - HTML5 Canvas map - World's countries</title>
+<script type="text/javascript" src="../proj4js-combined.js"></script>
+<script type="text/javascript" src="../dbcarta.js"></script>
+<script type="text/javascript" src="demodata/continents.js"></script>
+<script type="text/javascript" src="demodata/countries.js"></script>
+<script type="text/javascript" src="demodata/loaddata.js"></script>
+<script type="text/javascript">
+  function draw() {
+    if ('dbcarta' in window) {
+      var centerof;
+      for (var i=0; i<cntrylist.options.length; i++) {
+        var opt = cntrylist.options[i];
+        if (opt.selected) {
+          var m = opt.text.split(".");
+          var abbr = m[0],
+              mpart = m[1];
+          var cntryname = window.mcountries[abbr][0];
+          var centerof = window.mcountries[abbr][1][mpart][0][0],
+              coords = window.mcountries[abbr][1][mpart][1];
+          dbcarta.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof]]);
+          dbcarta2.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof]]);
+          dbcarta3.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof]]);
+          dbcarta4.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof]]);
+        }
+      }
+      if (centerof) {
+        var points = dbcarta.toPoints(centerof, true);
+        dbcarta.centerCarta(points[0] + dbcarta.m.offset_x, points[1] + dbcarta.m.offset_y);
+        dbcarta2.initProj(dbcarta2.project, centerof[0] - dbcarta2.m.center_x, centerof[1] - dbcarta2.m.center_y);
+        dbcarta3.initProj(dbcarta3.project, centerof[0] - dbcarta3.m.center_x, centerof[1] - dbcarta3.m.center_y);
+        dbcarta4.centerCarta(points[0] + dbcarta4.m.offset_x, points[1] + dbcarta4.m.offset_y);
+      }
+      dbcarta.draw();
+      dbcarta2.draw();
+      dbcarta3.draw();
+      dbcarta4.draw();
+    }
+  }
+  function refresh() {
+    window.location.reload(false);
+  }
+  function init() {
+    var mtab = document.createElement("table");
+    mtab.width = "100%";
+    var tb = document.createElement("tbody");
+    mtab.appendChild(tb);
+    var row = document.createElement("tr");
+    tb.appendChild(row);
+
+    var col = document.createElement("td");
+    col.rowSpan = "2";
+    col.width = "15%";
+    col.style.borderWidth = "1";
+    col.style.borderStyle = "solid";
+    col.style.verticalAlign = "top";
+    var el = document.createElement('div');
+    el.appendChild(document.createTextNode("List of countries:"));    
+    col.appendChild(el);
+    var cntrylist = el2 = document.createElement("select");
+    el2.id = "cntrylist"
+    el2.multiple="true";
+    el2.size = "20";
+    el = document.createElement('div');    
+    el.appendChild(el2);
+    col.appendChild(el);
+    el = document.createElement('div');    
+    var el2 = document.createElement('button');
+    el2.onclick = draw;
+    el2.appendChild(document.createTextNode("show"));
+    el.appendChild(el2);
+    el2 = document.createElement('button');
+    el2.onclick = refresh;
+    el2.appendChild(document.createTextNode("refresh"));
+    el.appendChild(el2);
+    col.appendChild(el);
+    row.appendChild(col);
+
+    col = document.createElement("td");
+    col.id = "canvasmap";
+    col.align = "center";
+    col.width = "40%";
+    row.appendChild(col);
+    col = document.createElement("td");
+    col.id = "canvasmap2";
+    col.align = "center";
+    col.width = "40%";
+    row.appendChild(col);
+    tb.appendChild(row);
+    row = document.createElement("tr");
+    col = document.createElement("td");
+    col.id = "canvasmap3";
+    col.align = "center";
+    col.width = "40%";
+    row.appendChild(col);
+    col = document.createElement("td");
+    col.id = "canvasmap4";
+    col.align = "center";
+    col.width = "40%";
+    row.appendChild(col);
+    tb.appendChild(row);
+    document.body.appendChild(mtab);
+
+    dbcarta = new dbCarta("canvasmap");
+    dbcarta.loadCarta(conts = loadConts());
+    dbcarta.loadCarta(meridians = dbcarta.createMeridians());
+    dbcarta.draw();
+    dbcarta2 = new dbCarta("canvasmap2");
+    dbcarta2.changeProject(203);
+    dbcarta2.scaleCarta(3);
+    dbcarta2.loadCarta(conts);
+    dbcarta2.loadCarta(meridians);
+    dbcarta2.draw();
+    dbcarta3 = new dbCarta("canvasmap3");
+    dbcarta3.changeProject(201);
+    dbcarta3.scaleCarta(2);
+    dbcarta3.loadCarta(conts);
+    dbcarta3.loadCarta(meridians);
+    dbcarta3.draw();
+    dbcarta4 = new dbCarta("canvasmap4");
+    dbcarta4.changeProject(101);
+    dbcarta4.scaleCarta(3);
+    dbcarta4.loadCarta(conts);
+    dbcarta4.loadCarta(meridians);
+    dbcarta4.draw();
+
+    window.mcountries = loadCountries();
+    for (var abbr in mcountries) {
+      el = document.createElement("optgroup");
+      el.label = mcountries[abbr][0];
+      for (var j in mcountries[abbr][1]) {
+        el2 = document.createElement("option");
+        el2.appendChild(document.createTextNode(abbr + "." + j));
+        el.appendChild(el2);
+      }
+      cntrylist.appendChild(el);
+    }
+  }
+</script>
+</head>
+<body onload="init()"><h2 style="margin:0; background:rgb(230,230,230);">World's Countries Demo</h2></body>
+</html>
