@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>dbCartajs - HTML5 Canvas map - Starry Sky Demo</title>
+<script type="text/javascript" src="../proj4js-combined.js"></script>
+<script type="text/javascript" src="../dbcarta.js"></script>
+<script type="text/javascript" src="demodata/continents.js"></script>
+<script type="text/javascript" src="demodata/loaddata.js"></script>
+<script type="text/javascript">
+  function turn() {
+    if ('dbcarta' in window) {
+      var cx = parseFloat(document.getElementById("turnx").value),
+          cy = parseFloat(document.getElementById("turny").value);
+      if (!isNaN(cx) && !isNaN(cy))
+        if (dbcarta.isSpherical()) {
+          var proj = dbcarta.initProj();
+          cx += proj.long0 * 180/Math.PI;
+          cy += proj.lat0 * 180/Math.PI;
+          dbcarta.initProj(' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
+          dbcarta.draw();
+        }
+    }
+  }
+  function doheight() {
+    if ('dbcarta' in window) {
+      var proj = dbcarta.initProj();
+      var projh = document.getElementById('projh').value * 1000,
+          cx = proj.long0 * 180/Math.PI,
+          cy = proj.lat0 * 180/Math.PI;
+      dbcarta.initProj(' +h=' + projh + ' +lon_0=' + cx + ' +lat_0=' + cy);
+      scaleheight();
+    }
+  }
+  function scaleheight() {
+    if ('dbcarta' in window) {
+      var proj = dbcarta.initProj();
+      var rhscale = Math.sqrt((proj.p15 - 1.0)/(proj.p15 + 1.0));
+      dbcarta.scaleCarta(1);
+      dbcarta.scaleCarta(1/rhscale*1/rhscale-0.5);
+      dbcarta.draw();
+    }
+  }
+  function init() {
+    var mtab = document.createElement("table");
+    mtab.width = "100%";
+    var row = document.createElement("tr");
+    row.style.backgroundColor = "rgb(230,230,230)";
+    mtab.appendChild(row);
+
+    var col = document.createElement("td");
+    col.width = "15%";
+    var el = document.createElement("input");
+    el.type = "text";
+    el.size= "4";
+    el.id = "turnx";
+    el.value= "10";
+    col.appendChild(el);
+    el = document.createElement("input");
+    el.type = "text";
+    el.size= "4";
+    el.id = "turny";
+    el.value= "10";
+    col.appendChild(el);    
+    el = document.createElement('button');
+    el.onclick = turn;
+    el.appendChild(document.createTextNode("turn"));
+    col.appendChild(el);
+    row.appendChild(col);
+
+    col = document.createElement("td");
+    col.width = "15%";
+    var projh = el = document.createElement("select");
+    el.id = "projh";
+    col.appendChild(el);
+    el = document.createElement('button');
+    el.onclick = doheight;
+    el.appendChild(document.createTextNode("height ae"));
+    col.appendChild(el);
+    row.appendChild(col);
+
+    row.appendChild(col);
+    col = document.createElement("td");
+    col.id = "coords";
+    col.align = "center";
+    col.width = "20%";
+    row.appendChild(col);
+    document.body.appendChild(mtab);
+
+    dbcarta = new dbCarta();
+    dbcarta.style.backgroundColor = "rgb(17,17,96)";
+    dbcarta.mopt['.Arctic']['fg'] = "rgb(131,147,125)";
+    dbcarta.mopt['.Arctic']['bg'] = "rgb(131,147,125)";
+    dbcarta.mopt['.Mainland']['fg'] = "rgb(71,87,125)";
+    dbcarta.mopt['.Mainland']['bg'] = "rgb(71,87,125)";
+    dbcarta.mopt['.Latitude']['fg'] = "rgb(7,7,186)";
+    dbcarta.mopt['.Longtitude']['fg'] = "rgb(7,7,186)";
+    dbcarta.mopt['DotPort']['fg'] = "rgb(220,0,0)";
+    dbcarta.mopt['DotPort']['labelcolor'] = "rgb(255,155,128)";
+    dbcarta.mopt['DotPort']['size'] = "3";
+    var pov = [37.700,55.750];
+    var proj = dbcarta.initProj(202, ' +lon_0=' + pov[0] + ' +lat_0=' + pov[1]);
+    // nsper proj height list
+    for(var i=1000; i<45000; i+=3000) {
+      el = document.createElement("option");
+      el.value = i;
+      if (i == proj.h/1000) el.selected = "true";
+      el.appendChild(document.createTextNode(i + " km"));
+      projh.appendChild(el);
+    }
+    dbcarta.loadCarta(loadConts());
+    dbcarta.loadCarta(dbcarta.createMeridians());
+    dbcarta.loadCarta([['DotPort', '1', [pov], 'Moscow']]);
+    doheight();
+    // curr. coords
+    dbcarta.clfunc.onmousemove = function(v) {
+      mcoord = document.getElementById("coords");
+      mcoord.innerHTML = " X: Y:";
+      if (v) mcoord.innerHTML = " X: " + v[0].toFixed(2) + " Y: " + v[1].toFixed(2);
+    }
+  }
+</script>
+</head>
+<body onload="init()"></body>
+</html>

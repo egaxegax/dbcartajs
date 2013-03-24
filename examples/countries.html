@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>dbCartajs - HTML5 Canvas map - World's countries</title>
+<title>dbCartajs - HTML5 Canvas map - World's Countries Demo</title>
 <script type="text/javascript" src="../proj4js-combined.js"></script>
 <script type="text/javascript" src="../dbcarta.js"></script>
 <script type="text/javascript" src="demodata/continents.js"></script>
@@ -29,8 +29,8 @@
       if (centerof) {
         var points = dbcarta.toPoints(centerof, true);
         dbcarta.centerCarta(points[0] + dbcarta.m.offset_x, points[1] + dbcarta.m.offset_y);
-        dbcarta2.initProj(dbcarta2.project, centerof[0] - dbcarta2.m.center_x, centerof[1] - dbcarta2.m.center_y);
-        dbcarta3.initProj(dbcarta3.project, centerof[0] - dbcarta3.m.center_x, centerof[1] - dbcarta3.m.center_y);
+        dbcarta2.initProj(' +lon_0=' + centerof[0] + ' +lat_0=' + centerof[1]);
+        dbcarta3.initProj(' +lon_0=' + centerof[0] + ' +lat_0=' + centerof[1]);
         dbcarta4.centerCarta(points[0] + dbcarta4.m.offset_x, points[1] + dbcarta4.m.offset_y);
       }
       dbcarta.draw();
@@ -57,7 +57,7 @@
     col.style.borderStyle = "solid";
     col.style.verticalAlign = "top";
     var el = document.createElement('div');
-    el.appendChild(document.createTextNode("List of countries:"));    
+    el.appendChild(document.createTextNode("Countries by part:"));    
     col.appendChild(el);
     var cntrylist = el2 = document.createElement("select");
     el2.id = "cntrylist"

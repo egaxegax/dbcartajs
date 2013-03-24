@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>dbCartajs - HTML5 Canvas map - sample</title>
+<title>dbCartajs - HTML5 Canvas map - Sample</title>
 <script type="text/javascript" src="../proj4js-combined.js"></script>
 <script type="text/javascript" src="../dbcarta.js"></script>
 <script type="text/javascript" src="demodata/continents.js"></script>
@@ -15,19 +15,23 @@
       dbcarta.draw();
     }
   }
-  function trans() {
-    if ('dbcarta' in window && dbcarta.isSpherical()) {
-      var transx = parseFloat(document.getElementById("transx").value),
-          transy = parseFloat(document.getElementById("transy").value);
-      if (!isNaN(transx) && !isNaN(transy)) {
-        dbcarta.initProj(dbcarta.project, transx, transy);
-        dbcarta.draw();
-      }
+  function turn() {
+    if ('dbcarta' in window) {
+      var cx = parseFloat(document.getElementById("turnx").value),
+          cy = parseFloat(document.getElementById("turny").value);
+      if (!isNaN(cx) && !isNaN(cy))
+        if (dbcarta.isSpherical()) {
+          var proj = dbcarta.initProj();
+          cx += proj.long0 * 180/Math.PI;
+          cy += proj.lat0 * 180/Math.PI;
+          dbcarta.initProj(' +lon_0=' + cx + ' +lat_0=' + cy);
+          dbcarta.draw();
+        }
     }
   }
   function proj() {
     if ('dbcarta' in window) {
-      dbcarta.changeProject(document.getElementById('proj').value);
+      dbcarta.changeProject(document.getElementById('projlist').value);
       dbcarta.draw();
     }
   }
@@ -64,32 +68,25 @@
     el = document.createElement("input");
     el.type = "text";
     el.size= "4";
-    el.id = "transx";
+    el.id = "turnx";
     el.value= "10";
     col.appendChild(el);
     el = document.createElement("input");
     el.type = "text";
     el.size= "4";
-    el.id = "transy";
+    el.id = "turny";
     el.value= "10";
     col.appendChild(el);    
     el = document.createElement('button');
-    el.onclick = trans;
-    el.appendChild(document.createTextNode("trans"));
+    el.onclick = turn;
+    el.appendChild(document.createTextNode("turn"));
     col.appendChild(el);
     row.appendChild(col);
 
     col = document.createElement("td");
     col.width = "15%";
-    el = document.createElement("select");
-    el.id = "proj";
-    var projlist = {0:'longlat', 101:'merc', 203:'ortho', 202:'nsper', 201:'laea'};
-    for(var i in projlist) {
-      el2 = document.createElement("option");
-      el2.value = i;
-      el2.appendChild(document.createTextNode(projlist[i]));
-      el.appendChild(el2);  
-    }
+    var projlist = el = document.createElement("select");
+    el.id = "projlist";
     col.appendChild(el);
     el = document.createElement('button');
     el.onclick = proj;
@@ -137,6 +134,15 @@
     dbcarta.loadCarta(dbcarta.createMeridians());
     dbcarta.loadCarta([['DotPort', '1', [[-25,40]], 'Point 1']]);
     dbcarta.draw();
+    // projlist
+    for(var i in dbcarta.proj) {
+      var projname = dbcarta.proj[i].split(' ')[0].split('=')[1];
+      el = document.createElement("option");     
+      el.value = i;
+      el.appendChild(document.createTextNode(projname));
+      projlist.appendChild(el);  
+    }
+    // curr. coords
     dbcarta.clfunc.onmousemove = function(v) {
       mcoord = document.getElementById("coords");
       mcoord.innerHTML = " X: Y:";

@@ -44,20 +44,17 @@ function dbCarta(pid) {
     this.dw.m.halfX = cw / 2.0;
     this.dw.m.halfY = this.dw.m.halfX / 2.0;
     this.dw.m.scale = 1;
-    this.dw.m.zoomfactor = 1;
     this.dw.m.offset_x = 0;
     this.dw.m.offset_y = 0;
     this.dw.m.scaleoff_x = 0;
     this.dw.m.scaleoff_y = 0;
-    this.dw.m.center_x = 0;
-    this.dw.m.center_y = 0;
     this.dw.clfunc = {};
     this.dw.mflood = {};
     this.dw.proj = {};
     this.dw.project = 0;
     if ('Proj4js' in window) {
       this.dw.proj = {
-        0: 'epsg:4326',
+        0: '+proj=longlat',
         101: '+proj=merc +units=m',
         201: '+proj=laea +units=m',
         202: '+proj=nsper +units=m +h=40000000 +a=6378136 +b=6378140', 
@@ -94,7 +91,7 @@ function dbCarta(pid) {
         var y = -90;
         while (y <= 90) {
           lon.push([x, y]);
-          y += 180;
+          y += 90;
         }
         lonlat.push( ['.Longtitude', [x, y].toString(), lon, x.toString(), lon[0]] );
         x += 30;
@@ -104,7 +101,7 @@ function dbCarta(pid) {
         var x = -180;
         var centerof = prev = [x, y];
         while (x < scale_x) {
-          x += 180;
+          x += 90;
           var lat = [prev, [x, y]],
               prev = [x, y];
           lonlat.push( ['.Latitude', [x, y].toString(), lat, y.toString(), centerof] );
@@ -165,12 +162,13 @@ function dbCarta(pid) {
           wrect = 26,
           tleft = cw - wrect,
           ttop = ch/2.0 - hrect/2.0;
+      var zoom = (this.m.scale < 1 ? 2-1/this.m.scale : this.m.scale);
       if (cx > tleft && cx < cw && cy > ttop && cy < ttop + hrect/2.0) {
-        if (this.m.zoomfactor < 50) this.m.zoomfactor++;
+        if (zoom < 50) zoom++;
       } else if (cx > tleft && cx < cw && cy > ttop + hrect/2.0 && cy < ttop + hrect) {
-        if (this.m.zoomfactor > -48) this.m.zoomfactor--;
+        if (zoom > -18) zoom--;
       } else return;
-      return (this.m.zoomfactor > 0 ? this.m.zoomfactor : 1/-(this.m.zoomfactor-2));
+      return (zoom > 1 ? zoom : 1/(2-zoom));
     },
     draw: function() {
       this.clearCarta();
@@ -199,19 +197,18 @@ function dbCarta(pid) {
       this.drawScale();
     },
     changeProject: function(new_project) {
-      if ('Proj4js' in window) {
-        this.project = new_project;
-      }
       if (this.isSpherical(new_project)) {
         var centerof = this.centerOf(),
             viewcenterof = this.viewcenterOf();
-        this.initProj(new_project, viewcenterof[0] - this.m.center_x, viewcenterof[1] - this.m.center_y);
       } else {
-        var centerof = this.toPoints([this.m.center_x, this.m.center_y], false);
-        this.m.center_x = this.m.center_y = 0;
-        this.initProj(new_project);
+        var centerof = [0, 0],
+            viewcenterof = [0, 0];
+        if ((proj = this.initProj()) !== undefined)
+          centerof = [ proj.long0 * 180/Math.PI, proj.lat0 * 180/Math.PI ];
+        centerof = this.toPoints(centerof, false);
       }
       this.centerCarta(centerof[0] + this.m.offset_x, centerof[1] + this.m.offset_y);
+      this.initProj(new_project, ' +lon_0=' + viewcenterof[0] + ' +lat_0=' + viewcenterof[1]);
     },
     centerPoint: function(cx, cy) {
       if (this.getContext) {
@@ -299,7 +296,7 @@ function dbCarta(pid) {
           }
         }
         if (ftext && centerof.length) {
-          ctx.fillStyle = "black";
+          ctx.fillStyle = ('labelcolor' in m ? m['labelcolor'] : 'black');
           if ('anchor' in m) {
             ctx.textAlign = m['anchor'][0];
             ctx.textBaseline = m['anchor'][1];
@@ -328,12 +325,19 @@ function dbCarta(pid) {
         this.m.scale = scale;
       }
     },
-    initProj: function(project, dx, dy) {
-      if (dx !== undefined && dy !== undefined) {
-        this.m.center_x += dx;
-        this.m.center_y += dy;
+    initProj: function(project, defs) {
+      if ('Proj4js' in window) {
+        if (project !== undefined) {
+          if (defs == undefined) {
+            defs = project;
+            project = this.project;
+          }
+          Proj4js.defs[String(project)] = this.proj[project] + (defs || '');
+          this.project = project;
+        }
+        if (String(this.project) in Proj4js.defs)
+          return (new Proj4js.Proj(String(this.project)));
       }
-      Proj4js.defs[String(project)] = this.proj[project] + " +lon_0=" + this.m.center_x + " +lat_0=" + this.m.center_y;
     },
     isSpherical: function(project) {
       project = project || this.project;
