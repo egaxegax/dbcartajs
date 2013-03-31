@@ -6,25 +6,22 @@
 <script type="text/javascript" src="../dbcarta.js"></script>
 <script type="text/javascript" src="demodata/continents.js"></script>
 <script type="text/javascript" src="demodata/cities.js"></script>
-<script type="text/javascript" src="demodata/loaddata.js"></script>
 <script type="text/javascript">
   function draw() {
-    if ('dbcarta' in window) {
-      var centerof;
-      for (var i=0; i<citylist.options.length; i++) {
-        var opt = citylist.options[i];
-        if (opt.selected) {
-          var coords = eval("["+opt.value+"]");
-          if (!centerof) centerof = coords;
-          dbcarta.loadCarta([['DotPort', opt.text, [coords], opt.text]]);
-        }
+    var centerof;
+    for (var i=0; i<citylist.options.length; i++) {
+      var opt = citylist.options[i];
+      if (opt.selected) {
+        var coords = eval("["+opt.value+"]");
+        if (!centerof) centerof = coords;
+        dbcarta.loadCarta([['DotPort', opt.text, [coords], opt.text]]);
       }
-      if (centerof) {
-        var points = dbcarta.toPoints(centerof, true);
-        dbcarta.centerCarta(points[0] + dbcarta.m.offset_x, points[1] + dbcarta.m.offset_y);
-      }
-      dbcarta.draw();
     }
+    if (centerof) {
+      var points = dbcarta.toPoints(centerof, true);
+      dbcarta.centerCarta(points[0] + dbcarta.m.offset_x, points[1] + dbcarta.m.offset_y);
+    }
+    dbcarta.draw();
   }
   function refresh() {
     window.location.reload(false);
@@ -66,29 +63,38 @@
 
     col = document.createElement("td");
     col.id = "canvasmap";
-    col.align = "center";
     row.appendChild(col);
+
+    el = document.createElement("h2");
+    el.appendChild(document.createTextNode("World's Cities Demo"));
+    el.style.margin = "0";
+    el.style.backgroundColor = "rgb(230,230,230)";
+    document.body.appendChild(el);
     document.body.appendChild(mtab);
 
     dbcarta = new dbCarta("canvasmap");
-    dbcarta.loadCarta(loadConts());
+    dbcarta.changeProject(101);
+    var points = dbcarta.toPoints([0, 40], true);
+    dbcarta.centerCarta(points[0], points[1]);
+    dbcarta.loadCarta(window.CONTINENTS);
     dbcarta.loadCarta(dbcarta.createMeridians());
     dbcarta.draw();
 
-    var cities = loadCities();
-    for (var countryname in cities) {
+    for (var countryname in window.CITIES) {
       el = document.createElement("optgroup");
       el.label = countryname;
-      for (var cityname in cities[countryname]) {
+      for (var cityname in window.CITIES[countryname]) {
         el2 = document.createElement("option");
         el2.appendChild(document.createTextNode(cityname));
-        el2.value = cities[countryname][cityname];
+        el2.value = window.CITIES[countryname][cityname];
         el.appendChild(el2);
       }
       citylist.appendChild(el);
     }
+    window.CONTINENTS = undefined;
+    window.CITIES = undefined;
   }
 </script>
 </head>
-<body onload="init()"><h2 style="margin:0; background:rgb(230,230,230);">World's Cities Demo</h2></body>
+<body onload="init()"></body>
 </html>

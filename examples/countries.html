@@ -6,38 +6,35 @@
 <script type="text/javascript" src="../dbcarta.js"></script>
 <script type="text/javascript" src="demodata/continents.js"></script>
 <script type="text/javascript" src="demodata/countries.js"></script>
-<script type="text/javascript" src="demodata/loaddata.js"></script>
 <script type="text/javascript">
   function draw() {
-    if ('dbcarta' in window) {
-      var centerof;
-      for (var i=0; i<cntrylist.options.length; i++) {
-        var opt = cntrylist.options[i];
-        if (opt.selected) {
-          var m = opt.text.split(".");
-          var abbr = m[0],
-              mpart = m[1];
-          var cntryname = window.mcountries[abbr][0];
-          var centerof = window.mcountries[abbr][1][mpart][0][0],
-              coords = window.mcountries[abbr][1][mpart][1];
-          dbcarta.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof]]);
-          dbcarta2.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof]]);
-          dbcarta3.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof]]);
-          dbcarta4.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof]]);
-        }
+    var centerof;
+    for (var i=0; i<cntrylist.options.length; i++) {
+      var opt = cntrylist.options[i];
+      if (opt.selected) {
+        var m = opt.text.split(".");
+        var abbr = m[0],
+            mpart = m[1];
+        var cntryname = window.COUNTRIES[abbr][0];
+        var centerof = window.COUNTRIES[abbr][1][mpart][0][0],
+            coords = window.COUNTRIES[abbr][1][mpart][1];
+        dbcarta.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof]]);
+        dbcarta2.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof]]);
+        dbcarta3.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof]]);
+        dbcarta4.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof]]);
       }
-      if (centerof) {
-        var points = dbcarta.toPoints(centerof, true);
-        dbcarta.centerCarta(points[0] + dbcarta.m.offset_x, points[1] + dbcarta.m.offset_y);
-        dbcarta2.initProj(' +lon_0=' + centerof[0] + ' +lat_0=' + centerof[1]);
-        dbcarta3.initProj(' +lon_0=' + centerof[0] + ' +lat_0=' + centerof[1]);
-        dbcarta4.centerCarta(points[0] + dbcarta4.m.offset_x, points[1] + dbcarta4.m.offset_y);
-      }
-      dbcarta.draw();
-      dbcarta2.draw();
-      dbcarta3.draw();
-      dbcarta4.draw();
     }
+    if (centerof) {
+      var points = dbcarta.toPoints(centerof, true);
+      dbcarta.centerCarta(points[0] + dbcarta.m.offset_x, points[1] + dbcarta.m.offset_y);
+      dbcarta2.initProj(' +lon_0=' + centerof[0] + ' +lat_0=' + centerof[1]);
+      dbcarta3.initProj(' +lon_0=' + centerof[0] + ' +lat_0=' + centerof[1]);
+      dbcarta4.centerCarta(points[0] + dbcarta4.m.offset_x, points[1] + dbcarta4.m.offset_y);
+    }
+    dbcarta.draw();
+    dbcarta2.draw();
+    dbcarta3.draw();
+    dbcarta4.draw();
   }
   function refresh() {
     window.location.reload(false);
@@ -80,57 +77,59 @@
 
     col = document.createElement("td");
     col.id = "canvasmap";
-    col.align = "center";
     col.width = "40%";
     row.appendChild(col);
     col = document.createElement("td");
     col.id = "canvasmap2";
-    col.align = "center";
     col.width = "40%";
     row.appendChild(col);
     tb.appendChild(row);
     row = document.createElement("tr");
     col = document.createElement("td");
     col.id = "canvasmap3";
-    col.align = "center";
     col.width = "40%";
     row.appendChild(col);
     col = document.createElement("td");
     col.id = "canvasmap4";
-    col.align = "center";
     col.width = "40%";
     row.appendChild(col);
     tb.appendChild(row);
+
+    el = document.createElement("h2");
+    el.appendChild(document.createTextNode("World's Countries Demo"));
+    el.style.margin = "0";
+    el.style.backgroundColor = "rgb(230,230,230)";
+    document.body.appendChild(el);
     document.body.appendChild(mtab);
 
     dbcarta = new dbCarta("canvasmap");
-    dbcarta.loadCarta(conts = loadConts());
+    dbcarta.loadCarta(window.CONTINENTS);
     dbcarta.loadCarta(meridians = dbcarta.createMeridians());
     dbcarta.draw();
     dbcarta2 = new dbCarta("canvasmap2");
     dbcarta2.changeProject(203);
     dbcarta2.scaleCarta(3);
-    dbcarta2.loadCarta(conts);
+    dbcarta2.loadCarta(window.CONTINENTS);
     dbcarta2.loadCarta(meridians);
     dbcarta2.draw();
     dbcarta3 = new dbCarta("canvasmap3");
     dbcarta3.changeProject(201);
     dbcarta3.scaleCarta(2);
-    dbcarta3.loadCarta(conts);
+    dbcarta3.loadCarta(window.CONTINENTS);
     dbcarta3.loadCarta(meridians);
     dbcarta3.draw();
     dbcarta4 = new dbCarta("canvasmap4");
     dbcarta4.changeProject(101);
     dbcarta4.scaleCarta(3);
-    dbcarta4.loadCarta(conts);
+    dbcarta4.loadCarta(window.CONTINENTS);
     dbcarta4.loadCarta(meridians);
+    window.CONTINENTS = undefined;
     dbcarta4.draw();
 
-    window.mcountries = loadCountries();
-    for (var abbr in mcountries) {
+    for (var abbr in window.COUNTRIES) {
       el = document.createElement("optgroup");
-      el.label = mcountries[abbr][0];
-      for (var j in mcountries[abbr][1]) {
+      el.label = window.COUNTRIES[abbr][0];
+      for (var j in window.COUNTRIES[abbr][1]) {
         el2 = document.createElement("option");
         el2.appendChild(document.createTextNode(abbr + "." + j));
         el.appendChild(el2);
@@ -140,5 +139,5 @@
   }
 </script>
 </head>
-<body onload="init()"><h2 style="margin:0; background:rgb(230,230,230);">World's Countries Demo</h2></body>
+<body onload="init()"></body>
 </html>

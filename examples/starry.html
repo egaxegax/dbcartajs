@@ -5,39 +5,105 @@
 <script type="text/javascript" src="../proj4js-combined.js"></script>
 <script type="text/javascript" src="../dbcarta.js"></script>
 <script type="text/javascript" src="demodata/continents.js"></script>
-<script type="text/javascript" src="demodata/loaddata.js"></script>
+<script type="text/javascript" src="demodata/stars.js"></script>
+<script type="text/javascript" src="demodata/starry.js"></script>
 <script type="text/javascript">
-  function turn() {
-    if ('dbcarta' in window) {
-      var cx = parseFloat(document.getElementById("turnx").value),
-          cy = parseFloat(document.getElementById("turny").value);
-      if (!isNaN(cx) && !isNaN(cy))
-        if (dbcarta.isSpherical()) {
-          var proj = dbcarta.initProj();
-          cx += proj.long0 * 180/Math.PI;
-          cy += proj.lat0 * 180/Math.PI;
-          dbcarta.initProj(' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
-          dbcarta.draw();
-        }
-    }
+  function draw() {
+    var proj = dbcarta.initProj();
+    var projh = document.getElementById('projh').value * 1000,
+        cx = proj.long0 * 180/Math.PI,
+        cy = proj.lat0 * 180/Math.PI;
+    dbcarta.initProj(' +h=' + projh + ' +lon_0=' + cx + ' +lat_0=' + cy);
+    dbcarta.scaleCarta(1);
+    dbcarta.scaleCarta(scaleheight());
+    dbcarta.draw();
+    loadStars();
   }
-  function doheight() {
-    if ('dbcarta' in window) {
-      var proj = dbcarta.initProj();
-      var projh = document.getElementById('projh').value * 1000,
-          cx = proj.long0 * 180/Math.PI,
-          cy = proj.lat0 * 180/Math.PI;
-      dbcarta.initProj(' +h=' + projh + ' +lon_0=' + cx + ' +lat_0=' + cy);
-      scaleheight();
+  // Calcucate Right Ascention and Declination (Ra/Dec)
+  function calcSpheric(coords, dt) {
+    var skyratio = 2.0 * Math.PI / scaleheight();
+        gmst = Starry.siderealTime(dt),
+        skyRotationAngle = gmst / 12.0 * Math.PI;
+    coords[0] /= skyratio;
+    coords[1] /= skyratio;
+    var proj = dbcarta.initProj();
+    var cy = -proj.lat0 * 180/Math.PI,
+        cx = proj.long0 * 180/Math.PI + skyRotationAngle * 180/Math.PI;
+    var skyproj = "+proj=ortho +units=m +a=6378140.0 +b=6356754.883 +lon_0=" + cx + " +lat_0=" + cy;
+    Proj4js.defs["SKY"] = skyproj;
+    var pt = dbcarta.transformCoords("SKY", 'epsg:4326', coords);
+    if (pt) {
+      // backside
+      pt[0] = Proj4js.common.adjust_lon((180 - (pt[0] - cx) + cx) * Math.PI/180);
+      pt[1] = pt[1] * Math.PI/180;
     }
+    return pt;
   }
+  // Draw visible stars on lonlat
+  function loadStars() {
+    var proj = dbcarta.initProj();
+    var stars = window.STARS,
+        rect = dbcarta.viewsizeOf(),
+        skyRadius = 2.0 * Math.PI * 180/Math.PI / scaleheight(),
+        eaRadius = Math.sqrt((proj.p15 - 1.0)/(proj.p15 + 1.0)) * 180/Math.PI,
+        cx = proj.long0 * 180/Math.PI,
+        cy = proj.lat0 * 180/Math.PI;
+    var mstars = Starry.renderSky(stars, rect, skyRadius, eaRadius, cx, cy, getSelTime());
+    dbcarta.initProj(0, '');
+    for(var i in mstars) {
+      dbcarta.mopt['star']['size'] = mstars[i][1] / 8;
+      dbcarta.paintCarta(mstars[i][0], 'star', mstars[i][2]);
+    }
+    dbcarta.initProj(202, ' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
+  }
+  function turn(cx, cy) {
+    if (!isNaN(cx) && !isNaN(cy))
+      if (dbcarta.isSpherical()) {
+        var proj = dbcarta.initProj();
+        cx += proj.long0 * 180/Math.PI;
+        cy += proj.lat0 * 180/Math.PI;
+        dbcarta.initProj(' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
+        dbcarta.draw();
+        loadStars();
+      }
+  }
+  // Calc maps scale by height above Earth
   function scaleheight() {
-    if ('dbcarta' in window) {
-      var proj = dbcarta.initProj();
-      var rhscale = Math.sqrt((proj.p15 - 1.0)/(proj.p15 + 1.0));
-      dbcarta.scaleCarta(1);
-      dbcarta.scaleCarta(1/rhscale*1/rhscale-0.5);
-      dbcarta.draw();
+    var proj = dbcarta.initProj();
+    var rhscale = ((proj.p15 - 1.0)/(proj.p15 + 1.0));
+    return (1/rhscale*1/rhscale*0.5);
+  }
+  function getCurrTime() {
+    var dt = new Date();
+    return [dt.getUTCFullYear(), dt.getUTCMonth()+1, dt.getUTCDate(), dt.getUTCHours(), dt.getUTCMinutes(), dt.getUTCSeconds()];
+  }
+  function getSelTime() {
+    return [document.getElementById("yy").value,
+            document.getElementById("mm").value,
+            document.getElementById("dd").value,
+            document.getElementById("hh").value,
+            document.getElementById("mi").value,
+            document.getElementById("ss").value]
+  }
+  function setSelTime() {
+    var dt = getCurrTime();
+    document.getElementById("yy").value = dt[0];
+    document.getElementById("mm").value = dt[1];
+    document.getElementById("dd").value = dt[2];
+    document.getElementById("hh").value = dt[3];
+    document.getElementById("mi").value = dt[4];
+    document.getElementById("ss").value = dt[5];
+  }
+  function setAutoTime() {
+    if ('autotime' in window) {
+      window.autotime = window.clearInterval(window.autotime);
+      document.getElementById("btauto").textContent = "auto";
+    } else {
+      window.autotime = setInterval(function() {
+        setSelTime();
+        draw();
+      }, 4000);
+      document.getElementById("btauto").textContent = "stop";
     }
   }
   function init() {
@@ -49,44 +115,92 @@
 
     var col = document.createElement("td");
     col.width = "15%";
-    var el = document.createElement("input");
-    el.type = "text";
-    el.size= "4";
-    el.id = "turnx";
-    el.value= "10";
+    var el = document.createElement("h2");
+    el.appendChild(document.createTextNode("Starry Sky Demo"));
+    el.style.padding = "0";
+    el.style.margin = "0";
     col.appendChild(el);
-    el = document.createElement("input");
-    el.type = "text";
-    el.size= "4";
-    el.id = "turny";
-    el.value= "10";
-    col.appendChild(el);    
+    row.appendChild(col);
+
+    col = document.createElement("td");
+    col.width = "10%";
+    col.align = "center";
     el = document.createElement('button');
-    el.onclick = turn;
-    el.appendChild(document.createTextNode("turn"));
+    el.onclick = function() { turn(0, -5) };
+    el.title = "Turn Up";
+    el.appendChild(document.createTextNode("U"));
+    col.appendChild(el);
+    el = document.createElement('button');
+    el.onclick = function() { turn(0, 5) };
+    el.title = "Turn Down";
+    el.appendChild(document.createTextNode("D"));
+    col.appendChild(el);
+    el = document.createElement('button');
+    el.onclick = function() { turn(5, 0) };
+    el.title = "Turn Left";
+    el.appendChild(document.createTextNode("L"));
+    col.appendChild(el);
+    el = document.createElement('button');
+    el.onclick = function() { turn(-5, 0) };
+    el.title = "Turn Right";
+    el.appendChild(document.createTextNode("R"));
+    col.appendChild(el);
+    row.appendChild(col);
+
+    col = document.createElement("td");
+    col.width = "10%";
+    col.align = "center";
+    var projh = el = document.createElement("select");
+    el.id = "projh";
+    col.appendChild(el);
+    el = document.createElement('button');
+    el.onclick = draw;
+    el.appendChild(document.createTextNode("height ae"));
+    col.appendChild(el);
+    row.appendChild(col);
+
+    col = document.createElement("td");
+    col.width = "20%";
+    col.align = "center";
+    var yy = document.createElement("select");
+    yy.id = "yy";
+    var mm = document.createElement("select");
+    mm.id = "mm";
+    var dd = document.createElement("select");
+    dd.id = "dd";
+    dd.style.marginRight = "1em";
+    var hh = document.createElement("select");
+    hh.id = "hh";
+    var mi = document.createElement("select");
+    mi.id = "mi";
+    var ss = document.createElement("select");
+    ss.id = "ss";
+    el = document.createElement("button");
+    el.id = "btauto";
+    el.onclick = setAutoTime;
+    el.appendChild(document.createTextNode("auto"));
+    col.appendChild(yy);
+    col.appendChild(document.createTextNode("-"));
+    col.appendChild(mm);
+    col.appendChild(document.createTextNode("-"));
+    col.appendChild(dd);
+    col.appendChild(hh);
+    col.appendChild(document.createTextNode(":"));
+    col.appendChild(mi);
+    col.appendChild(document.createTextNode(":"));
+    col.appendChild(ss);
     col.appendChild(el);
     row.appendChild(col);
 
     col = document.createElement("td");
     col.width = "15%";
-    var projh = el = document.createElement("select");
-    el.id = "projh";
-    col.appendChild(el);
-    el = document.createElement('button');
-    el.onclick = doheight;
-    el.appendChild(document.createTextNode("height ae"));
-    col.appendChild(el);
-    row.appendChild(col);
-
-    row.appendChild(col);
-    col = document.createElement("td");
-    col.id = "coords";
     col.align = "center";
-    col.width = "20%";
+    col.id = "coords";
     row.appendChild(col);
     document.body.appendChild(mtab);
 
     dbcarta = new dbCarta();
+    // change/define colors and flood types
     dbcarta.style.backgroundColor = "rgb(17,17,96)";
     dbcarta.mopt['.Arctic']['fg'] = "rgb(131,147,125)";
     dbcarta.mopt['.Arctic']['bg'] = "rgb(131,147,125)";
@@ -97,6 +211,10 @@
     dbcarta.mopt['DotPort']['fg'] = "rgb(220,0,0)";
     dbcarta.mopt['DotPort']['labelcolor'] = "rgb(255,155,128)";
     dbcarta.mopt['DotPort']['size'] = "3";
+    dbcarta.mopt['star'] = {};
+    dbcarta.mopt['star']['class'] = 'Dot';
+    dbcarta.mopt['star']['fg'] = "rgb(255,255,255)";
+    dbcarta.mopt['star']['labelcolor'] = "rgb(255,155,128)";
     var pov = [37.700,55.750];
     var proj = dbcarta.initProj(202, ' +lon_0=' + pov[0] + ' +lat_0=' + pov[1]);
     // nsper proj height list
@@ -107,16 +225,76 @@
       el.appendChild(document.createTextNode(i + " km"));
       projh.appendChild(el);
     }
-    dbcarta.loadCarta(loadConts());
+    // date years
+    for(i=1999; i<2050; i++) {
+      el = document.createElement("option");
+      el.value = i;
+      el.appendChild(document.createTextNode(i));
+      yy.appendChild(el);
+    }
+    // date month
+    for(i=1; i<13; i++) {
+      el = document.createElement("option");
+      el.value = i;
+      el.appendChild(document.createTextNode(i));
+      mm.appendChild(el);
+    }
+    // date days
+    for(i=1; i<32; i++) {
+      el = document.createElement("option");
+      el.value = i;
+      el.appendChild(document.createTextNode(i));
+      dd.appendChild(el);
+    }
+    // time hours
+    for(i=0; i<24; i++) {
+      el = document.createElement("option");
+      el.value = i;
+      el.appendChild(document.createTextNode(i));
+      hh.appendChild(el);
+    }
+    // time min
+    for(i=0; i<60; i++) {
+      el = document.createElement("option");
+      el.value = i;
+      el.appendChild(document.createTextNode(i));
+      mi.appendChild(el);
+    }
+    // time sec
+    for(i=0; i<60; i++) {
+      el = document.createElement("option");
+      el.value = i;
+      el.appendChild(document.createTextNode(i));
+      ss.appendChild(el);
+    }
+    // curr. coords
+    dbcarta.clfunc.onmousemove = function(sd) {
+      mcoord = document.getElementById("coords");
+      mcoord.innerHTML = "Ra/Dec:";
+      if (scoords = calcSpheric(sd, getSelTime())) {
+        // in radians
+        //mcoord.innerHTML = 'Ra: ' + scoords[0].toFixed(2) + ' Dec: ' + scoords[1].toFixed(2);
+        // in hms, dms
+        var ra = MUtil.deg2hms(scoords[0] * 180/Math.PI).join(':'),
+            dec = MUtil.deg2dms(scoords[1] * 180/Math.PI).join(':');
+        mcoord.innerHTML = 'Ra: ' + ra + ' Dec: ' + dec;
+      }
+    }
+    // events
+    yy.onchange = draw;
+    mm.onchange = draw;
+    dd.onchange = draw;
+    hh.onchange = draw;
+    mi.onchange = draw;
+    ss.onchange = draw;
+    dbcarta.clfunc.onclick = loadStars;
+    // draw
+    dbcarta.loadCarta(window.CONTINENTS);
     dbcarta.loadCarta(dbcarta.createMeridians());
     dbcarta.loadCarta([['DotPort', '1', [pov], 'Moscow']]);
-    doheight();
-    // curr. coords
-    dbcarta.clfunc.onmousemove = function(v) {
-      mcoord = document.getElementById("coords");
-      mcoord.innerHTML = " X: Y:";
-      if (v) mcoord.innerHTML = " X: " + v[0].toFixed(2) + " Y: " + v[1].toFixed(2);
-    }
+    window.CONTINENTS = undefined;
+    setSelTime();
+    draw();
   }
 </script>
 </head>

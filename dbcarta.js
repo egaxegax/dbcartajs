@@ -1,17 +1,18 @@
 /**
  * dbCarta HTML5 Canvas dymanic object map.
+ * It uses Proj4js transformations.
  *
- * This is port from Python dbCarta project http://dbcarta.googlecode.com/.
+ * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
  * egax@bk.ru, 2013
  */
 function dbCarta(pid) {
-  this.extend = function(destination, source) {
-    destination = destination || {};
-    if(source)
-      for(var property in source)
-        if(source[property] !== undefined)
-          destination[property] = source[property];
-    return destination;
+  this.extend = function(dest, src) {
+    dest = dest || {};
+    if(src)
+      for(var prop in src)
+        if(src[prop] !== undefined)
+          dest[prop] = src[prop];
+    return dest;
   }
   this.initialize = function() {
     this.dw = document.createElement('canvas');
@@ -34,10 +35,7 @@ function dbCarta(pid) {
       '.Longtitude':{'class': 'Line', 'fg': 'rgb(164,164,164)', 'anchor': ['start', 'top']},
       'DotPort':    {'class': 'Dot', 'fg': 'rgb(34,104,234)', 'anchor': ['start', 'middle'], 'size': 1},
       'Area':       {'class': 'Polygon', 'fg': 'rgb(0,130,200)', 'bg': 'rgb(0,130,200)'},
-      'Line':       {'class': 'Line', 'fg': 'rgb(0,130,200)'},
-      'Figure':     {'class': 'Line', 'fg': 'rgb(0,130,200)', 'width': 2},
-      'CurrFigure': {'class': 'Line', 'fg': 'rgb(0,130,200)', 'anchor': 'ne', 'width': 2},
-      'UserLine':   {'class': 'Line', 'fg': 'rgb(0,0,0)', 'anchor': 'nw'} };
+      'Line':       {'class': 'Line', 'fg': 'rgb(0,130,200)'} }
     /* private */
     this.dw.m = {};
     this.dw.m.delta = cw / 360.0;
@@ -112,49 +110,6 @@ function dbCarta(pid) {
       return lonlat;
     },
     // ----------------------------------
-    drawCoords: function(coords) {
-      if (this.getContext) {
-        var ctx = this.getContext("2d");
-        var cw = this.width,
-            ch = this.height;
-        ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        var wcrd = ctx.measureText('X 0000.00 X 0000.00').width,
-            hcrd = ctx.measureText('X').width * 2;
-        ctx.clearRect(cw - wcrd, ch - hcrd, wcrd, hcrd);
-        if (coords) {
-          ctx.textBaseline = 'bottom';
-          ctx.textAlign = 'end';
-          ctx.fillStyle = "black";
-          ctx.fillText('X ' + coords[0].toFixed(2) + ' Y ' + coords[1].toFixed(2), cw, ch);
-        }
-        ctx.restore();
-      }
-    },
-    drawScale: function() {
-      var cw = this.width,
-          ch = this.height,
-          hrect = 60,
-          wrect = 26,
-          tleft = cw - wrect,
-          ttop = ch/2.0 - hrect/2.0;
-      if (this.getContext) {
-        var ctx = this.getContext("2d");
-        ctx.save();
-        ctx.setTransform(1, 0, 0, 1, 0, 0);
-        ctx.beginPath(); // + -
-        ctx.rect(tleft + wrect/4.0, ttop + hrect/4.0, wrect/2.0, 1);
-        ctx.rect(tleft + wrect/2.0 - 0.5, ttop + hrect/7.0, 1, hrect/4.0);
-        ctx.rect(tleft + wrect/4.0, ttop + hrect/2.0 + hrect/4.0, wrect/2.0, 1);
-        ctx.fillStyle = 'rgb(100,100,100)';
-        ctx.fill();
-        ctx.rect(tleft, ttop, wrect, hrect); // border
-        ctx.globalAlpha = 0.3;
-        ctx.fillStyle = 'white';
-        ctx.fill();
-        ctx.restore();
-      }
-    },
     checkScale: function(cx, cy) {
       var cw = this.width,
           ch = this.height,
@@ -194,7 +149,8 @@ function dbCarta(pid) {
         }
         this.paintCarta(m['coords'], m['ftype'], m['label'], m['centerof']);
       }
-      this.drawScale();
+      this.paintScale();
+      this.paintBound();
     },
     changeProject: function(new_project) {
       if (this.isSpherical(new_project)) {
@@ -265,6 +221,68 @@ function dbCarta(pid) {
           this.paintCarta(coords, ftype, label, centerof);
       }
     },
+    paintBound: function() {
+      if (this.getContext) {
+        var ctx = this.getContext("2d");
+        var centerof = this.centerOf();
+        var ratio, proj = this.initProj();
+        // spherical radii
+        switch (String(this.project)) {
+          case "201":  ratio = 2.0; break;
+          case "202": ratio = Math.sqrt((proj.p15 - 1.0)/(proj.p15 + 1.0)); break;
+          case "203": ratio = 1.0; break;
+        }
+        if (ratio) {
+          ctx.strokeStyle = this.mopt['.Arctic']['fg'];
+          ctx.beginPath();
+          ctx.arc(centerof[0], centerof[1], 180/Math.PI * ratio * this.m.delta, 0, Math.PI*2, 0);
+          ctx.stroke();
+        }
+      }
+    },
+    paintCoords: function(coords) {
+      if (this.getContext) {
+        var ctx = this.getContext("2d");
+        var cw = this.width,
+            ch = this.height;
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        var wcrd = ctx.measureText('X 0000.00 X 0000.00').width,
+            hcrd = ctx.measureText('X').width * 2;
+        ctx.clearRect(cw - wcrd, ch - hcrd, wcrd, hcrd);
+        if (coords) {
+          ctx.textBaseline = 'bottom';
+          ctx.textAlign = 'end';
+          ctx.fillStyle = "black";
+          ctx.fillText('X ' + coords[0].toFixed(2) + ' Y ' + coords[1].toFixed(2), cw, ch);
+        }
+        ctx.restore();
+      }
+    },
+    paintScale: function() {
+      var cw = this.width,
+          ch = this.height,
+          hrect = 60,
+          wrect = 26,
+          tleft = cw - wrect,
+          ttop = ch/2.0 - hrect/2.0;
+      if (this.getContext) {
+        var ctx = this.getContext("2d");
+        ctx.save();
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.beginPath(); // + -
+        ctx.rect(tleft + wrect/4.0, ttop + hrect/4.0, wrect/2.0, 1);
+        ctx.rect(tleft + wrect/2.0 - 0.5, ttop + hrect/7.0, 1, hrect/4.0);
+        ctx.rect(tleft + wrect/4.0, ttop + hrect/2.0 + hrect/4.0, wrect/2.0, 1);
+        ctx.fillStyle = 'rgb(100,100,100)';
+        ctx.fill();
+        ctx.rect(tleft, ttop, wrect, hrect); // border
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = 'white';
+        ctx.fill();
+        ctx.restore();
+      }
+    },
     paintCarta: function(coords, ftype, ftext, centerof) {
       if (this.getContext) {
         var ctx = this.getContext("2d");
@@ -303,7 +321,7 @@ function dbCarta(pid) {
           }
           ctx.save();
           ctx.setTransform(1, 0, 0, 1, 0, 0);
-          ctx.fillText(ftext, (this.m.offset_x + this.m.scaleoff_x + centerof[0][0] + msize*2) * this.m.scale,
+          ctx.fillText(ftext, (this.m.offset_x + this.m.scaleoff_x + centerof[0][0] + msize + 3/this.m.scale) * this.m.scale,
                               (this.m.offset_y + this.m.scaleoff_y + centerof[0][1]) * this.m.scale);
           ctx.restore();
         }
@@ -448,10 +466,11 @@ function dbCarta(pid) {
     onmousemove: function(ev) {
       if (!ev) return;
       var points = this.canvasXY(ev);
-      var coords = this.fromPoints(points, true);
-      this.drawCoords(coords);
+      var srccoords = this.fromPoints(points, false);
+      var destcoords = this.fromPoints(points, true);
+      this.paintCoords(destcoords);
       if ('onmousemove' in this.clfunc)
-        this.clfunc.onmousemove(coords);
+        this.clfunc.onmousemove(srccoords, destcoords);
     },
     onclick: function(ev) {
       if (!ev) return;

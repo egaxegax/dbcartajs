@@ -1,46 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>dbCartajs - HTML5 Canvas map - Sample</title>
+<title>dbCartajs - HTML5 Canvas map - Simple Demo</title>
 <script type="text/javascript" src="../proj4js-combined.js"></script>
 <script type="text/javascript" src="../dbcarta.js"></script>
 <script type="text/javascript" src="demodata/continents.js"></script>
-<script type="text/javascript" src="demodata/loaddata.js"></script>
 <script type="text/javascript">
   function scale() {
-    if ('dbcarta' in window) {
-      var scale = parseFloat(document.getElementById("scale").value);
-      dbcarta.scaleCarta(1); // fix labels
-      dbcarta.scaleCarta(scale);
-      dbcarta.draw();
-    }
+    var scale = parseFloat(document.getElementById("scale").value);
+    dbcarta.scaleCarta(1); // fix labels
+    dbcarta.scaleCarta(scale);
+    dbcarta.draw();
   }
   function turn() {
-    if ('dbcarta' in window) {
-      var cx = parseFloat(document.getElementById("turnx").value),
-          cy = parseFloat(document.getElementById("turny").value);
-      if (!isNaN(cx) && !isNaN(cy))
-        if (dbcarta.isSpherical()) {
-          var proj = dbcarta.initProj();
-          cx += proj.long0 * 180/Math.PI;
-          cy += proj.lat0 * 180/Math.PI;
-          dbcarta.initProj(' +lon_0=' + cx + ' +lat_0=' + cy);
-          dbcarta.draw();
-        }
-    }
+    var cx = parseFloat(document.getElementById("turnx").value),
+        cy = parseFloat(document.getElementById("turny").value);
+    if (!isNaN(cx) && !isNaN(cy))
+      if (dbcarta.isSpherical()) {
+        var proj = dbcarta.initProj();
+        cx += proj.long0 * 180/Math.PI;
+        cy += proj.lat0 * 180/Math.PI;
+        dbcarta.initProj(' +lon_0=' + cx + ' +lat_0=' + cy);
+        dbcarta.draw();
+      }
   }
   function proj() {
-    if ('dbcarta' in window) {
-      dbcarta.changeProject(document.getElementById('projlist').value);
-      dbcarta.draw();
-    }
+    dbcarta.changeProject(document.getElementById('projlist').value);
+    dbcarta.draw();
   }
   function draw() {
-    if ('dbcarta' in window) {
-       try {coords = eval(document.getElementById('getcoords').value); coords.length; } 
-       catch (e) { alert("Invalid coords!\nUse:\n[[1,2],[3,4],..]"); return; }
-       dbcarta.loadCarta([[ document.getElementById("ftype").value, Math.random(), coords, 'MyTest' ]], 1);
-    }
+    try {
+      coords = eval(document.getElementById('getcoords').value); coords.length; } 
+    catch (e) { 
+       alert("Invalid coords!\nUse:\n[[1,2],[3,4],..]"); return; }
+    dbcarta.loadCarta([[ document.getElementById("ftype").value, Math.random(), coords, 'MyTest' ]], 1);
   }
   function init() {
     var mtab = document.createElement("table");
@@ -51,6 +44,16 @@
 
     var col = document.createElement("td");
     col.width = "15%";
+    var el = document.createElement("h2");
+    el.appendChild(document.createTextNode("Simple Demo"));
+    el.style.padding = "0";
+    el.style.margin = "0";
+    col.appendChild(el);
+    row.appendChild(col);
+
+    var col = document.createElement("td");
+    col.width = "10%";
+    col.align = "center";
     var el = document.createElement("input");
     el.type = "text";
     el.size= "3";
@@ -65,6 +68,7 @@
 
     col = document.createElement("td");
     col.width = "15%";
+    col.align = "center";
     el = document.createElement("input");
     el.type = "text";
     el.size= "4";
@@ -84,7 +88,7 @@
     row.appendChild(col);
 
     col = document.createElement("td");
-    col.width = "15%";
+    col.width = "10%";
     var projlist = el = document.createElement("select");
     el.id = "projlist";
     col.appendChild(el);
@@ -95,7 +99,8 @@
     row.appendChild(col);
 
     col = document.createElement("td");
-    col.width = "35%";
+    col.width = "30%";
+    col.align = "center";
     el = document.createElement("select");
     el.id = "ftype";
     var el2 = document.createElement("option");
@@ -121,18 +126,19 @@
     col.appendChild(el);
     row.appendChild(col);
 
-    row.appendChild(col);
     col = document.createElement("td");
-    col.id = "coords";
+    col.width = "15%";
     col.align = "center";
-    col.width = "20%";
+    col.id = "coords";
     row.appendChild(col);
     document.body.appendChild(mtab);
 
     dbcarta = new dbCarta();
-    dbcarta.loadCarta(loadConts());
+    dbcarta.loadCarta(window.CONTINENTS);
+    window.CONTINENTS = undefined;
     dbcarta.loadCarta(dbcarta.createMeridians());
-    dbcarta.loadCarta([['DotPort', '1', [[-25,40]], 'Point 1']]);
+    // point of view
+    dbcarta.loadCarta([['DotPort', '1', [[-25,40]], 'POV']]);
     dbcarta.draw();
     // projlist
     for(var i in dbcarta.proj) {
@@ -143,10 +149,10 @@
       projlist.appendChild(el);  
     }
     // curr. coords
-    dbcarta.clfunc.onmousemove = function(v) {
+    dbcarta.clfunc.onmousemove = function(sd, dd) {
       mcoord = document.getElementById("coords");
       mcoord.innerHTML = " X: Y:";
-      if (v) mcoord.innerHTML = " X: " + v[0].toFixed(2) + " Y: " + v[1].toFixed(2);
+      if (dd) mcoord.innerHTML = " X: " + dd[0].toFixed(2) + " Y: " + dd[1].toFixed(2);
     }
   }
 </script>
