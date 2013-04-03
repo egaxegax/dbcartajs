@@ -215,8 +215,11 @@ var Starry = {
     
     var mstars = [];
     for(var i in starsdata) {
-      var d = starsdata[i];
-      var ra = d[0], dec = d[1], mag = d[2], hip = d[3], label = d[4], size;
+      var d = starsdata[i], size;
+      if (d.length < 8) // hd
+        var ra = d[0], dec = d[1], mag = d[2], hip = d[3], label = d[4];
+      else // tycho
+        var ra = d[0], dec = d[1], mag = d[6], hip = d[5], label = d[7];
       var qpos = Qn.fromSpherical(ra, dec);      
       var q = Qn.rotateAroundAxis(qpos, skyAxisMatrix);
       var w = q[0], x = q[1], y = q[2], z = q[3];
@@ -236,9 +239,9 @@ var Starry = {
           continue;
 
       // star size
-      if ( mag < -1 ) size = 7.5;
-      else if ( mag < 0 ) size = 6.5;
-      else if ( mag < 1 ) size = 5.5;
+      if ( mag < -1 ) size = 8.0;
+      else if ( mag < 0 ) size = 7.0;
+      else if ( mag < 1 ) size = 6.0;
       else if ( mag < 2 ) size = 5.0;
       else if ( mag < 3 ) size = 4.0;
       else if ( mag < 4 ) size = 3.0;

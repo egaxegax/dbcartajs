@@ -2,13 +2,13 @@
 <html>
 <head>
 <title>dbCartajs - HTML5 Canvas map - World's Countries Demo</title>
-<script type="text/javascript" src="../proj4js-combined.js"></script>
-<script type="text/javascript" src="../dbcarta.js"></script>
+<script type="text/javascript" src="proj4js-combined.js"></script>
+<script type="text/javascript" src="dbcarta.js"></script>
 <script type="text/javascript" src="demodata/continents.js"></script>
 <script type="text/javascript" src="demodata/countries.js"></script>
 <script type="text/javascript">
   function draw() {
-    var centerof;
+    var centerof, cntrylist = document.getElementById('cntrylist');
     for (var i=0; i<cntrylist.options.length; i++) {
       var opt = cntrylist.options[i];
       if (opt.selected) {
@@ -24,6 +24,7 @@
         dbcarta4.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof]]);
       }
     }
+    // draw on centre
     if (centerof) {
       var points = dbcarta.toPoints(centerof, true);
       dbcarta.centerCarta(points[0] + dbcarta.m.offset_x, points[1] + dbcarta.m.offset_y);

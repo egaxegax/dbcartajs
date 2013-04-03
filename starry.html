@@ -2,8 +2,8 @@
 <html>
 <head>
 <title>dbCartajs - HTML5 Canvas map - Starry Sky Demo</title>
-<script type="text/javascript" src="../proj4js-combined.js"></script>
-<script type="text/javascript" src="../dbcarta.js"></script>
+<script type="text/javascript" src="proj4js-combined.js"></script>
+<script type="text/javascript" src="dbcarta.js"></script>
 <script type="text/javascript" src="demodata/continents.js"></script>
 <script type="text/javascript" src="demodata/stars.js"></script>
 <script type="text/javascript" src="demodata/starry.js"></script>
@@ -178,6 +178,7 @@
     el = document.createElement("button");
     el.id = "btauto";
     el.onclick = setAutoTime;
+    el.title = "autoupdate by interval";
     el.appendChild(document.createTextNode("auto"));
     col.appendChild(yy);
     col.appendChild(document.createTextNode("-"));

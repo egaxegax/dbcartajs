@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>dbCartajs - HTML5 Canvas map - Mercator Projection</title>
+<script type="text/javascript" src="proj4js-combined.js"></script>
+<script type="text/javascript" src="dbcarta.js"></script>
+<script type="text/javascript" src="demodata/continents.js"></script>
+<script type="text/javascript" src="demodata/countries.js"></script>
+<script type="text/javascript">
+  function init() {
+    var mtab = document.createElement("table");
+    mtab.width = "100%";
+    var row = document.createElement("tr");
+    row.style.backgroundColor = "rgb(230,230,230)";
+    mtab.appendChild(row);
+
+    var col = document.createElement("td");
+    col.width = "15%";
+    var el = document.createElement("h2");
+    el.appendChild(document.createTextNode("Mercator Proj"));
+    el.style.padding = "0";
+    el.style.margin = "0";
+    col.appendChild(el);
+    row.appendChild(col);
+    document.body.appendChild(mtab);
+
+    dbcarta = new dbCarta();
+    dbcarta.initProj(101, '+lon_0=0 +lat_0=0');
+    dbcarta.scaleCarta(0.65);
+    dbcarta.loadCarta(window.CONTINENTS);
+    dbcarta.loadCarta(dbcarta.createMeridians());
+    // draw country
+    var abbr = 'BR';
+    var cntryname = window.COUNTRIES[abbr][0];
+    for(var mpart in window.COUNTRIES[abbr][1]) {
+      var centerof = window.COUNTRIES[abbr][1][mpart][0],
+          coords = window.COUNTRIES[abbr][1][mpart][1]
+      dbcarta.loadCarta([['Area', abbr + mpart, coords, (mpart==12 ? cntryname : ''), centerof]]);
+    }
+    window.CONTINENTS = undefined;
+    window.COUNTRIES = undefined;
+    dbcarta.draw();
+  }
+</script>
+</head>
+<body onload="init()"></body>
+</html>

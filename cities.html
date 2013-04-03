@@ -2,13 +2,13 @@
 <html>
 <head>
 <title>dbCartajs - HTML5 Canvas map - World's Cities Demo</title>
-<script type="text/javascript" src="../proj4js-combined.js"></script>
-<script type="text/javascript" src="../dbcarta.js"></script>
+<script type="text/javascript" src="proj4js-combined.js"></script>
+<script type="text/javascript" src="dbcarta.js"></script>
 <script type="text/javascript" src="demodata/continents.js"></script>
 <script type="text/javascript" src="demodata/cities.js"></script>
 <script type="text/javascript">
   function draw() {
-    var centerof;
+    var centerof, citylist = document.getElementById('citylist');;
     for (var i=0; i<citylist.options.length; i++) {
       var opt = citylist.options[i];
       if (opt.selected) {

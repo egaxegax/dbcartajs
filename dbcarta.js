@@ -80,6 +80,9 @@ function dbCarta(pid) {
                points[1] / ch * ph ];
     },
     // -----------------------------------
+    /**
+    * Add meridians info to mflood.
+    */
     createMeridians: function () {
       var lonlat = [];
       var x = -180,
@@ -125,6 +128,9 @@ function dbCarta(pid) {
       } else return;
       return (zoom > 1 ? zoom : 1/(2-zoom));
     },
+    /**
+    * Draw obj from mflood on Canvas.
+    */
     draw: function() {
       this.clearCarta();
       /* viewport */
@@ -152,6 +158,9 @@ function dbCarta(pid) {
       this.paintScale();
       this.paintBound();
     },
+    /**
+    * Change project to NEW_PROJECT and center by visible center.
+    */
     changeProject: function(new_project) {
       if (this.isSpherical(new_project)) {
         var centerof = this.centerOf(),
@@ -172,6 +181,9 @@ function dbCarta(pid) {
         ctx.translate(cx, cy);
       }
     },
+    /**
+    * Center map by points CX,CY. Use DOSCALE for mouse points.
+    */
     centerCarta: function(cx, cy, doscale) {
       var pw = this.m.halfX * 2,
           ph = this.m.halfY * 2;
@@ -201,6 +213,9 @@ function dbCarta(pid) {
         ctx.restore();
       }
     },
+    /**
+    * Add obj. info from DATA to mflood store.
+    */
     loadCarta: function(data, dopaint) {
       for (var i in data) {
         var d = data[i],
@@ -221,6 +236,9 @@ function dbCarta(pid) {
           this.paintCarta(coords, ftype, label, centerof);
       }
     },
+    /**
+    * Draw Sphere radii bounds.
+    */
     paintBound: function() {
       if (this.getContext) {
         var ctx = this.getContext("2d");
@@ -240,6 +258,9 @@ function dbCarta(pid) {
         }
       }
     },
+    /**
+    * Draw curr. coords in right-bottom corner of map.
+    */
     paintCoords: function(coords) {
       if (this.getContext) {
         var ctx = this.getContext("2d");
@@ -259,6 +280,9 @@ function dbCarta(pid) {
         ctx.restore();
       }
     },
+    /**
+    * Draw zoom scale by right side.
+    */
     paintScale: function() {
       var cw = this.width,
           ch = this.height,
@@ -283,6 +307,9 @@ function dbCarta(pid) {
         ctx.restore();
       }
     },
+    /**
+    * Draw obj. with COORDS (deg.), FTYPE (see mflood) and centre with FTEXT, CENTEROF (deg.)
+    */
     paintCarta: function(coords, ftype, ftext, centerof) {
       if (this.getContext) {
         var ctx = this.getContext("2d");
@@ -327,6 +354,10 @@ function dbCarta(pid) {
         }
       }
     },
+    /**
+    * Change map scale to SCALE.
+    * Use twice to fix bug with labels: scaleCarta(1)->scaleCarta(SCALE)
+    */
     scaleCarta: function(scale) {
       if (this.getContext) {
         var ctx = this.getContext("2d");
@@ -343,6 +374,10 @@ function dbCarta(pid) {
         this.m.scale = scale;
       }
     },
+    /**
+    * Change project. to PROJECT with DEFS (see Proj4js proj. definitions).
+    * If no args return current projection info (Proj4js.Proj obj.).
+    */
     initProj: function(project, defs) {
       if ('Proj4js' in window) {
         if (project !== undefined) {
@@ -369,6 +404,9 @@ function dbCarta(pid) {
       return [ (rect[0] + rect[2]) / 2.0,
                (rect[1] + rect[3]) / 2.0 ];
     },
+    /**
+    * Map visible borders in degrees.
+    */
     viewsizeOf: function() {
       var rect = this.sizeOf();
       var left = this.fromPoints([rect[0], rect[1]], false),
@@ -379,6 +417,9 @@ function dbCarta(pid) {
           mright = right[0], mbottom = rightproj[1];
       return [mleft, mtop, mright, mbottom];
     },
+    /**
+    * Map visible centre in degrees.
+    */
     viewcenterOf: function() {
       var rect = this.viewsizeOf();
       return [ (rect[0] + rect[2]) / 2.0,
