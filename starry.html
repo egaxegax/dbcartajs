@@ -9,19 +9,33 @@
 <script type="text/javascript" src="demodata/starry.js"></script>
 <script type="text/javascript">
   function draw() {
-    var proj = dbcarta.initProj();
-    var projh = document.getElementById('projh').value * 1000,
-        cx = proj.long0 * 180/Math.PI,
-        cy = proj.lat0 * 180/Math.PI;
-    dbcarta.initProj(' +h=' + projh + ' +lon_0=' + cx + ' +lat_0=' + cy);
-    dbcarta.scaleCarta(1);
-    dbcarta.scaleCarta(scaleheight());
-    dbcarta.draw();
-    loadStars();
+    if (dbcarta.isSpherical()) {
+      var proj = dbcarta.initProj();
+      var projh = document.getElementById('projh').value * 1000,
+          cx = proj.long0 * 180/Math.PI,
+          cy = proj.lat0 * 180/Math.PI;
+      dbcarta.initProj(' +h=' + projh + ' +lon_0=' + cx + ' +lat_0=' + cy);
+      dbcarta.scaleCarta(1);
+      dbcarta.scaleCarta(1/scaleheight());
+      dbcarta.draw();
+      loadStars();
+    }
+  }
+  // Rotate Sphere on sides
+  function turn(cx, cy) {
+    if (!isNaN(cx) && !isNaN(cy))
+      if (dbcarta.isSpherical()) {
+        var proj = dbcarta.initProj();
+        cx += proj.long0 * 180/Math.PI;
+        cy += proj.lat0 * 180/Math.PI;
+        dbcarta.initProj(' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
+        dbcarta.draw();
+        loadStars();
+      }
   }
   // Calcucate Right Ascention and Declination (Ra/Dec)
   function calcSpheric(coords, dt) {
-    var skyratio = 2.0 * Math.PI / scaleheight();
+    var skyratio = 2.0 * Math.PI * scaleheight();
         gmst = Starry.siderealTime(dt),
         skyRotationAngle = gmst / 12.0 * Math.PI;
     coords[0] /= skyratio;
@@ -44,7 +58,7 @@
     var proj = dbcarta.initProj();
     var stars = window.STARS,
         rect = dbcarta.viewsizeOf(),
-        skyRadius = 2.0 * Math.PI * 180/Math.PI / scaleheight(),
+        skyRadius = 2.0 * Math.PI * 180/Math.PI * scaleheight(),
         eaRadius = Math.sqrt((proj.p15 - 1.0)/(proj.p15 + 1.0)) * 180/Math.PI,
         cx = proj.long0 * 180/Math.PI,
         cy = proj.lat0 * 180/Math.PI;
@@ -56,22 +70,14 @@
     }
     dbcarta.initProj(202, ' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
   }
-  function turn(cx, cy) {
-    if (!isNaN(cx) && !isNaN(cy))
-      if (dbcarta.isSpherical()) {
-        var proj = dbcarta.initProj();
-        cx += proj.long0 * 180/Math.PI;
-        cy += proj.lat0 * 180/Math.PI;
-        dbcarta.initProj(' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
-        dbcarta.draw();
-        loadStars();
-      }
-  }
   // Calc maps scale by height above Earth
   function scaleheight() {
     var proj = dbcarta.initProj();
     var rhscale = ((proj.p15 - 1.0)/(proj.p15 + 1.0));
-    return (1/rhscale*1/rhscale*0.5);
+    // skyratio measure above 40000 km
+    var etalon_p15 = (1.0 + 40000000/proj.a);
+    var etalon_rhscale = ((etalon_p15 - 1.0)/(etalon_p15 + 1.0));
+    return (rhscale/etalon_rhscale * rhscale/etalon_rhscale);
   }
   function getCurrTime() {
     var dt = new Date();
@@ -150,12 +156,9 @@
     col = document.createElement("td");
     col.width = "10%";
     col.align = "center";
+    col.appendChild(document.createTextNode("height ae "));
     var projh = el = document.createElement("select");
     el.id = "projh";
-    col.appendChild(el);
-    el = document.createElement('button');
-    el.onclick = draw;
-    el.appendChild(document.createTextNode("height ae"));
     col.appendChild(el);
     row.appendChild(col);
 
@@ -219,10 +222,10 @@
     var pov = [37.700,55.750];
     var proj = dbcarta.initProj(202, ' +lon_0=' + pov[0] + ' +lat_0=' + pov[1]);
     // nsper proj height list
-    for(var i=1000; i<45000; i+=3000) {
+    for(var i=1000; i<103000; i+=3000) {
       el = document.createElement("option");
       el.value = i;
-      if (i == proj.h/1000) el.selected = "true";
+      if (i == 100000) el.selected = "true";
       el.appendChild(document.createTextNode(i + " km"));
       projh.appendChild(el);
     }
@@ -282,6 +285,7 @@
       }
     }
     // events
+    projh.onchange = draw;
     yy.onchange = draw;
     mm.onchange = draw;
     dd.onchange = draw;
