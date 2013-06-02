@@ -154,7 +154,7 @@ var Starry = {
     var dt = dt.split(" ");
     var d = dt[0].split("."),
         t = dt[1].split(":");
-    return [parseInt(d[2]),parseInt(d[1]),parseInt(d[0]),parseInt(t[0]),parseInt(t[1]),parseInt(t[2])];
+    return [Number(d[2]),Number(d[1]),Number(d[0]),Number(t[0]),Number(t[1]),Number(t[2])];
   },
   /**
   * Modified Julian Day MJD
