@@ -429,6 +429,7 @@ function dbCarta(pid) {
     toPoints: function(coords, dotransform) {
       if (dotransform && this.project != 0) {
         if (!(coords = this.transformCoords('epsg:4326', String(this.project), coords))) return;
+        else if (!coords[2]) return; //backside filter
       }
       return [ coords[0] * this.m.delta + this.m.halfX,
               -coords[1] * this.m.delta + this.m.halfY ];
@@ -492,10 +493,9 @@ function dbCarta(pid) {
         var destpt = Proj4js.transform(sourceproj, destproj, sourcept);
         if (!isNaN(destpt.x) && !isNaN(destpt.y)) {
           if (sourceproj.projName == 'longlat') {
-            if (!isNaN(destpt.z)) {
-              return [ destpt.x / destproj.a * Proj4js.common.R2D,
-                       destpt.y / destproj.a * Proj4js.common.R2D ];
-            }
+            return [ destpt.x / destproj.a * Proj4js.common.R2D,
+                     destpt.y / destproj.a * Proj4js.common.R2D,
+                     !isNaN(destpt.z) ];
           } else {
             return [ destpt.x, destpt.y ];
           }

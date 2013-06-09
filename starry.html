@@ -6,7 +6,9 @@
 <script type="text/javascript" src="dbcarta.js"></script>
 <script type="text/javascript" src="demodata/continents.js"></script>
 <script type="text/javascript" src="demodata/stars.js"></script>
-<script type="text/javascript" src="demodata/starry.js"></script>
+<!--script type="text/javascript" src="/media/js/demodata/stars_tycho.js"></script-->
+<script type="text/javascript" src="utils/starry.js"></script>
+<script type="text/javascript" src="sgp4/satellite.js"></script>
 <script type="text/javascript">
   function draw() {
     if (dbcarta.isSpherical()) {
@@ -14,11 +16,12 @@
       var projh = document.getElementById('projh').value * 1000,
           cx = proj.long0 * 180/Math.PI,
           cy = proj.lat0 * 180/Math.PI;
+      // scale by altitude (height)
       dbcarta.initProj(' +h=' + projh + ' +lon_0=' + cx + ' +lat_0=' + cy);
       dbcarta.scaleCarta(1);
       dbcarta.scaleCarta(1/scaleheight());
       dbcarta.draw();
-      loadStars();
+      loadStarry();
     }
   }
   // Rotate Sphere on sides
@@ -30,7 +33,7 @@
         cy += proj.lat0 * 180/Math.PI;
         dbcarta.initProj(' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
         dbcarta.draw();
-        loadStars();
+        loadStarry();
       }
   }
   // Calcucate Right Ascention and Declination (Ra/Dec)
@@ -53,22 +56,74 @@
     }
     return pt;
   }
-  // Draw visible stars on lonlat
-  function loadStars() {
+  // Draw points (stars, tracs) on lonlat
+  function drawlonlat(pts, ftype){
     var proj = dbcarta.initProj();
-    var stars = window.STARS,
-        rect = dbcarta.viewsizeOf(),
+    var cx = proj.long0 * 180/Math.PI,
+        cy = proj.lat0 * 180/Math.PI;
+    // switch to lonlat
+    dbcarta.initProj(0, '');
+    for(var i in pts) {
+      dbcarta.mopt[ftype]['size'] = pts[i][1] / 8;
+      dbcarta.paintCarta(pts[i][0], ftype, pts[i][2]);
+    }
+    // restore spherical proj
+    dbcarta.initProj(202, ' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
+  }
+  // Render sky obj
+  function loadStarry(){
+    var proj = dbcarta.initProj();
+    var rect = dbcarta.viewsizeOf(),
         skyRadius = 2.0 * Math.PI * 180/Math.PI * scaleheight(),
         eaRadius = Math.sqrt((proj.p15 - 1.0)/(proj.p15 + 1.0)) * 180/Math.PI,
+        eaRadiusM = proj.a,
         cx = proj.long0 * 180/Math.PI,
-        cy = proj.lat0 * 180/Math.PI;
-    var mstars = Starry.renderSky(stars, rect, skyRadius, eaRadius, cx, cy, getSelTime());
-    dbcarta.initProj(0, '');
-    for(var i in mstars) {
-      dbcarta.mopt['star']['size'] = mstars[i][1] / 8;
-      dbcarta.paintCarta(mstars[i][0], 'star', mstars[i][2]);
+        cy = proj.lat0 * 180/Math.PI,
+        gmtime = getSelTime();
+    // draw stars
+    var stars = window.STARS,
+        mstars = Starry.renderSky(stars, rect, skyRadius, eaRadius, cx, cy, gmtime);
+    drawlonlat(mstars, 'star');
+    // sat.tracs
+    var tledata = [[ 'ISS (ZARYA)',
+                     '1 25544U 98067A   12138.83290882  .00011789  00000-0  17152-3 0  5727',
+                     '2 25544  51.6409 274.1861 0010682 328.0828 128.1508 15.56173799773289' ],
+                   [ 'MOLNIYA 1-90',
+                     '1 24960U 97054A   04104.60038411 -.00000148  00000-0  10000-3 0  8467',
+                     '2 24960  64.1699 306.8439 7209074 272.6281  14.3196  2.00635799 48072' ],
+                   [ 'COSMOS 158 R/B',
+                     '1 02802U 67045B   04105.12224913  .00000082  00000-0  32618-4 0  5785',
+                     '2 02802  74.0096 111.2339 0069038 241.3647 118.0552 14.42132256935013' ]];
+    for(var i in tledata) {
+      var pos = [];
+      var satrec = satellite.twoline2satrec(tledata[i][1], tledata[i][2]);
+      var rect = satellite.propagate(satrec, gmtime[0], gmtime[1], gmtime[2], gmtime[3], gmtime[4], gmtime[5]);
+      var tracs = [tledata[i][0], [rect[0]]];
+      var mtracs = Starry.renderSat(tracs[1], rect, eaRadius, eaRadiusM, cx, cy, gmtime),
+          mcoords = MVector.rect2geo(gmtime, tracs[1][0][0], tracs[1][0][1], tracs[1][0][2]);
+      drawlonlat(mtracs, 'sattrac');
+      dbcarta.paintCarta([mcoords], 'satsurface');
+      if (mtracs.length)
+        if (mtracs[0][1] > 1) { // not overlap
+          // sat.fields of vision
+          var pts = MVector.circle1spheric(mcoords[0], mcoords[1], MVector.AE * 18 * Math.PI/180, 20);
+          // conv to lonlat
+          for(var j in pts){
+            if (pt = dbcarta.transformCoords('epsg:4326', String(dbcarta.project), pts[j])) {
+              // backside intersect ea
+              if (!pt[2])
+                pt = MVector.lineNcircle([ mtracs[0][0][0], pt ], eaRadius);
+              // triangle sector
+              if (j > 0)
+                drawlonlat([[[mtracs[0][0][0], pt, pt1]]], 'sector');
+              // previous pt
+              var pt1 = pt;
+            }
+          }
+          // draw sat.label
+          drawlonlat([[[mtracs[0][0][0]], mtracs[0][1], tracs[0]]], 'sattrac');
+        }
     }
-    dbcarta.initProj(202, ' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
   }
   // Calc maps scale by height above Earth
   function scaleheight() {
@@ -84,12 +139,12 @@
     return [dt.getUTCFullYear(), dt.getUTCMonth()+1, dt.getUTCDate(), dt.getUTCHours(), dt.getUTCMinutes(), dt.getUTCSeconds()];
   }
   function getSelTime() {
-    return [document.getElementById("yy").value,
-            document.getElementById("mm").value,
-            document.getElementById("dd").value,
-            document.getElementById("hh").value,
-            document.getElementById("mi").value,
-            document.getElementById("ss").value]
+    return [Number(document.getElementById("yy").value),
+            Number(document.getElementById("mm").value),
+            Number(document.getElementById("dd").value),
+            Number(document.getElementById("hh").value),
+            Number(document.getElementById("mi").value),
+            Number(document.getElementById("ss").value)]
   }
   function setSelTime() {
     var dt = getCurrTime();
@@ -101,7 +156,7 @@
     document.getElementById("ss").value = dt[5];
   }
   function setAutoTime() {
-    if ('autotime' in window) {
+    if (window.autotime) {
       window.autotime = window.clearInterval(window.autotime);
       document.getElementById("btauto").textContent = "auto";
     } else {
@@ -219,6 +274,19 @@
     dbcarta.mopt['star']['class'] = 'Dot';
     dbcarta.mopt['star']['fg'] = "rgb(255,255,255)";
     dbcarta.mopt['star']['labelcolor'] = "rgb(255,155,128)";
+    dbcarta.mopt['sattrac'] = {};
+    dbcarta.mopt['sattrac']['class'] = 'Dot';
+    dbcarta.mopt['sattrac']['fg'] = "rgb(200,200,200)";
+    dbcarta.mopt['sattrac']['labelcolor'] = "rgb(200,200,170)";
+    dbcarta.mopt['satsurface'] = {};
+    dbcarta.mopt['satsurface']['class'] = 'Dot';
+    dbcarta.mopt['satsurface']['fg'] = "rgb(0,220,0)";
+    dbcarta.mopt['satsurface']['size'] = "2";
+    dbcarta.mopt['sector'] = {};
+    dbcarta.mopt['sector']['class'] = 'Polygon';
+    dbcarta.mopt['sector']['fg'] = "rgba(200,200,170,0.1)";
+    dbcarta.mopt['sector']['bg'] = "rgba(200,200,170,0.1)";
+    dbcarta.mopt['sector']['width'] = '0.2';
     var pov = [37.700,55.750];
     var proj = dbcarta.initProj(202, ' +lon_0=' + pov[0] + ' +lat_0=' + pov[1]);
     // nsper proj height list
@@ -292,7 +360,7 @@
     hh.onchange = draw;
     mi.onchange = draw;
     ss.onchange = draw;
-    dbcarta.clfunc.onclick = loadStars;
+    dbcarta.clfunc.onclick = loadStarry;
     // draw
     dbcarta.loadCarta(window.CONTINENTS);
     dbcarta.loadCarta(dbcarta.createMeridians());
