@@ -164,27 +164,26 @@ var MVector = {
         e = ma[1][1] - k * ma[1][0];
     // ax+bx+c=0
     var a = -k, b = 1, c = -e;
-
     var x0 = -a*c/(a*a+b*b),
         y0 = -b*c/(a*a+b*b);
     if (c*c > r*r*(a*a+b*b)) // no points
       return;
     else if (Math.abs(c*c - r*r*(a*a+b*b)) < 0) // 1 point
-       return ma[1];
+      return ma[1];
     else {  // 2 points
-    var d = r*r - c*c/(a*a+b*b),
-        mult = Math.sqrt(d / (a*a+b*b));
-    var ax = x0 + b * mult,
-        bx = x0 - b * mult;
-        ay = y0 - a * mult;
-        by = y0 + a * mult;
-    // closest
-    var r1 = Math.sqrt((ma[0][0] - ax)*(ma[0][0] - ax) + (ma[0][1] - ay)*(ma[0][1] - ay)),
-        r2 = Math.sqrt((ma[0][0] - bx)*(ma[0][0] - bx) + (ma[0][1] - by)*(ma[0][1] - by));
-    if (r1 < r2)
-      return [ ax, ay ];
-    else
-      return [ bx, by ];
+      var d = r*r - c*c/(a*a+b*b),
+          mult = Math.sqrt(d / (a*a+b*b));
+      var ax = x0 + b * mult,
+          bx = x0 - b * mult;
+          ay = y0 - a * mult;
+          by = y0 + a * mult;
+      // closest
+      var r1 = Math.sqrt((ma[0][0] - ax)*(ma[0][0] - ax) + (ma[0][1] - ay)*(ma[0][1] - ay)),
+          r2 = Math.sqrt((ma[0][0] - bx)*(ma[0][0] - bx) + (ma[0][1] - by)*(ma[0][1] - by));
+      if (r1 < r2)
+        return [ ax, ay ];
+      else
+        return [ bx, by ];
     }
   },
   /**
@@ -411,7 +410,7 @@ var Starry = {
         skyAxis = Qn.fromEuler(-cy, cx + skyRotationAngle, 0.0),
         skyAxisMatrix = Qn.toMatrix(Qn.inverse(skyAxis));
     
-    var mtracs = [];
+    var labels = [], points = [];
     for(var i in tracs) {
       var d = tracs[i], size;
       var xe = d[0], ye = d[1], ze = d[2];  // vector
@@ -432,14 +431,11 @@ var Starry = {
       //if ( (px < left || px >= right) || (py > top || py <= bottom) )
       //    continue;
 
-      // size
-      if ( i == 0 ) 
-        size = 10.0;
-      else
-        size = 1.0;
-
-      mtracs.push([ [[px, py]], size ]);
+      if ( i == 0 ) // label
+        labels.push([ [[px, py]] ]);
+      else // points
+        points.push([px, py]);
     }
-    return mtracs;
+    return [labels, [[points]]];
   }
 }
