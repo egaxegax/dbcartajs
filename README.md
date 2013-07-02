@@ -8,7 +8,8 @@ It uses Proj4js transformations.  Starry Sky demo include satellite-js module.
 
 Simply download, unpack and open index.html in any browser with HTML5 support.
 
-
 ## Starry Sky Demo
 
 Featured, copmlicated demo like Orbitron, Marble, Xephem but more lightweight.
+
+![Скриншот с dbcartajs.appspot.com](http://dbcarta.googlecode.com/svn/wiki/img/demo-250.gif "dbcartajs")
