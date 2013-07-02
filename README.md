@@ -12,4 +12,7 @@ Simply download, unpack and open index.html in any browser with HTML5 support.
 
 Featured, copmlicated demo like Orbitron, Marble, Xephem but more lightweight.
 
-![Скриншот с dbcartajs.appspot.com](http://dbcarta.googlecode.com/svn/wiki/img/demo-250.gif "dbcartajs")
+## Screenshots
+
+![demo-250.gif] (http://img-fotki.yandex.ru/get/9089/136640652.0/0_b79e1_2ba88537_M.gif "demo-250.gif")
+![demo-polar-250.gif] (http://img-fotki.yandex.ru/get/9329/136640652.0/0_b79e2_12b9df76_M.gif "demo-polar-250.gif")
