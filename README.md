@@ -14,3 +14,8 @@ Controls:
 ## Starry Sky Demo
 
 Featured, copmlicated demo like Orbitron, Marble, Xephem but more lightweight.
+
+## Screenshots
+
+![demo-250.gif] (http://img-fotki.yandex.ru/get/9089/136640652.0/0_b79e1_2ba88537_M.gif "demo-250.gif")
+![demo-polar-250.gif] (http://img-fotki.yandex.ru/get/9329/136640652.0/0_b79e2_12b9df76_M.gif "demo-polar-250.gif")
