@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta http-equiv="content-type" content="text/html;charset=windows-1251" />
 <title>dbCartajs - HTML5 Canvas map - World's Countries Demo</title>
 <script type="text/javascript" src="proj4js-combined.js"></script>
 <script type="text/javascript" src="dbcarta.js"></script>
@@ -55,16 +56,16 @@
     col.style.borderStyle = "solid";
     col.style.verticalAlign = "top";
     var el = document.createElement('div');
-    el.appendChild(document.createTextNode("Countries by part:"));    
+    el.appendChild(document.createTextNode("Countries by part:"));
     col.appendChild(el);
     var cntrylist = el2 = document.createElement("select");
     el2.id = "cntrylist"
     el2.multiple="true";
     el2.size = "20";
-    el = document.createElement('div');    
+    el = document.createElement('div');
     el.appendChild(el2);
     col.appendChild(el);
-    el = document.createElement('div');    
+    el = document.createElement('div');
     var el2 = document.createElement('button');
     el2.onclick = draw;
     el2.appendChild(document.createTextNode("show"));

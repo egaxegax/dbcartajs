@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=windows-1251" />
+<title>dbCartajs - HTML5 Canvas map - Non-Cartographic Demo</title>
+<script type="text/javascript" src="proj4js-combined.js"></script>
+<script type="text/javascript" src="dbcarta.js"></script>
+<script type="text/javascript">
+  function init() {
+    dbcarta = new dbCarta();
+    dbcarta.style.backgroundColor = 'white';
+    dbcarta.style.border = '1px dashed lightgray';
+    // add new layer
+    dbcarta.mopt['yellow'] = {class: 'Polygon', fg: 'black', bg: 'yellow'};
+    dbcarta.mopt['red'] = {class: 'Polygon', fg: 'black', bg: 'red'};
+    dbcarta.mopt['hole'] = {class: 'Polygon', fg: 'black', bg: 'white'};
+    dbcarta.loadCarta([['yellow','D1',[[-178,80],[-178,70],[-158,73],[-158,77],[-178,80]],'D',null,true]]);
+    dbcarta.loadCarta([['hole','D2',[[-175,78],[-175,72],[-161,74],[-161,76],[-175,78]],'D2',null,true]]);
+    dbcarta.loadCarta([['red','B1',[[-148,80],[-148,70],[-128,73],[-142,75],[-128,77],[-148,80]],'B',null,true]]);
+    dbcarta.loadCarta([['hole','B2',[[-145,78],[-145,75.5],[-138,77],[-145,78]]]]);
+    dbcarta.loadCarta([['hole','B3',[[-145,74],[-145,71.5],[-138,73],[-145,74]]]]);
+    dbcarta.loadCarta([['yellow','C',[[-98,80],[-118,83],[-118,70],[-98,73],[-101,75],[-115,73],[-115,80],[-101,78],[-98,80]],'C',null,true]]);
+    dbcarta.loadCarta([['red','A1',[[-76,80],[-86,70],[-78,70],[-77,74],[-75,74],[-74,70],[-66,70],[-76,80]],'A',null,true]]);
+    dbcarta.loadCarta([['hole','A2',[[-76,77],[-77,75],[-75,75],[-76,77]]]]);
+    dbcarta.loadCarta([['yellow','R1',[[-58,80],[-58,70],[-53,70],[-53,73],[-44,70],[-38,70],[-52,75],[-38,77],[-58,80]],'R',null,true]]);
+    dbcarta.loadCarta([['hole','R2',[[-55,78],[-55,75.5],[-48,77],[-55,78]]]]);
+    dbcarta.loadCarta([['red','T',[[-28,80],[-28,77],[-20,77],[-20,70],[-12,70],[-12,77],[-4,77],[-4,80],[-28,80]],'T',null,true]]);
+    dbcarta.loadCarta([['yellow','A3',[[14,80],[4,70],[12,70],[13,74],[15,74],[16,70],[24,70],[14,80]],'A',null,true]]);
+    dbcarta.loadCarta([['hole','A4',[[14,77],[13,75],[15,75],[14,77]]]]);
+    // center by A
+    var points = dbcarta.toPoints([-76,82], true);
+    dbcarta.centerCarta(points[0] + dbcarta.m.offset_x, points[1] + dbcarta.m.offset_y);
+    dbcarta.changeProject(203);
+    dbcarta.scaleCarta(6);
+    dbcarta.draw();
+  }
+</script>
+</head>
+<body onload="init()"></body>
+</html>

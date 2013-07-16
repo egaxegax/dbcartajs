@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta http-equiv="content-type" content="text/html;charset=windows-1251" />
 <title>dbCartajs - HTML5 Canvas map - Simple Demo</title>
 <script type="text/javascript" src="proj4js-combined.js"></script>
 <script type="text/javascript" src="dbcarta.js"></script>
@@ -33,7 +34,7 @@
       coords = eval(document.getElementById('getcoords').value); coords.length; } 
     catch (e) { 
        alert("Invalid coords!\nUse:\n[[1,2],[3,4],..]"); return; }
-    dbcarta.loadCarta([[ document.getElementById("ftype").value, Math.random(), coords, 'MyTest' ]], 1);
+    dbcarta.loadCarta([[ document.getElementById("ftype").value, Math.random(), coords, 'MyTest', coords[0], true ]], 1);
   }
   function init() {
     var mtab = document.createElement("table");
@@ -80,7 +81,7 @@
     el.size= "4";
     el.id = "turny";
     el.value= "10";
-    col.appendChild(el);    
+    col.appendChild(el);
     el = document.createElement('button');
     el.onclick = turn;
     el.appendChild(document.createTextNode("turn"));
@@ -110,11 +111,11 @@
     el2 = document.createElement("option");
     el2.value = "Area";
     el2.appendChild(document.createTextNode(el2.value));
-    el.appendChild(el2);      
+    el.appendChild(el2);
     el2 = document.createElement("option");
     el2.value = "DotPort";
     el2.appendChild(document.createTextNode(el2.value));
-    el.appendChild(el2);      
+    el.appendChild(el2);
     col.appendChild(el);
     el = document.createElement("input");
     el.type = "text";
@@ -143,10 +144,10 @@
     // projlist
     for(var i in dbcarta.proj) {
       var projname = dbcarta.proj[i].split(' ')[0].split('=')[1];
-      el = document.createElement("option");     
+      el = document.createElement("option");
       el.value = i;
       el.appendChild(document.createTextNode(projname));
-      projlist.appendChild(el);  
+      projlist.appendChild(el);
     }
     // curr. coords
     dbcarta.clfunc.onmousemove = function(sd, dd) {

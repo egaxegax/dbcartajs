@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta http-equiv="content-type" content="text/html;charset=windows-1251" />
 <title>dbCartajs - HTML5 Canvas map - Starry Sky Demo</title>
 <script type="text/javascript" src="proj4js-combined.js"></script>
 <script type="text/javascript" src="dbcarta.js"></script>
@@ -39,15 +40,15 @@
   }
   // Calcucate Right Ascention and Declination (Ra/Dec)
   function calcSpheric(coords, dt) {
-    var skyratio = 2.0 * Math.PI * scaleheight();
+    var proj = dbcarta.initProj();
+    var skyratio = proj.h/proj.a;
         gmst = Starry.siderealTime(dt),
         skyRotationAngle = gmst / 12.0 * Math.PI;
     coords[0] /= skyratio;
     coords[1] /= skyratio;
-    var proj = dbcarta.initProj();
     var cy = -proj.lat0 * 180/Math.PI,
         cx = proj.long0 * 180/Math.PI + skyRotationAngle * 180/Math.PI;
-    var skyproj = "+proj=ortho +units=m +a=6378140.0 +b=6356754.883 +lon_0=" + cx + " +lat_0=" + cy;
+    var skyproj = "+proj=ortho +units=m +a=" + proj.a + " +b=" + proj.b + " +lon_0=" + cx + " +lat_0=" + cy;
     Proj4js.defs["SKY"] = skyproj;
     var pt = dbcarta.transformCoords("SKY", 'epsg:4326', coords);
     if (pt) {
@@ -75,7 +76,7 @@
   function loadStarry(){
     var proj = dbcarta.initProj();
     var rect = dbcarta.viewsizeOf(),
-        skyRadius = 2.0 * Math.PI * 180/Math.PI * scaleheight(),
+        skyRadius = 180/Math.PI * proj.h/proj.a,
         eaRadius = Math.sqrt((proj.p15 - 1.0)/(proj.p15 + 1.0)) * 180/Math.PI,
         eaRadiusM = proj.a,
         cx = proj.long0 * 180/Math.PI,

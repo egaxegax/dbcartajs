@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=windows-1251" />
+<title>dbCartajs - HTML5 Canvas map - Use Map Demo</title>
+<script type="text/javascript" src="dbcarta.js"></script>
+<script type="text/javascript" src="demodata/countriesd.js"></script>
+<script type="text/javascript">
+  function init() {
+    var mtab = document.createElement("table");
+    mtab.width = "100%";
+    var row = document.createElement("tr");
+    row.style.backgroundColor = "rgb(230,230,230)";
+    mtab.appendChild(row);
+
+    var col = document.createElement("td");
+    col.width = "15%";
+    var el = document.createElement("h2");
+    el.appendChild(document.createTextNode("UseMap Demo"));
+    el.style.padding = "0";
+    el.style.margin = "0";
+    col.appendChild(el);
+    row.appendChild(col);
+
+    col = document.createElement("td");
+    col.align = "center";
+    col.id = "coords";
+    row.appendChild(col);
+    document.body.appendChild(mtab);
+
+    dbcarta = new dbCarta();
+    // add new layer
+    dbcarta.mopt['Country'] = {};
+    dbcarta.mopt['Country']['class'] = 'Polygon';
+    dbcarta.mopt['Country']['fg'] = "rgb(200,200,200)";
+    dbcarta.mopt['Country']['bg'] = dbcarta.mopt['.Mainland']['bg'];
+    dbcarta.loadCarta(window.COUNTRIES, false, true);
+    window.COUNTRIES = undefined;
+    dbcarta.loadCarta(dbcarta.createMeridians());
+    dbcarta.draw();
+    // curr. object
+    dbcarta.clfunc.onmousemove = function(sd, dd) {
+      mcoord = document.getElementById("coords");
+      if (dbcarta.m.pmap) {
+         var o = dbcarta.mflood[dbcarta.m.pmap],
+             label = 'label' in o ? o['label'] : dbcarta.m.pmap;
+         mcoord.innerHTML = label;
+      }
+    }
+  }
+</script>
+</head>
+<body onload="init()"></body>
+</html>
