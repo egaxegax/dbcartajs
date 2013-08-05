@@ -335,7 +335,7 @@ var Starry = {
     earthRadius,  // degrees
     centerx,      // degrees
     centery,      // degrees
-    time          // array date/time GMT
+    time          // array date/time UTC
     ){
 
     var left = viewport[0], top = viewport[1],
@@ -374,13 +374,7 @@ var Starry = {
           continue;
 
       // star size
-      if ( mag < -1 ) size = 8.0;
-      else if ( mag < 0 ) size = 7.0;
-      else if ( mag < 1 ) size = 6.0;
-      else if ( mag < 2 ) size = 5.0;
-      else if ( mag < 3 ) size = 4.0;
-      else if ( mag < 4 ) size = 3.0;
-      else if ( mag < 5 ) size = 2.0;
+      if ( mag < 7 ) size = 7.0 - mag;
       else size = 1.0;
 
       mstars.push([ [[px, py]], size, label ]);
@@ -437,5 +431,260 @@ var Starry = {
         points.push([px, py]);
     }
     return [labels, [[points]]];
+  }
+}
+var Solar = {
+  /**
+  * Возвращает дни (с долями) от эпохи J2000.
+  * $time массив (y,m,d,h,m,s) в UTC.
+  */
+  timeScale: function(time) {
+    var Y = parseInt(time[0]),
+        M = parseInt(time[1]),
+        D = parseInt(time[2]),
+        h = 3 in time ? parseInt(time[3]) : 0,
+        m = 4 in time ? parseInt(time[4]) : 0,
+        s = 5 in time ? parseInt(time[5]) : 0;
+    return 367*Y - parseInt(7*( Y + parseInt((M+9)/12) ) / 4) + parseInt(275*M/9) + D - 730530 + (h*3600 + m*60 + s) / 86400.0;
+  },
+  /**
+  * Переводит эклиптические прямоугольные гелиоцентрическе в 
+  * экваториальные прямоугольные геоцентричсекие координаты.
+  * Возвращает массив `[x,y,z]`.
+  * $xe, $ye, $ze прямоугольные координаты.
+  * $d кол-во дней с долями от эпохи J2000.
+  */
+  ecl2eq: function(xe, ye, ze, d) {
+    var ecl = 23.4393 - 3.563E-7 * d;
+    return [ xe,
+             ye * Math.cos(ecl * Math.PI/180) - ze * Math.sin(ecl * Math.PI/180),
+             ye * Math.sin(ecl * Math.PI/180) + ze * Math.cos(ecl * Math.PI/180) ];
+  },
+  /**
+  * Переводит эклиптические прямоугольные гелиоцентрические в
+  * эклиптические прямоугольные геоцентрические координаты.
+  * Возвращает массив `[x,y,z]`. Использует Sun.
+  * $xe, $ye, $ze прямоугольные координаты.
+  * $d кол-во дней с долями от эпохи J2000.
+  * $precession_epoch эпоха с долями для прецессии.
+  */
+  ecl_helio2geo: function(xe, ye, ze, r, d, precession_epoch) {
+    if (precession_epoch) {
+      // эклиптич. сферич. гелиоцентрич.
+      var ecl = MVector.rect2spheric(xe, ye, ze),
+          lonecl = ecl[0],
+          latecl = ecl[1],
+          r = ecl[2];
+      // прецессия
+      var lon_corr = 3.82394E-5 * ( 365.2422 * ( precession_epoch - 2000.0 ) - d );
+      lonecl += lon_corr;
+      // коррект. эклиптич. сферич. гелиоцентрич.
+      var rect = MVector.spheric2rect(lonecl, latecl, r),
+          xe = rect[0],
+          ye = rect[1],
+          ze = rect[2];
+    }
+    // позиция Солнца
+    var ps = this.Sun(d),
+        xs = ps[0],
+        ys = ps[1],
+        zs = ps[2];
+    // эклиптич. прямоуг. геоцентрич.
+    var xg = xe + xs,
+        yg = ye + ys,
+        zg = ze;
+    return [ xg, yg, zg ];
+  },
+  /**
+  * Считает эклиптические прямоугольные гелиоцентрические (геоцентрические для Луны) координаты.
+  * Возвращает массив `[x,y,z]`
+  * N долгота восходящего узла (в градусах).
+  * i наклонение (в градусах).
+  * w аргумент перигея (в градусах).
+  * a среднее расстояние от центра земли в радиусах земли ( E.r.).
+  * e эксцентриситет.
+  * M средняя аномалия.
+  */
+  eclrect: function(N, i, w, a, e, M) {
+    // эксцентрич. аномалия
+    var E0 = MUtil.ang360(M + (180/Math.PI) * e * Math.sin(M * Math.PI/180) * ( 1.0 + e * Math.cos(M * Math.PI/180) )),
+        E1 = MUtil.ang360(E0 - (E0 - (180/Math.PI) * e * Math.sin(E0 * Math.PI/180) - M) / (1 - e * Math.cos(E0 * Math.PI/180)));
+    var x = a * (Math.cos(E1 * Math.PI/180) - e),
+        y = a * Math.sqrt(1 - e*e) * Math.sin(E1 * Math.PI/180);
+    // расстояние и истинная аномалия
+    var r = Math.sqrt( x*x + y*y ),
+        v = Math.atan2( y, x );
+    return [ r * ( Math.cos(N * Math.PI/180) * Math.cos(v + w * Math.PI/180) - Math.sin(N * Math.PI/180) * Math.sin(v + w * Math.PI/180) * Math.cos(i * Math.PI/180) ),
+             r * ( Math.sin(N * Math.PI/180) * Math.cos(v + w * Math.PI/180) + Math.cos(N * Math.PI/180) * Math.sin(v + w * Math.PI/180) * Math.cos(i * Math.PI/180) ),
+             r * Math.sin(v + w * Math.PI/180) * Math.sin(i * Math.PI/180) ];
+  },
+  /**
+  * Расчет положения Солнца.
+  * $d кол-во дней с долями от эпохи J2000.
+  */
+  Sun: function(d) {
+    // орбитальные параметры
+    var N = 0.0,                                       // долгота восходящего узла
+        i = 0.0,                                       // наклонение
+        w = MUtil.ang360(282.9404 + 4.70935E-5 * d),   // аргумент перигея
+        a = 1.000000,                                  // среднее расстояние от Солнца (в а.е.)
+        e = 0.016709 - 1.151E-9 * d,                   // эксцентриситет
+        M = MUtil.ang360(356.0470 + 0.9856002585 * d); // средняя аномалия
+    // средняя долгота
+    var L = MUtil.ang360(w + M);
+    // эксцентрич. аномалия
+    var E = MUtil.ang360(M + (180/Math.PI) * e * Math.sin(M * Math.PI/180) * ( 1.0 + e * Math.cos(M * Math.PI/180) ));
+    // эклиптич. прямоуг. гелиоцентрич.
+    var xv = Math.cos(E * Math.PI/180) - e,
+        yv = Math.sqrt(1.0 - e*e) * Math.sin(E * Math.PI/180);
+    // расстояние и истинная аномалия
+    var r = Math.sqrt( xv*xv + yv*yv ),
+        v = Math.atan2( yv, xv );
+    // истинная долгота
+    var lon = v + w * Math.PI/180;
+    // эклиптич. прямоуг. геоцентрич.
+    var xe = r * Math.cos(lon),
+        ye = r * Math.sin(lon),
+        ze = 0.0;
+    return [xe, ye, ze ];
+  },
+  Moon: function(d) {
+    var N = 125.1228 - 0.0529538083 * d,
+        i = 5.1454,
+        w = 318.0634 + 0.1643573223 * d,
+        a = 60.2666,
+        e = 0.054900,
+        M = 115.3654 + 13.0649929509 * d;
+    return this.eclrect(N, i, MUtil.ang360(w), a, e, MUtil.ang360(M));
+  },
+  Mercury: function(d) {
+    var N = 48.3313 + 3.24587E-5 * d,
+        i = 7.0047 + 5.00E-8 * d,
+        w = 29.1241 + 1.01444E-5 * d,
+        a = 0.387098,
+        e = 0.205635 + 5.59E-10 * d,
+        M = 168.6562 + 4.0923344368 * d;
+    var ecl = this.eclrect(N, i, MUtil.ang360(w), a, e, MUtil.ang360(M)),
+        xg = ecl[0],
+        yg = ecl[1],
+        zg = ecl[2],
+        r = Math.sqrt( xg*xg+yg*yg+zg*zg );
+    return [ xg, yg, zg, r ];
+  },
+  Venus: function(d) {
+    var N = 76.6799 + 2.46590E-5 * d,
+        i = 3.3946 + 2.75E-8 * d,
+        w = 54.8910 + 1.38374E-5 * d,
+        a = 0.723330,
+        e = 0.006773 - 1.302E-9 * d,
+        M = 48.0052 + 1.6021302244 * d;
+    var ecl = this.eclrect(N, i, MUtil.ang360(w), a, e, MUtil.ang360(M)),
+        xg = ecl[0],
+        yg = ecl[1],
+        zg = ecl[2],
+        r = Math.sqrt( xg*xg+yg*yg+zg*zg );
+    return [ xg, yg, zg, r ];
+  },
+  Mars: function(d) {
+    var N = 49.5574 + 2.11081E-5 * d,
+        i = 1.8497 - 1.78E-8 * d,
+        w = 286.5016 + 2.92961E-5 * d,
+        a = 1.523688,
+        e = 0.093405 + 2.516E-9 * d,
+        M = 18.6021 + 0.5240207766 * d;
+    var ecl = this.eclrect(N, i, MUtil.ang360(w), a, e, MUtil.ang360(M)),
+        xg = ecl[0],
+        yg = ecl[1],
+        zg = ecl[2],
+        r = Math.sqrt( xg*xg+yg*yg+zg*zg );
+    return [ xg, yg, zg, r ];
+  },
+  Jupiter: function(d) {
+    var N = 100.4542 + 2.76854E-5 * d,
+        i = 1.3030 - 1.557E-7 * d,
+        w = 273.8777 + 1.64505E-5 * d,
+        a = 5.20256,
+        e = 0.048498 + 4.469E-9 * d,
+        M = 19.8950 + 0.0830853001 * d;
+    var ecl = this.eclrect(N, i, MUtil.ang360(w), a, e, MUtil.ang360(M)),
+        xg = ecl[0],
+        yg = ecl[1],
+        zg = ecl[2],
+        r = Math.sqrt( xg*xg+yg*yg+zg*zg );
+    return [ xg, yg, zg, r ];
+  },
+  Saturn: function(d) {
+    var N = 113.6634 + 2.38980E-5 * d,
+        i = 2.4886 - 1.081E-7 * d,
+        w = 339.3939 + 2.97661E-5 * d,
+        a = 9.55475,
+        e = 0.055546 - 9.499E-9 * d,
+        M = 316.9670 + 0.0334442282 * d;
+    var ecl = this.eclrect(N, i, MUtil.ang360(w), a, e, MUtil.ang360(M)),
+        xg = ecl[0],
+        yg = ecl[1],
+        zg = ecl[2],
+        r = Math.sqrt( xg*xg+yg*yg+zg*zg );
+    return [ xg, yg, zg, r ];
+  },
+  Uranus: function(d) {
+    var N = 74.0005 + 1.3978E-5 * d,
+        i = 0.7733 + 1.9E-8 * d,
+        w = 96.6612 + 3.0565E-5 * d,
+        a = 19.18171 - 1.55E-8 * d,
+        e = 0.047318 + 7.45E-9 * d,
+        M = 142.5905 + 0.011725806 * d;
+    var ecl = this.eclrect(N, i, MUtil.ang360(w), a, e, MUtil.ang360(M)),
+        xg = ecl[0],
+        yg = ecl[1],
+        zg = ecl[2],
+        r = Math.sqrt( xg*xg+yg*yg+zg*zg );
+    return [ xg, yg, zg, r ];
+  },
+  Neptune: function(d) {
+    var N = 131.7806 + 3.0173E-5 * d,
+        i = 1.7700 - 2.55E-7 * d,
+        w = 272.8461 - 6.027E-6 * d,
+        a = 30.05826 + 3.313E-8 * d,
+        e = 0.008606 + 2.15E-9 * d,
+        M = 260.2471 + 0.005995147 * d;
+    var ecl = this.eclrect(N, i, MUtil.ang360(w), a, e, MUtil.ang360(M)),
+        xg = ecl[0],
+        yg = ecl[1],
+        zg = ecl[2],
+        r = Math.sqrt( xg*xg+yg*yg+zg*zg );
+    return [ xg, yg, zg, r ];
+  },
+  Pluto: function(d) {
+    // код Плутона
+  },
+  loadSun: function(time) {
+    var d = this.timeScale(time);
+    var ps = this.Sun(d),
+        ecl = this.ecl2eq(ps[0], ps[1], ps[2], d),
+        eq = MVector.rect2spheric(ecl[0], ecl[1], ecl[2]);
+    return [ MUtil.ang360(eq[0] * 180/Math.PI) * Math.PI/180, eq[1], -26, 'Sun', 'Sun' ];
+  },
+  loadMoon: function(time) {
+    var d = this.timeScale(time);
+    var ps = this.Moon(d),
+        ecl = this.ecl2eq(ps[0], ps[1], ps[2], d),
+        eq = MVector.rect2spheric(ecl[0], ecl[1], ecl[2]);
+    return [ MUtil.ang360(eq[0] * 180/Math.PI) * Math.PI/180, eq[1], -11, 'Moon', 'Moon' ];
+  },
+  /**
+  * Возвращает массив координат (ra,dec) планет на $time в UTC.
+  */ 
+  loadPlanets: function(time) {
+    var d = this.timeScale(time);
+    var mplanets = [];
+    var planets = ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'];
+    for(var i in planets) {
+      var ps = eval("this." + planets[i] + "(d)"),
+          ecl = this.ecl_helio2geo(ps[0], ps[1], ps[2], ps[3], d),
+          eq = MVector.rect2spheric(ecl[0], ecl[1], ecl[2]);
+      mplanets.push([ MUtil.ang360(eq[0] * 180/Math.PI) * Math.PI/180, eq[1], 2, planets[i], planets[i] ]);
+    }    
+    return mplanets;
   }
 }

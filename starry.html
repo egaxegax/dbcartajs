@@ -13,34 +13,34 @@
 <script type="text/javascript" src="sgp4/satellite.js"></script>
 <script type="text/javascript">
   function draw() {
-    if (dbcarta.isSpherical()) {
-      var proj = dbcarta.initProj();
+    if (dw.isSpherical()) {
+      var proj = dw.initProj();
       var projh = document.getElementById('projh').value * 1000,
           cx = proj.long0 * 180/Math.PI,
           cy = proj.lat0 * 180/Math.PI;
       // scale by altitude (height)
-      dbcarta.initProj(' +h=' + projh + ' +lon_0=' + cx + ' +lat_0=' + cy);
-      dbcarta.scaleCarta(1);
-      dbcarta.scaleCarta(1/scaleheight());
-      dbcarta.draw();
+      dw.initProj(' +h=' + projh + ' +lon_0=' + cx + ' +lat_0=' + cy);
+      dw.scaleCarta(1);
+      dw.scaleCarta(1/scaleheight());
+      dw.draw();
       loadStarry();
     }
   }
   // Rotate Sphere on sides
   function turn(cx, cy) {
     if (!isNaN(cx) && !isNaN(cy))
-      if (dbcarta.isSpherical()) {
-        var proj = dbcarta.initProj();
+      if (dw.isSpherical()) {
+        var proj = dw.initProj();
         cx += proj.long0 * 180/Math.PI;
         cy += proj.lat0 * 180/Math.PI;
-        dbcarta.initProj(' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
-        dbcarta.draw();
+        dw.initProj(' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
+        dw.draw();
         loadStarry();
       }
   }
   // Calcucate Right Ascention and Declination (Ra/Dec)
   function calcSpheric(coords, dt) {
-    var proj = dbcarta.initProj();
+    var proj = dw.initProj();
     var skyratio = proj.h/proj.a;
         gmst = Starry.siderealTime(dt),
         skyRotationAngle = gmst / 12.0 * Math.PI;
@@ -50,7 +50,7 @@
         cx = proj.long0 * 180/Math.PI + skyRotationAngle * 180/Math.PI;
     var skyproj = "+proj=ortho +units=m +a=" + proj.a + " +b=" + proj.b + " +lon_0=" + cx + " +lat_0=" + cy;
     Proj4js.defs["SKY"] = skyproj;
-    var pt = dbcarta.transformCoords("SKY", 'epsg:4326', coords);
+    var pt = dw.transformCoords("SKY", 'epsg:4326', coords);
     if (pt) {
       // backside
       pt[0] = Proj4js.common.adjust_lon((180 - (pt[0] - cx) + cx) * Math.PI/180);
@@ -60,32 +60,44 @@
   }
   // Draw points (stars, tracs) on lonlat
   function drawlonlat(pts, ftype){
-    var proj = dbcarta.initProj();
+    var proj = dw.initProj();
     var cx = proj.long0 * 180/Math.PI,
         cy = proj.lat0 * 180/Math.PI;
     // switch to lonlat
-    dbcarta.initProj(0, '');
+    dw.initProj(0, '');
     for(var i in pts) {
-      dbcarta.mopt[ftype]['size'] = pts[i][1] / 8;
-      dbcarta.paintCarta(pts[i][0], ftype, pts[i][2]);
+      dw.mopt[ftype]['size'] = pts[i][1] / 8;
+      dw.paintCarta(pts[i][0], ftype, pts[i][2]);
     }
     // restore spherical proj
-    dbcarta.initProj(202, ' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
+    dw.initProj(202, ' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
   }
   // Render sky obj
   function loadStarry(){
-    var proj = dbcarta.initProj();
-    var rect = dbcarta.viewsizeOf(),
+    var proj = dw.initProj();
+    var rect = dw.viewsizeOf(),
         skyRadius = 180/Math.PI * proj.h/proj.a,
         eaRadius = Math.sqrt((proj.p15 - 1.0)/(proj.p15 + 1.0)) * 180/Math.PI,
         eaRadiusM = proj.a,
         cx = proj.long0 * 180/Math.PI,
         cy = proj.lat0 * 180/Math.PI,
         gmtime = getSelTime();
-    // draw stars
+    // stars
     var stars = window.STARS,
         mstars = Starry.renderSky(stars, rect, skyRadius, eaRadius, cx, cy, gmtime);
     drawlonlat(mstars, 'star');
+    // sun
+    var sun = Solar.loadSun(gmtime),
+        msun = Starry.renderSky([sun], rect, skyRadius, eaRadius, cx, cy, gmtime);
+    drawlonlat(msun, 'sun');
+    // moon
+    var moon = Solar.loadMoon(gmtime),
+        mmoon = Starry.renderSky([moon], rect, skyRadius, eaRadius, cx, cy, gmtime);
+    drawlonlat(mmoon, 'moon');
+    // planets
+    var planets = Solar.loadPlanets(gmtime),
+        mplanets = Starry.renderSky(planets, rect, skyRadius, eaRadius, cx, cy, gmtime);
+    drawlonlat(mplanets, 'planet');
     // sat.tracs
     var tledata = window.TLEDATA;
     for (var i in tledata){
@@ -106,13 +118,13 @@
       var mtracs = Starry.renderSat(tracs[1], rect, eaRadius, eaRadiusM, cx, cy, gmtime),
           mcoords = MVector.rect2geo(gmtime, tracs[1][0][0], tracs[1][0][1], tracs[1][0][2]);
       drawlonlat(mtracs[1], 'sattrac');
-      dbcarta.paintCarta([mcoords], 'satsurface');
+      dw.paintCarta([mcoords], 'satsurface');
       if ((label = mtracs[0]).length) {
         // sat.fields of vision
         var pts = MVector.circle1spheric(mcoords[0], mcoords[1], MVector.AE * 18 * Math.PI/180, 20);
         // conv to lonlat
         for(var j in pts){
-          if (pt = dbcarta.transformCoords('epsg:4326', String(dbcarta.project), pts[j])) {
+          if (pt = dw.transformCoords('epsg:4326', String(dw.project), pts[j])) {
             // backside intersect ea
             if (!pt[2])
               pt = MVector.lineNcircle([ label[0][0][0], pt ], eaRadius);
@@ -130,16 +142,12 @@
   }
   // Calc maps scale by height above Earth
   function scaleheight() {
-    var proj = dbcarta.initProj();
+    var proj = dw.initProj();
     var rhscale = ((proj.p15 - 1.0)/(proj.p15 + 1.0));
     // skyratio measure above 40000 km
     var etalon_p15 = (1.0 + 40000000/proj.a);
     var etalon_rhscale = ((etalon_p15 - 1.0)/(etalon_p15 + 1.0));
     return (rhscale/etalon_rhscale * rhscale/etalon_rhscale);
-  }
-  function getCurrTime() {
-    var dt = new Date();
-    return [dt.getUTCFullYear(), dt.getUTCMonth()+1, dt.getUTCDate(), dt.getUTCHours(), dt.getUTCMinutes(), dt.getUTCSeconds()];
   }
   function getSelTime() {
     return [Number(document.getElementById("yy").value),
@@ -149,14 +157,19 @@
             Number(document.getElementById("mi").value),
             Number(document.getElementById("ss").value)]
   }
-  function setSelTime() {
-    var dt = getCurrTime();
-    document.getElementById("yy").value = dt[0];
-    document.getElementById("mm").value = dt[1];
-    document.getElementById("dd").value = dt[2];
-    document.getElementById("hh").value = dt[3];
-    document.getElementById("mi").value = dt[4];
-    document.getElementById("ss").value = dt[5];
+  function setSelTime(interval) {
+    if (interval) {
+      var st = getSelTime(),
+          ut = Date.UTC(st[0],st[1]-1,st[2],st[3],st[4],st[5]);
+      var dt = new Date(ut + interval);
+    } else
+      var dt = new Date();
+    document.getElementById("yy").value = dt.getUTCFullYear();
+    document.getElementById("mm").value = dt.getUTCMonth()+1;
+    document.getElementById("dd").value = dt.getUTCDate();
+    document.getElementById("hh").value = dt.getUTCHours();
+    document.getElementById("mi").value = dt.getUTCMinutes();
+    document.getElementById("ss").value = dt.getUTCSeconds();
   }
   function setAutoTime() {
     if (window.autotime) {
@@ -164,9 +177,9 @@
       document.getElementById("btauto").textContent = "auto";
     } else {
       window.autotime = setInterval(function() {
-        setSelTime();
+        setSelTime(300*1000);
         draw();
-      }, 4000);
+      }, 300);
       document.getElementById("btauto").textContent = "stop";
     }
   }
@@ -186,7 +199,7 @@
     col.appendChild(el);
     row.appendChild(col);
 
-    col = document.createElement("td");
+    var col = document.createElement("td");
     col.width = "10%";
     col.align = "center";
     el = document.createElement('button');
@@ -211,16 +224,17 @@
     col.appendChild(el);
     row.appendChild(col);
 
-    col = document.createElement("td");
+    var col = document.createElement("td");
     col.width = "10%";
     col.align = "center";
-    col.appendChild(document.createTextNode("height ae "));
+    col.appendChild(document.createTextNode("height "));
     var projh = el = document.createElement("select");
     el.id = "projh";
     col.appendChild(el);
+    col.appendChild(document.createTextNode(" km"));
     row.appendChild(col);
 
-    col = document.createElement("td");
+    var col = document.createElement("td");
     col.width = "20%";
     col.align = "center";
     var yy = document.createElement("select");
@@ -254,100 +268,50 @@
     col.appendChild(el);
     row.appendChild(col);
 
-    col = document.createElement("td");
+    var col = document.createElement("td");
     col.width = "15%";
     col.align = "center";
     col.id = "coords";
     row.appendChild(col);
     document.body.appendChild(mtab);
 
-    dbcarta = new dbCarta();
-    // change/define colors and flood types
-    dbcarta.style.backgroundColor = "rgb(17,17,96)";
-    dbcarta.mopt['.Arctic']['fg'] = "rgb(131,147,125)";
-    dbcarta.mopt['.Arctic']['bg'] = "rgb(131,147,125)";
-    dbcarta.mopt['.Mainland']['fg'] = "rgb(71,87,125)";
-    dbcarta.mopt['.Mainland']['bg'] = "rgb(71,87,125)";
-    dbcarta.mopt['.Latitude']['fg'] = "rgb(7,7,186)";
-    dbcarta.mopt['.Longtitude']['fg'] = "rgb(7,7,186)";
-    dbcarta.mopt['DotPort']['fg'] = "rgb(220,0,0)";
-    dbcarta.mopt['DotPort']['labelcolor'] = "rgb(255,155,128)";
-    dbcarta.mopt['DotPort']['size'] = "3";
-    dbcarta.mopt['star'] = {};
-    dbcarta.mopt['star']['class'] = 'Dot';
-    dbcarta.mopt['star']['fg'] = "rgb(255,255,255)";
-    dbcarta.mopt['star']['labelcolor'] = "rgb(255,155,128)";
-    dbcarta.mopt['satpos'] = {};
-    dbcarta.mopt['satpos']['class'] = 'Dot';
-    dbcarta.mopt['satpos']['fg'] = "rgb(200,200,170)";
-    dbcarta.mopt['satpos']['labelcolor'] = "rgb(200,200,170)";
-    dbcarta.mopt['sattrac'] = {};
-    dbcarta.mopt['sattrac']['class'] = 'Line';
-    dbcarta.mopt['sattrac']['fg'] = "rgba(200,200,170,0.1)";
-    dbcarta.mopt['sattrac']['labelcolor'] = "rgb(200,200,170)";
-    dbcarta.mopt['satsurface'] = {};
-    dbcarta.mopt['satsurface']['class'] = 'Dot';
-    dbcarta.mopt['satsurface']['fg'] = "rgb(0,220,0)";
-    dbcarta.mopt['satsurface']['size'] = "2";
-    dbcarta.mopt['sector'] = {};
-    dbcarta.mopt['sector']['class'] = 'Polygon';
-    dbcarta.mopt['sector']['fg'] = "rgba(200,200,170,0.1)";
-    dbcarta.mopt['sector']['bg'] = "rgba(200,200,170,0.1)";
-    dbcarta.mopt['sector']['width'] = '0.2';
+    dw = new dbCarta();
+    // change some colors
+    dw.style.backgroundColor = "rgb(17,17,96)";
+    dw.mopt['DotPort']['fg'] = "rgb(220,0,0)";
+    dw.mopt['DotPort']['size'] = "3";
+    // define new types
+    dw.extend(dw.mopt, {
+      "star": {class: "Dot", fg: "rgb(255,255,255)", labelcolor: "rgb(155,155,200)"},
+      "sun": {class: "Dot", fg: "rgb(255,255,0)", labelcolor: "rgb(255,255,0)"},
+      "moon": {class: "Dot", fg: "rgb(200,200,200)", labelcolor: "rgb(200,200,200)"},
+      "planet": {class: "Dot", fg: "rgb(220,200,200)", labelcolor: "rgb(255,155,128)"},
+      "satpos":  {class: "Dot", fg: "rgb(200,200,170)", labelcolor: "rgb(200,200,170)"},
+      "sattrac": {class: "Line", fg: "rgba(200,200,170,0.1)", labelcolor: "rgb(200,200,170)"},
+      "satsurface": {class: "Dot", fg: "rgb(0,220,0)", size: "2"},
+      "sector": {class: "Polygon", fg: "rgba(200,200,170,0.1)", bg: "rgba(200,200,170,0.1)", width: '0.1'}
+    });
+    // init proj
     var pov = [37.700,55.750];
-    var proj = dbcarta.initProj(202, ' +lon_0=' + pov[0] + ' +lat_0=' + pov[1]);
+    var proj = dw.initProj(202, ' +lon_0=' + pov[0] + ' +lat_0=' + pov[1]);
+    var optfunc = function(v, o) {
+      var el = document.createElement("option");
+      el.value = v;
+      el.appendChild(document.createTextNode(v));
+      o.appendChild(el);
+    };
     // nsper proj height list
-    for(var i=1000; i<103000; i+=3000) {
-      el = document.createElement("option");
-      el.value = i;
-      if (i == 100000) el.selected = "true";
-      el.appendChild(document.createTextNode(i + " km"));
-      projh.appendChild(el);
-    }
-    // date years
-    for(i=1999; i<2050; i++) {
-      el = document.createElement("option");
-      el.value = i;
-      el.appendChild(document.createTextNode(i));
-      yy.appendChild(el);
-    }
-    // date month
-    for(i=1; i<13; i++) {
-      el = document.createElement("option");
-      el.value = i;
-      el.appendChild(document.createTextNode(i));
-      mm.appendChild(el);
-    }
-    // date days
-    for(i=1; i<32; i++) {
-      el = document.createElement("option");
-      el.value = i;
-      el.appendChild(document.createTextNode(i));
-      dd.appendChild(el);
-    }
-    // time hours
-    for(i=0; i<24; i++) {
-      el = document.createElement("option");
-      el.value = i;
-      el.appendChild(document.createTextNode(i));
-      hh.appendChild(el);
-    }
-    // time min
-    for(i=0; i<60; i++) {
-      el = document.createElement("option");
-      el.value = i;
-      el.appendChild(document.createTextNode(i));
-      mi.appendChild(el);
-    }
-    // time sec
-    for(i=0; i<60; i++) {
-      el = document.createElement("option");
-      el.value = i;
-      el.appendChild(document.createTextNode(i));
-      ss.appendChild(el);
-    }
+    for(var i=1000; i<103000; i+=3000) optfunc(i, projh);
+    projh.value = 100000;
+    // fill date/time
+    for(i=1999; i<2050; i++) optfunc(i, yy);
+    for(i=1; i<13; i++) optfunc(i, mm);
+    for(i=1; i<32; i++) optfunc(i, dd);
+    for(i=0; i<24; i++) optfunc(i, hh);
+    for(i=0; i<60; i++) optfunc(i, mi);
+    for(i=0; i<60; i++) optfunc(i, ss);
     // curr. coords
-    dbcarta.clfunc.onmousemove = function(sd) {
+    dw.clfunc.onmousemove = function(sd) {
       mcoord = document.getElementById("coords");
       mcoord.innerHTML = "Ra/Dec:";
       if (scoords = calcSpheric(sd, getSelTime())) {
@@ -367,11 +331,11 @@
     hh.onchange = draw;
     mi.onchange = draw;
     ss.onchange = draw;
-    dbcarta.clfunc.onclick = loadStarry;
+    dw.clfunc.onclick = loadStarry;
     // draw
-    dbcarta.loadCarta(window.CONTINENTS);
-    dbcarta.loadCarta(dbcarta.createMeridians());
-    dbcarta.loadCarta([['DotPort', '1', [pov], 'Moscow']]);
+    dw.loadCarta(window.CONTINENTS);
+    dw.loadCarta(dw.createMeridians());
+    dw.loadCarta([['DotPort', '1', [pov], 'Moscow']]);
     window.CONTINENTS = undefined;
     setSelTime();
     draw();

@@ -9,32 +9,32 @@
 <script type="text/javascript">
   function scale() {
     var scale = parseFloat(document.getElementById("scale").value);
-    dbcarta.scaleCarta(1); // fix labels
-    dbcarta.scaleCarta(scale);
-    dbcarta.draw();
+    dw.scaleCarta(1); // fix labels
+    dw.scaleCarta(scale);
+    dw.draw();
   }
   function turn() {
     var cx = parseFloat(document.getElementById("turnx").value),
         cy = parseFloat(document.getElementById("turny").value);
     if (!isNaN(cx) && !isNaN(cy))
-      if (dbcarta.isSpherical()) {
-        var proj = dbcarta.initProj();
+      if (dw.isSpherical()) {
+        var proj = dw.initProj();
         cx += proj.long0 * 180/Math.PI;
         cy += proj.lat0 * 180/Math.PI;
-        dbcarta.initProj(' +lon_0=' + cx + ' +lat_0=' + cy);
-        dbcarta.draw();
+        dw.initProj(' +lon_0=' + cx + ' +lat_0=' + cy);
+        dw.draw();
       }
   }
   function proj() {
-    dbcarta.changeProject(document.getElementById('projlist').value);
-    dbcarta.draw();
+    dw.changeProject(document.getElementById('projlist').value);
+    dw.draw();
   }
   function draw() {
     try {
       coords = eval(document.getElementById('getcoords').value); coords.length; } 
     catch (e) { 
        alert("Invalid coords!\nUse:\n[[1,2],[3,4],..]"); return; }
-    dbcarta.loadCarta([[ document.getElementById("ftype").value, Math.random(), coords, 'MyTest', coords[0], true ]], 1);
+    dw.loadCarta([[ document.getElementById("ftype").value, Math.random(), coords, 'MyTest', coords[0], true ]], 1);
   }
   function init() {
     var mtab = document.createElement("table");
@@ -46,7 +46,7 @@
     var col = document.createElement("td");
     col.width = "15%";
     var el = document.createElement("h2");
-    el.appendChild(document.createTextNode("Simple Demo"));
+    el.appendChild(document.createTextNode("Sample"));
     el.style.padding = "0";
     el.style.margin = "0";
     col.appendChild(el);
@@ -67,7 +67,7 @@
     col.appendChild(el);
     row.appendChild(col);
 
-    col = document.createElement("td");
+    var col = document.createElement("td");
     col.width = "15%";
     col.align = "center";
     el = document.createElement("input");
@@ -88,18 +88,16 @@
     col.appendChild(el);
     row.appendChild(col);
 
-    col = document.createElement("td");
+    var col = document.createElement("td");
     col.width = "10%";
+    col.align = "center";
+    col.appendChild(document.createTextNode(" proj "));
     var projlist = el = document.createElement("select");
     el.id = "projlist";
     col.appendChild(el);
-    el = document.createElement('button');
-    el.onclick = proj;
-    el.appendChild(document.createTextNode("proj"));
-    col.appendChild(el);
     row.appendChild(col);
 
-    col = document.createElement("td");
+    var col = document.createElement("td");
     col.width = "30%";
     col.align = "center";
     el = document.createElement("select");
@@ -127,30 +125,31 @@
     col.appendChild(el);
     row.appendChild(col);
 
-    col = document.createElement("td");
+    var col = document.createElement("td");
     col.width = "15%";
     col.align = "center";
     col.id = "coords";
     row.appendChild(col);
     document.body.appendChild(mtab);
 
-    dbcarta = new dbCarta();
-    dbcarta.loadCarta(window.CONTINENTS);
+    dw = new dbCarta();
+    dw.loadCarta(window.CONTINENTS);
     window.CONTINENTS = undefined;
-    dbcarta.loadCarta(dbcarta.createMeridians());
+    dw.loadCarta(dw.createMeridians());
     // point of view
-    dbcarta.loadCarta([['DotPort', '1', [[-25,40]], 'POV']]);
-    dbcarta.draw();
+    dw.loadCarta([['DotPort', '1', [[-25,40]], 'POV']]);
+    dw.draw();
     // projlist
-    for(var i in dbcarta.proj) {
-      var projname = dbcarta.proj[i].split(' ')[0].split('=')[1];
+    for(var i in dw.proj) {
+      var projname = dw.proj[i].split(' ')[0].split('=')[1];
       el = document.createElement("option");
       el.value = i;
       el.appendChild(document.createTextNode(projname));
       projlist.appendChild(el);
     }
+    projlist.onchange = proj;
     // curr. coords
-    dbcarta.clfunc.onmousemove = function(sd, dd) {
+    dw.clfunc.onmousemove = function(sd, dd) {
       mcoord = document.getElementById("coords");
       mcoord.innerHTML = " X: Y:";
       if (dd) mcoord.innerHTML = " X: " + dd[0].toFixed(2) + " Y: " + dd[1].toFixed(2);
