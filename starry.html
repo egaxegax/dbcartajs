@@ -98,6 +98,9 @@
     var planets = Solar.loadPlanets(gmtime),
         mplanets = Starry.renderSky(planets, rect, skyRadius, eaRadius, cx, cy, gmtime);
     drawlonlat(mplanets, 'planet');
+    // terminator
+    var term = MGeo.terminator(gmtime, proj.h/1000.0, cx, cy);
+    dw.paintCarta(term, 'terminator');
     // sat.tracs
     var tledata = window.TLEDATA;
     for (var i in tledata){
@@ -121,13 +124,13 @@
       dw.paintCarta([mcoords], 'satsurface');
       if ((label = mtracs[0]).length) {
         // sat.fields of vision
-        var pts = MVector.circle1spheric(mcoords[0], mcoords[1], MVector.AE * 18 * Math.PI/180, 20);
+        var pts = MGeo.circle1spheric(mcoords[0], mcoords[1], MGeo.AE * 18 * Math.PI/180, 20);
         // conv to lonlat
         for(var j in pts){
           if (pt = dw.transformCoords('epsg:4326', String(dw.project), pts[j])) {
             // backside intersect ea
             if (!pt[2])
-              pt = MVector.lineNcircle([ label[0][0][0], pt ], eaRadius);
+              pt = MGeo.lineNcircle([ label[0][0][0], pt ], eaRadius);
             // triangle sector
             if (j > 0)
               drawlonlat([[[label[0][0][0], pt, pt1]]], 'sector');
@@ -174,7 +177,7 @@
   function setAutoTime() {
     if (window.autotime) {
       window.autotime = window.clearInterval(window.autotime);
-      document.getElementById("btauto").textContent = "auto";
+      document.getElementById("btauto").textContent = "play";
     } else {
       window.autotime = setInterval(function() {
         setSelTime(300*1000);
@@ -191,9 +194,9 @@
     mtab.appendChild(row);
 
     var col = document.createElement("td");
-    col.width = "15%";
+    col.width = "10%";
     var el = document.createElement("h2");
-    el.appendChild(document.createTextNode("Starry Sky Demo"));
+    el.appendChild(document.createTextNode("Starry Sky"));
     el.style.padding = "0";
     el.style.margin = "0";
     col.appendChild(el);
@@ -243,18 +246,19 @@
     mm.id = "mm";
     var dd = document.createElement("select");
     dd.id = "dd";
-    dd.style.marginRight = "1em";
+    dd.style.marginRight = "0.5em";
     var hh = document.createElement("select");
     hh.id = "hh";
     var mi = document.createElement("select");
     mi.id = "mi";
     var ss = document.createElement("select");
     ss.id = "ss";
+    ss.style.marginRight = "0.5em";
     el = document.createElement("button");
     el.id = "btauto";
     el.onclick = setAutoTime;
     el.title = "autoupdate by interval";
-    el.appendChild(document.createTextNode("auto"));
+    el.appendChild(document.createTextNode("play"));
     col.appendChild(yy);
     col.appendChild(document.createTextNode("-"));
     col.appendChild(mm);
@@ -289,7 +293,8 @@
       "satpos":  {class: "Dot", fg: "rgb(200,200,170)", labelcolor: "rgb(200,200,170)"},
       "sattrac": {class: "Line", fg: "rgba(200,200,170,0.1)", labelcolor: "rgb(200,200,170)"},
       "satsurface": {class: "Dot", fg: "rgb(0,220,0)", size: "2"},
-      "sector": {class: "Polygon", fg: "rgba(200,200,170,0.1)", bg: "rgba(200,200,170,0.1)", width: '0.1'}
+      "sector": {class: "Polygon", fg: "rgba(200,200,170,0.1)", bg: "rgba(200,200,170,0.1)", width: '0.1'},
+      "terminator": {class: "Polygon", fg: "rgba(0,0,0,0.3)", bg: "rgba(0,0,0,0.3)"}
     });
     // init proj
     var pov = [37.700,55.750];
@@ -302,7 +307,7 @@
     };
     // nsper proj height list
     for(var i=1000; i<103000; i+=3000) optfunc(i, projh);
-    projh.value = 100000;
+    projh.value = 25000;
     // fill date/time
     for(i=1999; i<2050; i++) optfunc(i, yy);
     for(i=1; i<13; i++) optfunc(i, mm);

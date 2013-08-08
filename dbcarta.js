@@ -61,9 +61,9 @@ function dbCarta(pid) {
           0: '+proj=longlat',
           101: '+proj=merc +units=m',
           201: '+proj=laea +units=m',
-          202: '+proj=nsper +units=m +h=40000000 +a=6378136 +b=6378140', 
+          202: '+proj=nsper +units=m +h=40000000',
           203: '+proj=ortho +units=m +a=6378137 +b=6378137'
-        };
+        }
       }
       return {};
     }(),
