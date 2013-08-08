@@ -16,6 +16,8 @@ Controls:
 
 Featured, copmlicated demo like Orbitron, Marble, Xephem but more lightweight.
 
+![starry2.png] (http://img-fotki.yandex.ru/get/9555/136640652.0/0_becbd_66ad485b_XL.png "Starry Sky")
+
 ## Screenshots
 
 Orthographic:
@@ -27,6 +29,4 @@ Mercator:
 
 ![mercv.png] (http://img-fotki.yandex.ru/get/9064/136640652.0/0_b999b_feccc6d_XL.jpg "Mercator")
 
-Near-Side (Sattelite view):
 
-![starry2.png] (http://img-fotki.yandex.ru/get/9555/136640652.0/0_becbd_66ad485b_XL.png "Starry Sky")
