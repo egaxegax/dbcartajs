@@ -1,5 +1,6 @@
-/* Stars catalog HD */
-// array[ra, dec, mag, HD, label]
+/* Stars catalog HD
+   array[ra, dec, mag, HD, label] */
+
 STARS=[
 [0.023271056693257724, -0.09961466705757638, 4.61, 28],
 [0.024870941840919196, 0.23380624585188484, 5.51, 87],

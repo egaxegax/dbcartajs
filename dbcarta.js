@@ -1,5 +1,5 @@
 /**
- * dbCartajs HTML5 Canvas dymanic object map.
+ * dbCartajs HTML5 Canvas dymanic object map v1.2.
  * It uses Proj4js transformations.
  *
  * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
@@ -17,29 +17,42 @@ function dbCarta(pid) {
     this.dw.height = cw / 2.0;
     this.dw.style.borderWidth = '0';
     this.dw.style.backgroundColor = 'rgb(186,196,205)';
-    this.dw.extend = function(dst, src) {
-      if (!src) {
-        src = dst;
-        dst = this;
-      }
-      for(var prop in src)
-        if(src[prop] !== undefined)
-          dst[prop] = src[prop];
-    }
   }
   this.init();
+  this.dw.extend = function(dst, src) {
+    if (!src) {
+      src = dst;
+      dst = this;
+    }
+    for(var prop in src)
+      if(src[prop] !== undefined)
+        dst[prop] = src[prop];
+    return dst;
+  };
   this.dw.extend({
     // base layers
+    // options:
+    //   fg - color (stroke)
+    //   bg - background color (fill)
+    //   dash - dash patten [1,2]
+    //   join - lineJoin
+    //   cap - lineCap
+    //   width - lineWidth
+    //   size - arc radii
+    //   labelcolor
+    //   labelscale - text scalable [0|1]
+    //   anchor - text pos [textAlign, textBaseline]
+    //   rotate - text rotate
     mopt: {
-      '.Arctic':    {class: 'Polygon', fg: 'rgb(210,221,195)', bg: 'rgb(210,221,195)'},
-      '.Mainland':  {class: 'Polygon', fg: 'rgb(135,159,103)', bg: 'rgb(135,159,103)'},
-      '.Water':     {class: 'Polygon', fg: 'rgb(90,140,190)', bg: 'rgb(90,140,190)'},
-      '.WaterLine': {class: 'Line', fg: 'rgb(186,196,205)', smooth: 1},
-      '.Latitude':  {class: 'Line', fg: 'rgb(164,164,164)', anchor: ['start', 'bottom']},
-      '.Longtitude':{class: 'Line', fg: 'rgb(164,164,164)', anchor: ['start', 'top']},
-      'DotPort':    {class: 'Dot', fg: 'rgb(240,220,0)', anchor: ['start', 'middle'], size: 2},
-      'Area':       {class: 'Polygon', fg: 'rgb(0,80,170)', bg: 'rgb(0,80,170)'},
-      'Line':       {class: 'Line', fg: 'rgb(0,130,200)', width: 1, join: 'round'}
+      '.Arctic':    {cls: 'Polygon', fg: 'rgb(210,221,195)', bg: 'rgb(210,221,195)'},
+      '.Mainland':  {cls: 'Polygon', fg: 'rgb(135,159,103)', bg: 'rgb(135,159,103)'},
+      '.Water':     {cls: 'Polygon', fg: 'rgb(90,140,190)', bg: 'rgb(90,140,190)'},
+      '.WaterLine': {cls: 'Line', fg: 'rgb(186,196,205)'},
+      '.Latitude':  {cls: 'Line', fg: 'rgb(164,164,164)', anchor: ['start', 'bottom']},
+      '.Longtitude':{cls: 'Line', fg: 'rgb(164,164,164)', anchor: ['start', 'top']},
+      'DotPort':    {cls: 'Dot', fg: 'rgb(240,220,0)', anchor: ['start', 'middle'], size: 2},
+      'Area':       {cls: 'Polygon', fg: 'rgb(0,80,170)', bg: 'rgb(0,80,170)'},
+      'Line':       {cls: 'Line', fg: 'rgb(0,130,200)'}
     },
     // private
     m: {
@@ -62,7 +75,7 @@ function dbCarta(pid) {
           101: '+proj=merc +units=m',
           201: '+proj=laea +units=m',
           202: '+proj=nsper +units=m +h=40000000',
-          203: '+proj=ortho +units=m +a=6378137 +b=6378137'
+          203: '+proj=ortho +units=m'
         }
       }
       return {};
@@ -77,16 +90,26 @@ function dbCarta(pid) {
           ch = this.offsetHeight,
           ph = this.height;
       var node = ev.target,
-          points = [ev.clientX, ev.clientY];
-      points[0] += window.pageXOffset;
-      points[1] += window.pageYOffset;
+          pts = [ev.clientX, ev.clientY];
+      pts[0] += window.pageXOffset;
+      pts[1] += window.pageYOffset;
       while (node) {
-         points[0] -= node.offsetLeft - node.scrollLeft;
-         points[1] -= node.offsetTop - node.scrollTop;
+         pts[0] -= node.offsetLeft - node.scrollLeft;
+         pts[1] -= node.offsetTop - node.scrollTop;
          node = node.offsetParent;
       }
-      return [ points[0] / cw * pw,
-               points[1] / ch * ph ];
+      return [ pts[0] / cw * pw,
+               pts[1] / ch * ph ];
+    },
+    /**
+    * Dash support.
+    */
+    setDashLine: function(dashlist) {
+      var ctx = this.getContext('2d');
+      if ('setLineDash' in ctx)
+        ctx.setLineDash(dashlist);
+      else if ('mozDash' in ctx)
+        ctx.mozDash = dashlist;
     },
     // -----------------------------------
     /**
@@ -172,7 +195,7 @@ function dbCarta(pid) {
           this.m.domap = true;
         if (this.m.doreload || doreload)
           this.reload(m);
-        this.paintCartaPts(m['points'], m['ftype'], m['label'], m['centerofpts']);
+        this.paintCartaPts(m['pts'], m['ftype'], m['label'], m['centerofpts']);
       }
       this.m.doreload = false;
       this.paintScale();
@@ -194,16 +217,10 @@ function dbCarta(pid) {
       this.centerCarta(centerof[0] + this.m.offset[0], centerof[1] + this.m.offset[1]);
       this.initProj(new_project, ' +lon_0=' + viewcenterof[0] + ' +lat_0=' + viewcenterof[1]);
     },
-    centerPoint: function(cx, cy) {
-      var ctx = this.getContext('2d');
-      ctx.translate(cx, cy);
-    },
     /**
     * Center map by points CX,CY. Use DOSCALE for mouse points.
     */
     centerCarta: function(cx, cy, doscale) {
-      var pw = this.m.halfX * 2,
-          ph = this.m.halfY * 2;
       var centerof = this.centerOf();
       var offx = centerof[0] - cx;
           offy = centerof[1] - cy;
@@ -211,13 +228,14 @@ function dbCarta(pid) {
         offx /= this.m.scale;
         offy /= this.m.scale;
       }
-      // offset
+      // translate offset
       var dx = offx + this.m.offset[0],
           dy = offy + this.m.offset[1];
-      if ((dx <= centerof[0] && dx >= centerof[0] - pw) && 
-          (dy <= centerof[1] && dy >= centerof[1] - ph)) {
+      if ((dx <= centerof[0] * 2.0 && dx >= -centerof[0] * 2.0) &&
+          (dy <= centerof[1] * 2.0 && dy >= -centerof[1] * 2.0)) {
+        var ctx = this.getContext('2d');
+        ctx.translate(offx, offy);
         this.m.offset = [ dx, dy ];
-        this.centerPoint(offx, offy);
       }
     },
     clearCarta: function() {
@@ -250,7 +268,7 @@ function dbCarta(pid) {
         if (dopaint) {
           this.m.domap = ismap;
           this.reload(m); // add points
-          this.paintCartaPts(m['points'], ftype, label, m['centerofpts']);
+          this.paintCartaPts(m['pts'], ftype, label, m['centerofpts']);
         }
         this.mflood[ftag] = m;
       }
@@ -259,39 +277,40 @@ function dbCarta(pid) {
     * Refill obj PID in mfood new points of coords.
     */
     reload: function(m) {
-      var points = this.approxCoords(m['coords'], true, 10),
+      var pts = this.approxCoords(m['coords'], true, this.project ? 10 : undefined),
           centerofpts = this.approxCoords([m['centerof']], true);
-      m['points'] = points;
+      m['pts'] = pts;
       m['centerofpts'] = centerofpts;
+      return m;
     },
-    /** 
+    /**
     * Highlight obj under mouse cursor like html MAP.
     */
-    doMap: function(points) {
+    doMap: function(pts) {
       if (Number(new Date()) - this.m.tmap < 100) // not so quickly
         return;
       this.m.tmap = Number(new Date());
       var pid; // current map id
       var ctx = this.getContext('2d');
-      var cx = -this.m.offset[0] - this.m.scaleoff[0] + points[0] / this.m.scale,
-          cy = -this.m.offset[1] - this.m.scaleoff[1] + points[1] / this.m.scale;
+      var cx = -this.m.offset[0] - this.m.scaleoff[0] + pts[0] / this.m.scale,
+          cy = -this.m.offset[1] - this.m.scaleoff[1] + pts[1] / this.m.scale;
       // points func
       var addpoints = function(self, pid, domap) {
         var m = self.mflood[pid],
             mopt = self.mopt[m['ftype']],
             mcolor = 'rgb(80,90,100)';
         ctx.beginPath();
-        if (mopt['class'] == 'Dot')
-          ctx.arc(m['points'][0][0], m['points'][0][1], mopt['size']/self.m.scale, 0, Math.PI*2, 0);
+        if (mopt['cls'] == 'Dot')
+          ctx.arc(m['pts'][0][0], m['pts'][0][1], mopt['size']/self.m.scale, 0, Math.PI*2, 0);
         else
-          for (var j in m['points'])
-            ctx.lineTo(m['points'][j][0], m['points'][j][1]);
+          for (var j in m['pts'])
+            ctx.lineTo(m['pts'][j][0], m['pts'][j][1]);
         if (domap != undefined) {
-          if (mopt['class'] == 'Line' || !domap) {
+          if (mopt['cls'] == 'Line' || !domap) {
             ctx.strokeStyle = (domap ? mcolor : mopt['fg']);
             ctx.stroke();
           }
-          if (mopt['class'] != 'Line') {
+          if (mopt['cls'] != 'Line') {
             ctx.fillStyle = (domap ? mcolor : mopt['bg'] || mopt['fg']);
             ctx.fill();
           }
@@ -310,13 +329,11 @@ function dbCarta(pid) {
         }
       ctx.restore();
       // current
-      if (pid) {
+      if (pid)
         addpoints(this, pid, true);
-      }
       // restore prev
-      if (this.m.pmap && this.m.pmap != pid) {
+      if (this.m.pmap && this.m.pmap != pid)
         addpoints(this, this.m.pmap, false);
-      }
       this.m.pmap = pid;
     },
     /**
@@ -389,54 +406,75 @@ function dbCarta(pid) {
     * Draw obj with COORDS (see paintCartaPts).
     */
     paintCarta: function(coords, ftype, ftext, centerof) {
-      var points = this.approxCoords(coords, true, 10),
-          centerofpts = this.approxCoords([centerof], true);
-      this.paintCartaPts(points, ftype, ftext, centerofpts);
+      var m = this.reload( {'coords': coords} );
+      this.paintCartaPts(m['pts'], ftype, ftext, m['centerofpts']);
     },
     /**
     * Draw obj with POINTS, FTYPE (see mflood) and centre with FTEXT in CENTEROFPTS (see paintCarta).
+    * Check points if bezierCurve as "[[1,1,'Q'],[1,2,'Q'],[2,3,'Q'],...]".
     */
-    paintCartaPts: function(points, ftype, ftext, centerofpts) {
-      var ctx = this.getContext('2d');
+    paintCartaPts: function(pts, ftype, ftext, centerofpts) {
       var m = this.mopt[ftype];
       var msize = (m['size'] || 1) / this.m.scale,
           mwidth = (m['width'] || 1) / this.m.scale,
-          mjoin = (m['join'] || 'miter');
+          mjoin = m['join'] || 'miter',
+          mcap = m['cap'] || 'butt',
+          // label defaults
+          mtcolor = m['labelcolor'] || 'black',
+          mtrotate = m['rotate'] || 0,
+          mtalign = m['anchor'] && m['anchor'][0] || 'start',
+          mtbaseline = m['anchor'] && m['anchor'][1] || 'alphabetic';
+      var ctx = this.getContext('2d');
       ctx.lineWidth = mwidth;
       ctx.lineJoin = mjoin;
-      if (m['class'] == 'Dot') {
-        if (points.length) {
-          centerofpts = points;
-          ctx.beginPath();
-          ctx.arc(points[0][0], points[0][1], msize, 0, Math.PI*2, 0);
+      ctx.lineCap = mcap;
+      ctx.beginPath();
+      this.setDashLine(m['dash']);
+      if (m['cls'] == 'Dot') {
+        if (pts.length) {
+          centerofpts = pts;
+          ctx.arc(pts[0][0], pts[0][1], msize, 0, Math.PI*2, 0);
           ctx.strokeStyle = m['fg'];
           ctx.stroke();
           ctx.fillStyle = m['bg'] || m['fg'];
           ctx.fill();
         }
       } else {
-        ctx.beginPath();
-        for (var i in points)
-          ctx.lineTo(points[i][0], points[i][1]);
+        var mpts = [];
+        for (var i in pts) {
+          if (!mpts.length)
+            ctx.lineTo(pts[i][0], pts[i][1]);
+          if (pts[i][2] == 'Q') {
+            mpts.push(pts[i]);
+            if (mpts.length == 3) {
+              ctx.bezierCurveTo(mpts[0][0], mpts[0][1], mpts[1][0], mpts[1][1], mpts[2][0], mpts[2][1]);
+              mpts = [];
+            }
+          }
+        }
         ctx.strokeStyle = m['fg'];
         ctx.stroke();
-        if (m['class'] == 'Polygon') {
+        if (m['cls'] == 'Polygon') {
           ctx.fillStyle = m['bg'];
           ctx.fill();
         }
       }
       if (ftext)
         if (centerofpts && centerofpts.length) {
-          ctx.fillStyle = (m['labelcolor'] || 'black');
-          if ('anchor' in m) {
-            ctx.textAlign = m['anchor'][0];
-            ctx.textBaseline = m['anchor'][1];
+          ctx.fillStyle = mtcolor;
+          ctx.textAlign = mtalign;
+          ctx.textBaseline = mtbaseline;
+          if (m['labelscale']) {
+            ctx.fillText(ftext, centerofpts[0][0] + msize + 3, centerofpts[0][1]);
+          } else {
+            ctx.save();
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.translate((this.m.offset[0] + this.m.scaleoff[0] + centerofpts[0][0] + msize + 3/this.m.scale) * this.m.scale,
+                          (this.m.offset[1] + this.m.scaleoff[1] + centerofpts[0][1]) * this.m.scale);
+            ctx.rotate(mtrotate * Math.PI/180);
+            ctx.fillText(ftext, 0, 0);
+            ctx.restore();
           }
-          ctx.save();
-          ctx.setTransform(1, 0, 0, 1, 0, 0);
-          ctx.fillText(ftext, (this.m.offset[0] + this.m.scaleoff[0] + centerofpts[0][0] + msize + 3/this.m.scale) * this.m.scale,
-                              (this.m.offset[1] + this.m.scaleoff[1] + centerofpts[0][1]) * this.m.scale);
-          ctx.restore();
         }
     },
     /**
@@ -452,7 +490,7 @@ function dbCarta(pid) {
           cy = centerof[1]/ratio - centerof[1];
       var offx = this.m.offset[0] - this.m.offset[0]/ratio,
           offy = this.m.offset[1] - this.m.offset[1]/ratio;
-      this.centerPoint(cx + offx, cy + offy);
+      ctx.translate(cx + offx, cy + offy);
       this.m.scaleoff = [ cx, cy ];
       this.m.scale = scale;
     },
@@ -513,16 +551,19 @@ function dbCarta(pid) {
     },
     // - transforms ------------------------
     toPoints: function(coords, dotransform) {
+      var m = coords;
       if (dotransform && this.project != 0) {
         if (!(coords = this.transformCoords('epsg:4326', String(this.project), coords))) return;
         else if (!coords[2]) return; //backside filter
       }
-      return [ coords[0] * this.m.delta + this.m.halfX,
-              -coords[1] * this.m.delta + this.m.halfY ];
+      var pts = [ coords[0] * this.m.delta + this.m.halfX,
+                 -coords[1] * this.m.delta + this.m.halfY ];
+      if (m[2]) pts.push(m[2]); // bezier flag
+      return pts;
     },
-    fromPoints: function(points, dotransform) {
-      var coords = [ (points[0] / this.m.scale - this.m.halfX / this.m.scale - this.m.offset[0]) / this.m.delta,
-                    -(points[1] / this.m.scale - this.m.halfY / this.m.scale - this.m.offset[1]) / this.m.delta ];
+    fromPoints: function(pts, dotransform) {
+      var coords = [ (pts[0] / this.m.scale - this.m.halfX / this.m.scale - this.m.offset[0]) / this.m.delta,
+                    -(pts[1] / this.m.scale - this.m.halfY / this.m.scale - this.m.offset[1]) / this.m.delta ];
       if (dotransform && this.project != 0) {
         if (!(coords = this.transformCoords(String(this.project), 'epsg:4326', coords))) return;
       }
@@ -539,15 +580,13 @@ function dbCarta(pid) {
     * Approx. (and convert to points if DOPOINTS) coords with STEP (deg.).
     */
     approxCoords: function(coords, dopoints, step) {
-      var i, approx_pts = [],
-          step = step || 1;
+      var i, approx_pts = [];
       for (var j in coords) {
         if (!coords[j]) {
           continue;
-        } else if (!i) {
+        } else if (!i || !step) {
           if (pts = (dopoints ? this.toPoints(coords[j], true) : coords[j]))
             approx_pts.push(pts);
-          i = j;
         } else {
           var x = coords[i][0],
               y = coords[i][1],
@@ -564,8 +603,8 @@ function dbCarta(pid) {
             if (pts = (dopoints ? this.toPoints([_x, _y], true) : [_x, _y]))
               approx_pts.push(pts);
           }
-          i = j;
         }
+        i = j;
       }
       return approx_pts;
     },
@@ -595,29 +634,29 @@ function dbCarta(pid) {
     // - events -----------------------------
     onmousemove: function(ev) {
       if (!ev) return;
-      var points = this.canvasXY(ev);
-      var src = this.fromPoints(points, false);
-      var dst = this.fromPoints(points, true);
+      var pts = this.canvasXY(ev);
+      var src = this.fromPoints(pts, false);
+      var dst = this.fromPoints(pts, true);
       if (this.m.domap)
-        this.doMap(points);
+        this.doMap(pts);
       this.paintCoords(dst);
       if ('onmousemove' in this.clfunc)
         this.clfunc.onmousemove(src, dst);
     },
     onclick: function(ev) {
       if (!ev) return;
-      var points = this.canvasXY(ev);
-      if (scale = this.checkScale(points[0], points[1])) {
+      var pts = this.canvasXY(ev);
+      if (scale = this.checkScale(pts[0], pts[1])) {
         this.scaleCarta(1); // fix labels
         this.scaleCarta(scale);
       } else if (this.isSpherical()) {
-        var dst = this.fromPoints(points, true);
+        var dst = this.fromPoints(pts, true);
         if (dst){
           var proj = this.initProj();
           this.initProj(' +h=' + proj.h + ' +lon_0=' + dst[0] + ' +lat_0=' + dst[1]);
         }
       } else
-        this.centerCarta(points[0], points[1], true);
+        this.centerCarta(pts[0], pts[1], true);
       this.draw();
       if ('onclick' in this.clfunc)
         this.clfunc.onclick();

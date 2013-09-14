@@ -1,5 +1,6 @@
-/* NORAD TLE satellite's data samples */
-// array[[label,[line1,line2]],...]
+/* NORAD TLE satellite's data samples
+   array[[label,[line1,line2]],...] */
+
 TLEDATA2 = [['ISS (ZARYA)',
             '1 25544U 98067A   12138.83290882  .00011789  00000-0  17152-3 0  5727',
             '2 25544  51.6409 274.1861 0010682 328.0828 128.1508 15.56173799773289' ],

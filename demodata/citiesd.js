@@ -1,5 +1,6 @@
-/* List with coords of world cities */
-// {cntryname:[[label, coords],...],...}
+/* List with coords of world cities
+  {cntryname:[[label, coords],...],...} */
+
 CITIES = {
 "Afghanistan":[
   ["Asadabad",[[71.15,34.866]]],

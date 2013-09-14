@@ -9,7 +9,7 @@ Demos at http://dbcartajs.appspot.com/.
 
 Simply download, unpack and open index.html in any browser with HTML5 support.
 Controls: 
- * left click to center point; 
+ * left click to center point/turn sphere; 
  * zoom buttons [+|-] are placed on right side.
 
 ## Starry Sky Demo

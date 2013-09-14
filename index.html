@@ -1,86 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html;charset=windows-1251" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <title>dbCartajs - HTML5 Canvas map</title>
 <script type="text/javascript" src="proj4js-combined.js"></script>
 <script type="text/javascript" src="dbcarta.js"></script>
 <script type="text/javascript" src="demodata/continents.js"></script>
-<script type="text/javascript">
-  function init() {
-    var mtab = document.createElement("table");
-    mtab.width = "100%";
-    var row = document.createElement("tr");
-    mtab.appendChild(row);
-
-    var col = document.createElement("td");
-    col.width = "20%";
-    row.appendChild(col);
-
-    col = document.createElement("td");
-    col.id = "demo1";
-    col.width = "30%";
-    col.align = "right";
-    row.appendChild(col);
-
-    col = document.createElement("td");
-    col.id = "demo2";
-    col.width = "30%";
-    col.align = "left";
-    row.appendChild(col);
-
-    col = document.createElement("td");
-    col.width = "20%";
-    row.appendChild(col);
-    document.getElementById("anim").appendChild(mtab);
-
-    var cx = Math.random() * 360,
-        cy = Math.random() * 180;
-    dbcarta1 = new dbCarta("demo1");
-    dbcarta1.initProj(203, ' +lon_0=' + cx + ' +lat_0=' + cy);
-    dbcarta1.loadCarta(window.CONTINENTS);
-    dbcarta1.loadCarta(dbcarta1.createMeridians());
-    dbcarta1.scaleCarta(1.4);
-    dbcarta1.draw();
-    dbcarta2 = new dbCarta("demo2");
-    dbcarta2.initProj(203, ' +lon_0=' + (180-cx) + ' +lat_0=' + (-cy/2.0));
-    dbcarta2.loadCarta(window.CONTINENTS);
-    dbcarta2.loadCarta(dbcarta2.createMeridians());
-    dbcarta2.scaleCarta(1.4);
-    window.CONTINENTS = undefined;
-    dbcarta2.draw();
-  }
-</script>
+<script type="text/javascript" src="demos/index.inc.js"></script>
 </head>
-<body onload="init()">
-<h2 align="center" style="background:rgb(230,230,230)">dbCartajs - HTML5 Canvas map with some Proj4js projections</h2>
-<div align="center" id="anim"></div>
-<div align="center">
-<p>
-EN: It used HTML5 Canvas 2D. Pure javascript and serverless. Draw, color, move, zoom map and objects.
-</p>
-<p>
-RU: Карта-Навигатор с проекциями. Использует HTML5 Canvas 2D и JavaScript без сервера. Рисование, масштабирование объектов. 
-</p>
-<table width="50%" border="0"><tr>
-<td align="center"><h2 style="margin:0">Demos:</h2></td>
-<td></td></tr><tr>
-<td align="center" width="25%">
-<p><a href="merc.html" target="_blank">Mercator</a></p>
-<p><a href="sample.html" target="_blank">Sample</a></p>
-<p><a href="cities.html" target="_blank">World's cities</a></p>
-<p><a href="countries.html" target="_blank">World's countries</a></p>
-<p><a href="starry.html" target="_blank">Starry Sky (Featured)</a></p>
-<p><a href="noncart.html" target="_blank">Noncartographic</a></p>
-<p><a href="usemap.html" target="_blank">Use Map Area</a></p>
-</td>
-<td width="25%" align="center">
-<p style="border:1px solid #adadad"><a href="#" target="_blank" title="Source code">Source Code</a></p>
-</td></tr>
-</table>
-<p style="font-size:smaller; color:#adadad;">
-<a style="text-decoration:none; color:inherit;" href="http://egaxegax.appspot.com/">egaxegax</a>, 2013
-</p>
-</div>
-</body>
+<body onload="init()"></body>
 </html>

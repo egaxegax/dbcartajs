@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=windows-1251" />
+<title>dbCartajs - HTML5 Canvas map - Moscow Metro</title>
+<script type="text/javascript" src="proj4js-combined.js"></script>
+<script type="text/javascript" src="dbcarta.js"></script>
+<script type="text/javascript" src="demodata/mosmetro.js"></script>
+<script type="text/javascript">
+  function fromPoints(points){
+    var cw = 1376;
+    var ch = 1267;
+    var m = {
+      delta: cw / 360.0,
+      halfX: cw / 2.0,
+      halfY: ch / 2.0 * ch/cw,
+      scale: 1,
+      offset: [0, 0],
+      scaleoff: [0, 0],
+      domap: false,
+      doreload: true
+    };
+    return [ (points[0] / m.scale - m.halfX / m.scale - m.offset[0]) / m.delta,
+            -(points[1] / m.scale - m.halfY / m.scale - m.offset[1]) / m.delta ];
+  }
+  function addrow(tt) {
+    var tb = document.getElementById('tb');
+    if (!tb) {
+      var mtab = document.createElement("table");
+      mtab.width = "100%";
+      var tb = document.createElement("tbody");
+      tb.id = "tb";
+      mtab.appendChild(tb);
+      document.body.appendChild(mtab);
+    }
+    var row = document.createElement("tr");
+    tb.appendChild(row);
+    var col = document.createElement("td");
+    col.appendChild(document.createTextNode(tt));
+    row.appendChild(col);
+  }
+  function findstation(){
+    var centerofpts, stationlist = document.getElementById('stationlist');
+    for (var i=0; i<stationlist.options.length; i++) {
+      var opt = stationlist.options[i];
+      if (opt.selected) {
+        var centerofpts = dw.mflood[opt.value]['pts'];
+        break;
+      }
+    }
+    if (centerofpts) {
+      dw.centerCarta(centerofpts[0][0] + dw.m.offset[0], centerofpts[0][1] + dw.m.offset[1]);
+      dw.draw();
+    }
+  }
+  function draw() {
+    var ctx = dw.getContext("2d");
+    //route1
+    var pts = [
+      [[1078,257]],[[827,508]],
+      [[768,508],[-14,0],[-24,10]],
+      [[305,957]]
+    ];
+    // route1_ext
+    var pts = [
+      [[305,957]],[[215,1047]],
+    ];
+    // route2
+    var pts = [
+        [[333,174],[0,14],[10,24]],
+        [[556,411],[10,10],[10,24]],
+        [[566,464],[0,14],[10,24]],
+        [[768,680],[10,10],[10,24]],
+        [[778,712],[0,14],[10,24]],
+        [[938,885],[10,10],[10,24]],
+        [[948,1131],[0,14],[10,24]],
+        [[992,1189]],[[1052,1189]]
+    ];
+    // route2_ext
+    var pts = [
+        [[333,114]],[[333,174]],
+    ];
+    // route3
+    var pts = [
+      [[77,208]],
+      [[77,511],[0,14],[10,24]],
+      [[190,638],[10,10],[24,10]],
+      [[547,648],[14,0],[24,-10]],
+      [[571,638],[14,0],[24,-10]],
+      [[595,628]],
+      [[891,628],[14,0],[24,-10]],
+      [[1158,375]]
+    ];
+    // route4
+    var pts = [
+      [[77,450]],
+      [[187,560],[10,10],[24,10]],
+      [[287,570],[14,0],[24,10]],
+      [[329,598],[10,10],[24,10]],
+      [[413,608],[15,-14],[30,-14]],
+      [[585,594],[14,0],[24,10]],
+      [[615,608]],
+      [[413,608],[20,20],[-20,-20]],
+      [[393,492]]
+    ];
+    // route6
+    var pts = [
+      [[828,88]],
+      [[828,435],[0,14],[-10,24]],
+      [[818,459],[0,14],[-10,24]],
+      [[808,489]],
+      [[808,671],[0,14],[-10,24]],
+      [[528,965],[-10,10],[-10,24]],
+      [[518,1155]]
+    ];
+    // route6_ext
+    var pts = [
+      [[828,88]],[[828,28]]
+    ];
+    // route7
+    var pts = [
+        [[284,202]],
+        [[284,278],[0,14],[10,24]],
+        [[452,460],[10,10],[24,10]],
+        [[686,470],[14,0],[24,10]],
+        [[788,558],[10,10],[10,24]],
+        [[798,624],[0,14],[10,24]],
+        [[1040,880],[10,10],[24,10]],
+        [[1260,890]],
+        [[1300,930]]
+    ];
+    // route7_ext
+    var pts = [
+        [[1300,930],[0,14],[-10,24]],
+        [[1210,1034],[-10,10],[-10,24]],
+        [[1200,1065]]
+    ];
+    // route8
+    var pts = [
+      [[752,735]],
+      [[1032,735]],
+      [[1197,570]]
+    ];
+    // route8_ext
+    var pts = [
+      [[752,735]],
+      [[607,735],[-14,0],[-24,-10]],
+      [[403,550],[-10,-10],[-24,-10]],
+      [[282,540],[-14,0],[-24,10]],
+      [[237,571],[-10,10],[-10,24]],
+      [[227,811],[0,14],[-10,24]],
+      [[67,985]]
+    ];
+    // route9
+    var pts = [
+        [[687,22]],
+        [[687,57],[0,14],[-10,24]],
+        [[585,173],[-10,10],[-10,24]],
+        [[575,290],[0,14],[10,24]],
+        [[671,400]],
+        [[671,430]],
+        [[615,488]],
+        [[615,657],[0,14],[10,24]],
+        [[751,807],[10,10],[10,24]],
+        [[761,1071],[0,14],[-10,24]],
+        [[635,1211]]
+    ];
+    // route10
+    var pts = [
+      [[695,247],[10,10],[10,24]],
+      [[705,411],[0,14],[10,24]],
+      [[1002,722],[10,10],[10,24]],
+      [[1012,860],[0,14],[10,24]],
+      [[1092,954],[10,10],[10,24]],
+      [[1102,990],[0,14],[-10,24]],
+      [[1022,1084],[-10,10],[-10,24]],
+      [[1012,1215]]
+    ];
+    // route10_ext
+    var pts = [
+      [[695,247]],
+      [[603,155],[-10,-10],[-10,-24]],
+      [[593,22]]
+    ];
+    // route11
+    var pts = [
+      [[789,1028]],[[948,1028]]
+    ];
+    // route12
+    var pts = [
+      [[616,1231],[20,20],[-20,20]]
+    ];
+    // routeTPK
+    var pts = [
+      [[365,540]],
+      [[369,536],[10,-10],[10,-24]],
+      [[379,415]],
+      [[517,277],[10,-10],[24,-10]],
+      [[906,267],[14,0],[24,10]],
+      [[986,333],[10,10],[10,24]],
+      [[996,509],[0,14],[10,24]],
+      [[1075,602],[10,10],[10,24]],
+      [[1085,676],[0,14],[10,24]],
+      [[1165,770],[0,14],[10,24]],
+      [[982,1018],[-10,10],[-24,10]],
+      [[948,1028]]
+    ];
+    // routeTPK
+    var pts = [
+      [[379,415]],
+      [[374,420],[-10,10],[-24,10]],
+      [[139,430],[-14,0],[-24,10]],
+      [[60,495],[-10,10],[-10,24]],
+      [[50,589],[0,14],[10,24]],
+      [[465,1018],[10,10],[24,10]],
+      [[789,1028]]
+    ];
+    // routeKOZH
+    var pts = [
+      [[1095,700]],
+      [[1205,810],[10,10],[10,24]],
+      [[1215,898],[0,14],[10,24]],
+      [[1310,1012],[10,10],[10,24]],
+      [[1320,1114]]
+    ];
+    // monorail
+    var pts = [
+      [[585,197]],[[855,197]]
+    ];
+    // moskva_river
+    var pts = [
+      [[-200,283]],
+      [[230,283]],
+      [[170,333]],
+      [[220,363]],
+      [[170,403]],
+      [[230,461],[21,0],[36,15]],
+      [[335,545],[15,15],[36,15]],
+      [[431,560],[21,0],[36,15]],
+      [[461,705],[0,25],[-15,36]],
+      [[386,801]],
+      [[631,676],[15,-15],[36,-15]],
+      [[761,661],[25,0],[36,15]],
+      [[887,766],[15,15],[15,36]],
+      [[902,912]],
+      [[990,932]],
+      [[1016,995]],
+      [[971,1085]],
+      [[1080,1124],[21,0],[36,15]],
+      [[1580,1624]]
+    ];
+    // moskva_canal
+    var pts = [
+      [[266,469]],
+      [[255,458],[-10,-10],[-10,-24]],
+      [[245,351],[0,-14],[10,-24]],
+      [[306,276],[10,-10],[10,-24]],
+      [[315,0]]
+    ];
+    // strogino_lake_exit
+    var pts = [
+      [[160,333]],
+      [[190,310],[10,-10],[24,-10]],
+      [[230,300]],
+      [[184,320]],
+      [[160,333]]
+    ];
+    // vodootvodny_canal
+    var pts = [
+      [[570,740]],
+      [[582,740],[14,0],[24,-10]],
+      [[636,700],[14,-10],[24,-10]],
+      [[759,690],[21,0],[36,15]],
+      [[900,810]]
+    ];
+    // yauza_river
+    var pts = [
+      [[810,690]],
+      [[945,690]],
+      [[985,470]],
+      [[1005,311],[0,-21],[-15,-36]],
+      [[917,202],[-15,-15],[-36,-15]],
+      [[830,187]],
+      [[830,177],[0,-14],[10,-24]],
+      [[930,77]]
+    ];
+    // Nagatino_Kozhukhovo
+    var pts = [
+      [[912,932]],[[940,904]]
+    ];
+    // Nagatino_poyma
+    var pts = [
+      [[953,891]],
+      [[977,915],[15,15],[15,36]]
+    ];
+    // grebnoy_canal
+    var pts = [
+      [[160,388]],
+      [[200,378]],
+      [[220,378]],
+      [[180,388]]
+    ];
+    // sheremetyevo_express_line
+    var pts = [
+      [[492,371]],
+      [[600,263],[10,-10],[10,-24]],
+      [[610,10],[10,-10],[10,-24]],
+      [[575,-5]]
+    ];
+    // vnukovo
+    var pts = [
+      [[400,663]],
+      [[310,663]],
+      [[181,834]],
+      [[63,952],[-10,10],[-10,24]]
+    ];
+    // domodedovo
+    var pts = [
+      [[883,818]],
+      [[883,1270]]
+    ];
+    for(var i in pts){
+        if (pts[i].length === 1){
+          var m = fromPoints(pts[i][0]);
+          m = [parseInt(m[0]), parseInt(m[1])];
+          addrow('[' + m.toString(',') + '],');
+        }
+        if (pts[i].length === 3){
+            var m = fromPoints(pts[i][0]),
+                m1 = fromPoints([pts[i][0][0]+pts[i][1][0], pts[i][0][1]+pts[i][1][1]]),
+                m2 = fromPoints([pts[i][0][0]+pts[i][2][0], pts[i][0][1]+pts[i][2][1]]);
+            m = [parseInt(m[0]), parseInt(m[1]),"'Q'"];
+            m1 = [parseInt(m1[0]), parseInt(m1[1]),"'Q'"];
+            m2 = [parseInt(m2[0]), parseInt(m2[1]),"'Q'"];
+            addrow('[' + m.toString(',') + '],[' + m1.toString(',') + '],[' + m2.toString(',') + '],');
+        }
+    }
+    // bezier
+    var pts = [[1,87],
+      [-22,112,'Q']];
+    var k = (pts[1][1]-pts[0][1])/(pts[1][0]-pts[0][0]);
+    var b = pts[0][1] - k * pts[0][0];
+    var pts = [
+    // Stations
+/*[[889,418],"Komsomolskaya_5"],
+[[944,627],"Kurskaya_5"],
+[[914,716],"Taganskaya_5"],
+[[827,803],"Paveletskaya_5"],
+[[761,832],"Dobryninskaya"],
+[[653,840],"Oktyabrskaya_5"],
+[[486,748],"Park_Kultury_5"],
+[[431,627],"Kievskaya_5"],
+[[429,548],"Rossyskaya"],
+[[445,490],"Krasnopresnenskaya"],
+[[510,393],"Belorusskaya_5"],
+[[587,344],"Novoslobodskaya"],
+[[705,324],"Suvorovskaya"],
+[[808,353],"Prospekt_Mira_5"],*/
+[[635,187],"Fonvizinskaya"],
+[[665,217],"Butyrskaya"],
+[[695,247],"Marina_Roshcha_10"],
+    ];
+    addrow('---');
+    for(var i in pts){
+      //pts[i][0][1] = k*pts[i][0][0]+b;
+      var m = fromPoints(pts[i][0]);
+      //m[0] -= 0.17;
+      var pt = [Math.round(m[0]*100)/100, Math.round((k*m[0]+b)*100)/100];
+      var label = "'" + pts[i][1] + "'";
+      addrow('[' + ["'st5'", label, '[[' + pt + ']]',  label.replace('_', ' ')].toString(',') + '],' );
+    }
+  }
+  function init() {
+    var mtab = document.createElement("table");
+    mtab.width = "100%";
+    var row = document.createElement("tr");
+    row.style.backgroundColor = "rgb(230,230,230)";
+    mtab.appendChild(row);
+
+    var col = document.createElement("td");
+    col.width = "20%";
+    var el = document.createElement("h2");
+    el.appendChild(document.createTextNode("Moscow Metro"));
+    el.style.padding = "0";
+    el.style.margin = "0";
+    col.appendChild(el);
+    row.appendChild(col);
+
+    var col = document.createElement("td");
+    col.width = "40%";
+    col.align = "center";
+    col.appendChild(document.createTextNode("Stations  "));
+    var stationlist = el = document.createElement("select");
+    el.id = "stationlist";
+    col.appendChild(el);
+    row.appendChild(col);
+
+    var col = document.createElement("td");
+    col.align = "center";
+    col.id = "coords";
+    row.appendChild(col);
+    document.body.appendChild(mtab);
+
+    dw = new dbCarta();
+    dw.style.backgroundColor = "white";
+    // define new layers
+    var route = function(o){ return dw.extend({cls: "Line", width: 5}, o||{}) },
+        route_d = function(o){ return route(dw.extend({dash: [2,4]}, o||{})) },
+        station = function(o){ return dw.extend({cls: "Dot", bg: "white", size: 2, width: 5, labelscale: 1}, o||{}) },
+        interchange = function(o){ return station(dw.extend({size: 3, labelcolor: o['fg'], bg: o['fg']}, o)) },
+        interchange_d = function(o){ return interchange(dw.extend({size: 2, width: 1}, o||{})) },
+        river = function(o){ return route(dw.extend({fg: "#E2FCFC", join: 'round', cap: 'round', labelcolor: '#5555ff'}, o||{})) },
+        aeroexpress = function(o){ return route(dw.extend({fg: "#DDDDDD"}, o||{})) },
+        aeroexpress_d = function(o){ return route(dw.extend({fg: "#FFFFFF", width: 4, dash: [10,10]}, o||{})) };
+    // lines
+    dw.extend(dw.mopt, {
+      "r1": route({fg: "#ED1B35"}),
+      "r2": route({fg: "#44B85C"}),
+      "r3": route({fg: "#0078BF"}),
+      "r4": route({fg: "#19C1F3"}),
+      "r5": route({fg: "#894E35"}),
+      "r6": route({fg: "#F58631"}),
+      "r7": route({fg: "#8E479C"}),
+      "r8": route({fg: "#FFCB31"}),
+      "r9": route({fg: "#A1A2A3"}),
+      "r10": route({fg: "#B3D445"}),
+      "r11": route({fg: "#79CDCD"}),
+      "r12": route({fg: "#ACBFE1"}),
+      "rTPK": route_d({fg: "#554D26"}),
+      "rKOZH": route_d({fg: "#DE62BE"})
+    });
+    // lines ext
+    dw.extend(dw.mopt, {
+      "r1_ext": route_d({fg: dw.mopt["r1"].fg}),
+      "r2_ext": route_d({fg: dw.mopt["r2"].fg}),
+      "r6_ext": route_d({fg: dw.mopt["r6"].fg}),
+      "r7_ext": route_d({fg: dw.mopt["r7"].fg}),
+      "r8_ext": route_d({fg: dw.mopt["r8"].fg}),
+      "r10_ext": route_d({fg: dw.mopt["r10"].fg}),
+      "r12_ext": route_d({fg: dw.mopt["r12"].fg})
+    });
+    // interchanges
+    dw.extend(dw.mopt, {
+      "interchange": route({fg: "#000000", join: 'round', cap: 'round', width: 8}),
+      "interchange_d": route({fg: "#FFFFFF", join: 'round', cap: 'round', width: 7})
+    });
+    // rivers
+    dw.extend(dw.mopt, {
+      "moskva_canal": river({width: 5, rotate: -90}),
+      "strogino_lake_exit": river({cls: 'Polygon', bg: river().fg, width: 5}),
+      "vodootvodny_canal": river({width: 5}),
+      "yauza_river": river({width: 5, rotate: 45, anchor: ['start', 'top']}),
+      "Nagatino_Kozhukhovo": river({width: 5}),
+      "Nagatino_poyma": river({width: 6}),
+      "grebnoy_canal": river({width: 3}),
+      "moskva_river": river({width: 15, rotate: 45, anchor: ['start', 'top']})
+    });
+    // rails
+    dw.extend(dw.mopt, {
+      "monorail": route({fg: "#2C87C5", width: 2, labelcolor: "#2C87C5", anchor: ['start', 'bottom']}),
+      "sheremetyevo_express_line": aeroexpress({anchor: ['end', 'top']}),
+      "sheremetyevo_express_line_d": aeroexpress_d({anchor: ['end', 'top']}),
+      "vnukovo_express_line": aeroexpress({anchor: ['start', 'top']}),
+      "vnukovo_express_line_d": aeroexpress_d({anchor: ['end', 'top']}),
+      "domodedovo_express_line": aeroexpress({anchor: ['start', 'top']}),
+      "domodedovo_express_line_d": aeroexpress_d()
+    });
+    // stations
+    dw.extend(dw.mopt, {
+      "s1": station({fg: dw.mopt["r1"].fg}),
+      "s1_1": interchange({fg: dw.mopt["r1"].fg, anchor: ['start', 'top']}),
+      "s1_2": interchange({fg: dw.mopt["r1"].fg, anchor: ['end', 'top']}),
+      "s2": station({fg: dw.mopt["r2"].fg}),
+      "s2_1": interchange({fg: dw.mopt["r2"].fg, anchor: ['start', 'middle']}),
+      "s2_2": interchange({fg: dw.mopt["r2"].fg, anchor: ['end', 'bottom']}),
+      "s2_3": interchange({fg: dw.mopt["r2"].fg, anchor: ['start', 'bottom']}),
+      "s2_4": station({fg: dw.mopt["r2"].fg, anchor: ['end', 'bottom']}),
+      "s2_5": interchange({fg: dw.mopt["r2"].fg, anchor: ['end', 'top']}),
+      "s2_6": station({fg: dw.mopt["r2"].fg, anchor: ['start', 'top']}),
+      "s3": station({fg: dw.mopt["r3"].fg}),
+      "s3_1": station({fg: dw.mopt["r3"].fg, anchor: ['end', 'bottom']}),
+      "s3_2": station({fg: dw.mopt["r3"].fg, anchor: ['end', 'top']}),
+      "s3_3": interchange({fg: dw.mopt["r3"].fg, anchor: ['end', 'bottom']}),
+      "s3_4": interchange({fg: dw.mopt["r3"].fg, anchor: ['start', 'bottom']}),
+      "s3_5": interchange({fg: dw.mopt["r3"].fg, anchor: ['end', 'top']}),
+      "s3_6": interchange({fg: dw.mopt["r3"].fg, anchor: ['start', 'bottom']}),
+      "s4": station({fg: dw.mopt["r4"].fg}),
+      "s4_1": station({fg: dw.mopt["r4"].fg, anchor: ['end', 'top']}),
+      "s4_2": interchange({fg: dw.mopt["r4"].fg, anchor: ['end', 'bottom']}),
+      "s4_3": station({fg: dw.mopt["r4"].fg, anchor: ['start', 'bottom']}),
+      "s4_4": interchange({fg: dw.mopt["r4"].fg, anchor: ['end', 'top']}),
+      "s5": interchange({fg: dw.mopt["r5"].fg}),
+      "s5_1": interchange({fg: dw.mopt["r5"].fg, anchor: ['end', 'bottom']}),
+      "s5_2": interchange({fg: dw.mopt["r5"].fg, anchor: ['start', 'top']}),
+      "s6": station({fg: dw.mopt["r6"].fg}),
+      "s6_1": station({fg: dw.mopt["r6"].fg, anchor: ['end', 'top']}),
+      "s6_2": interchange({fg: dw.mopt["r6"].fg}),
+      "s6_3": interchange({fg: dw.mopt["r6"].fg, anchor: ['end', 'bottom']}),
+      "s7": station({fg: dw.mopt["r7"].fg, anchor: ['end', 'bottom']}),
+      "s7_1": interchange({fg: dw.mopt["r7"].fg, anchor: ['end', 'bottom']}),
+      "s7_2": interchange({fg: dw.mopt["r7"].fg, anchor: ['start', 'bottom']}),
+      "s7_3": interchange({fg: dw.mopt["r7"].fg, anchor: ['start', 'top']}),
+      "s7_4": station({fg: dw.mopt["r7"].fg, anchor: ['start', 'bottom']}),
+      "s7_5": interchange_d({fg: dw.mopt["r7"].fg}),
+      "s8": station({fg: dw.mopt["r8"].fg}),
+      "s8_1": interchange({fg: dw.mopt["r8"].fg}),
+      "s8_2": interchange({fg: dw.mopt["r8"].fg, anchor: ['start', 'bottom']}),
+      "s8_3": interchange({fg: dw.mopt["r8"].fg, anchor: ['start', 'top']}),
+      "s8_4": interchange({fg: dw.mopt["r8"].fg, anchor: ['end', 'top']}),
+      "s8_5": interchange({fg: dw.mopt["r8"].fg, anchor: ['end', 'botom']}),
+      "s8_6": interchange_d({fg: dw.mopt["r8"].fg}),
+      "s9": station({fg: dw.mopt["r9"].fg, anchor: ['start', 'bottom']}),
+      "s9_1": interchange({fg: dw.mopt["r9"].fg, anchor: ['end', 'bottom']}),
+      "s9_2": interchange({fg: dw.mopt["r9"].fg, anchor: ['start', 'bottom']}),
+      "s9_3": interchange({fg: dw.mopt["r9"].fg, anchor: ['start', 'bottom']}),
+      "s9_4": station({fg: dw.mopt["r9"].fg, anchor: ['end', 'bottom']}),
+      "s10": station({fg: dw.mopt["r10"].fg,  anchor: ['end', 'bottom']}),
+      "s10_1": station({fg: dw.mopt["r10"].fg, anchor: ['start', 'bottom']}),
+      "s10_2": interchange({fg: dw.mopt["r10"].fg, anchor: ['start', 'bottom']}),
+      "s10_3": interchange({fg: dw.mopt["r10"].fg, anchor: ['end', 'top']}),
+      "s10_4": interchange_d({fg: dw.mopt["r10"].fg}),
+      "s11": station({fg: dw.mopt["r11"].fg, anchor: ['start', 'bottom']}),
+      "s11_1": interchange({fg: dw.mopt["r11"].fg, anchor: ['start', 'top']}),
+      "s11_2": interchange_d({fg: dw.mopt["r11"].fg}),
+      "s12": station({fg: dw.mopt["r12"].fg, anchor: ['center', 'bottom']}),
+      "s12_1": station({fg: dw.mopt["r12"].fg, anchor: ['center', 'top']}),
+      "s12_2": station({fg: dw.mopt["r12"].fg, anchor: ['start', 'top']}),
+      "s12_3": station({fg: dw.mopt["r12"].fg, anchor: ['end', 'bottom']}),
+      "s12_4": interchange({fg: dw.mopt["r12"].fg, anchor: ['start', 'bottom']}),
+      "s12_5": interchange({fg: dw.mopt["r12"].fg, anchor: ['start', 'top']}),
+      "sTPK": station({fg: dw.mopt["rTPK"].fg, anchor: ['start', 'top']}),
+      "sTPK_1": station({fg: dw.mopt["rTPK"].fg, anchor: ['start', 'bottom']}),
+      "sTPK_2": station({fg: dw.mopt["rTPK"].fg, anchor: ['end', 'bottom']}),
+      "sTPK_3": interchange({fg: dw.mopt["rTPK"].fg, anchor: ['start', 'top']}),
+      "sTPK_4": interchange({fg: dw.mopt["rTPK"].fg, anchor: ['end', 'bottom']}),
+      "sTPK_5": interchange({fg: dw.mopt["rTPK"].fg, anchor: ['start', 'bottom']}),
+      "sTPK_6": interchange_d({fg: dw.mopt["rTPK"].fg}),
+      "sKOZH": station({fg: dw.mopt["rKOZH"].fg, anchor: ['start', 'bottom']}),
+      "sKOZH_1": station({fg: dw.mopt["rKOZH"].fg, anchor: ['end', 'bottom']}),
+      "sKOZH_2": interchange({fg: dw.mopt["rKOZH"].fg, anchor: ['start', 'bottom']}),
+      "sKOZH_3": interchange_d({fg: dw.mopt["rKOZH"].fg}),
+      "sMono": interchange({fg: dw.mopt["monorail"].fg, size: 1, anchor: ['start', 'top']}),
+      "sMono_1": interchange({fg: dw.mopt["monorail"].fg, size: 1, anchor: ['start', 'middle']})
+    });
+    dw.loadCarta(window.MLINES);
+    dw.loadCarta(window.MSTATIONS);
+    dw.draw();
+    // station list
+    for (var i in window.MSTATIONS) {
+      var el = document.createElement("option");
+      el.value = window.MSTATIONS[i][0] + "_" + window.MSTATIONS[i][1];
+      el.appendChild(document.createTextNode(window.MSTATIONS[i][3]));
+      stationlist.appendChild(el);
+    }
+    stationlist.onchange = findstation;
+    window.MLINES = undefined;
+    window.MSTATIONS = undefined;
+    draw();
+    // curr.object
+    dw.clfunc.onmousemove = function() {
+      var mcoord = document.getElementById("coords");
+      var label = "";
+      if (dw.m.pmap) {
+        var o = dw.mflood[dw.m.pmap];
+        label = o['label'];
+      }
+      mcoord.innerHTML = label;
+    }
+  }
+</script>
+</head>
+<body onload="init()"></body>
+</html>
