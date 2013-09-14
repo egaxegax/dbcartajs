@@ -16,7 +16,17 @@ Controls:
 
 Featured, copmlicated demo like Orbitron, Marble, Xephem but more lightweight.
 
+![starry2.png] (http://img-fotki.yandex.ru/get/9555/136640652.0/0_becbd_66ad485b_XL.png "Starry Sky")
+
 ## Screenshots
 
-![demo-250.gif] (http://img-fotki.yandex.ru/get/9089/136640652.0/0_b79e1_2ba88537_M.gif "demo-250.gif")
-![demo-polar-250.gif] (http://img-fotki.yandex.ru/get/9329/136640652.0/0_b79e2_12b9df76_M.gif "demo-polar-250.gif")
+Orthographic:
+
+![ortho-ns.gif] (http://img-fotki.yandex.ru/get/9066/136640652.0/0_bf3ee_cde97104_orig "ortho-ns.gif")
+![ortho-ew.gif] (http://img-fotki.yandex.ru/get/9167/136640652.0/0_bf3ed_d4a4a2c3_orig "ortho-ew.gif")
+
+Mercator:
+
+![mercv.png] (http://img-fotki.yandex.ru/get/9064/136640652.0/0_b999b_feccc6d_XL.jpg "Mercator")
+
+
