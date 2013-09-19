@@ -30,7 +30,12 @@ function listDemos() {
       a.appendChild(document.createTextNode('SVG-карты'));
       sp.appendChild(document.createTextNode('Карта Московского Метрополитена 2013 с выбором станций. Переделена с '));
       sp.appendChild(a);
-      sp.appendChild(document.createTextNode(' на Wikipedia. Загружается намного быстрее оригинала. Пунктирные линии строящихся станций отображаются только в Firefox (поддержка метода setDashLine в Canvas).'));
+      var a = document.createElement("a");
+      a.href = "http://habrahabr.ru/post/193778";
+      a.appendChild(document.createTextNode('Карта Московского Метро на Canvas'));
+      sp.appendChild(document.createTextNode(' на Wikipedia. Загружается намного быстрее оригинала. Пунктирные линии строящихся станций отображаются только в Firefox (поддержка метода setDashLine в Canvas). Подробности в статье на Хабре "'));
+      sp.appendChild(a);
+      sp.appendChild(document.createTextNode('".'));
       return sp; }]
   ];
 }

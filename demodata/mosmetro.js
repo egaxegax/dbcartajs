@@ -1008,7 +1008,7 @@ MSTATIONS = [
   ['sTPK_4','Rizhskaya',[[41,82]],'',null,1],
   ['sTPK_4','Sokolniki',[[76.37,65.67]],'',null,1],
   ['sTPK_4','Elektrozavodskaya',[[80,19]],'',null,1],
-  ['sTPK','Lefortovo',[[98.63,-2.27]],'Лефортово',null,1],
+  ['sTPK','Lefortovo',[[98.63,-1.76]],'Лефортово',null,1],
   ['sTPK_5','Aviamotornaya',[[106,-30]],'Авиамоторная',null,1],
   ['sTPK_5','Nizhegorodskaya_Ulitsa',[[122.18,-46.18]],'Нижегородская улица',null,1],
   ['sTPK_3','Tekstilshchiki',[[106.62,-76]],'',null,1],
