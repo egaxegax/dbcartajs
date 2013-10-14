@@ -618,7 +618,7 @@ var Solar = {
         i = 0.0,                                       // incl.
         w = MUtil.ang360(282.9404 + 4.70935E-5 * d),   // arg.perig.
         a = 1.000000,                                  // average distance from the Sun (a.u.)
-        e = 0.016709 - 1.151E-9 * d,                   // эксцентриситет
+        e = 0.016709 - 1.151E-9 * d,                   // essentricity
         M = MUtil.ang360(356.0470 + 0.9856002585 * d); // mean anomaly
     // mean longtitude
     var L = MUtil.ang360(w + M);
@@ -767,12 +767,20 @@ var Solar = {
   loadPlanets: function(time) {
     var d = this.timeScale(time);
     var mplanets = [];
-    var planets = ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune'];
-    for(var i in planets) {
-      var ps = eval("this." + planets[i] + "(d)"),
+    var pos = {
+      Mercury: this.Mercury(d),
+      Venus: this.Venus(d), 
+      Mars: this.Mars(d), 
+      Jupiter: this.Jupiter(d), 
+      Saturn: this.Saturn(d), 
+      Uranus: this.Uranus(d), 
+      Neptune: this.Neptune(d)
+    };
+    for(var i in pos) {
+      var ps = pos[i],
           ecl = this.ecl_helio2geo(ps[0], ps[1], ps[2], ps[3], d),
           eq = MVector.rect2spheric(ecl[0], ecl[1], ecl[2]);
-      mplanets.push([ MUtil.ang360(eq[0] * 180/Math.PI) * Math.PI/180, eq[1], 2, planets[i], planets[i] ]);
+      mplanets.push([ MUtil.ang360(eq[0] * 180/Math.PI) * Math.PI/180, eq[1], 2, i, i ]);
     }    
     return mplanets;
   }

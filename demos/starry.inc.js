@@ -91,6 +91,8 @@ function loadStarry(){
   // sat.tracs
   var tledata = window.TLEDATA;
   for (var i in tledata){
+    if (!tledata[i][1])
+      continue; // check data
     var pos = [];
     var satrec = satellite.twoline2satrec(tledata[i][1], tledata[i][2]);
     // by 2 mean motion ago
@@ -193,21 +195,25 @@ function init() {
   col.width = "10%";
   col.align = "center";
   el = document.createElement('button');
+  el.id = 'btup';
   el.onclick = function() { turn(0, -5) };
   el.title = "Turn Up";
   el.appendChild(document.createTextNode("U"));
   col.appendChild(el);
   el = document.createElement('button');
+  el.id = 'btdown';
   el.onclick = function() { turn(0, 5) };
   el.title = "Turn Down";
   el.appendChild(document.createTextNode("D"));
   col.appendChild(el);
   el = document.createElement('button');
+  el.id = 'btleft';
   el.onclick = function() { turn(5, 0) };
   el.title = "Turn Left";
   el.appendChild(document.createTextNode("L"));
   col.appendChild(el);
   el = document.createElement('button');
+  el.id = 'btright';
   el.onclick = function() { turn(-5, 0) };
   el.title = "Turn Right";
   el.appendChild(document.createTextNode("R"));
@@ -262,11 +268,17 @@ function init() {
   var col = document.createElement("td");
   col.width = "15%";
   col.align = "center";
-  col.id = "coords";
+  var el = document.createElement("div");
+  el.id = "coords";
+  col.appendChild(el);
   row.appendChild(col);
   document.body.appendChild(mtab);
+  
+  var mcont = document.createElement("div");
+  mcont.id = "mcont";
+  document.body.appendChild(mcont);
 
-  dw = new dbCarta();
+  dw = new dbCarta(mcont.id);
   // change some colors
   dw.style.backgroundColor = "rgb(17,17,96)";
   dw.mopt['DotPort']['fg'] = "rgb(220,0,0)";
@@ -328,7 +340,7 @@ function init() {
   dw.loadCarta(window.CONTINENTS);
   dw.loadCarta(dw.createMeridians());
   dw.loadCarta([['DotPort', '1', [pov], 'Moscow']]);
-  window.CONTINENTS = undefined;
+  //window.CONTINENTS = undefined;
   setSelTime();
   draw();
 }

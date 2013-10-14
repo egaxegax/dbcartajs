@@ -1,5 +1,5 @@
 /**
- * dbCartajs HTML5 Canvas dymanic object map v1.2.
+ * dbCartajs HTML5 Canvas dymanic object map v1.2.1
  * It uses Proj4js transformations.
  *
  * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
@@ -414,6 +414,11 @@ function dbCarta(pid) {
     * Check points if bezierCurve as "[[1,1,'Q'],[1,2,'Q'],[2,3,'Q'],...]".
     */
     paintCartaPts: function(pts, ftype, ftext, centerofpts) {
+      if (!(ftype in this.mopt))
+        return;
+      var chkPts =  function(pts) { // validate pts
+        return (pts && !isNaN(pts[0]) && !isNaN(pts[1]));
+      }
       var m = this.mopt[ftype];
       var msize = (m['size'] || 1) / this.m.scale,
           mwidth = (m['width'] || 1) / this.m.scale,
@@ -431,7 +436,7 @@ function dbCarta(pid) {
       ctx.beginPath();
       this.setDashLine(m['dash']);
       if (m['cls'] == 'Dot') {
-        if (pts.length) {
+        if (chkPts(pts[0])){
           centerofpts = pts;
           ctx.arc(pts[0][0], pts[0][1], msize, 0, Math.PI*2, 0);
           ctx.strokeStyle = m['fg'];
@@ -442,7 +447,7 @@ function dbCarta(pid) {
       } else {
         var mpts = [];
         for (var i in pts) {
-          if (!mpts.length)
+          if (!mpts.length && chkPts(pts[i]))
             ctx.lineTo(pts[i][0], pts[i][1]);
           if (pts[i][2] == 'Q') {
             mpts.push(pts[i]);
