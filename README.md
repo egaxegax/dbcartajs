@@ -1,7 +1,7 @@
 dbCartajs
 =========
 
-HTML5 Canvas dymanic object map. Pure JavaScript and serveless.
+HTML5 Canvas dymanic object map. Pure JavaScript and serverless.
 It uses Proj4js transformations.  Starry Sky demo include satellite-js module.
 Demos at http://dbcartajs.appspot.com/.
 
