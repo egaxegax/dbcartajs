@@ -914,7 +914,7 @@ MSTATIONS = [
   ['s8','Lomonosobsky_Prospekt',[[-120,-35]],'Ломоносовский проспект',null,1],
   ['s8','Minskaya',[[-120,-25]],'Минская',null,1],
   ['s8_6','Park_Pobedy',[[-120,-16]],'',null,1],
-  ['s8_5','Delovoy_Tsentr',[[-84,11]],'Delovoy Tsentr',null,1],
+  ['s8_5','Delovoy_Tsentr',[[-84,11]],'Деловой центр',null,1],
   ['s8_1','Kutuzovsky_Prospekt',[[-69.38,3.63]],'Кутузовский проспект',null,1],
   ['s8_4','Plyushchikha',[[-40,-24.55]],'Плющиха',null,1],
   ['s8_1','Volkhonka',[[-29.83,-34.29]],'Волхонка',null,1],

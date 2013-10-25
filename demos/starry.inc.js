@@ -97,9 +97,9 @@ function loadStarry(){
     var satrec = satellite.twoline2satrec(tledata[i][1], tledata[i][2]);
     // by 2 mean motion ago
     var utc1 = Date.UTC(gmtime[0], gmtime[1], gmtime[2], gmtime[3], gmtime[4], gmtime[5]),
-        ps = Math.PI * 1/satrec.no * 60.0 * 2.0,
+        ps = 2.0 * Math.PI * 1/satrec.no * 60.0,
         delta = 0, step = ps / 100.0, vrect = [];
-    while (delta < ps){
+    while (delta < ps) {
       var utc2 = new Date();
       utc2.setTime(utc1 - delta * 1000);
       var pv = satellite.propagate(satrec, utc2.getUTCFullYear(), utc2.getUTCMonth()+1, utc2.getUTCDate(), utc2.getHours(), utc2.getMinutes(), utc2.getSeconds());
@@ -111,6 +111,12 @@ function loadStarry(){
         mcoords = MVector.rect2geo(gmtime, tracs[1][0][0], tracs[1][0][1], tracs[1][0][2]);
     drawlonlat(mtracs[1], 'sattrac');
     dw.paintCarta([mcoords], 'satsurface');
+    if (!trace[i]) trace[i] = [];
+    trace[i].push(mcoords);
+    if (trace[i].length > 40) trace[i].shift();
+    // surface trace
+    for(var j in trace[i])
+      dw.paintCarta([trace[i][j]], 'sattrace');
     if ((label = mtracs[0]).length) {
       // sat.fields of vision
       var pts = MGeo.circle1spheric(mcoords[0], mcoords[1], MGeo.AE * 18 * Math.PI/180, 20);
@@ -291,7 +297,8 @@ function init() {
     "planet": {cls: "Dot", fg: "rgb(220,200,200)", labelcolor: "rgb(255,155,128)"},
     "satpos":  {cls: "Dot", fg: "rgb(200,200,170)", labelcolor: "rgb(200,200,170)"},
     "sattrac": {cls: "Line", fg: "rgba(200,200,170,0.1)", labelcolor: "rgb(200,200,170)"},
-    "satsurface": {cls: "Dot", fg: "rgb(0,220,0)", size: "2"},
+    "sattrace": {cls: "Dot", fg: "rgba(220,220,0,0.3)"},
+    "satsurface": {cls: "Dot", fg: "rgb(0,220,0)", size: '2'},
     "sector": {cls: "Polygon", fg: "rgba(200,200,170,0.1)", bg: "rgba(200,200,170,0.1)", width: '0.1'},
     "terminator": {cls: "Polygon", fg: "rgba(0,0,0,0.3)", bg: "rgba(0,0,0,0.3)"}
   });
@@ -341,6 +348,7 @@ function init() {
   dw.loadCarta(dw.createMeridians());
   dw.loadCarta([['DotPort', '1', [pov], 'Moscow']]);
   //window.CONTINENTS = undefined;
+  window.trace = {};
   setSelTime();
   draw();
 }

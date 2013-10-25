@@ -196,7 +196,7 @@ function init() {
   dw.loadCarta(window.MSTATIONS);
   dw.draw();
   // station list
-  window.MSTATIONS.sort(function(a,b){return a[1]>b[1]});
+  window.MSTATIONS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1});
   for (var i in window.MSTATIONS) {
     if (!window.MSTATIONS[i][3]) continue;
     var el = document.createElement("option");
