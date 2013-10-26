@@ -434,7 +434,8 @@ function dbCarta(pid) {
       ctx.lineJoin = mjoin;
       ctx.lineCap = mcap;
       ctx.beginPath();
-      this.setDashLine(m['dash']);
+      if (m['dash'])
+        this.setDashLine(m['dash']);
       if (m['cls'] == 'Dot') {
         if (chkPts(pts[0])){
           centerofpts = pts;
