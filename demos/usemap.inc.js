@@ -37,6 +37,7 @@ function init() {
   dw = new dbCarta();
   // add new layers
   dw.extend(dw.mopt, {
+    "Arctic": {cls: "Polygon", fg: "rgb(200,200,200)", bg: dw.mopt['.Arctic']['bg']},
     "Country": {cls: "Polygon", fg: "rgb(200,200,200)", bg: dw.mopt['.Mainland']['bg']}
   });
   dw.loadCarta(window.COUNTRIES);
