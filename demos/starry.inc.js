@@ -185,6 +185,7 @@ function init() {
   var mtab = document.createElement("table");
   mtab.width = "100%";
   var row = document.createElement("tr");
+  row.style.height = "1px";
   row.style.backgroundColor = "rgb(230,230,230)";
   mtab.appendChild(row);
 
@@ -278,13 +279,16 @@ function init() {
   el.id = "coords";
   col.appendChild(el);
   row.appendChild(col);
-  document.body.appendChild(mtab);
-  
-  var mcont = document.createElement("div");
-  mcont.id = "mcont";
-  document.body.appendChild(mcont);
 
-  dw = new dbCarta(mcont.id);
+  var row = document.createElement("tr");
+  var col = document.createElement("td");
+  col.colSpan = "10";
+  col.id = "mcol";
+  row.appendChild(col);
+  mtab.appendChild(row);
+  document.body.appendChild(mtab);
+
+  dw = new dbCarta({id:"mcol", height:col.offsetHeight});
   // change some colors
   dw.style.backgroundColor = "rgb(17,17,96)";
   dw.mopt['DotPort']['fg'] = "rgb(220,0,0)";

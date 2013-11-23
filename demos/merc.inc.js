@@ -1,8 +1,8 @@
 // merc.html func
 function init() {
   var mtab = document.createElement("table");
-  mtab.width = "100%";
   var row = document.createElement("tr");
+  row.style.height = "1px";
   row.style.backgroundColor = "rgb(230,230,230)";
   mtab.appendChild(row);
 
@@ -14,9 +14,16 @@ function init() {
   el.style.margin = "0";
   col.appendChild(el);
   row.appendChild(col);
+
+  var row = document.createElement("tr");
+  var col = document.createElement("td");
+  col.colSpan = "10";
+  col.id = "mcol";
+  row.appendChild(col);
+  mtab.appendChild(row);
   document.body.appendChild(mtab);
 
-  dw = new dbCarta();
+  dw = new dbCarta({id:"mcol", height:col.offsetHeight});
   dw.initProj(101, '+lon_0=0 +lat_0=0');
   dw.scaleCarta(1.4);
   dw.loadCarta(window.CONTINENTS);

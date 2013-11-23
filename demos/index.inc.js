@@ -36,7 +36,11 @@ function listDemos() {
       sp.appendChild(document.createTextNode(' на Wikipedia. Загружается намного быстрее оригинала. Пунктирные линии строящихся станций отображаются только в Firefox (поддержка метода setDashLine в Canvas). Подробности в статье на Хабре "'));
       sp.appendChild(a);
       sp.appendChild(document.createTextNode('".'));
-      return sp; }]
+      return sp; }],
+    ['mosrails.html', 'Moscow Rail Map', function() {
+      return document.createTextNode('Ещё одна карта на тему железных дорог. Схема пригородного ж/д транспорта Москвы и МО. ' + 
+                                     'Оригинал этой карты можно видеть на стенах тамбуров подмосковных электричек под названием ' + 
+                                     'Moscow Underground and Commuter Rail Map. Подробности на Хабре.'); }],
   ];
 }
 function init() {
@@ -161,13 +165,13 @@ function init() {
   // add anim
   var cx = Math.random() * 360,
       cy = Math.random() * 180;
-  dbcarta1 = new dbCarta("demo1");
+  dbcarta1 = new dbCarta({id: "demo1"});
   dbcarta1.initProj(203, ' +lon_0=' + cx + ' +lat_0=' + cy);
   dbcarta1.loadCarta(window.CONTINENTS);
   dbcarta1.loadCarta(dbcarta1.createMeridians());
   dbcarta1.scaleCarta(1.4);
   dbcarta1.draw();
-  dbcarta2 = new dbCarta("demo2");
+  dbcarta2 = new dbCarta({id: "demo2"});
   dbcarta2.initProj(203, ' +lon_0=' + (180-cx) + ' +lat_0=' + (-cy/2.0));
   dbcarta2.loadCarta(window.CONTINENTS);
   dbcarta2.loadCarta(dbcarta2.createMeridians());

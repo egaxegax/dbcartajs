@@ -1,25 +1,23 @@
-/**
- * dbCartajs HTML5 Canvas dymanic object map v1.2.1
+/*
+ * dbCartajs HTML5 Canvas dymanic object map v1.3
  * It uses Proj4js transformations.
  *
  * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
  * egax@bk.ru, 2013
  */
-function dbCarta(pid) {
-  this.init = function() {
-    this.dw = document.createElement('canvas');
-    if (!(p = document.getElementById(pid)))
-      p = document.body;
-    p.appendChild(this.dw);
-    // styles
-    this.dw.style.width = '100%';
-    this.dw.width = cw = this.dw.offsetWidth;
-    this.dw.height = cw / 2.0;
-    this.dw.style.borderWidth = '0';
-    this.dw.style.backgroundColor = 'rgb(186,196,205)';
-  }
-  this.init();
-  this.dw.extend = function(dst, src) {
+function dbCarta(cfg) {
+  cfg = cfg||{};
+  var dw = document.createElement('canvas'),
+      el = document.getElementById(cfg.id);
+  if (!el) el = document.body;
+  el.appendChild(dw);
+  // styles
+  dw.style.border = 'none';
+  dw.style.backgroundColor = cfg.bg||'rgb(186,196,205)';
+  if (!cfg.width) dw.style.width = '100%';
+  dw.width = (cfg.width ? cfg.width : dw.offsetWidth);
+  dw.height = (cfg.height ? cfg.height : dw.offsetWidth / 2.0);
+  dw.extend = function(dst, src) {
     if (!src) {
       src = dst;
       dst = this;
@@ -29,20 +27,39 @@ function dbCarta(pid) {
         dst[prop] = src[prop];
     return dst;
   };
-  this.dw.extend({
-    // base layers
-    // options:
-    //   fg - color (stroke)
-    //   bg - background color (fill)
-    //   dash - dash patten [1,2]
-    //   join - lineJoin
-    //   cap - lineCap
-    //   width - lineWidth
-    //   size - arc radii
-    //   labelcolor
-    //   labelscale - text scalable [0|1]
-    //   anchor - text pos [textAlign, textBaseline]
-    //   rotate - text rotate
+  dw.extend({
+    /**
+     * Public
+     * cfg - config {
+     *   pid: parent id
+     *   width, height: canvas size
+     *   viewportx, viewporty: offset limits for centerCarta in degrees
+     *   scalefg, scalebg: colors for paintScale
+     * }
+     */
+    cfg: {
+      viewportx: cfg.viewportx || 180.0,
+      viewporty: cfg.viewporty || 90.0,
+      scalefg: cfg.scalefg || 'rgb(100,100,100)',
+      scalebg: cfg.scalebg || 'rgba(255,255,255,0.3)'
+    },
+    /**
+     * Base Layers
+     * Options {
+     *   cls:  type {Polygon|Line|Dot|Rect}
+     *   fg: : color (stroke)
+     *   bg: - background color (fill)
+     *   dash: - dash patten [1,2]
+     *   join: lineJoin
+     *   cap: lineCap
+     *   width: lineWidth
+     *   size: arc radii or rect size
+     *   labelcolor
+     *   labelscale: text scalable [0|1]
+     *   anchor: text pos [textAlign, textBaseline]
+     *   rotate: text rotate
+     * }
+     */
     mopt: {
       '.Arctic':    {cls: 'Polygon', fg: 'rgb(210,221,195)', bg: 'rgb(210,221,195)'},
       '.Mainland':  {cls: 'Polygon', fg: 'rgb(135,159,103)', bg: 'rgb(135,159,103)'},
@@ -54,18 +71,22 @@ function dbCarta(pid) {
       'Area':       {cls: 'Polygon', fg: 'rgb(0,80,170)', bg: 'rgb(0,80,170)'},
       'Line':       {cls: 'Line', fg: 'rgb(0,130,200)'}
     },
-    // private
+    /**
+     * Private
+     */
     m: {
-      delta: cw / 360.0,
-      halfX: cw / 2.0,
-      halfY: cw / 4.0,
+      delta: dw.width / 360.0,
+      halfX: dw.width / 2.0,
+      halfY: dw.height / 2.0,
       scale: 1,
       offset: [0, 0],
       scaleoff: [0, 0],
       domap: false,
       doreload: true
     },
-    // stores
+    /**
+     * Stores
+     */ 
     clfunc: {},
     mflood: {},
     proj: function(){
@@ -166,7 +187,7 @@ function dbCarta(pid) {
     draw: function() {
       this.clearCarta();
       this.paintBound();
-      // viewport
+      // current view
       var rect = this.viewsizeOf();
       var left = rect[0], top = rect[1],
           right = rect[2], bottom = rect[3];
@@ -231,8 +252,10 @@ function dbCarta(pid) {
       // translate offset
       var dx = offx + this.m.offset[0],
           dy = offy + this.m.offset[1];
-      if ((dx <= centerof[0] * 2.0 && dx >= -centerof[0] * 2.0) &&
-          (dy <= centerof[1] * 2.0 && dy >= -centerof[1] * 2.0)) {
+      // viewport
+      var vp = this.toPoints([this.cfg.viewportx, this.cfg.viewporty], false);
+      if ((dx <= vp[0] - this.width/2.0 && dx >= this.width/2.0 - vp[0]) &&
+          (dy <= this.height/2.0 - vp[1] && dy >= vp[1] - this.height/2.0)) {
         var ctx = this.getContext('2d');
         ctx.translate(offx, offy);
         this.m.offset = [ dx, dy ];
@@ -298,19 +321,25 @@ function dbCarta(pid) {
       var addpoints = function(self, pid, domap) {
         var m = self.mflood[pid],
             mopt = self.mopt[m['ftype']],
-            mcolor = 'rgb(80,90,100)';
+            msize =  mopt['size']/self.m.scale,
+            mwidth = (mopt['width'] || 1) / self.m.scale,
+            mcolor = 'rgba(80,90,100,0.5)';
         ctx.beginPath();
         if (mopt['cls'] == 'Dot')
-          ctx.arc(m['pts'][0][0], m['pts'][0][1], mopt['size']/self.m.scale, 0, Math.PI*2, 0);
+          ctx.arc(m['pts'][0][0], m['pts'][0][1], msize, 0, Math.PI*2, 0);
+        else if (mopt['cls'] == 'Rect')
+          ctx.rect(m['pts'][0][0] - msize/2.0, m['pts'][0][1] - msize/2.0, msize, msize);
         else
           for (var j in m['pts'])
             ctx.lineTo(m['pts'][j][0], m['pts'][j][1]);
         if (domap != undefined) {
-          if (mopt['cls'] == 'Line' || !domap) {
+          ctx.lineWidth = mwidth;
+          if (mopt['cls'] == 'Line') {
             ctx.strokeStyle = (domap ? mcolor : mopt['fg']);
+            ctx.stroke();            
+          } else {
+            ctx.strokeStyle = mopt['fg'];
             ctx.stroke();
-          }
-          if (mopt['cls'] != 'Line') {
             ctx.fillStyle = (domap ? mcolor : mopt['bg'] || mopt['fg']);
             ctx.fill();
           }
@@ -328,12 +357,14 @@ function dbCarta(pid) {
           }
         }
       ctx.restore();
-      // current
-      if (pid)
-        addpoints(this, pid, true);
-      // restore prev
-      if (this.m.pmap && this.m.pmap != pid)
-        addpoints(this, this.m.pmap, false);
+      if (this.m.pmap != pid) {
+        // current
+        if (pid)
+          addpoints(this, pid, true);
+        // restore prev
+        if (this.m.pmap)
+          addpoints(this, this.m.pmap, false);
+      }
       this.m.pmap = pid;
     },
     /**
@@ -395,10 +426,10 @@ function dbCarta(pid) {
       ctx.rect(tleft + wrect/4.0, ttop + hrect/4.0, wrect/2.0, 1);
       ctx.rect(tleft + wrect/2.0 - 0.5, ttop + hrect/7.0, 1, hrect/4.0);
       ctx.rect(tleft + wrect/4.0, ttop + hrect/2.0 + hrect/4.0, wrect/2.0, 1);
-      ctx.fillStyle = 'rgb(100,100,100)';
+      ctx.fillStyle = this.cfg.scalefg;
       ctx.fill();
       ctx.rect(tleft, ttop, wrect, hrect); // border
-      ctx.fillStyle = 'rgba(255,255,255,0.3)';
+      ctx.fillStyle = this.cfg.scalebg;
       ctx.fill();
       ctx.restore();
     },
@@ -428,17 +459,21 @@ function dbCarta(pid) {
           mtcolor = m['labelcolor'] || 'black',
           mtrotate = m['rotate'] || 0,
           mtalign = m['anchor'] && m['anchor'][0] || 'start',
-          mtbaseline = m['anchor'] && m['anchor'][1] || 'alphabetic';
+          mtbaseline = m['anchor'] && m['anchor'][1] || 'alphabetic',
+          mtfont = (m['labelscale'] ? parseInt(this.width/125) : 10) + "px sans-serif";
       var ctx = this.getContext('2d');
       ctx.lineWidth = mwidth;
       ctx.lineJoin = mjoin;
       ctx.lineCap = mcap;
       ctx.beginPath();
       this.setDashLine(m['dash'] || []);
-      if (m['cls'] == 'Dot') {
+      if (m['cls'] == 'Dot' || m['cls'] == 'Rect') {
         if (chkPts(pts[0])){
           centerofpts = pts;
-          ctx.arc(pts[0][0], pts[0][1], msize, 0, Math.PI*2, 0);
+          if (m['cls'] == 'Dot')
+            ctx.arc(pts[0][0], pts[0][1], msize, 0, Math.PI*2, 0);
+          else
+            ctx.rect(pts[0][0] - msize/2.0, pts[0][1] - msize/2.0, msize, msize);
           ctx.strokeStyle = m['fg'];
           ctx.stroke();
           ctx.fillStyle = m['bg'] || m['fg'];
@@ -469,8 +504,12 @@ function dbCarta(pid) {
           ctx.fillStyle = mtcolor;
           ctx.textAlign = mtalign;
           ctx.textBaseline = mtbaseline;
+          if (ctx.font != mtfont) ctx.font = mtfont;
+          // offset direct
+          var hs = (mtalign == 'end' ? -1 : (mtalign == 'start' ? 1 : 0)),
+              vs = (mtbaseline == 'bottom' ? -1 : (mtbaseline == 'top' ? 1 : 0));
           if (m['labelscale']) {
-            ctx.fillText(ftext, centerofpts[0][0] + msize + 3, centerofpts[0][1]);
+            ctx.fillText(ftext, centerofpts[0][0] + (msize + 3) * hs, centerofpts[0][1] + (msize + 3) * vs);
           } else {
             ctx.save();
             ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -650,7 +689,7 @@ function dbCarta(pid) {
     },
     onclick: function(ev) {
       if (!ev) return;
-      var pts = this.canvasXY(ev);
+      var scale, pts = this.canvasXY(ev);
       if (scale = this.checkScale(pts[0], pts[1])) {
         this.scaleCarta(1); // fix labels
         this.scaleCarta(scale);
@@ -667,5 +706,5 @@ function dbCarta(pid) {
         this.clfunc.onclick();
     }
   });
-  return this.dw;
+  return dw;
 }

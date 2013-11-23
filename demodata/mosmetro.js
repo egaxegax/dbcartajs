@@ -1,4 +1,4 @@
-﻿/* List with coords of Moscow Metro lines and stations
+/* List with coords of Moscow Metro lines and stations
    [[ftype, ftag, coords, label, centerof, ismap],...]
    Three points with coords and 'Q' literal implements to bezierCurveTo (...) method. */
 
@@ -384,14 +384,6 @@ MLINES = [
       [69.03,-11.43],[62.27,-5.73],[62.27,-16.53],[69.03,-11.43]
     ]
   ],
-  ['interchange', 'Kurskaya-Chkalobskaya', [
-      [69.03,-11.43],[62.27,-5.73],[62.27,-16.53],[69.03,-11.43]
-    ]
-  ],
-  ['interchange_d', 'Kurskaya-Chkalobskaya', [
-      [69.03,-11.43],[62.27,-5.73],[62.27,-16.53],[69.03,-11.43]
-    ]
-  ],
   ['interchange', 'Taganskaya-Marksistskaya', [
       [60,-35.9],[60,-45],[64,-39],[60,-35.9]
     ]
@@ -521,11 +513,11 @@ MLINES = [
     ]
   ],
   ['interchange', 'Kuntsevskaya', [
-      [-159,34],[-152,34]
+      [-159,34],[-152.2,34]
     ]
   ],
   ['interchange_d', 'Kuntsevskaya', [
-      [-159,34],[-152,34]
+      [-159,34],[-152.2,34]
     ]
   ],
   ['interchange', 'Smolenskaya-Plyushchikha', [
@@ -748,7 +740,7 @@ MLINES = [
   ['monorail_legend', 'mn_legend', [
       [60,-210],[40,-210]
     ], 'Московский монорельс', [60,-210]
-  ],
+  ]
 ];
 MSTATIONS = [
   ['s1','Ulitsa_Podbelskogo',[[102,85]],'Улица Подбельского',null,1],
@@ -761,14 +753,14 @@ MSTATIONS = [
   ['s1_1','Chistye_Prudy',[[34,19]],'Чистые пруды',null,1],
   ['s1_2','Lubyanka',[[11.5,14.5]],'Лубянка',null,1],
   ['s1_1','Okhotny_Ryad',[[-4,-1]],'Охотный ряд',null,1],
-  ['s1_1','Biblioteka_Imeni_Lenina',[[-14,-11]],'Библиотека имени Ленина',null,1],
+  ['s1_4','Biblioteka_Imeni_Lenina',[[-14,-11]],'Библиотека имени Ленина',null,1],
   ['s1_1','Kropotkinskaya',[[-29.83,-26.83]],'Кропоткинская'],
   ['s1_2','Park_Kultury',[[-53,-50]],'Парк Культуры',null,1],
   ['s1','Frunzenskaya',[[-60.96,-57.96]],'Фрунзенская',null,1],
   ['s1','Sportivnaya',[[-68.81,-65.81]],'Спортивная',null,1],
   ['s1','Vorobyovy_Gory',[[-76.66,-73.66]],'Воробьёвы горы',null,1],
   ['s1','Universitet',[[-84.51,-81.51]],'Университет',null,1],
-  ['s1_2','Prospekt_Vernadskogo',[[-91.05,-88.05]],'Проспект Вернадского',null,1],
+  ['s1_3','Prospekt_Vernadskogo',[[-91.05,-88.05]],'Проспект Вернадского',null,1],
   ['s1','Yugo-Zapadnaya',[[-100.2,-97.2]],'Юго-Западная',null,1],
   ['s1','Troparyovo',[[-108.05,-105.4]],'Тропарёво',null,1],
   ['s1','Rumyantsevo',[[-115.9,-113.59]],'Румянцево',null,1],
@@ -877,7 +869,7 @@ MSTATIONS = [
   ['s6','Konkovo',[[-44,-127]],'Коньково',null,1],
   ['s6','Tyoplyi_Stan',[[-44,-135]],'Тёплый Стан',null,1],
   ['s6','Yasenevo',[[-44,-143]],'Ясенево',null,1],
-  ['s6_3','Novoyasenevskaya',[[-44,-149]],'Новоясеневская',null,1],
+  ['s6_5','Novoyasenevskaya',[[-44,-149]],'Новоясеневская',null,1],
 //
   ['s7','Planernaya',[[-105,99]],'Планерная',null,1],
   ['s7','Skhodnenskaya',[[-105,91]],'Сходненская',null,1],
@@ -893,10 +885,10 @@ MSTATIONS = [
   ['s7_1','Kuznetsky_Most',[[11.5,20.5]],'Кузнецкий мост',null,1],
   ['s7_5','Kitay-Gorod',[[31,-16]],'',null,1],
   ['s7_2','Taganskaya',[[60,-45]],'',null,1],
-  ['s7_2','Proletarskaya',[[80,-65]],'Пролетарская',null,1],
+  ['s7_6','Proletarskaya',[[80,-65]],'Пролетарская',null,1],
   ['s7_4','Volgogradsky_Prospekt',[[92,-77]],'Волгоградский проспект',null,1],
   ['s7_3','Tekstilshchiki',[[103.31,-80]],'Текстильщики',null,1],
-  ['s7_4','Kuzminki',[[126,-80]],'Кузьминки',null,1],
+  ['s7_7','Kuzminki',[[126,-80]],'Кузьминки',null,1],
   ['s7_4','Ryazanskiy_Prospekt',[[142,-80]],'Рязанский проспект',null,1],
   ['s7','Vykhino',[[160,-90]],'Выхино',null,1],
   ['s7_1','Lermontovsky_Prospekt',[[147,-106]],'Лермонтовский проспект',null,1],
@@ -931,11 +923,11 @@ MSTATIONS = [
   ['s9','Bibirevo',[[0,137]],'Бибирево',null,1],
   ['s9','Otradnoye',[[-3,130]],'Отрадное',null,1],
   ['s9','Vladykino',[[-11,122]],'Владыкино',null,1],
-  ['s9_3','Petrovsko-Razumovskaya',[[-21.52,111.48]],'Петровско-Разумовская',null,1],
+  ['s9_2','Petrovsko-Razumovskaya',[[-21.52,111.48]],'Петровско-Разумовская',null,1],
   ['s9_4','Timiryazevskaya',[[-29,101]],'Тимирязевская',null,1],
   ['s9','Dmitrovskaya',[[-29,91]],'Дмитровская',null,1],
-  ['s9_2','Savyolovskaya',[[-29,82]],'Савёловская',null,1],
-  ['s9_2','Mendeleyevskaya',[[-25,68.95]],'Менделеевская',null,1],
+  ['s9_3','Savyolovskaya',[[-29,82]],'Савёловская',null,1],
+  ['s9_5','Mendeleyevskaya',[[-25,68.95]],'Менделеевская',null,1],
   ['s9_1','Tsvetnoy_Bulvar',[[-4,43.5]],'Цветной бульвар',null,1],
   ['s9_2','Chekhovskaya',[[-18.55,24]],'Чеховская',null,1],
   ['s9_2','Borovitskaya',[[-19,-16]],'Боровицкая',null,1],
@@ -945,7 +937,7 @@ MSTATIONS = [
   ['s9','Nagatinskaya',[[19,-91]],'Нагатинская',null,1],
   ['s9','Nagornaya',[[19,-99]],'Нагорная',null,1],
   ['s9','Nakhimovsky_Prospekt',[[19,-107]],'Нахимовский проспект',null,1],
-  ['s9_1','Sevastopolskaya',[[19,-116]],'Севастопольская',null,1],
+  ['s9_6','Sevastopolskaya',[[19,-116]],'Севастопольская',null,1],
   ['s9','Chertanovskaya',[[19,-125]],'Чертановская',null,1],
   ['s9','Yuzhnaya',[[16,-133]],'Южная',null,1],
   ['s9','Prazhskaya',[[10,-139.41]],'Пражская',null,1],
@@ -994,11 +986,11 @@ MSTATIONS = [
   ['s12_1','Chechyorsky_Proezd',[[-129,-174]],'Чечёрский проезд',null,1],
   ['s12','Novokuryanovo',[[-150,-174]],'Новокурьяново',null,1],
 //
-  ['sTPK_3','Kuntsevskaya',[[-152,34]],'Кунцевская',null,1],
-  ['sTPK_2','Terekhovo',[[-137,40]],'Терехово',null,1],
-  ['sTPK_7','Mnyovniki',[[-121,40]],'Н.Мнёвники',null,1],
-  ['sTPK','Narodnoye_Opolcheniye',[[-105,40]],'Улица Н.ополчения',null,1],
-  ['sTPK_6','Delovoy_Tsentr',[[-84,11]],'',null,1],
+  ['sTPK_3','Kuntsevskaya',[[-152.2,34]],'Кунцевская',null,1],
+  ['sTPK_4','Terekhovo',[[-137,40]],'Терехово',null,1],
+  ['sTPK_6','Mnyovniki',[[-121,40]],'Н.Мнёвники',null,1],
+  ['sTPK','Narodnoye_Opolcheniye',[[-105,40]],'Улица Н.Ополчения',null,1],
+  ['sTPK_5','Delovoy_Tsentr',[[-84,11]],'',null,1],
   ['sTPK_2','Shelepikha',[[-80,28]],'Шелепиха',null,1],
   ['sTPK_4','Khoroshyobskaya',[[-80,44]],'Хорошёвская',null,1],
   ['sTPK_2','Khodynskoye_Pole',[[-67.5,56.5]],'Ходынское Поле',null,1],
@@ -1008,9 +1000,9 @@ MSTATIONS = [
   ['sTPK_4','Rizhskaya',[[41,82]],'',null,1],
   ['sTPK_4','Sokolniki',[[76.37,65.67]],'',null,1],
   ['sTPK_4','Elektrozavodskaya',[[80,19]],'',null,1],
-  ['sTPK','Lefortovo',[[98.63,-1.76]],'Лефортово',null,1],
-  ['sTPK_5','Aviamotornaya',[[106,-30]],'Авиамоторная',null,1],
-  ['sTPK_5','Nizhegorodskaya_Ulitsa',[[122.18,-46.18]],'Нижегородская улица',null,1],
+  ['sTPK_7','Lefortovo',[[98.63,-1.76]],'Лефортово',null,1],
+  ['sTPK_3','Aviamotornaya',[[106,-30]],'Авиамоторная',null,1],
+  ['sTPK_3','Nizhegorodskaya_Ulitsa',[[122.18,-46.18]],'Нижегородская улица',null,1],
   ['sTPK_3','Tekstilshchiki',[[106.62,-76]],'',null,1],
   ['sTPK','Yozhnoportovaya',[[93,-92.46]],'Южнопортовая',null,1],
   ['sTPK','Nagatinsky_Zaton',[[81.63,-106.2]],'Нагатинский затон',null,1],

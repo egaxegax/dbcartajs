@@ -7,6 +7,7 @@ function init() {
   var mtab = document.createElement("table");
   mtab.width = "100%";
   var row = document.createElement("tr");
+  row.style.height = "1px";
   row.style.backgroundColor = "rgb(230,230,230)";
   mtab.appendChild(row);
 
@@ -34,7 +35,15 @@ function init() {
   row.appendChild(col);
   document.body.appendChild(mtab);
 
-  dw = new dbCarta();
+  var row = document.createElement("tr");
+  var col = document.createElement("td");
+  col.colSpan = "10";
+  col.id = "mcol";
+  row.appendChild(col);
+  mtab.appendChild(row);
+  document.body.appendChild(mtab);
+
+  dw = new dbCarta({id:"mcol", height:col.offsetHeight});
   // add new layers
   dw.extend(dw.mopt, {
     "Arctic": {cls: "Polygon", fg: "rgb(200,200,200)", bg: dw.mopt['.Arctic']['bg']},

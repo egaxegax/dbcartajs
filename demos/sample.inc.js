@@ -30,8 +30,8 @@ function draw() {
 }
 function init() {
   var mtab = document.createElement("table");
-  mtab.width = "100%";
   var row = document.createElement("tr");
+  row.style.height = "1px";
   row.style.backgroundColor = "rgb(230,230,230)";
   mtab.appendChild(row);
 
@@ -122,9 +122,16 @@ function init() {
   col.align = "center";
   col.id = "coords";
   row.appendChild(col);
+  
+  var row = document.createElement("tr");
+  var col = document.createElement("td");
+  col.colSpan = "10";
+  col.id = "mcol";
+  row.appendChild(col);
+  mtab.appendChild(row);
   document.body.appendChild(mtab);
 
-  dw = new dbCarta();
+  dw = new dbCarta({id:"mcol", height:col.offsetHeight});
   dw.loadCarta(window.CONTINENTS);
   window.CONTINENTS = undefined;
   dw.loadCarta(dw.createMeridians());

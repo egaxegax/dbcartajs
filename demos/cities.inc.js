@@ -55,15 +55,15 @@ function init() {
   el2.id = "citylist"
   el2.multiple="true";
   el2.size = "20";
-  el = document.createElement('div');    
+  var el = document.createElement('div');    
   el.appendChild(el2);
   col.appendChild(el);
-  el = document.createElement('div');    
+  var el = document.createElement('div');    
   var el2 = document.createElement('button');
   el2.onclick = draw;
   el2.appendChild(document.createTextNode("show"));
   el.appendChild(el2);
-  el2 = document.createElement('button');
+  var el2 = document.createElement('button');
   el2.onclick = refresh;
   el2.appendChild(document.createTextNode("refresh"));
   el.appendChild(el2);
@@ -75,7 +75,7 @@ function init() {
   row.appendChild(col);
   document.body.appendChild(mtab);
 
-  dw = new dbCarta("canvasmap");
+  dw = new dbCarta({id:"canvasmap"});
   dw.changeProject(101);
   var points = dw.toPoints([0, 40], true);
   dw.centerCarta(points[0], points[1]);
