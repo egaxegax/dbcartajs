@@ -69,7 +69,7 @@ function init() {
     viewporty: 400,
     scalebg: 'rgba(100,200,100,0.2)'
   });
-  dw.style.backgroundColor = 'white';
+  dw.style.backgroundColor = 'rgb(240,245,251)';
   // define new layers
   var route = function(o){ return dw.extend({cls: 'Line', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
       route_d = function(o){ return route(dw.extend({dash: [4,2]}, o||{})) },
@@ -115,7 +115,7 @@ function init() {
   });
   // roads
   dw.extend(dw.mopt, {
-    "mkad": route({fg: "rgb(180,180,180)", width: 1, anchor: ['center', 'middle']})
+    "mkad": route({cls: "Polygon", bg: "white", fg: "rgb(180,180,180)", width: 1, anchor: ['center', 'middle']})
   });
   // lines ext
   dw.extend(dw.mopt, {
