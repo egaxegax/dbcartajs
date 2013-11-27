@@ -260,7 +260,7 @@ function init() {
     "a8_7": ost({anchor: ['start', 'middle']}),
     "a9": rst({fg: dw.mopt["t9"].fg, anchor: ['end', 'middle']}),
     "a9_1": rst({fg: dw.mopt["t9"].fg, anchor: ['end', 'top']}),
-    "a9_2": rst({fg: dw.mopt["t9"].fg, anchor: ['start', 'bottom']}),
+    "a9_2": rst({fg: dw.mopt["t9"].fg, anchor: ['start', 'middle']}),
     "a9_3": rst({fg: dw.mopt["t9"].fg, anchor: ['start', 'top']}),
     "a9_4": rst({fg: dw.mopt["t9"].fg, anchor: ['center', 'top']}),
     "a9_5": rst({fg: dw.mopt["t9"].fg, anchor: ['center', 'bottom']}),
