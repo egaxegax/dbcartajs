@@ -72,7 +72,7 @@ function init() {
   dw.style.backgroundColor = 'rgb(240,245,251)';
   // define new layers
   var route = function(o){ return dw.extend({cls: 'Line', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
-      route_d = function(o){ return route(dw.extend({dash: [4,2]}, o||{})) },
+      route_d = function(o){ return route(dw.extend({width: 1, fg: 'white', dash: [4,2]}, o||{})) },
       interchange = function(o){ return route(dw.extend({fg: 'black', join: 'round', cap: 'round', width: 6}, o||{})) },
       interchange_d = function(o) { return interchange(dw.extend({fg: 'white', width: 5}, o||{})) },
       station = function(o){ return dw.extend({cls: 'Dot', bg: 'white', size: 3, width: 5, labelscale: 1}, o||{}) },
@@ -121,10 +121,10 @@ function init() {
   dw.extend(dw.mopt, {
     "mr_1": route({fg: dw.mopt["mr"].fg, labelcolor: dw.mopt["mr"].fg, anchor: ['end', 'middle']}),
     "mr_2": route({fg: dw.mopt["mr"].fg, labelcolor: dw.mopt["mr"].fg, anchor: ['start', 'middle']}),
-    "t2_ext": route_d({fg: dw.mopt["t2"].fg}),
-    "t3_ext": route_d({fg: dw.mopt["t3"].fg}),
-    "t7_ext": route_d({fg: dw.mopt["t7"].fg}),
-    "t11_ext": route_d({fg: dw.mopt["t11"].fg, dash: [2,2]})
+    "t2_ext": route_d(),
+    "t3_ext": route_d(),
+    "t7_ext": route_d(),
+    "t11_ext": route_d({dash: [2,2]})
   });
   // interchanges
   dw.extend(dw.mopt, {
