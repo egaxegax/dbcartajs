@@ -123,8 +123,7 @@ function init() {
     "mr_2": route({fg: dw.mopt["mr"].fg, labelcolor: dw.mopt["mr"].fg, anchor: ['start', 'middle']}),
     "t2_ext": route_d(),
     "t3_ext": route_d(),
-    "t7_ext": route_d(),
-    "t11_ext": route_d({dash: [2,2]})
+    "t7_ext": route_d()
   });
   // interchanges
   dw.extend(dw.mopt, {
