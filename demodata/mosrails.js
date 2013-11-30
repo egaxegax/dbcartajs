@@ -979,16 +979,16 @@ RLINES = [
       [115,6],[109,1]
     ]
   ],
-  ['interchange_d', 'Novaya', [
+  ['interchange_dl', 'Novaya', [
       [115,6],[109,1]
     ]
   ],
   ['interchange', 'Elektrozavodskaya', [
-      [92,42.25],[88,38]
+      [92,42.25],[87.7,38]
     ]
   ],
   ['interchange_d', 'Elektrozavodskaya', [
-      [92,42.25],[88,38]
+      [92,42.25],[87.7,38]
     ]
   ],
   ['interchange', 'Rizhskaya', [
@@ -1770,7 +1770,7 @@ RSTATIONS = [
     ['a10_4','Frezer',[[113,-24]],'Фрезер',null,1],
     ['a10_1','Novaya',[[109,1]],'Новая',null,1],
     ['a10_4','Sortirovochnaya',[[109,17]],'Сортировочная',null,1],
-    ['a10_1','Elektrozavodskaya',[[88,38]],'Электрозаводская',null,1],
+    ['a10_1','Elektrozavodskaya',[[87.7,38]],'Электрозаводская',null,1],
     ['a10_1','Kazanskiy_Vokzal',[[51.875,38]],'Казанский вокзал',null,1],
     ['a10_6','7_km',[[54,-368]],'7 км',null,1],
     ['a10_7','Klemovo',[[62,-368]],'Клёмово',null,1],
