@@ -34,13 +34,12 @@ function dbCarta(cfg) {
      *   pid: parent id
      *   width, height: canvas size
      *   viewportx, viewporty: offset limits for centerCarta in degrees
-     *   scalefg, scalebg: colors for paintScale
+     *   scalebg: bgcolor for paintScale
      * }
      */
     cfg: {
       viewportx: cfg.viewportx || 180.0,
       viewporty: cfg.viewporty || 90.0,
-      scalefg: cfg.scalefg || 'rgb(100,100,100)',
       scalebg: cfg.scalebg || 'rgba(255,255,255,0.3)'
     },
     /**
@@ -170,14 +169,14 @@ function dbCarta(cfg) {
     checkScale: function(cx, cy) {
       var cw = this.width,
           ch = this.height,
-          hrect = 60,
-          wrect = 26,
-          tleft = cw - wrect,
-          ttop = ch/2.0 - hrect/2.0;
+          h = ch/5,
+          w = h/2,
+          tleft = cw - w,
+          ttop = ch/2 - h/2;
       var zoom = (this.m.scale < 1 ? 2-1/this.m.scale : this.m.scale);
-      if (cx > tleft && cx < cw && cy > ttop && cy < ttop + hrect/2.0) {
+      if (cx > tleft && cx < cw && cy > ttop && cy < ttop + h/2.0) {
         if (zoom < 50) zoom++;
-      } else if (cx > tleft && cx < cw && cy > ttop + hrect/2.0 && cy < ttop + hrect) {
+      } else if (cx > tleft && cx < cw && cy > ttop + h/2.0 && cy < ttop + h) {
         if (zoom > -18) zoom--;
       } else return;
       return (zoom > 1 ? zoom : 1/(2-zoom));
@@ -416,20 +415,42 @@ function dbCarta(cfg) {
     paintScale: function() {
       var cw = this.width,
           ch = this.height,
-          hrect = 60,
-          wrect = 26,
-          tleft = cw - wrect,
-          ttop = ch/2.0 - hrect/2.0;
+          h = ch/5,
+          w = h/2,
+          tleft = cw - w,
+          ttop = ch/2 - h/2,
+          d = w/18; // + - size
       var ctx = this.getContext('2d');
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.beginPath(); // + -
-      ctx.rect(tleft + wrect/4.0, ttop + hrect/4.0, wrect/2.0, 1);
-      ctx.rect(tleft + wrect/2.0 - 0.5, ttop + hrect/7.0, 1, hrect/4.0);
-      ctx.rect(tleft + wrect/4.0, ttop + hrect/2.0 + hrect/4.0, wrect/2.0, 1);
-      ctx.fillStyle = this.cfg.scalefg;
-      ctx.fill();
-      ctx.rect(tleft, ttop, wrect, hrect); // border
+      ctx.translate(tleft, ttop);
+      with (ctx) {
+        lineTo(w, h);
+        lineTo(w, 0);
+        lineTo(0, 0);
+        lineTo(0, h/4 - d/2);
+        lineTo(w/2 - d/2, h/4 - d/2);
+        lineTo(w/2 - d/2, h/8);
+        lineTo(w/2 + d/2, h/8);
+        lineTo(w/2 + d/2, h/4 - d/2);
+        lineTo(w/2 + w/4, h/4 - d/2);
+        lineTo(w/2 + w/4, h/4 + d/2);
+        lineTo(w/2 + d/2, h/4 + d/2);
+        lineTo(w/2 + d/2, h/4 + w/4);
+        lineTo(w/2 - d/2, h/4 + w/4);
+        lineTo(w/2 - d/2, h/4 + d/2);
+        lineTo(w/4, h/4 + d/2);
+        lineTo(w/4, h/4 - d/2);
+        lineTo(0, h/4 - d/2);
+        lineTo(0, h/2 + h/4 - d/2);
+        lineTo(w/2 + w/4, h/2 + h/4 - d/2);
+        lineTo(w/2 + w/4, h/2 + h/4 + d/2);
+        lineTo(w/4, h/2 + h/4 + d/2);
+        lineTo(w/4, h/2 + h/4 - d/2);
+        lineTo(0, h/2 + h/4 - d/2);
+        lineTo(0, h);
+      }
       ctx.fillStyle = this.cfg.scalebg;
       ctx.fill();
       ctx.restore();
@@ -687,6 +708,7 @@ function dbCarta(cfg) {
             cy = -this.m.offset[1] - this.m.scaleoff[1] + dy / this.m.scale;
         this.clearCarta();
         ctx.drawImage(this.m.mimg, cx, cy, this.m.mimg.width/this.m.scale, this.m.mimg.height/this.m.scale);
+        this.m.mmove = true;
       } else {
         var src = this.fromPoints(pts, false);
         var dst = this.fromPoints(pts, true);
@@ -712,9 +734,8 @@ function dbCarta(cfg) {
         this.centerCarta(
           centerof[0] - pts[0] + this.m.mpts[0],
           centerof[1] - pts[1] + this.m.mpts[1], true);
-        this.draw();
-        delete this.m.mpts;
         delete this.m.mimg;
+        this.draw();
       };
     },
     onclick: function(ev) {
@@ -727,7 +748,9 @@ function dbCarta(cfg) {
         if (!dst) return;
         var proj = this.initProj();
         this.initProj(' +h=' + proj.h + ' +lon_0=' + dst[0] + ' +lat_0=' + dst[1]);
-      } else
+      } else if (!this.m.mmove)
+        this.centerCarta(pts[0], pts[1], true);
+      else
         return;
       this.draw();
       if ('onclick' in this.clfunc)
