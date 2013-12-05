@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.4.1
+ * dbCartajs HTML5 Canvas dymanic object map v1.4.2
  * It uses Proj4js transformations.
  *
  * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
@@ -112,8 +112,10 @@ function dbCarta(cfg) {
           ph = this.height;
       var node = ev.target,
           pts = [ev.clientX, ev.clientY];
-      pts[0] += window.pageXOffset;
-      pts[1] += window.pageYOffset;
+      if (!/WebKit/.test(navigator.userAgent)) {
+        pts[0] += window.pageXOffset;
+        pts[1] += window.pageYOffset;
+      }
       while (node) {
          pts[0] -= node.offsetLeft - node.scrollLeft;
          pts[1] -= node.offsetTop - node.scrollTop;
