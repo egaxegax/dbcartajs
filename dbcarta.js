@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.4.2
+ * dbCartajs HTML5 Canvas dymanic object map v1.4.3
  * It uses Proj4js transformations.
  *
  * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
@@ -338,12 +338,17 @@ function dbCarta(cfg) {
           ctx.lineWidth = mwidth;
           if (mopt['cls'] == 'Line') {
             ctx.strokeStyle = (domap ? mcolor : mopt['fg']);
-            ctx.stroke();            
-          } else {
+            ctx.stroke();
+          } else if (mopt['cls'] == 'Dot' || mopt['cls'] == 'Rect') {
             ctx.strokeStyle = mopt['fg'];
             ctx.stroke();
             ctx.fillStyle = (domap ? mcolor : mopt['bg'] || mopt['fg']);
             ctx.fill();
+          } else {
+            ctx.fillStyle = (domap ? mcolor : mopt['bg']);
+            ctx.fill();
+            ctx.strokeStyle = mopt['fg'];
+            ctx.stroke();
           }
         }
       }

@@ -152,6 +152,20 @@ var MVector = {
     var ret = [ MUtil.ang180(lonlat[0] * 180/Math.PI),
                 lonlat[1] * 180/Math.PI ];
     return ret;
+  },
+  /**
+  * Return [X,Y] rotated around Z-axis with ANGLE relative to center of CX,CY.
+  */
+  rotateZ: function(x, y, angle, cx, cy) {
+    var roll = angle * Math.PI/180,
+        r = Math.sqrt((cx - x) * (cx - x) + (y - cy) * (y - cy));
+    if (r > 0) {
+        var a = Math.acos((cx - x) / r);
+        if (y < cy) a = 2.0 * Math.PI - a;
+        coords = [ cx - r * Math.cos(roll + a),
+                   cy + r * Math.sin(roll + a) ];
+    }
+    return coords;
   }
 };
 var MGeo = {
@@ -189,7 +203,20 @@ var MGeo = {
     }
   },
   /**
-  * Circle points on sphere.
+  * Circle coords.
+  */
+  circle2poly: function(x, y, radius, col_vertex){
+    var anglestep = 2.0*Math.PI / col_vertex,
+        pts = [];
+    if (Math.abs(radius) <= this.EPS) return pts;
+    for (var i=0; i<=col_vertex; i++){
+      pts.push([ x - radius * Math.cos(i * anglestep), 
+                 y + radius * Math.sin(i * anglestep) ]);
+    }
+    return pts;
+  },
+  /**
+  * Circle coords on sphere.
   */
   circle1spheric: function(x, y, radius, col_vertex){
     // latitude 90
