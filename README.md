@@ -10,7 +10,7 @@ Demos at http://dbcartajs.appspot.com/.
 
 ## Usage
 
-Simply download, unpack and open index.html in any browser with HTML5 support.
+Simply download, unpack and open index.html from demo folder in any browser with HTML5 support.
 Controls:
  * drag to move in lonlat, mercator projections;
  * left click to center point if mouse drag unavailable (on Tablet PC) ;
