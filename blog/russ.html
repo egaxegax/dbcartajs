@@ -4,7 +4,6 @@
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <title>dbCartajs - Карта России</title>
 <script type="text/javascript" src="../dbcarta.js"></script>
-<script type="text/javascript" src="../demo/utils/starry.js"></script>
 </head>
 <body>
 <div id="cont-russ"></div>
@@ -26,7 +25,7 @@ allmaps.push(function(){
   // трассы под белыми кругами
   var MLINES_a = [
     ['r1', '1', [
-        [0,84],[0,0],[-63,-90]
+        [0,84],[0,0]
       ]
     ],
     ['r2', '1', [
@@ -98,26 +97,30 @@ allmaps.push(function(){
       ]
     ],
     ['r7', '1', [
-        [-89,-31],[0,0]
-      ]
-    ],
-    ['r7', '2', [
-        [-63,-90],[-71,-40],[-69.3,-24.18]
-      ]
-    ],
-    ['r7', '3', [
-        [-52.5,-75.2],[-71,-40]
-      ]
-    ],
-    ['r7', '4', [
-        [-41.65,-59.5],[-71,-40]
+        [-63,-90],[0,0]
       ]
     ],
     ['r8', '1', [
-        [-52.5,14.14],[0,0]
+        [-89,-31],[0,0]
+      ]
+    ],
+    ['r8', '2', [
+        [-63,-90],[-71,-40],[-69.3,-24.18]
+      ]
+    ],
+    ['r8', '3', [
+        [-52.5,-75.2],[-71,-40]
+      ]
+    ],
+    ['r8', '4', [
+        [-41.65,-59.5],[-71,-40]
       ]
     ],
     ['r9', '1', [
+        [-52.5,14.14],[0,0]
+      ]
+    ],
+    ['r10', '1', [
         [-23,30],[0,0]
       ]
     ]
@@ -128,14 +131,84 @@ allmaps.push(function(){
       ]
     ]
   ];
+  // легенда
+  var MLEGEND = [
+    ['legend', '1', [
+        [-125,75],[-85,75],[-85,20],[-125,20]
+      ]
+    ],
+    ['r1', '1_legend', [
+        [-120,70],[-115,70]
+      ], 'М-1 "Беларусь"', [-114,69]
+    ],
+    ['r2', '2_legend', [
+        [-120,65],[-115,65]
+      ], 'М-9 "Балтия"', [-114,64]
+    ],
+    ['r3', '3_legend', [
+        [-120,60],[-115,60]
+      ], 'М-10 "Россия"', [-114,59]
+    ],
+    ['r4', '4_legend', [
+        [-120,55],[-115,55]
+      ], 'М-8 "Холмогоры"', [-114,54]
+    ],
+    ['r5', '5_legend', [
+        [-120,50],[-115,50]
+      ], 'М-7 "Волга"', [-114,49]
+    ],
+    ['r6', '6_legend', [
+        [-120,45],[-115,45]
+      ], 'М-5 "Урал"', [-114,44]
+    ],
+    ['r7', '7_legend', [
+        [-120,40],[-115,40]
+      ], 'М-6 "Каспий"', [-114,39]
+    ],
+    ['r8', '8_legend', [
+        [-120,35],[-115,35]
+      ], 'М-4 "Дон"', [-114,34]
+    ],
+    ['r9', '9_legend', [
+        [-120,30],[-115,30]
+      ], 'М-2 "Крым"', [-114,29]
+    ],
+    ['r10', '10_legend', [
+        [-120,25],[-115,25]
+      ], 'М-3 "Украина"', [-114,24]
+    ]
+  ];
+  // точки круга
+  var circle2poly = function(x, y, radius, col_vertex){
+    var anglestep = 2.0*Math.PI / col_vertex,
+        pts = [];
+    if (Math.abs(radius) <= this.EPS) return pts;
+    for (var i=0; i<=col_vertex; i++){
+      pts.push([ x - radius * Math.cos(i * anglestep), 
+                 y + radius * Math.sin(i * anglestep) ]);
+    }
+    return pts;
+  }
+  // поворот точки отн. оси Z
+  var rotateZ = function(x, y, angle, cx, cy) {
+    var roll = angle * Math.PI/180,
+        r = Math.sqrt((cx - x) * (cx - x) + (y - cy) * (y - cy));
+    if (r > 0) {
+        var a = Math.acos((cx - x) / r);
+        if (y < cy) a = 2.0 * Math.PI - a;
+        coords = [ cx - r * Math.cos(roll + a),
+                   cy + r * Math.sin(roll + a) ];
+    }
+    return coords;
+  }
   // создаем круг
   var genkrug = function(x, y, r){
     var cols = 10,
         roll = 18;
-    var coords = MGeo.circle2poly(x, y, r, cols),
+    var coords = circle2poly(x, y, r, cols),
         pts = [];
     for(var i in coords){
-      var pt = MVector.rotateZ(coords[i][0], coords[i][1], roll, x, y);
+      var pt = rotateZ(coords[i][0], coords[i][1], roll, x, y);
       pts.push(pt);
     }
     return pts;
@@ -230,8 +303,8 @@ allmaps.push(function(){
   ];
   // белые круги над трассами
   var MCITIES_b = [
-    ['a1', 'Minsk', [[0,43]], 'Минск', [0,43], 1],
-    ['a1', 'Vilnus', [[0,67]], 'Вильнюс', [0,67], 1],
+    ['a1', 'Minsk', null, 'Минск', [0,43], 1],
+    ['a1', 'Vilnus', null, 'Вильнюс', [0,67], 1],
     ['a2', 'Smolensk', genkrug(0, 26.5, 1.5), 'Смоленск', [-7,31], 1],
     ['a2', 'Kaliningrad', genkrug(0, 84, 1.5), 'Калининград', [4,84], 1],
     ['a2_1', 'Rzhev', genkrug(14.85, 22, 0.1), 'Ржев', [13,22], 1],
@@ -241,7 +314,7 @@ allmaps.push(function(){
     ['a2', 'Velikiy_Novgorod', genkrug(35.3, 12.3, 2), 'Великий Новгород', [22,18], 1],
     ['a2', 'Petrozavodsk', genkrug(69, 5, 1.5), 'Петрозаводск', [72,3], 1],
     ['a2', 'Murmansk', genkrug(116, 22, 2), 'Мурманск', [116,17], 1],
-    ['a2', 'Saint-Petersburg', [[66,23]], 'Санкт-Петерсбург', [55,35], 1],
+    ['a2', 'Saint-Petersburg', null, 'Санкт-Петерсбург', [55,35], 1],
     ['a2', 'Yaroslavl', genkrug(33.5, -10, 3), 'Ярославль', [35,-5], 1],
     ['a2', 'Vologda', genkrug(44.5, -13.22, 1.5), 'Вологда', [48,-9], 1],
     ['a2', 'Arkhangelsk', genkrug(55.5, -16.5, 1.5), 'Архангельск', [61,-16], 1],
@@ -315,9 +388,11 @@ allmaps.push(function(){
     'r4': route({fg: 'rgb(239,127,26)'}),
     'r5': route({fg: 'rgb(255,237,0)'}),
     'r6': route({fg: 'rgb(176,203,31)'}),
-    'r7': route({fg: 'rgb(178,179,179)'}),
-    'r8': route({fg: 'rgb(227,30,36)'}),
-    'r9': route({fg: 'rgb(57,49,133)'})
+    'r7': route({fg: 'rgb(102,195,208)'}),
+    'r8': route({fg: 'rgb(178,179,179)'}),
+    'r9': route({fg: 'rgb(227,30,36)'}),
+    'r10': route({fg: 'rgb(57,49,133)'}),
+    'legend': {cls: 'Polygon', fg: 'rgba(63,152,170,0.1)', bg: 'rgba(103,152,170,0.1)'}
   });
   // цветные круги
   dw.extend(dw.mopt, {
@@ -331,7 +406,7 @@ allmaps.push(function(){
     's6': krug({fg: 'rgb(246,176,150)', bg: 'rgb(246,176,150)'}),
     's7': krug({fg: 'rgb(218,218,218)', bg: 'rgb(218,218,218)'}),
     's8': krug({fg: 'rgb(240,134,131)', bg: 'rgb(240,134,131)'}),
-    's8_1': krug({fg: dw.mopt['r8'].fg, bg: 'white'}),
+    's8_1': krug({fg: dw.mopt['r9'].fg, bg: 'white'}),
     's9': krug({fg: 'rgb(126,113,177)', bg: 'rgb(126,113,177)'})
   });
   // белые круги
@@ -347,6 +422,7 @@ allmaps.push(function(){
   dw.loadCarta(MLINES_b);
   dw.loadCarta(MKRUG_b);
   dw.loadCarta(MCITIES_b);
+  dw.loadCarta(MLEGEND);
   dw.draw();
 });
 </script>
