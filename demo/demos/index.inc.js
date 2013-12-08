@@ -127,6 +127,18 @@ function init() {
   tb.appendChild(row);
   var col = document.createElement("td");
   col.colSpan = "2";
+  col.appendChild(document.createTextNode("Ищите больше примеров на блоге "));
+  var el2 = document.createElement("a");
+  el2.href = "http://dbcartajs.blogspot.ru";
+  el2.target = "_blank";
+  el2.appendChild(document.createTextNode("dbcartajs.blogspot.ru."));
+  col.appendChild(el2);
+  row.appendChild(col);
+
+  var row = document.createElement("tr");
+  tb.appendChild(row);
+  var col = document.createElement("td");
+  col.colSpan = "2";
   var dl = document.createElement("dl");
   col.appendChild(dl);
   row.appendChild(col);
