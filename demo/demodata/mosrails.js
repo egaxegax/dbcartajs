@@ -1,8 +1,10 @@
-/* List with coords of Moscow Underground and Commuter Rail lines and stations
-   [[ftype, ftag, coords, label, centerof, ismap],...]
-   Three points with coords and 'Q' literal implements to bezierCurveTo (...) method. */
-
-RLINES = [
+/**
+ * List with coords of Moscow Underground and Commuter Rail lines and stations.
+ *  [[ftype, ftag, coords, label, centerof, ismap],...]
+ * Three points with coords and 'Q' literal implements to bezierCurveTo (...) method.
+ * egaxegax, 2013
+ */
+var RLINES = [
 // MKAD
   ['mkad', 'm', [
       [-83,158,'Q'],[-85,158,'Q'],[-87,156,'Q'],
@@ -1064,7 +1066,7 @@ RLINES = [
     ]
   ]
 ];
-MSTATIONS = [
+var MSTATIONS = [
 // Metro
   ['s1','Ulitsa_Podbelskogo',[[69,103]],'Улица Подбельского',null,1],
   ['s1_2','Komsomolskaya',[[51.875,46.96]],'Комсомольская',null,1],
@@ -1185,7 +1187,7 @@ MSTATIONS = [
   ['mkad','ml4',[[197,27]],'МКАД',[197,27],1],
   ['mkad','ml5',[[-6, 158]],'МКАД',[-6, 158],1]
 ];
-RSTATIONS = [
+var RSTATIONS = [
   ['t1',[
     ['a1','Begovaya',[[-91,40.28]],'Беговая',null,1],
     ['a1_1','Testovskaya',[[-109,27]],'Тестовская',null,1],
