@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.4.3
+ * dbCartajs HTML5 Canvas dymanic object map v1.4.4
  * It uses Proj4js transformations.
  *
  * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
@@ -35,12 +35,16 @@ function dbCarta(cfg) {
      *   width, height: canvas size
      *   viewportx, viewporty: offset limits for centerCarta in degrees
      *   scalebg: bgcolor for paintScale
+     *   mapbg, maplabelfg, maplabelfg: colors for doMap
      * }
      */
     cfg: {
       viewportx: cfg.viewportx || 180.0,
       viewporty: cfg.viewporty || 90.0,
-      scalebg: cfg.scalebg || 'rgba(255,255,255,0.3)'
+      scalebg: cfg.scalebg || 'rgba(255,255,255,0.3)',
+      mapbg: cfg.mapbg || 'rgba(80,90,100,0.5)',
+      maplabelfg: cfg.maplabelfg || 'rgba(0,0,0,0.8)',
+      maplabelbg: cfg.maplabelbg || 'rgba(190,210,220,0.8)'
     },
     /**
      * Base Layers
@@ -311,7 +315,7 @@ function dbCarta(cfg) {
     /**
     * Highlight obj under mouse cursor like html MAP.
     */
-    doMap: function(pts) {
+    doMap: function(pts, ev) {
       if (Number(new Date()) - this.m.tmap < 100) // not so quickly
         return;
       this.m.tmap = Number(new Date());
@@ -325,7 +329,7 @@ function dbCarta(cfg) {
             mopt = self.mopt[m['ftype']],
             msize =  mopt['size']/self.m.scale,
             mwidth = (mopt['width'] || 1) / self.m.scale,
-            mcolor = 'rgba(80,90,100,0.5)';
+            mcolor = self.cfg.mapbg;
         ctx.beginPath();
         if (mopt['cls'] == 'Dot')
           ctx.arc(m['pts'][0][0], m['pts'][0][1], msize, 0, Math.PI*2, 0);
@@ -355,14 +359,21 @@ function dbCarta(cfg) {
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       // check ismap
-      for (var i in this.mflood)
-        if (this.mflood[i]['ismap']) {
-          addpoints(this, i);
-          if (ctx.isPointInPath(cx, cy)) {
-            pid = i;
-            break;
+      if (this.m.pmap) {
+        addpoints(this, this.m.pmap);
+        if (ctx.isPointInPath(cx, cy))
+          pid = this.m.pmap;
+      }
+      // check all
+      if (!pid)
+        for (var i in this.mflood)
+          if (this.mflood[i]['ismap']) {
+            addpoints(this, i);
+            if (ctx.isPointInPath(cx, cy)) {
+              pid = i;
+              break;
+            }
           }
-        }
       ctx.restore();
       if (this.m.pmap != pid) {
         // current
@@ -371,6 +382,27 @@ function dbCarta(cfg) {
         // restore prev
         if (this.m.pmap)
           addpoints(this, this.m.pmap, false);
+      }
+      // label
+      if (pid){
+        var label = this.mflood[pid]['label'];
+        if (label) {
+          if (!this.m.lmap) {
+            this.m.lmap = document.createElement('div');
+            this.m.lmap.style.color = this.cfg.maplabelfg;
+            this.m.lmap.style.backgroundColor = this.cfg.maplabelbg;
+            this.m.lmap.style.position = 'absolute';
+            this.m.lmap.appendChild(document.createTextNode(''));
+            this.m.lmap.onmousemove = function(){ this.childNodes[0].textContent = ''; };
+            document.body.appendChild(this.m.lmap);
+          }
+          this.m.lmap.childNodes[0].textContent = label;
+          this.m.lmap.style.left = ev.clientX + 'px';
+          this.m.lmap.style.top = ev.clientY - this.m.lmap.offsetHeight*1.2 + 'px';
+        }
+      } else if (this.m.lmap) {
+        document.body.removeChild(this.m.lmap);
+        delete this.m.lmap;
       }
       this.m.pmap = pid;
     },
@@ -721,7 +753,7 @@ function dbCarta(cfg) {
         var src = this.fromPoints(pts, false);
         var dst = this.fromPoints(pts, true);
         if (this.m.domap)
-          this.doMap(pts);
+          this.doMap(pts, ev);
         this.paintCoords(dst);
         if ('onmousemove' in this.clfunc)
           this.clfunc.onmousemove(src, dst);
