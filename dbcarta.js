@@ -397,8 +397,8 @@ function dbCarta(cfg) {
             document.body.appendChild(this.m.lmap);
           }
           this.m.lmap.childNodes[0].textContent = label;
-          this.m.lmap.style.left = ev.clientX + 'px';
-          this.m.lmap.style.top = ev.clientY - this.m.lmap.offsetHeight*1.2 + 'px';
+          this.m.lmap.style.left = ev.clientX + window.pageXOffset + 'px';
+          this.m.lmap.style.top = ev.clientY + window.pageYOffset - this.m.lmap.offsetHeight*1.2 + 'px';
         }
       } else if (this.m.lmap) {
         document.body.removeChild(this.m.lmap);
