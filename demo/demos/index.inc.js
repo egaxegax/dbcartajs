@@ -171,7 +171,7 @@ function init() {
   el2.target = '_blank';
   el2.appendChild(document.createTextNode('egaxegax'));
   el.appendChild(el2);
-  el.appendChild(document.createTextNode(', 2013'));
+  el.appendChild(document.createTextNode(', 2014'));
   document.body.appendChild(el);
 
   // add anim
