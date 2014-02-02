@@ -30,6 +30,7 @@ function draw() {
 }
 function init() {
   var mtab = document.createElement('table');
+  mtab.style.borderCollapse = 'collapse';
   var row = document.createElement('tr');
   row.style.height = '1px';
   row.style.backgroundColor = 'rgb(230,230,230)';
@@ -127,6 +128,7 @@ function init() {
   var col = document.createElement('td');
   col.colSpan = '10';
   col.id = 'mcol';
+  col.style.padding = "0";
   row.appendChild(col);
   mtab.appendChild(row);
   document.body.appendChild(mtab);

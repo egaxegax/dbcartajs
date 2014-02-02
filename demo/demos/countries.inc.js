@@ -32,8 +32,10 @@ function refresh() {
   window.location.reload(false);
 }
 function init() {
+  document.body.style.margin = "0";
   var mtab = document.createElement('table');
   mtab.width = '100%';
+  mtab.style.borderCollapse = 'collapse';
   var tb = document.createElement('tbody');
   mtab.appendChild(tb);
   var row = document.createElement('tr');
