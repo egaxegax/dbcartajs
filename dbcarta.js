@@ -1,9 +1,9 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.4.4
+ * dbCartajs HTML5 Canvas dymanic object map v1.4.5
  * It uses Proj4js transformations.
  *
  * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
- * egax@bk.ru, 2013
+ * egax@bk.ru, 2014
  */
 function dbCarta(cfg) {
   cfg = cfg||{};
@@ -177,12 +177,12 @@ function dbCarta(cfg) {
           ch = this.height,
           h = ch/5,
           w = h/2,
-          tleft = cw - w,
+          tleft = cw - w - w/10,
           ttop = ch/2 - h/2;
       var zoom = (this.m.scale < 1 ? 2-1/this.m.scale : this.m.scale);
-      if (cx > tleft && cx < cw && cy > ttop && cy < ttop + h/2.0) {
+      if (cx > tleft && cx < tleft + w && cy > ttop && cy < ttop + h/2.0) {
         if (zoom < 50) zoom++;
-      } else if (cx > tleft && cx < cw && cy > ttop + h/2.0 && cy < ttop + h) {
+      } else if (cx > tleft && cx < tleft + w && cy > ttop + h/2.0 && cy < ttop + h) {
         if (zoom > -18) zoom--;
       } else return;
       return (zoom > 1 ? zoom : 1/(2-zoom));
@@ -281,14 +281,15 @@ function dbCarta(cfg) {
       for (var i in data) {
         var d = data[i],
             ftype = d[0],
-            tag = d[1],
-            ftag = ftype + '_' + tag;
+            ftag = d[1],
+            fkey = ftype + '_' + ftag;
         var coords = d[2],
             label = 3 in d ? d[3] : '',
             centerof = 4 in d ? d[4] : undefined,
             ismap = 5 in d ? d[5] : undefined;
         var m = {
           'ftype': ftype,
+          'ftag': ftag,
           'coords': coords,
           'label': label,
           'centerof': centerof,
@@ -299,7 +300,7 @@ function dbCarta(cfg) {
           this.reload(m); // add points
           this.paintCartaPts(m['pts'], ftype, label, m['centerofpts']);
         }
-        this.mflood[ftag] = m;
+        this.mflood[fkey] = m;
       }
     },
     /**
@@ -385,21 +386,19 @@ function dbCarta(cfg) {
       }
       // label
       if (pid){
-        var label = this.mflood[pid]['label'];
-        if (label) {
-          if (!this.m.lmap) {
-            this.m.lmap = document.createElement('div');
-            this.m.lmap.style.color = this.cfg.maplabelfg;
-            this.m.lmap.style.backgroundColor = this.cfg.maplabelbg;
-            this.m.lmap.style.position = 'absolute';
-            this.m.lmap.appendChild(document.createTextNode(''));
-            this.m.lmap.onmousemove = function(){ this.childNodes[0].textContent = ''; };
-            document.body.appendChild(this.m.lmap);
-          }
-          this.m.lmap.childNodes[0].textContent = label;
-          this.m.lmap.style.left = ev.clientX + window.pageXOffset + 'px';
-          this.m.lmap.style.top = ev.clientY + window.pageYOffset - this.m.lmap.offsetHeight*1.2 + 'px';
+        if (!this.m.lmap) {
+          this.m.lmap = document.createElement('div');
+          this.m.lmap.style.color = this.cfg.maplabelfg;
+          this.m.lmap.style.backgroundColor = this.cfg.maplabelbg;
+          this.m.lmap.style.position = 'absolute';
+//          this.m.lmap.appendChild(document.createTextNode(''));
+          this.m.lmap.onmousemove = function(){ this.innerHTML = ''; };
+          document.body.appendChild(this.m.lmap);
         }
+        var label = this.mflood[pid]['ftag'] + '<br/>' + this.mflood[pid]['label'];
+        this.m.lmap.innerHTML = label;
+        this.m.lmap.style.left = ev.clientX + window.pageXOffset + 'px';
+        this.m.lmap.style.top = ev.clientY + window.pageYOffset - this.m.lmap.offsetHeight*1.2 + 'px';
       } else if (this.m.lmap) {
         document.body.removeChild(this.m.lmap);
         delete this.m.lmap;
@@ -456,9 +455,11 @@ function dbCarta(cfg) {
           ch = this.height,
           h = ch/5,
           w = h/2,
-          tleft = cw - w,
+          tleft = cw - w - w/10,
           ttop = ch/2 - h/2,
           d = w/18; // + - size
+      var cols = 20, // arc col vertex
+          anglestep = Math.PI/cols;
       var ctx = this.getContext('2d');
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -466,8 +467,9 @@ function dbCarta(cfg) {
       ctx.translate(tleft, ttop);
       with (ctx) {
         lineTo(w, h);
-        lineTo(w, 0);
-        lineTo(0, 0);
+        lineTo(w, h/4 - d/2);
+        for (var i = 0; i <= cols; i++)
+          lineTo(w/2 + w/2 * Math.cos(i * anglestep), h/4 - d/2 - w/2 * Math.sin(i * anglestep));
         lineTo(0, h/4 - d/2);
         lineTo(w/2 - d/2, h/4 - d/2);
         lineTo(w/2 - d/2, h/8);
@@ -488,8 +490,9 @@ function dbCarta(cfg) {
         lineTo(w/4, h/2 + h/4 + d/2);
         lineTo(w/4, h/2 + h/4 - d/2);
         lineTo(0, h/2 + h/4 - d/2);
-        lineTo(0, h);
-      }
+        for (var i = 0; i <= cols; i++)
+          lineTo(w/2 - w/2 * Math.cos(i * anglestep), h/2 + h/4 - d/2 + w/2 * Math.sin(i * anglestep));
+        }
       ctx.fillStyle = this.cfg.scalebg;
       ctx.fill();
       ctx.restore();
