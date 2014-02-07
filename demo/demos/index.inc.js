@@ -2,27 +2,6 @@
 // list demos with brief
 function listDemos() {
   return [
-    ['merc.html', 'Mercator', function() {
-      return document.createTextNode('На карте в проекции "Меркатор" изображены несколько стран со столицами. Города соединены маршрутными линиями.'); }],
-    ['sample.html', 'Sample', function() {
-      return document.createTextNode('Демо с возможностью нанесения объкетов с заданными координатами в выбранной проекции.'); }],
-    ['cities.html', "World's Cities", function() {
-      return document.createTextNode('Список крупнейших городов мира с возможностью выбора на карте в проекции "Меркатор".'); }],
-    ['countries.html', "World's Countries", function() {
-      return document.createTextNode('Список стран мира с возможностью выбора в различных проекциях.'); }],
-    ['noncart.html', 'Noncartographic', function() {
-      return document.createTextNode('Выводим слово dbcarta по буквам в координатах.'); }],
-    ['usemap.html', 'Use Map Area', function() {
-      return document.createTextNode('Карта стран мира с возможностью наведения на них и выводом дополнительной информации по ним.'); }],
-    ['starry.html', 'Starry Sky (Featured)', function() {
-      var sp = document.createElement('span');
-      var a = document.createElement('a');
-      a.href = 'http://habrahabr.ru/post/189692';
-      a.appendChild(document.createTextNode('Звездное небо на Canvas'));
-      sp.appendChild(document.createTextNode('Глобус на фоне звездного неба как в Orbitron, Marble, Xephem. Подробно написано в статье на Хабре "'));
-      sp.appendChild(a);
-      sp.appendChild(document.createTextNode('".'));
-      return sp; }],
     ['mosmetro.html', 'Moscow Metro', function() {
       var sp = document.createElement('span');
       var a = document.createElement('a');
@@ -37,10 +16,31 @@ function listDemos() {
       sp.appendChild(a);
       sp.appendChild(document.createTextNode('".'));
       return sp; }],
-    ['mosrails.html', 'Moscow Rail Map', function() {
+    ['mosrails.html', 'Moscow Rail Roads', function() {
       return document.createTextNode('Ещё одна карта на тему железных дорог. Схема пригородного ж/д транспорта Москвы и МО. ' + 
                                      'Оригинал этой карты можно видеть на стенах тамбуров подмосковных электричек под названием ' + 
                                      'Moscow Underground and Commuter Rail Map. Подробности на Хабре.'); }],
+    ['starry.html', 'Starry Sky', function() {
+      var sp = document.createElement('span');
+      var a = document.createElement('a');
+      a.href = 'http://habrahabr.ru/post/189692';
+      a.appendChild(document.createTextNode('Звездное небо на Canvas'));
+      sp.appendChild(document.createTextNode('Глобус на фоне звездного неба как в Orbitron, Marble, Xephem. Подробно написано в статье на Хабре "'));
+      sp.appendChild(a);
+      sp.appendChild(document.createTextNode('".'));
+      return sp; }],
+    ['merc.html', 'Avia Routes', function() {
+      return document.createTextNode('На карте в проекции "Меркатор" изображены несколько стран со столицами. Города соединены маршрутными линиями.'); }],
+    ['usemap.html', 'Area Map', function() {
+      return document.createTextNode('Карта стран мира с возможностью наведения на них и выводом дополнительной информации по ним.'); }],
+    ['noncart.html', 'Noncart', function() {
+      return document.createTextNode('Выводим слово dbcarta по буквам в координатах.'); }],
+    ['sample.html', 'Sample', function() {
+      return document.createTextNode('Демо с возможностью нанесения объкетов с заданными координатами в выбранной проекции.'); }],
+    ['cities.html', "World's Cities", function() {
+      return document.createTextNode('Список крупнейших городов мира с возможностью выбора на карте в проекции "Меркатор".'); }],
+    ['countries.html', "World's Countries", function() {
+      return document.createTextNode('Список стран мира с возможностью выбора в различных проекциях.'); }]
   ];
 }
 function init() {
@@ -81,12 +81,12 @@ function init() {
 
   var el = document.createElement('p');
   el.style.textAlign = 'center';
-  el.appendChild(document.createTextNode('EN: It used HTML5 Canvas 2D. Pure javascript and serverless. Draw, color, move, zoom map and objects.'));
+  el.appendChild(document.createTextNode('It uses HTML5 Canvas 2D. Pure javascript and serverless. Draw, color, move, zoom map and objects.'));
   document.body.appendChild(el);
   
   var el = document.createElement('p');
   el.style.textAlign = 'center';
-  el.appendChild(document.createTextNode('RU: Карта-Навигатор с проекциями. Использует HTML5 Canvas 2D и JavaScript без сервера. Рисование, масштабирование объектов.'));
+  el.appendChild(document.createTextNode('Карта-Навигатор с проекциями. Использует HTML5 Canvas 2D и JavaScript без сервера. Рисование, масштабирование объектов.'));
   document.body.appendChild(el);
   
   // demos table
@@ -101,11 +101,12 @@ function init() {
 
   var col = document.createElement('td');
   col.width = '60%';
-  col.align = 'center';
-  var el = document.createElement('h2');
-  el.style.margin = '0';
-  el.appendChild(document.createTextNode('Demos:'));
-  col.appendChild(el);
+  col.appendChild(document.createTextNode('Ищите больше разных карт в блоге на '));
+  var el2 = document.createElement('a');
+  el2.href = 'http://dbcartajs.blogspot.ru';
+  el2.target = '_blank';
+  el2.appendChild(document.createTextNode('dbcartajs.blogspot.ru.'));
+  col.appendChild(el2);
   row.appendChild(col);
   
   // github source
@@ -122,18 +123,6 @@ function init() {
   col.appendChild(el);
   row.appendChild(col);
   document.body.appendChild(mtab);
-
-  var row = document.createElement('tr');
-  tb.appendChild(row);
-  var col = document.createElement('td');
-  col.colSpan = '2';
-  col.appendChild(document.createTextNode('Ищите больше примеров на блоге '));
-  var el2 = document.createElement('a');
-  el2.href = 'http://dbcartajs.blogspot.ru';
-  el2.target = '_blank';
-  el2.appendChild(document.createTextNode('dbcartajs.blogspot.ru.'));
-  col.appendChild(el2);
-  row.appendChild(col);
 
   var row = document.createElement('tr');
   tb.appendChild(row);
