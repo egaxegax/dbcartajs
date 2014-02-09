@@ -1,8 +1,8 @@
-﻿// index.html func
+// index.html func
 // list demos with brief
 function listDemos() {
   return [
-    ['mosmetro.html', 'Moscow Metro', function() {
+    [['mosmetro.html'], ['Moscow Metro'], function() {
       var sp = document.createElement('span');
       var a = document.createElement('a');
       a.href = 'http://upload.wikimedia.org/wikipedia/commons/f/f3/Moscow_metro_map_ru_sb.svg';
@@ -16,11 +16,19 @@ function listDemos() {
       sp.appendChild(a);
       sp.appendChild(document.createTextNode('".'));
       return sp; }],
-    ['mosrails.html', 'Moscow Rail Roads', function() {
+    [['mosrails.html'], ['Moscow Rail Roads'], function() {
       return document.createTextNode('Ещё одна карта на тему железных дорог. Схема пригородного ж/д транспорта Москвы и МО. ' + 
                                      'Оригинал этой карты можно видеть на стенах тамбуров подмосковных электричек под названием ' + 
                                      'Moscow Underground and Commuter Rail Map. Подробности на Хабре.'); }],
-    ['starry.html', 'Starry Sky', function() {
+    [['http://dbcartajs.blogspot.ru/2014/01/spbmetro.html#cont-spbmetro',
+      'http://dbcartajs.blogspot.ru/2014/02/metro-novosibirsk.html#cont-nsbmetro',
+      'http://dbcartajs.blogspot.ru/2014/02/metro-kiev.html#cont-kievmetro',
+      'http://dbcartajs.blogspot.ru/2014/02/metro-tbilisi.html#cont-tbilisimetro'], [
+      'Saint-Petersburg', 'Novosibirsk', 'Kiev', 'Tbilisi'], function() {
+      return document.createTextNode('Подборка прочих карт со схемами метро наиболее крупных городов России и СНГ из блога проекта. ' + 
+                                     'Небольшие схемы по сравнению с московской. В целом вообще по протяженности и количеству станций с московским метро ' + 
+                                     'могут сравниться только метро Нью-Йорка и Лондона.'); }],
+    [['starry.html'], ['Starry Sky'], function() {
       var sp = document.createElement('span');
       var a = document.createElement('a');
       a.href = 'http://habrahabr.ru/post/189692';
@@ -29,17 +37,17 @@ function listDemos() {
       sp.appendChild(a);
       sp.appendChild(document.createTextNode('".'));
       return sp; }],
-    ['merc.html', 'Avia Routes', function() {
+    [['merc.html'], ['Avia Routes'], function() {
       return document.createTextNode('На карте в проекции "Меркатор" изображены несколько стран со столицами. Города соединены маршрутными линиями.'); }],
-    ['usemap.html', 'Area Map', function() {
+    [['usemap.html'], ['Area Map'], function() {
       return document.createTextNode('Карта стран мира с возможностью наведения на них и выводом дополнительной информации по ним.'); }],
-    ['noncart.html', 'Noncart', function() {
+    [['noncart.html'], ['Noncart'], function() {
       return document.createTextNode('Выводим слово dbcarta по буквам в координатах.'); }],
-    ['sample.html', 'Sample', function() {
+    [['sample.html'], ['Sample'], function() {
       return document.createTextNode('Демо с возможностью нанесения объкетов с заданными координатами в выбранной проекции.'); }],
-    ['cities.html', "World's Cities", function() {
+    [['cities.html'], ["World's Cities"], function() {
       return document.createTextNode('Список крупнейших городов мира с возможностью выбора на карте в проекции "Меркатор".'); }],
-    ['countries.html', "World's Countries", function() {
+    [['countries.html'], ["World's Countries"], function() {
       return document.createTextNode('Список стран мира с возможностью выбора в различных проекциях.'); }]
   ];
 }
@@ -136,11 +144,20 @@ function init() {
     if (i%2 == 0) div.style.backgroundColor = '#EEEEEE';
     var dt = document.createElement('dt');
     var dd = document.createElement('dd');
-    var a = document.createElement('a');
-    a.href = mdemos[i][0];
-    a.target = '_blank';
-    a.appendChild(document.createTextNode(mdemos[i][1]));
-    dt.appendChild(a);
+    var ul = document.createElement('ul');
+    ul.style.padding = 0;
+    for(var j in mdemos[i][0]){
+      var li = document.createElement('li');
+      li.style.display = 'inline';
+      li.style.paddingRight = '20px';
+      var a = document.createElement('a');
+      a.href = mdemos[i][0][j];
+      a.target = '_blank';
+      a.appendChild(document.createTextNode(mdemos[i][1][j]));
+      li.appendChild(a);
+      ul.appendChild(li);
+    }
+    dt.appendChild(ul);
     dd.appendChild(mdemos[i][2]());
     div.appendChild(dt);
     div.appendChild(dd);

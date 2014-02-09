@@ -43,8 +43,8 @@ function dbCarta(cfg) {
       viewporty: cfg.viewporty || 90.0,
       scalebg: cfg.scalebg || 'rgba(255,255,255,0.3)',
       mapbg: cfg.mapbg || 'rgba(80,90,100,0.5)',
-      maplabelfg: cfg.maplabelfg || 'rgba(0,0,0,0.8)',
-      maplabelbg: cfg.maplabelbg || 'rgba(190,210,220,0.8)'
+      maplabelfg: cfg.maplabelfg || 'rgba(0,0,0,0.9)',
+      maplabelbg: cfg.maplabelbg || 'rgba(190,210,220,0.9)'
     },
     /**
      * Base Layers
@@ -391,12 +391,13 @@ function dbCarta(cfg) {
           this.m.lmap.style.color = this.cfg.maplabelfg;
           this.m.lmap.style.backgroundColor = this.cfg.maplabelbg;
           this.m.lmap.style.position = 'absolute';
-//          this.m.lmap.appendChild(document.createTextNode(''));
           this.m.lmap.onmousemove = function(){ this.innerHTML = ''; };
           document.body.appendChild(this.m.lmap);
         }
-        var label = this.mflood[pid]['ftag'] + '<br/>' + this.mflood[pid]['label'];
-        this.m.lmap.innerHTML = label;
+        // ftag + opt.label + opt.desc
+        this.m.lmap.innerHTML = this.mflood[pid]['ftag'] + 
+          (this.mflood[pid]['label'] ? '<br/>' + this.mflood[pid]['label'] : '') + 
+          (this.mflood[pid]['desc'] ? '<br/>' + this.mflood[pid]['desc'] : '');
         this.m.lmap.style.left = ev.clientX + window.pageXOffset + 'px';
         this.m.lmap.style.top = ev.clientY + window.pageYOffset - this.m.lmap.offsetHeight*1.2 + 'px';
       } else if (this.m.lmap) {

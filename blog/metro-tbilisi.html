@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<title>dbCartajs - Карта метро Тбилиси</title>
+<script type="text/javascript" src="../dbcarta.js"></script>
+</head>
+<body>
+<select id="tbilisimetro-stationlist"><option value="">Выберите...</option></select>
+<script type='text/javascript'>
+  var allmaps = [];
+  function initmaps(){
+    for(var i in allmaps){
+      allmaps[i]();
+    }
+  }
+  if(window.addEventListener) {
+    window.addEventListener('load', initmaps, false);
+  } else {
+    window.attachEvent('onload', initmaps);
+  }
+</script>
+<script type="text/javascript">
+allmaps.push(function(){
+  var MLINES = [
+    ['r1', '1', [
+        [32,60],[20,50],[14,37],[7,21],
+        [-1,8],[2,0],[12,-8],[12,-18],[11,-32],
+        [5,-40],[11,-48],[28,-48],[36,-54],
+        [46,-54],[56,-56],[69,-49]
+      ]
+    ],
+    ['r2', '1', [
+        [-68,-9],[-51,-18],[-30,-15],[-13,-13],
+        [-5,-22],[3,-15],[12,-18]
+      ]
+    ]
+  ];
+  var MSTATIONS = [
+    ['s1','AKHMETELI THEATRE',[[32,60]],'АХМЕТЕЛИС ТЕАТРИ'],
+    ['s1_1','SARAJISHVILI',[[20,50]],'САРАДЖИШВИЛИ'],
+    ['s1_1','GURAMISHVILI',[[14,37]],'ГУРАМИШВИЛИ'],
+    ['s1_1','GRMAGELE',[[7,21]],'ГРМАГЕЛЕ'],
+    ['s1','DIDUBE',[[-1,8]],'ДИДУБЕ'],
+    ['s1_1','GOTSIRIDZE',[[2,0]],'ГОЦИРИДЗЕ'],
+    ['s1_1','NADZALADEVI',[[12,-8]],'НАДЗАЛАДЕВИ'],
+    ['s1_5','STATION SQUARE I',[[12,-18]],'САДГУРИС МОЭДАНИ I'],
+    ['s1_1','MARDJANISHVILI',[[11,-32]],'МАРДЖАНИШВИЛИ'],
+    ['s1','RUSTAVELI',[[5,-40]],'РУСТАВЕЛИ'],
+    ['s1','LIBERTY SQUARE',[[11,-48]],'ТАВИСУПЛЕБИС МОЭДАНИ'],
+    ['s1_2','AVLABARI',[[28,-48]],'АВЛАБАРИ'],
+    ['s1_3','300 ARAGVELI',[[36,-54]],'САМАСИ АРАГВЕЛИ'],
+    ['s1_2','ISANI',[[46,-54]],'ИСАНИ'],
+    ['s1_4','SAMGORI',[[56,-56]],'САМГОРИ'],
+    ['s1_2','VARKETILI',[[69,-49]],'ВАРКЕТИЛИ'],
+//
+    ['s2_3','STATE UNIVERSITY',[[-68,-9]],'САХЕЛМЦИПО УНИВЕРСИТЕТИ'],
+    ['s2_1','VAZHA-PSHAVELA',[[-51,-18]],'ВАЖНА-ПШАВЕЛА'],
+    ['s2_1','DELISI',[[-30,-15]],'ДЕЛИСИ'],
+    ['s2_2','MEDICAL UNIVERSITY',[[-13,-13]],'САМЕДИЦИНО УНИВЕРСИТЕТИ'],
+    ['s2_1','TECHNICAL UNIVERSITY',[[-5,-22]],'ТЕКНИКУРИ УНИВЕРСИТЕТИ'],
+    ['s2_3','TSERETELI',[[3,-15]],'ЦЕРЕТЕЛИ'],
+    ['s2','STATION SQUARE II',[[12,-18]],'САДГУРИС МОЭДАНИ II'],
+//
+    ['s1s','AKHMETELI THEATRE',[[32,60]],'',null,1],
+    ['s1s','SARAJISHVILI',[[20,50]],'',null,1],
+    ['s1s','GURAMISHVILI',[[14,37]],'',null,1],
+    ['s1s','GRMAGELE',[[7,21]],'',null,1],
+    ['s1s','DIDUBE',[[-1,8]],'',null,1],
+    ['s1s','GOTSIRIDZE',[[2,0]],'',null,1],
+    ['s1s','NADZALADEVI',[[12,-8]],'',null,1],
+    ['s1s','STATION SQUARE I',[[12,-18]],'',null,1],
+    ['s1s','MARDJANISHVILI',[[11,-32]],'',null,1],
+    ['s1s','RUSTAVELI',[[5,-40]],'',null,1],
+    ['s1s','LIBERTY SQUARE',[[11,-48]],'',null,1],
+    ['s1s','AVLABARI',[[28,-48]],'',null,1],
+    ['s1s','300 ARAGVELI',[[36,-54]],'',null,1],
+    ['s1s','ISANI',[[46,-54]],'',null,1],
+    ['s1s','SAMGORI',[[56,-56]],'',null,1],
+    ['s1s','VARKETILI',[[69,-49]],'',null,1],
+//
+    ['s2s','STATE UNIVERSITY',[[-68,-9]],'',null,1],
+    ['s2s','VAZHA-PSHAVELA',[[-51,-18]],'',null,1],
+    ['s2s','DELISI',[[-30,-15]],'',null,1],
+    ['s2s','MEDICAL UNIVERSITY',[[-13,-13]],'',null,1],
+    ['s2s','TECHNICAL UNIVERSITY',[[-5,-22]],'',null,1],
+    ['s2s','TSERETELI',[[3,-15]],'',null,1],
+    ['s2s','STATION SQUARE II',[[12,-18]],'',null,1],
+//
+  ];
+  // -------------------------------------------
+  var dw = new dbCarta({
+    id: 'cont-tbilisimetro',
+    height: 600,
+    scalebg: 'rgba(200,100,50,0.2)'
+  });
+  dw.style.backgroundColor = 'white';
+  dw.style.border = '1px dashed lightgray';
+  // define new layers
+  var route = function(o){ return dw.extend({cls: 'Line', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
+      station = function(o){ return dw.extend({cls: 'Dot', size: 8, width: 6, bg: dw.style.backgroundColor, labelscale: 1}, o||{}) },
+      redst = function(o){ return station(dw.extend({fg: 'rgb(193,41,22)'}, o||{})) },
+      bluest = function(o){ return station(dw.extend({fg: 'rgb(25,74,103)'}, o||{})) };
+  // lines
+  dw.extend(dw.mopt, {
+    'r1': route({fg: 'rgb(236,66,45)'}),
+    'r2': route({fg: 'rgb(180,215,233)'})
+  });
+  // stations
+  dw.extend(dw.mopt, {
+    's1': redst({anchor: ['end', 'middle']}),
+    's1_1': redst({anchor: ['start', 'middle']}),
+    's1_2': redst({anchor: ['center', 'bottom']}),
+    's1_3': redst({anchor: ['center', 'top']}),
+    's1_4': redst({anchor: ['start', 'top']}),
+    's1_5': redst({anchor: ['start', 'bottom']}),
+    's1s': redst({bg: redst().fg, size: 5, width: 1}),
+    's2': bluest({anchor: ['start', 'top']}),
+    's2_1': bluest({anchor: ['center', 'top']}),
+    's2_2': bluest({anchor: ['end', 'bottom']}),
+    's2_3': bluest({anchor: ['center', 'bottom']}),
+    's2s': bluest({bg: bluest().fg, size: 5, width: 1})
+  });
+  dw.loadCarta(MLINES);
+  dw.loadCarta(MSTATIONS);
+  dw.scaleCarta(1.25);
+  dw.draw();
+  // station list
+  var findstation = function(ev){
+    var stationlist = ev.target,
+        opt = stationlist.options[stationlist.selectedIndex];
+    if (opt) {
+      var centerofpts = dw.mflood[opt.value]['pts'];
+      dw.centerCarta(centerofpts[0][0] + dw.m.offset[0], centerofpts[0][1] + dw.m.offset[1]);
+      dw.draw();
+      drawcrosshair();
+    }
+  };
+  var drawcrosshair = function(){
+    var ctx = dw.getContext('2d');
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.beginPath();
+    ctx.moveTo(dw.width/2.0, 0);
+    ctx.lineTo(dw.width/2.0, dw.height);
+    ctx.moveTo(0, dw.height/2.0);
+    ctx.lineTo(dw.width, dw.height/2.0);
+    ctx.lineWidth = 15;
+    ctx.strokeStyle = 'rgba(100,100,200,0.2)';
+    ctx.stroke();
+    ctx.restore();
+  }
+  var fillstation = function(ev){
+    var stationlist = ev.target;
+    if (stationlist.length < MSTATIONS.length){
+      MSTATIONS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1});
+      for (var i in MSTATIONS) {
+        if (!MSTATIONS[i][3]) continue;
+        var el = document.createElement('option');
+        el.value = MSTATIONS[i][0] + '_' + MSTATIONS[i][1];
+        el.appendChild(document.createTextNode(MSTATIONS[i][3]));
+        stationlist.appendChild(el);
+      }
+    }
+  }
+  var stationlist = document.getElementById('tbilisimetro-stationlist');
+  stationlist.onmousedown = fillstation;
+  stationlist.onchange = findstation;
+});
+</script>
+</body>
+</html>
