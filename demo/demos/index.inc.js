@@ -146,6 +146,7 @@ function init() {
     var dd = document.createElement('dd');
     var ul = document.createElement('ul');
     ul.style.padding = 0;
+    ul.style.margin = 0;
     for(var j in mdemos[i][0]){
       var li = document.createElement('li');
       li.style.display = 'inline';
