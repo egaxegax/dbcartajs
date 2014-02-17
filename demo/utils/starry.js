@@ -496,7 +496,7 @@ var Starry = {
       if ( mag < 7 ) size = 7.0 - mag;
       else size = 1.0;
 
-      mstars.push([ [[px, py]], size, label ]);
+      mstars.push([ [[px, py]], size, label, hip, {hip: hip, label: label, ra: ra, dec: dec} ]);
     }
     return mstars;
   },

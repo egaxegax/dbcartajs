@@ -40,21 +40,41 @@ function calcSpheric(coords, dt) {
   var pt = dw.transformCoords('SKY', 'epsg:4326', coords);
   if (pt) {
     // backside
-    pt[0] = Proj4js.common.adjust_lon((180 - (pt[0] - cx) + cx) * Math.PI/180);
+    pt[0] = MUtil.ang360(180 - (pt[0] - cx) + cx) * Math.PI/180;
     pt[1] = pt[1] * Math.PI/180;
   }
   return pt;
 }
 // Draw points (stars, tracs) on lonlat
-function drawlonlat(pts, ftype){
+function drawlonlat(pts, ftype, areasize){
   var proj = dw.initProj();
   var cx = proj.long0 * 180/Math.PI,
       cy = proj.lat0 * 180/Math.PI;
   // switch to lonlat
   dw.initProj(0, '');
   for(var i in pts) {
-    dw.mopt[ftype]['size'] = pts[i][1] / 8;
-    dw.paintCarta(pts[i][0], ftype, pts[i][2]);
+    var mcoords = pts[i][0],
+        msize = pts[i][1] / 8,
+        mlabel = pts[i][2],
+        mftag = pts[i][3] || mlabel;
+    if (msize) 
+      dw.mopt[ftype]['size'] = msize;
+    var m = dw.paintCarta(mcoords, ftype, mlabel);
+    // add map area
+    if (mftag && dw.chkPts(m['pts'][0])) {
+      var desc = [];
+      if (pts[i][4]) // opt.info
+        for (var k in pts[i][4])
+          if (pts[i][4][k]) desc.push('<b>' + k + '</b>: ' + pts[i][4][k]);
+      dw.marea[ftype + '_' + mftag] = {
+        'ftype': ftype,
+        'ftag': mftag,
+        'pts': m['pts'],
+        'desc': desc.join('<br/>')
+      };
+    }
+    if (areasize) // fix size for area map
+      dw.mopt[ftype]['size'] = areasize;
   }
   // restore spherical proj
   dw.initProj(202, ' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
@@ -69,22 +89,24 @@ function loadStarry(){
       cx = proj.long0 * 180/Math.PI,
       cy = proj.lat0 * 180/Math.PI,
       gmtime = getSelTime();
+  // clear map area
+  dw.marea = {};
   // stars
   var stars = STARS,
       mstars = Starry.renderSky(stars, rect, skyRadius, eaRadius, cx, cy, gmtime);
-  drawlonlat(mstars, 'star');
+  drawlonlat(mstars, 'star', 3);
   // sun
   var sun = Solar.loadSun(gmtime),
       msun = Starry.renderSky([sun], rect, skyRadius, eaRadius, cx, cy, gmtime);
-  drawlonlat(msun, 'sun');
+  drawlonlat(msun, 'sun', 5);
   // moon
   var moon = Solar.loadMoon(gmtime),
       mmoon = Starry.renderSky([moon], rect, skyRadius, eaRadius, cx, cy, gmtime);
-  drawlonlat(mmoon, 'moon');
+  drawlonlat(mmoon, 'moon', 4);
   // planets
   var planets = Solar.loadPlanets(gmtime),
       mplanets = Starry.renderSky(planets, rect, skyRadius, eaRadius, cx, cy, gmtime);
-  drawlonlat(mplanets, 'planet');
+  drawlonlat(mplanets, 'planet', 4);
   // terminator
   var term = MGeo.terminator(gmtime, proj.h/1000.0, cx, cy);
   dw.paintCarta(term, 'terminator');
@@ -109,8 +131,16 @@ function loadStarry(){
     var tracs = [tledata[i][0], vrect];
     var mtracs = Starry.renderSat(tracs[1], rect, eaRadius, eaRadiusM, cx, cy, gmtime),
         mcoords = MVector.rect2geo(gmtime, tracs[1][0][0], tracs[1][0][1], tracs[1][0][2]);
-    drawlonlat(mtracs[1], 'sattrac');
-    dw.paintCarta([mcoords], 'satsurface');
+    //drawlonlat(mtracs[1], 'sattrac');
+    var m = dw.paintCarta([mcoords], 'satsurface');
+    if (dw.chkPts(m['pts'][0])) {
+      dw.marea['satsurface' + i] = {
+        'ftype': 'satsurface',
+        'ftag': i,
+        'pts': m['pts'],
+        'desc': tracs[0]
+      };
+    };
     if (!trace[i]) trace[i] = [];
     trace[i].push(mcoords);
     if (trace[i].length > 40) trace[i].shift();
@@ -119,7 +149,7 @@ function loadStarry(){
       dw.paintCarta([trace[i][j]], 'sattrace');
     if ((label = mtracs[0]).length) {
       // sat.fields of vision
-      var pts = MGeo.circle1spheric(mcoords[0], mcoords[1], MGeo.AE * 18 * Math.PI/180, 20);
+      var pts = MGeo.circle1spheric(mcoords[0], mcoords[1], MGeo.AE * 1.0/*18*/ * Math.PI/180, 20);
       // conv to lonlat
       for(var j in pts){
         if (pt = dw.transformCoords('epsg:4326', String(dw.project), pts[j])) {
@@ -133,8 +163,11 @@ function loadStarry(){
           var pt1 = pt;
         }
       }
+      // calc sat.height
+      var x = tracs[1][0][0], y = tracs[1][0][1], z = tracs[1][0][2], 
+          h = Math.sqrt(x*x + y*y + z*z);
       // draw sat.label
-      drawlonlat([[[label[0][0][0]], 16, tracs[0]]], 'satpos');
+      drawlonlat([[[label[0][0][0]], 16, tracs[0], i, {label: tracs[0], height: Math.floor(h)}]], 'satpos');
     }
   }
 }
@@ -333,11 +366,11 @@ function init() {
     mcoord.innerHTML = 'Ra/Dec:';
     if (scoords = calcSpheric(sd, getSelTime())) {
       // in radians
-      //mcoord.innerHTML = 'Ra: ' + scoords[0].toFixed(2) + ' Dec: ' + scoords[1].toFixed(2);
+      mcoord.innerHTML = 'Ra: ' + scoords[0].toFixed(4) + ' Dec: ' + scoords[1].toFixed(4);
       // in hms, dms
-      var ra = MUtil.deg2hms(scoords[0] * 180/Math.PI).join(':'),
-          dec = MUtil.deg2dms(scoords[1] * 180/Math.PI).join(':');
-      mcoord.innerHTML = 'Ra: ' + ra + ' Dec: ' + dec;
+//      var ra = MUtil.deg2hms(scoords[0] * 180/Math.PI).join(':'),
+//          dec = MUtil.deg2dms(scoords[1] * 180/Math.PI).join(':');
+//      mcoord.innerHTML = 'Ra: ' + ra + ' Dec: ' + dec;
     }
   }
   // events
@@ -353,6 +386,7 @@ function init() {
   dw.loadCarta(CONTINENTS);
   dw.loadCarta(dw.createMeridians());
   dw.loadCarta([['DotPort', '1', [pov], 'Moscow']]);
+  dw.cfg.mapbg = undefined; // no draw map area
   //delete CONTINENTS;
   window.trace = {};
   setSelTime();

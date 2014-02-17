@@ -384,6 +384,7 @@ function dbCarta(cfg) {
       if (fkey){
         if (!this.m.lmap) {
           this.m.lmap = document.createElement('div');
+          this.m.lmap.style.zIndex = "10000";
           this.m.lmap.style.color = this.cfg.maplabelfg;
           this.m.lmap.style.backgroundColor = this.cfg.maplabelbg;
           this.m.lmap.style.position = 'absolute';
@@ -391,9 +392,7 @@ function dbCarta(cfg) {
           document.body.appendChild(this.m.lmap);
         }
         // ftag + opt.label + opt.desc
-        this.m.lmap.innerHTML = this.marea[fkey]['ftag'] + 
-          (this.marea[fkey]['label'] ? '<br/>' + this.marea[fkey]['label'] : '') + 
-          (this.marea[fkey]['desc'] ? '<br/>' + this.marea[fkey]['desc'] : '');
+        this.m.lmap.innerHTML = this.marea[fkey]['desc'] || this.marea[fkey]['label'] || this.marea[fkey]['ftag'];
         this.m.lmap.style.left = ev.clientX + window.pageXOffset + 'px';
         this.m.lmap.style.top = ev.clientY + window.pageYOffset - this.m.lmap.offsetHeight*1.2 + 'px';
       } else if (this.m.lmap) {
