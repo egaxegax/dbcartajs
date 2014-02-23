@@ -2,7 +2,7 @@
  * List with coords of Moscow Metro lines and stations
  *  [[ftype, ftag, coords, label, centerof, ismap],...]
  * Three points with coords and 'Q' literal implements to bezierCurveTo (...) method.
- * egaxegax, 2013
+ * egax@bk.ru, 2013
  */
 var MLINES = [
   ['moskva_canal', 'mc', [

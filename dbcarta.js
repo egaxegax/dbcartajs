@@ -1,9 +1,9 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.5.
+ * dbCartajs HTML5 Canvas dymanic object map v1.5.1.
  * It uses Proj4js transformations.
  *
  * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
- * egax@bk.ru, 2014
+ * egax@bk.ru, 2013
  */
 function dbCarta(cfg) {
   cfg = cfg||{};
@@ -93,6 +93,9 @@ function dbCarta(cfg) {
     clfunc: {}, // callbacks
     mflood: {}, // obj draw
     marea: {},  // map area
+    /*
+     * Proj4 defs
+     */
     proj: function(){
       if ('Proj4js' in window){
         return {
@@ -105,6 +108,7 @@ function dbCarta(cfg) {
       }
       return {};
     }(),
+    projload: {},
     project: 0,
     /**
     * Convert pixels to points.
@@ -190,8 +194,8 @@ function dbCarta(cfg) {
     /**
     * Draw obj from mflood on Canvas.
     */
-    draw: function() {
-      this.clearCarta();
+    draw: function(dontclear) {
+      if (!dontclear) this.clearCarta();
       this.paintBound();
       // current view
       var rect = this.viewsizeOf();
@@ -236,7 +240,8 @@ function dbCarta(cfg) {
       } else {
         var centerof = [0, 0],
             viewcenterof = [0, 0];
-        if ((proj = this.initProj()) !== undefined)
+        var proj = this.initProj();
+        if (proj !== undefined)
           centerof = [ proj.long0 * 180/Math.PI, proj.lat0 * 180/Math.PI ];
         centerof = this.toPoints(centerof, false);
       }
@@ -614,8 +619,11 @@ function dbCarta(cfg) {
           this.project = project;
           Proj4js.defs[String(project)] = new_defs;
         }
-        if (String(this.project) in Proj4js.defs)
-          return (new Proj4js.Proj(String(this.project)));
+        if (String(this.project) in Proj4js.defs) {
+          this.projload['epsg:4326'] = new Proj4js.Proj('epsg:4326');
+          this.projload[String(this.project)] = new Proj4js.Proj(String(this.project));
+          return this.projload[String(this.project)];
+        }
       }
     },
     isSpherical: function(project) {
@@ -719,9 +727,8 @@ function dbCarta(cfg) {
     },
     transformCoords: function(sourcestr, deststr, coords) {
       if ('Proj4js' in window) {
-        var sourceproj = new Proj4js.Proj(sourcestr);
-        var destproj = new Proj4js.Proj(deststr);
-        destproj.loadProjDefinition();
+        var sourceproj = this.projload[sourcestr],
+            destproj = this.projload[deststr];
         if (destproj.projName == 'longlat') {
           coords[0] = sourceproj.a * coords[0] * Proj4js.common.D2R;
           coords[1] = sourceproj.a * coords[1] * Proj4js.common.D2R;

@@ -1,7 +1,7 @@
 /**
  * Starry Sky and Solar System Bodies.
  * Source: Marble, libnova, k-map.
- * egax, 2013
+ * egax@bk.ru, 2013
  */
 var MUtil = {
   /**
@@ -454,9 +454,13 @@ var Starry = {
     earthRadius,  // degrees
     centerx,      // degrees
     centery,      // degrees
-    time          // array date/time UTC
+    time,         // array date/time UTC
+    darkhide,
+    outhide
     ){
 
+    darkhide = (darkhide == undefined || darkhide);
+    outhide = (outhide == undefined || outhide);
     var left = viewport[0], top = viewport[1],
         right = viewport[2], bottom = viewport[3];
     var cx = centerx * Math.PI/180,
@@ -470,7 +474,7 @@ var Starry = {
     var mstars = [];
     for(var i in starsdata) {
       var d = starsdata[i], size;
-      if (d.length < 8) // hd
+      if (d.length < 6) // hd
         var ra = d[0], dec = d[1], mag = d[2], hip = d[3], label = d[4];
       else // tycho
         var ra = d[0], dec = d[1], mag = d[6], hip = d[5], label = d[7];
@@ -485,11 +489,11 @@ var Starry = {
           py = y * skyRadius;
       
       // darkside
-      if ( z < 0 && ( (px * px + py * py) < (earthRadius * earthRadius) ) )
+      if ( darkhide && (z < 0 && ((px * px + py * py) < (earthRadius * earthRadius))) )
           continue;
 
       // outside
-      if ( (px < left || px >= right) || (py > top || py <= bottom) )
+      if ( outhide && ((px < left || px >= right) || (py > top || py <= bottom)) )
           continue;
 
       // star size
@@ -510,7 +514,8 @@ var Starry = {
     earthRadiusM, // meters
     centerx,      // degrees
     centery,      // degrees
-    time          // array date/time GMT
+    time,         // array date/time GMT
+    darkhide
     ){
 
     var left = viewport[0], top = viewport[1],
@@ -537,12 +542,12 @@ var Starry = {
           py = y * skyRadius;
       
       // darkside
-      if ( z < 0 && ( (px * px + py * py) < (earthRadius * earthRadius) ) )
+      if ( darkhide && (z < 0 && ((px * px + py * py) < (earthRadius * earthRadius))) )
           continue;
 
       // outside
-      //if ( (px < left || px >= right) || (py > top || py <= bottom) )
-      //    continue;
+//      if ( (px < left || px >= right) || (py > top || py <= bottom) )
+//          continue;
 
       if ( i == 0 ) // label
         labels.push([ [[px, py]] ]);

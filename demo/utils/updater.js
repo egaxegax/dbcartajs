@@ -1,6 +1,6 @@
 /**
  * XmlHttpRequest updater.
- * egax, 2013
+ * egax@bk.ru, 2013
  */
 var upfunc = function(item){
   // par [{[id:%,]url:%[,params:%,mycallback:%]},...] 
