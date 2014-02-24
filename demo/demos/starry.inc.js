@@ -233,13 +233,18 @@ function draw(){
 // Scale map by height above Earth
 function scaleheight() {
   var proj = dw.initProj();
-  var rhscale = ((proj.p15 - 1.0)/(proj.p15 + 1.0));
-  // skyratio measure above 40000 km
-  var etalon_p15 = (1.0 + 40000000/proj.a);
-  var etalon_rhscale = ((etalon_p15 - 1.0)/(etalon_p15 + 1.0));
-  var h = (rhscale/etalon_rhscale * rhscale/etalon_rhscale);
+  var projh = document.getElementById('projh').value * 1000,
+      cx = proj.long0 * 180/Math.PI,
+      cy = proj.lat0 * 180/Math.PI;
+  // set height
+  var proj = dw.initProj(' +h=' + projh + ' +lon_0=' + cx + ' +lat_0=' + cy);
+  // skyratio measure on 40000 km
+  var rhscale = ((proj.p15 - 1.0)/(proj.p15 + 1.0)),
+      etalon_p15 = (1.0 + 40000000/proj.a),
+      etalon_rhscale = ((etalon_p15 - 1.0)/(etalon_p15 + 1.0)),
+      sh = (rhscale/etalon_rhscale * rhscale/etalon_rhscale);
   dw.scaleCarta(1);
-  dw.scaleCarta(1/h);
+  dw.scaleCarta(1/sh);
 }
 function getSelTime() {
   return [Number(document.getElementById('yy').value),
@@ -456,11 +461,11 @@ function init() {
   dw.initProj(202, ' +h=' + projh.value * 1000 + ' +lon_0=' + pov[0] + ' +lat_0=' + pov[1]);
   dw.loadCarta(CONTINENTS);
   dw.loadCarta(dw.createMeridians());
-  dw.loadCarta([['DotPort', '1', [pov], 'Москва']]);
-  scaleheight();
+  dw.loadCarta([['DotPort', 'Moscow', [pov], 'Москва']]);
   delete dw.cfg.mapbg; // no draw map area
   //delete CONTINENTS;
   window.trace = {};
   setSelTime();
+  scaleheight();
   draw();
 }
