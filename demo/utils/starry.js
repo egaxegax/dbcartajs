@@ -811,9 +811,10 @@ var Solar = {
     for(var i in pos) {
       var ps = pos[i],
           ecl = this.ecl_helio2geo(ps[0], ps[1], ps[2], ps[3], d),
+          ecl = this.ecl2eq(ecl[0], ecl[1], ecl[2], d),
           eq = MVector.rect2spheric(ecl[0], ecl[1], ecl[2]);
       mplanets.push([ MUtil.ang360(eq[0] * 180/Math.PI) * Math.PI/180, eq[1], 2, i, i ]);
-    }    
+    }
     return mplanets;
   }
 }
