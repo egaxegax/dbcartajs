@@ -40,11 +40,12 @@ function turn(cx, cy) {
 // Calcucate Right Ascention and Declination (Ra/Dec)
 function calcSpheric(coords, dt) {
   var proj = dw.initProj();
-  var skyratio = proj.h/proj.a;
+  var rect = dw.viewsizeOf(),
+      skyRadius = 0.6 * Math.sqrt((rect[2]-rect[0])*(rect[2]-rect[0]) + (rect[3]-rect[1])*(rect[3]-rect[1])),
       gmst = Starry.siderealTime(dt),
       skyRotationAngle = gmst / 12.0 * Math.PI;
-  coords[0] /= skyratio;
-  coords[1] /= skyratio;
+  coords[0] /= skyRadius * Math.PI/180;
+  coords[1] /= skyRadius * Math.PI/180;
   var cy = -proj.lat0 * 180/Math.PI,
       cx = proj.long0 * 180/Math.PI + skyRotationAngle * 180/Math.PI;
   var skyproj = '+proj=ortho +units=m +a=' + proj.a + ' +b=' + proj.b + ' +lon_0=' + cx + ' +lat_0=' + cy;
@@ -101,7 +102,7 @@ function draw(){
       cx = proj.long0 * 180/Math.PI,
       cy = proj.lat0 * 180/Math.PI,
       rect = dw.viewsizeOf(),
-      skyRadius = 180/Math.PI * projh/proj.a,
+      skyRadius = 0.6 * Math.sqrt((rect[2]-rect[0])*(rect[2]-rect[0]) + (rect[3]-rect[1])*(rect[3]-rect[1])),
       eaRadius = Math.sqrt((proj.p15 - 1.0)/(proj.p15 + 1.0)) * 180/Math.PI,
       eaRadiusM = proj.a,
       gmtime = getSelTime(),
@@ -238,13 +239,10 @@ function scaleheight() {
       cy = proj.lat0 * 180/Math.PI;
   // set height
   var proj = dw.initProj(' +h=' + projh + ' +lon_0=' + cx + ' +lat_0=' + cy);
-  // skyratio measure on 40000 km
-  var rhscale = ((proj.p15 - 1.0)/(proj.p15 + 1.0)),
-      etalon_p15 = (1.0 + 40000000/proj.a),
-      etalon_rhscale = ((etalon_p15 - 1.0)/(etalon_p15 + 1.0)),
-      sh = (rhscale/etalon_rhscale * rhscale/etalon_rhscale);
+  // skyratio
+  var rhscale = Math.sqrt((proj.p15 - 1.0)/(proj.p15 + 1.0));
   dw.scaleCarta(1);
-  dw.scaleCarta(1/sh);
+  dw.scaleCarta(1/rhscale * 4/proj.p15);
 }
 function getSelTime() {
   return [Number(document.getElementById('yy').value),

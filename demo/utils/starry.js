@@ -330,9 +330,9 @@ var MGeo = {
       }
     }
     s2=ss2.concat(ss1);
-    if (s1.length && s2.length) {
-      if (this.distance(s1[0], s2[0]) < Math.PI/2.0) s2.reverse();
-    }
+//    if (s1.length && s2.length) {
+//      if (this.distance(s1[0], s2[0]) < Math.PI/2.0) s2.reverse();
+//    }
     var s = s1.concat(s2);
     if (s) {
       s.push(s[0]);
@@ -475,9 +475,9 @@ var Starry = {
     for(var i in starsdata) {
       var d = starsdata[i], size;
       if (d.length < 6) // hd
-        var ra = d[0], dec = d[1], mag = d[2], hip = d[3], label = d[4];
+        var ra = d[0], dec = d[1], mag = d[2], hd = d[3], label = d[4];
       else // tycho
-        var ra = d[0], dec = d[1], mag = d[6], hip = d[5], label = d[7];
+        var ra = d[0], dec = d[1], mag = d[6], hd = d[5], label = d[7];
       var qpos = Qn.fromSpherical(ra, dec);      
       var q = Qn.rotateAroundAxis(qpos, skyAxisMatrix);
       var w = q[0], x = q[1], y = q[2], z = q[3];
@@ -500,7 +500,7 @@ var Starry = {
       if ( mag < 7 ) size = 7.0 - mag;
       else size = 1.0;
 
-      mstars.push([ [[px, py]], size, label, hip, {hip: hip, label: label, ra: ra, dec: dec} ]);
+      mstars.push([ [[px, py]], size, label, hd, {HD: hd, label: label, ra: ra, dec: dec} ]);
     }
     return mstars;
   },
