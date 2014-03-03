@@ -330,9 +330,9 @@ var MGeo = {
       }
     }
     s2=ss2.concat(ss1);
-//    if (s1.length && s2.length) {
-//      if (this.distance(s1[0], s2[0]) < Math.PI/2.0) s2.reverse();
-//    }
+    if (s1.length && s2.length) {
+      if (this.distance(s1[0], s2[0]) < Math.PI/2.0) s2.reverse();
+    }
     var s = s1.concat(s2);
     if (s) {
       s.push(s[0]);
