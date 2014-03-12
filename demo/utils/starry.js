@@ -251,14 +251,21 @@ var MGeo = {
     cy *= Math.PI/180;
     return ((Math.sin(y) * Math.sin(cy) - Math.cos(y) * Math.cos(cy) * Math.cos(Math.PI + (cx - x)))>0);
   },
+  isnight: function(sung, x, y) {
+    x *= Math.PI/180;
+    y *= Math.PI/180;
+    var rect = MVector.spheric2rect(x, y),
+        v = rect[0] * sung[0] + rect[1] * sung[1] + rect[2] * sung[2];
+    return v < 0;
+  },
   bigcircle1spheric: function(x, y, col_vertex, cx, cy, dolight){
     var ct, L, F, T, f=0,
         k = (col_vertex || 10),
         ss1 = [], ss2 = [];
-    for (var i=0; i<=360*col_vertex; i++) {
+    for (var i=0; i<360*col_vertex; i++) {
       if (y!=0) {
         ct = -1 / Math.tan(y*Math.PI/180);
-        L = -180 + i / k;
+        L = -179.999 + i / k;
         T = ct * Math.cos((L - x)*Math.PI/180);
         F = Math.atan(T)*180/Math.PI;
       } else { // equinox
@@ -299,45 +306,6 @@ var MGeo = {
         x1 = pt2[0] * Math.PI/180.0,
         y1 = pt2[1] * Math.PI/180.0;
     return Math.acos(Math.cos(y) * Math.cos(y1) * Math.cos(x - x1) + Math.sin(y) * Math.sin(y1));
-  },
-  /**
-  * Day/Night zone.
-  * T time array.
-  * h height above Earth (in km).
-  * CX, CY center point (in deg.).
-  */
-  terminator: function(time, h, cx, cy) {
-    var sunpos = Solar.loadSun(time),
-        rect = MVector.spheric2rect(sunpos[0], sunpos[1]),
-        sgeo = MVector.rect2geo(time, rect[0], rect[1], rect[2]);
-    var s1 = MGeo.bigcircle1spheric(sgeo[0], sgeo[1], 1, cx, cy, true);
-    h += this.AE;
-    var ss1 = [];
-    for(var i in s1) {
-      if (this.distance(s1[i], [cx, cy])<=Math.acos(this.AE/h)) ss1.push(s1[i]);
-    }
-    s1 = ss1;
-    var s2 = this.circle1spheric(cx, cy, this.AE*Math.acos(this.AE/h)-100,60);
-    var ss1 = [], ss2 = [], f=0;
-    for(var i in s2) {
-      if (!this.islight(s2[i][0], s2[i][1], sgeo[0], sgeo[1])) {
-        if (!f)
-          ss1.push(s2[i]);
-        else
-          ss2.push(s2[i]);
-      } else {
-        f = true;
-      }
-    }
-    s2=ss2.concat(ss1);
-    if (s1.length && s2.length) {
-      if (this.distance(s1[0], s2[0]) < Math.PI/2.0) s2.reverse();
-    }
-    var s = s1.concat(s2);
-    if (s) {
-      s.push(s[0]);
-    }
-    return s;
   }
 };
 var Qn = {
@@ -549,10 +517,9 @@ var Starry = {
 //      if ( (px < left || px >= right) || (py > top || py <= bottom) )
 //          continue;
 
-      if ( i == 0 ) // label
+      if ( i == 0 )
         labels.push([ [[px, py]] ]);
-      else // points
-        points.push([px, py]);
+      points.push([px, py]);
     }
     return [labels, [[points]]];
   }

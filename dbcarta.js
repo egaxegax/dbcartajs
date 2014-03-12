@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.5.1.
+ * dbCartajs HTML5 Canvas dymanic object map v1.5.2.
  * It uses Proj4js transformations.
  *
  * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
@@ -176,7 +176,7 @@ function dbCarta(cfg) {
       return lonlat;
     },
     // ----------------------------------
-    checkScale: function(cx, cy) {
+    chkScale: function(cx, cy) {
       var cw = this.width,
           ch = this.height,
           h = ch/5,
@@ -185,9 +185,9 @@ function dbCarta(cfg) {
           ttop = ch/2 - h/2;
       var zoom = (this.m.scale < 1 ? 2-1/this.m.scale : this.m.scale);
       if (cx > tleft && cx < tleft + w && cy > ttop && cy < ttop + h/2.0) {
-        if (zoom < 50) zoom++;
+        if (zoom < 50) zoom += 0.5;
       } else if (cx > tleft && cx < tleft + w && cy > ttop + h/2.0 && cy < ttop + h) {
-        if (zoom > -18) zoom--;
+        if (zoom > -18) zoom -= 0.5;
       } else return;
       return (zoom > 1 ? zoom : 1/(2-zoom));
     },
@@ -338,13 +338,13 @@ function dbCarta(cfg) {
             mwidth = (mopt['width'] || 1) / self.m.scale,
             mcolor = self.cfg.mapbg;
         ctx.beginPath();
-        if (mopt['cls'] == 'Dot')
+        if (mopt['cls'] == 'Dot' && self.chkPts(m['pts'][0]))
           ctx.arc(m['pts'][0][0], m['pts'][0][1], msize, 0, Math.PI*2, 0);
-        else if (mopt['cls'] == 'Rect')
-          ctx.rect(m['pts'][0][0] - msize/2.0, m['pts'][0][1] - msize/2.0, msize, msize);
+        else if (mopt['cls'] == 'Rect' && self.chkPts(m['pts'][0]))
+            ctx.rect(m['pts'][0][0] - msize/2.0, m['pts'][0][1] - msize/2.0, msize, msize);
         else
           for (var j in m['pts'])
-            if (self.chkPts( m['pts'][j]))
+            if (self.chkPts(m['pts'][j]))
               ctx.lineTo(m['pts'][j][0], m['pts'][j][1]);
         if (domap != undefined && mcolor) {
           ctx.lineWidth = mwidth;
@@ -389,10 +389,10 @@ function dbCarta(cfg) {
       if (fkey){
         if (!this.m.lmap) {
           this.m.lmap = document.createElement('div');
-          this.m.lmap.style.zIndex = "10000";
-          this.m.lmap.style.color = this.cfg.maplabelfg;
           this.m.lmap.style.backgroundColor = this.cfg.maplabelbg;
+          this.m.lmap.style.color = this.cfg.maplabelfg;
           this.m.lmap.style.position = 'absolute';
+          this.m.lmap.style.zIndex = '10000';
           this.m.lmap.onmousemove = function(){ this.innerHTML = ''; };
           document.body.appendChild(this.m.lmap);
         }
@@ -792,7 +792,7 @@ function dbCarta(cfg) {
     },
     onclick: function(ev) {
       var scale, pts = this.canvasXY(ev);
-      if (scale = this.checkScale(pts[0], pts[1])) {
+      if (scale = this.chkScale(pts[0], pts[1])) {
         this.scaleCarta(1); // fix labels
         this.scaleCarta(scale);
       } else if (this.isSpherical()) {

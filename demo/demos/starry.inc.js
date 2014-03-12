@@ -1,5 +1,5 @@
 /**
- * Starry Sky Canvas map.
+ * Starry Sky Canvas map v2.0.
  * View stars, constellations, planets, sattelites on Earth background.
  * egax@bk.ru, 2013
  */
@@ -13,18 +13,31 @@ var mopt = {
   'planet': {cls: 'Dot', fg: 'rgb(220,200,200)', labelcolor: 'rgb(255,155,128)'},
   'earth': {},
   'sattrac': {cls: 'Line', fg: 'rgba(100,100,220,0.4)'},    
-  'satsurface': {cls: 'Dot', fg: 'rgb(0,220,0)', size: '2'},
-  'sattrace': {cls: 'Dot', fg: 'rgba(220,220,0,0.3)'},
+  'satsurface': {cls: 'Dot', fg: 'rgba(0,0,220,0.5)', size: '2'},
+  'sattrace': {cls: 'Line', fg: 'rgb(255,255,0)'},
   'satsector': {cls: 'Polygon', fg: 'rgba(200,200,170,0.1)', bg: 'rgba(200,200,170,0.1)', width: '0.1'},
   'satpos':  {cls: 'Dot', fg: 'rgb(200,200,170)', labelcolor: 'rgb(200,200,170)'},
   'terminator': {cls: 'Polygon', fg: 'rgba(0,0,0,0.3)', bg: 'rgba(0,0,0,0.3)'}
-}
+};
+// list sat
+var msat = {};
 // layers on
 function layers() {
   var m = {};
-  for (var i in mopt)
-    if (!mopt[i]['hide']) m[i] = mopt[i];
+  for (var i in mopt) if (!mopt[i]['hide']) m[i] = mopt[i];
   return m;
+}
+// Change proj
+function proj() { 
+  dw.changeProject(document.getElementById('projlist').value);
+  // reset map
+  var centerof = dw.toPoints([0, 0], false);
+  dw.centerCarta(centerof[0] + dw.m.offset[0], centerof[1] + dw.m.offset[1]);
+  dw.scaleCarta(1);
+  dw.scaleCarta( dw.project == 101 ? 0.5 : 1 );
+  dw.style.backgroundColor = dw.isSpherical() ? 'rgb(17,17,96)' : 'rgb(186,196,205)';
+  scaleheight();
+  draw();
 }
 // Rotate Sphere on sides
 function turn(cx, cy) {
@@ -35,10 +48,11 @@ function turn(cx, cy) {
       cy += proj.lat0 * 180/Math.PI;
       dw.initProj(' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
       draw();
-    }
+    }  
 }
-// Calcucate Right Ascention and Declination (Ra/Dec)
+// Calculate Right Ascention and Declination (ra/dec)
 function calcSpheric(coords, dt) {
+  if (!dw.isSpherical()) return;
   var proj = dw.initProj();
   var rect = dw.viewsizeOf(),
       skyRadius = 0.6 * Math.sqrt((rect[2]-rect[0])*(rect[2]-rect[0]) + (rect[3]-rect[1])*(rect[3]-rect[1])),
@@ -59,11 +73,53 @@ function calcSpheric(coords, dt) {
   }
   return pt;
 }
+// Night zone coords
+function terminator(time, h, cx, cy) {
+  var sunpos = Solar.loadSun(time),
+      srect = MVector.spheric2rect(sunpos[0], sunpos[1]),
+      sgeo = MVector.rect2geo(time, srect[0], srect[1], srect[2]);
+  if (dw.isSpherical()) {
+    var s1 = MGeo.bigcircle1spheric(sgeo[0], sgeo[1], 1, cx, cy, true);
+    h += MGeo.AE;
+    var ss1 = [];
+    for(var i in s1) {
+      if (MGeo.distance(s1[i], [cx, cy])<=Math.acos(MGeo.AE/h)) ss1.push(s1[i]);
+    }
+    s1 = ss1;
+    var s2 = MGeo.circle1spheric(cx, cy, MGeo.AE*Math.acos(MGeo.AE/h)-100,60);
+    var ss1 = [], ss2 = [], f=0;
+    for(var i in s2) {
+      if (!MGeo.islight(s2[i][0], s2[i][1], sgeo[0], sgeo[1])) {
+        if (!f)
+          ss1.push(s2[i]);
+        else
+          ss2.push(s2[i]);
+      } else {
+        f = true;
+      }
+    }
+    s2=ss2.concat(ss1);
+    if (s1.length && s2.length) {
+      if (MGeo.distance(s1[0], s2[0]) < Math.PI/4.0) s2.reverse();
+    }
+    var s = s1.concat(s2);
+    if (s) {
+      s.push(s[0]);
+    }
+  } else {
+    var s = MGeo.bigcircle1spheric(sgeo[0], sgeo[1], 5),
+        isnight = MGeo.isnight(srect, 179.99, 89.99);
+    if (isnight) s.push([179.99,89.99]); else s.push([179.99,-89.99]);
+    if (isnight) s.push([-179.99,89.99]); else s.push([-179.99,-89.99]);
+    s.push(s[0]);
+  }
+  return s;
+}
 // Render points (stars, tracs) on lonlat
 function drawlonlat(pts, ftype, areasize){
+  if (!dw.isSpherical()) return;
   var proj = dw.initProj();
-  var projh = document.getElementById('projh').value * 1000,
-      cx = proj.long0 * 180/Math.PI,
+  var cx = proj.long0 * 180/Math.PI,
       cy = proj.lat0 * 180/Math.PI;
   // switch to lonlat
   dw.initProj(0, '');
@@ -76,7 +132,7 @@ function drawlonlat(pts, ftype, areasize){
       dw.mopt[ftype]['size'] = msize;
     var m = dw.paintCarta(mcoords, ftype, mlabel);
     // add map area
-    if (mftag && dw.chkPts(m['pts'][0])) {
+    if (mftag) {
       var desc = [];
       if (pts[i][4]) // opt.info
         for (var k in pts[i][4])
@@ -92,14 +148,13 @@ function drawlonlat(pts, ftype, areasize){
       dw.mopt[ftype]['size'] = areasize;
   }
   // restore spherical proj
-  dw.initProj(202, ' +h=' + projh + ' +lon_0=' + cx + ' +lat_0=' + cy);
+  dw.initProj(202, ' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
 }
 // Render all layers
 function draw(){
   var mlayers = layers();
   var proj = dw.initProj();
-  var projh = document.getElementById('projh').value * 1000,
-      cx = proj.long0 * 180/Math.PI,
+  var cx = proj.long0 * 180/Math.PI,
       cy = proj.lat0 * 180/Math.PI,
       rect = dw.viewsizeOf(),
       skyRadius = 0.6 * Math.sqrt((rect[2]-rect[0])*(rect[2]-rect[0]) + (rect[3]-rect[1])*(rect[3]-rect[1])),
@@ -107,7 +162,17 @@ function draw(){
       eaRadiusM = proj.a,
       gmtime = getSelTime(),
       darkhide = ('earth' in mlayers);
+  var sat = {};
+  // clear all
   dw.clearCarta();
+  for (var i in dw.mflood) {
+    switch (dw.mflood[i]['ftype']) {
+    case 'terminator':
+    case 'sattrace':
+    case 'satsurface':
+      delete dw.mflood[i];
+    }
+  }
   // clear map area
   dw.marea = {};
   for (var ftype in mlayers) {
@@ -151,8 +216,8 @@ function draw(){
       drawlonlat(mplanets, 'planet', 4);
       break;
     case 'terminator':
-      var term = MGeo.terminator(gmtime, projh/1000.0, cx, cy);
-      dw.paintCarta(term, 'terminator');
+      var term = terminator(gmtime, proj.h/1000, cx, cy);
+      dw.loadCarta([['terminator', '1', term]], 1);
       break;
     case 'satpos':
     case 'sattrac':
@@ -161,52 +226,66 @@ function draw(){
     case 'satsector':
       var tledata = TLEDATA;
       for (var i in tledata){
-        if (!tledata[i][1])
+        if (!tledata[i])
           continue; // check data
-        var pos = [];
-        var satrec = satellite.twoline2satrec(tledata[i][1], tledata[i][2]);
-        // by 2 mean motion ago
-        var utc1 = Date.UTC(gmtime[0], gmtime[1], gmtime[2], gmtime[3], gmtime[4], gmtime[5]),
-            ps = 2.0 * Math.PI * 1/satrec.no * 60.0,
-            delta = 0, step = ps / 100.0, vrect = [];
-        while (delta < ps) {
-          var utc2 = new Date();
-          utc2.setTime(utc1 - delta * 1000);
-          var pv = satellite.propagate(satrec, utc2.getUTCFullYear(), utc2.getUTCMonth()+1, utc2.getUTCDate(), utc2.getHours(), utc2.getMinutes(), utc2.getSeconds());
-          delta += step;
-          vrect.push(pv[0]);
+        if (msat[tledata[i][0]])
+          continue; // skip hidden
+        if (!sat[i]) {
+          var satrec = satellite.twoline2satrec(tledata[i][1], tledata[i][2]);
+          // orbital period
+          var utc1 = Date.UTC(gmtime[0], gmtime[1]-1, gmtime[2], gmtime[3], gmtime[4], gmtime[5]),
+              ps = 2.0 * Math.PI * 60.0/satrec.no, // rad.per min to 2 period
+              delta = 0, step = ps / 200.0, vrect = [], vgeo = [];
+          while (delta <= ps) {
+            var utc2 = new Date();
+            utc2.setTime(utc1 - delta * 1000);
+            var pv = satellite.propagate(satrec, utc2.getUTCFullYear(), utc2.getUTCMonth()+1, utc2.getUTCDate(), utc2.getUTCHours(), utc2.getUTCMinutes(), utc2.getUTCSeconds()),
+                gmst = satellite.gstime_from_date(utc2.getUTCFullYear(), utc2.getUTCMonth()+1, utc2.getUTCDate(), utc2.getUTCHours(), utc2.getUTCMinutes(), utc2.getUTCSeconds()),
+                pgeo = satellite.eci_to_geodetic(pv['position'], gmst);
+            delta += step;
+            vrect.push([pv['position']['x'], pv['position']['y'], pv['position']['z']]);
+            vgeo.push([MUtil.ang180(pgeo['longitude'] * 180/Math.PI), MUtil.ang90(pgeo['latitude'] * 180/Math.PI)]);
+          }
+          sat[i] = {
+            'tracs': [tledata[i][0], vrect],
+            'mtracs': Starry.renderSat(vrect, rect, eaRadius, eaRadiusM, cx, cy, gmtime, darkhide),
+            'mcoords': vgeo
+          };
         }
-        var tracs = [tledata[i][0], vrect];
-        var mtracs = Starry.renderSat(tracs[1], rect, eaRadius, eaRadiusM, cx, cy, gmtime, darkhide),
-            mcoords = MVector.rect2geo(gmtime, tracs[1][0][0], tracs[1][0][1], tracs[1][0][2]);
+        var tracs = sat[i]['tracs'], 
+            mtracs = sat[i]['mtracs'], 
+            mcoords = sat[i]['mcoords'];
+        // calc sat.height
+        var sath = Math.sqrt(tracs[1][0][0]*tracs[1][0][0] + tracs[1][0][1]*tracs[1][0][1] + tracs[1][0][2]*tracs[1][0][2]);
+        sath -= MGeo.AE;
         // orbit
-        if (ftype == 'sattrac') {
+        if (ftype == 'sattrac')
           drawlonlat(mtracs[1], 'sattrac');
-        }
         // surface point
         if (ftype == 'satsurface') {
-          var m = dw.paintCarta([mcoords], 'satsurface');
-          if (dw.chkPts(m['pts'][0])) {
-            dw.marea['satsurface'+i] = {
-              'ftype': 'satsurface',
-              'ftag': i,
-              'pts': m['pts'],
-              'desc': tracs[0]
-            }
+          dw.loadCarta([['satsurface', i, [mcoords[0]]]], 1);
+          var m = {label: tracs[0], lon: mcoords[0][0], lat: mcoords[0][1], h: sath},
+              desc = [];
+          for (var k in m) if (m[k]) desc.push('<b>' + k + '</b>: ' + m[k]);
+          dw.marea['satsurface_' + i] = {
+            'ftype': 'satsurface',
+            'ftag': i,
+            'pts': dw.mflood['satsurface_' + i]['pts'],
+            'desc': desc.join('<br/>')
           }
         }
         // surface trace
         if (ftype == 'sattrace') {
-          if (!trace[i]) trace[i] = [];
-          trace[i].push(mcoords);
-          if (trace[i].length > 40) trace[i].shift();
-          for(var j in trace[i])
-            dw.paintCarta([trace[i][j]], 'sattrace');
+          var trace = [];
+          for (var j in mcoords)
+            if (mcoords[j-1] && mcoords[j][0] - mcoords[j-1][0] < 90)
+              trace.push(['sattrace', i + '.' + j, [mcoords[j-1], mcoords[j]]]);
+          dw.loadCarta(trace, 1);
         }
-        if (mtracs[0].length) {
+        if (dw.isSpherical() && mtracs[0].length) {
           // sat.fields of vision
           if (ftype == 'satsector') {
-            var pts = MGeo.circle1spheric(mcoords[0], mcoords[1], MGeo.AE * 18 * Math.PI/180, 20);
+            var pts = MGeo.circle1spheric(mcoords[0][0], mcoords[0][1], MGeo.AE * 18 * Math.PI/180, 20);
             // conv to lonlat
             for(var j in pts){
               if (pt = dw.transformCoords('epsg:4326', String(dw.project), pts[j])) {
@@ -218,13 +297,9 @@ function draw(){
               }
             }
           }
-          if (ftype == 'satpos') {
-            // calc sat.height
-            var x = tracs[1][0][0], y = tracs[1][0][1], z = tracs[1][0][2], 
-                h = Math.sqrt(x*x + y*y + z*z);
-            // draw sat.label
-            drawlonlat([[[mtracs[0][0][0][0]], 16, tracs[0], i, {label: tracs[0], height: Math.floor(h)}]], 'satpos');
-          }
+          // sat.label
+          if (ftype == 'satpos')
+            drawlonlat([[[mtracs[0][0][0][0]], 16, tracs[0], i, {label: tracs[0], h: Math.floor(sath)}]], 'satpos');
         }
       }
       break;
@@ -233,6 +308,7 @@ function draw(){
 }
 // Scale map by height above Earth
 function scaleheight() {
+  if (!dw.isSpherical()) return;
   var proj = dw.initProj();
   var projh = document.getElementById('projh').value * 1000,
       cx = proj.long0 * 180/Math.PI,
@@ -269,13 +345,13 @@ function setSelTime(interval) {
 function setAutoTime() {
   if (window.autotime) {
     window.autotime = window.clearInterval(window.autotime);
-    document.getElementById('btauto').textContent = 'play';
+    document.getElementById('btauto').textContent = '▶';
   } else {
     window.autotime = setInterval(function() {
       setSelTime(500*1000);
       draw();
     }, 500);
-    document.getElementById('btauto').textContent = 'stop';
+    document.getElementById('btauto').textContent = '◼';
   }
 }
 function init() {
@@ -326,21 +402,32 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '5%';
-  col.align = 'center';
-  var lstlayers = el = document.createElement('select');
-  el.id = 'lstlayers';
+  col.width = '1%';
+  var layerlist = el = document.createElement('select');
+  el.id = 'layerlist';
   col.appendChild(el);
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '10%';
-  col.align = 'center';
-  col.appendChild(document.createTextNode('height '));
+  col.width = '1%';
+  var satlist = el = document.createElement('select');
+  el.id = 'satlist';
+  col.appendChild(el);
+  row.appendChild(col);
+
+  var col = document.createElement('td');
+  col.width = '1%';
   var projh = el = document.createElement('select');
   el.id = 'projh';
   col.appendChild(el);
-  col.appendChild(document.createTextNode(' km'));
+  row.appendChild(col);
+
+  var col = document.createElement('td');
+  col.width = '1%';
+  col.align = 'center';
+  var projlist = el = document.createElement('select');
+  el.id = 'projlist';
+  col.appendChild(el);
   row.appendChild(col);
 
   var col = document.createElement('td');
@@ -363,17 +450,13 @@ function init() {
   el = document.createElement('button');
   el.id = 'btauto';
   el.onclick = setAutoTime;
-  el.title = 'autoupdate by interval';
-  el.appendChild(document.createTextNode('play'));
+  el.title = 'update by interval';
+  el.appendChild(document.createTextNode('▶'));
   col.appendChild(yy);
-  col.appendChild(document.createTextNode('-'));
   col.appendChild(mm);
-  col.appendChild(document.createTextNode('-'));
   col.appendChild(dd);
   col.appendChild(hh);
-  col.appendChild(document.createTextNode(':'));
   col.appendChild(mi);
-  col.appendChild(document.createTextNode(':'));
   col.appendChild(ss);
   col.appendChild(el);
   row.appendChild(col);
@@ -382,7 +465,8 @@ function init() {
   col.width = '10%';
   col.align = 'center';
   var el = document.createElement('div');
-  el.id = 'coords';
+  el.id = 'tcoord';
+  el.style.fontSize = 'smaller';
   col.appendChild(el);
   row.appendChild(col);
 
@@ -397,24 +481,39 @@ function init() {
 
   dw = new dbCarta({id:'mcol', height:col.offsetHeight});
   // change some colors
-  dw.style.backgroundColor = 'rgb(17,17,96)';
   dw.mopt['DotPort']['fg'] = 'rgb(220,0,0)';
-  dw.mopt['DotPort']['size'] = '3';
   // define new layers
   dw.extend(dw.mopt, layers());
   var optfunc = function(v, o) {
     var el = document.createElement('option');
-    el.id = 'o-' + v;
     el.value = v;
     el.appendChild(document.createTextNode(v));
     o.appendChild(el);
   };
   // list layers
-  optfunc('layers...', lstlayers)
-  for(var i in layers()) optfunc(i, lstlayers);
-  // nsper proj height list
+  optfunc('layers...', layerlist);
+  layerlist.options[layerlist.selectedIndex].disabled = 'true';
+  for(var i in layers()) optfunc(i, layerlist);
+  // list sat
+  optfunc('satellites...', satlist);
+  satlist.options[satlist.selectedIndex].disabled = 'true';
+  for(var i in TLEDATA) if (TLEDATA[i]) optfunc(TLEDATA[i][0], satlist);
+  // list nsper proj height
+  optfunc('height...', projh);
+  projh.options[projh.selectedIndex].disabled = 'true';
   for(var i=1000; i<103000; i+=3000) optfunc(i, projh);
-  projh.value = 25000;
+  projh.value = 40000;
+  // list proj
+  optfunc('proj...', projlist);
+  projlist.options[projlist.selectedIndex].disabled = 'true';
+  for(var i in { 0: dw.proj[0], 101: dw.proj[0], 202: dw.proj[202] }) {
+    var projname = dw.proj[i].split(' ')[0].split('=')[1];
+    el = document.createElement('option');
+    el.value = i;
+    el.appendChild(document.createTextNode(projname));
+    projlist.appendChild(el);
+  }
+  projlist.value = '202';
   // fill date/time
   for(i=1999; i<2050; i++) optfunc(i, yy);
   for(i=1; i<13; i++) optfunc(i, mm);
@@ -423,17 +522,28 @@ function init() {
   for(i=0; i<60; i++) optfunc(i, mi);
   for(i=0; i<60; i++) optfunc(i, ss);
   // events
-  lstlayers.onchange = function() {
-    var opt = document.getElementById('o-' + this.value);
+  layerlist.onchange = function() {
     mopt[this.value]['hide'] = (!mopt[this.value]['hide']);
-    opt.style.color = (mopt[this.value]['hide'] ? 'lightgray' : '');
-    this.value = 'layers...';
+    this.options[this.selectedIndex].style.color = (mopt[this.value]['hide'] ? 'lightgray' : '');
     draw();
+  }
+  satlist.onchange = function() {
+    msat[this.value] = (!msat[this.value]);
+    this.options[this.selectedIndex].style.color = (msat[this.value] ? 'lightgray' : '');
+    draw();
+  }
+  // hide some sat
+  for(var i=0; i<satlist.options.length; i++) {
+    if (i>1) {
+      satlist.options[i].style.color = 'lightgray';
+      msat[satlist.options[i].value] = true;
+    }
   }
   projh.onchange = function() {
     scaleheight();
     draw();
   }
+  projlist.onchange = proj;
   yy.onchange = draw;
   mm.onchange = draw;
   dd.onchange = draw;
@@ -442,28 +552,31 @@ function init() {
   ss.onchange = draw;
   dw.clfunc.onclick = draw;
   // curr. coords
-  dw.clfunc.onmousemove = function(sd) {
-    mcoord = document.getElementById('coords');
-    mcoord.innerHTML = 'Ra/Dec:';
-    if (scoords = calcSpheric(sd, getSelTime())) {
-      // in radians
-      mcoord.innerHTML = 'Ra: ' + scoords[0].toFixed(4) + ' Dec: ' + scoords[1].toFixed(4);
-      // in hms, dms
-//      var ra = MUtil.deg2hms(scoords[0] * 180/Math.PI).join(':'),
-//          dec = MUtil.deg2dms(scoords[1] * 180/Math.PI).join(':');
-//      mcoord.innerHTML = 'Ra: ' + ra + ' Dec: ' + dec;
+  dw.clfunc.onmousemove = function(sd, dd) {
+    var tcoord = document.getElementById('tcoord');
+    if (dw.isSpherical()) {
+      if (scoords = calcSpheric(sd, getSelTime())) {
+        // in radians
+        tcoord.innerHTML = 'Ra: ' + scoords[0].toFixed(4) + ' Dec: ' + scoords[1].toFixed(4);
+        // in hms, dms
+//        var ra = MUtil.deg2hms(scoords[0] * 180/Math.PI).join(':'),
+//            dec = MUtil.deg2dms(scoords[1] * 180/Math.PI).join(':');
+//        tcoord.innerHTML = 'Ra: ' + ra + ' Dec: ' + dec;
+      }
+    } else if (dd) {
+      tcoord.innerHTML = ' Lon: ' + dd[0].toFixed(2) + ' Lat: ' + dd[1].toFixed(2);
     }
   }
   // draw
-  var pov = [37.700,55.750];
-  dw.initProj(202, ' +h=' + projh.value * 1000 + ' +lon_0=' + pov[0] + ' +lat_0=' + pov[1]);
   dw.loadCarta(CONTINENTS);
   dw.loadCarta(dw.createMeridians());
-  dw.loadCarta([['DotPort', 'Moscow', [pov], 'Москва']]);
+  dw.loadCarta([['DotPort', 'Moscow', [[37.700,55.750]], 'Москва', null, 1]]);
+  // center pov
+  var pov = dw.mflood['DotPort_Moscow']['coords'][0],
+      pts = dw.toPoints(pov, true);
+  dw.centerCarta(pts[0] + dw.m.offset[0], pts[1] + dw.m.offset[1]);
   delete dw.cfg.mapbg; // no draw map area
   //delete CONTINENTS;
-  window.trace = {};
   setSelTime();
-  scaleheight();
-  draw();
+  proj();
 }

@@ -1,6 +1,14 @@
+/*
+ * satellite-js v1.1
+ * (c) 2013 Shashwat Kandadai and UCSC
+ * https://github.com/shashwatak/satellite-js
+ * License: MIT
+ */
+
+
 satellite = (function () {
 
-    var satellite = { version : "1.0" };
+    var satellite = { version : "1.2" };
 /*
     satellite-head.js and satellite-tail.js sandwich all the other
     functions in the library.
@@ -13,6 +21,13 @@ satellite = (function () {
     Consult the Makefile to see which files are going to be sandwiched.
 
 })() The footer is in satellite-tail.js */
+/*
+ * satellite-js v1.1
+ * (c) 2013 Shashwat Kandadai and UCSC
+ * https://github.com/shashwatak/satellite-js
+ * License: MIT
+ */
+
 var pi = Math.PI;
 var twopi = pi * 2;
 var deg2rad = pi / 180.0;
@@ -27,6 +42,13 @@ var j3     =  -0.00000253215306;
 var j4     =  -0.00000161098761;
 var j3oj2  =  j3 / j2;
 var x2o3   = 2.0 / 3.0;
+/*
+ * satellite-js v1.1
+ * (c) 2013 Shashwat Kandadai and UCSC
+ * https://github.com/shashwatak/satellite-js
+ * License: MIT
+ */
+
 function dpper (satrec, dpper_parameters) {
     /* -----------------------------------------------------------------------------
     *
@@ -266,6 +288,13 @@ function dpper (satrec, dpper_parameters) {
     };
     return dpper_result;
 }
+/*
+ * satellite-js v1.1
+ * (c) 2013 Shashwat Kandadai and UCSC
+ * https://github.com/shashwatak/satellite-js
+ * License: MIT
+ */
+
 function dscom (dscom_parameters) {
     /*-----------------------------------------------------------------------------
     *
@@ -667,6 +696,13 @@ var epoch   = dscom_parameters.epoch,
     };
     return dscom_results;
 }
+/*
+ * satellite-js v1.1
+ * (c) 2013 Shashwat Kandadai and UCSC
+ * https://github.com/shashwatak/satellite-js
+ * License: MIT
+ */
+
 function dsinit(dsinit_parameters) {
    /*-----------------------------------------------------------------------------
     *
@@ -1064,6 +1100,13 @@ function dsinit(dsinit_parameters) {
     };
     return dsinit_results;
 }
+/*
+ * satellite-js v1.1
+ * (c) 2013 Shashwat Kandadai and UCSC
+ * https://github.com/shashwatak/satellite-js
+ * License: MIT
+ */
+
 function dspace (dspace_parameters){
     /*-----------------------------------------------------------------------------
     *
@@ -1311,6 +1354,13 @@ function dspace (dspace_parameters){
     }
     return dspace_results;
 }
+/*
+ * satellite-js v1.1
+ * (c) 2013 Shashwat Kandadai and UCSC
+ * https://github.com/shashwatak/satellite-js
+ * License: MIT
+ */
+
 function gstime (jdut1){
     /* -----------------------------------------------------------------------------
     *
@@ -1443,6 +1493,13 @@ satellite.gstime_from_date = function (year, mon, day, hr, minute, sec) {
     var julian_day = jday(year, mon, day, hr, minute, sec);
     return gstime (julian_day);
 }
+/*
+ * satellite-js v1.1
+ * (c) 2013 Shashwat Kandadai and UCSC
+ * https://github.com/shashwatak/satellite-js
+ * License: MIT
+ */
+
 function initl(initl_parameters){
     /*-----------------------------------------------------------------------------
     *
@@ -1580,6 +1637,13 @@ function initl(initl_parameters){
     };
     return initl_results;
 }
+/*
+ * satellite-js v1.1
+ * (c) 2013 Shashwat Kandadai and UCSC
+ * https://github.com/shashwatak/satellite-js
+ * License: MIT
+ */
+
 function sgp4init(satrec, sgp4init_parameters){
     /*-----------------------------------------------------------------------------
     *
@@ -2211,6 +2275,13 @@ function sgp4init(satrec, sgp4init_parameters){
     // sgp4fix return boolean. satrec.error contains any error codes
     return true;
 }
+/*
+ * satellite-js v1.1
+ * (c) 2013 Shashwat Kandadai and UCSC
+ * https://github.com/shashwatak/satellite-js
+ * License: MIT
+ */
+
 function twoline2rv(longstr1, longstr2){
     /*Return a Satellite imported from two lines of TLE data.
 
@@ -2287,10 +2358,10 @@ function twoline2rv(longstr1, longstr2){
     // --------- correct fix will occur when year is 4-digit in tle ---------
 
    if (satrec.epochyr < 57){
-       year= satrec.epochyr + 2000;
+       year = satrec.epochyr + 2000;
    }
    else{
-       year= satrec.epochyr + 1900;
+       year = satrec.epochyr + 1900;
    }
 
 
@@ -2318,8 +2389,6 @@ function twoline2rv(longstr1, longstr2){
         xnodeo : satrec.nodeo,
     };
 
-
-
     sgp4init(satrec, sgp4init_parameters );
 
     return satrec;
@@ -2340,6 +2409,14 @@ satellite.twoline2satrec = function (longstr1, longstr2) {
 satellite.propagate = function (satrec, year, month, day, hour, minute, second) {
     return propagate (satrec, year, month, day, hour, minute, second);
 }
+
+/*
+ * satellite-js v1.1
+ * (c) 2013 Shashwat Kandadai and UCSC
+ * https://github.com/shashwatak/satellite-js
+ * License: MIT
+ */
+
 function sgp4(satrec, tsince){
     /*-----------------------------------------------------------------------------
     *
@@ -2728,49 +2805,56 @@ function sgp4(satrec, tsince){
         vz    =  sini * cossu;
 
         //  --------- position and velocity (in km and km/sec) ----------
-        r = [0.0, 0.0, 0.0];
-        r[0] = (mrt * ux)* radiusearthkm;
-        r[1] = (mrt * uy)* radiusearthkm;
-        r[2] = (mrt * uz)* radiusearthkm;
-        v = [0.0, 0.0, 0.0];
-        v[0] = (mvt * ux + rvdot * vx) * vkmpersec;
-        v[1] = (mvt * uy + rvdot * vy) * vkmpersec;
-        v[2] = (mvt * uz + rvdot * vz) * vkmpersec;
+        r = { x : 0.0, y : 0.0, z : 0.0 };
+        r["x"] = (mrt * ux)* radiusearthkm;
+        r["y"] = (mrt * uy)* radiusearthkm;
+        r["z"] = (mrt * uz)* radiusearthkm;
+        v = { x : 0.0, y : 0.0, z : 0.0 };
+        v["x"] = (mvt * ux + rvdot * vx) * vkmpersec;
+        v["y"] = (mvt * uy + rvdot * vy) * vkmpersec;
+        v["z"] = (mvt * uz + rvdot * vz) * vkmpersec;
     }
     //  sgp4fix for decaying satellites
     if (mrt < 1.0) {
         // printf("// decay condition %11.6f \n",mrt);
         satrec.error = 6;
-        return [false, false];
+        return { position : false, velocity : false };
     }
-    return [r, v];
+    return { position : r, velocity : v };
 }
 
 satellite.sgp4 = function (satrec, tsince) {
     return sgp4 (satrec, tsince);
 }
+/*
+ * satellite-js v1.1
+ * (c) 2013 Shashwat Kandadai and UCSC
+ * https://github.com/shashwatak/satellite-js
+ * License: MIT
+ */
+
 function eci_to_geodetic (eci_coords, gmst) {
     'use strict';
     // http://www.celestrak.com/columns/v02n03/
     var a   = 6378.137;
     var b   = 6356.7523142;
-    var R   = Math.sqrt( (eci_coords[0]*eci_coords[0]) + (eci_coords[1]*eci_coords[1]) );
+    var R   = Math.sqrt( (eci_coords["x"]*eci_coords["x"]) + (eci_coords["y"]*eci_coords["y"]) );
     var f   = (a - b)/a;
     var e2  = ((2*f) - (f*f));
-    var longitude = Math.atan2(eci_coords[1], eci_coords[0]) - gmst;
+    var longitude = Math.atan2(eci_coords["y"], eci_coords["x"]) - gmst;
     var kmax = 20;
     var k = 0;
-    var latitude = Math.atan2(eci_coords[2],
-                   Math.sqrt(eci_coords[0]*eci_coords[0] +
-                                eci_coords[1]*eci_coords[1]));
+    var latitude = Math.atan2(eci_coords["z"],
+                   Math.sqrt(eci_coords["x"]*eci_coords["x"] +
+                                eci_coords["y"]*eci_coords["y"]));
     var C;
     while (k < kmax){
         C = 1 / Math.sqrt( 1 - e2*(Math.sin(latitude)*Math.sin(latitude)) );
-        latitude = Math.atan2 (eci_coords[2] + (a*C*e2*Math.sin(latitude)), R);
+        latitude = Math.atan2 (eci_coords["z"] + (a*C*e2*Math.sin(latitude)), R);
         k += 1;
     }
-    var h = (R/Math.cos(latitude)) - (a*C);
-    return [longitude, latitude, h];
+    var height = (R/Math.cos(latitude)) - (a*C);
+    return { longitude : longitude, latitude : latitude, height : height };
 }
 
 function eci_to_ecf (eci_coords, gmst){
@@ -2787,10 +2871,10 @@ function eci_to_ecf (eci_coords, gmst){
     // [Y]  =  [-S C  0][Y]
     // [Z]ecf  [0  0  1][Z]eci
 
-    var X = (eci_coords[0] * Math.cos(gmst))    + (eci_coords[1] * Math.sin(gmst));
-    var Y = (eci_coords[0] * (-Math.sin(gmst))) + (eci_coords[1] * Math.cos(gmst));
-    var Z =  eci_coords[2];
-    return [X, Y, Z];
+    var X = (eci_coords["x"] * Math.cos(gmst))    + (eci_coords["y"] * Math.sin(gmst));
+    var Y = (eci_coords["x"] * (-Math.sin(gmst))) + (eci_coords["y"] * Math.cos(gmst));
+    var Z =  eci_coords["z"];
+    return { x : X, y : Y, z : Z };
 }
 
 function ecf_to_eci (ecf_coords, gmst){
@@ -2801,17 +2885,17 @@ function ecf_to_eci (ecf_coords, gmst){
     // [Y]  =  [S  C  0][Y]
     // [Z]eci  [0  0  1][Z]ecf
     //
-    var X = (ecf_coords[0] * Math.cos(gmst))    - (ecf_coords[1] * Math.sin(gmst));
-    var Y = (ecf_coords[0] * (Math.sin(gmst)))  + (ecf_coords[1] * Math.cos(gmst));
-    var Z =  ecf_coords[2];
-    return [X, Y, Z];
+    var X = (ecf_coords["x"] * Math.cos(gmst))    - (ecf_coords["y"] * Math.sin(gmst));
+    var Y = (ecf_coords["x"] * (Math.sin(gmst)))  + (ecf_coords["y"] * Math.cos(gmst));
+    var Z =  ecf_coords["z"];
+    return { x : X, y : Y, z : Z };
 }
 
 function geodetic_to_ecf (geodetic_coords){
     'use strict';
-    var longitude   = geodetic_coords[0];
-    var latitude    = geodetic_coords[1];
-    var height      = geodetic_coords[2];
+    var longitude   = geodetic_coords["longitude"];
+    var latitude    = geodetic_coords["latitude"];
+    var height      = geodetic_coords["height"];
     var a           = 6378.137;
     var b           = 6356.7523142;
     var f           = (a - b)/a;
@@ -2821,24 +2905,24 @@ function geodetic_to_ecf (geodetic_coords){
     var X           = (normal + height) * Math.cos (latitude) * Math.cos (longitude);
     var Y           = (normal + height) * Math.cos (latitude) * Math.sin (longitude);
     var Z           = ((normal*(1-e2)) + height) * Math.sin (latitude);
-    return [X, Y, Z];
+    return { x : X, y : Y, z : Z };
 }
 
-function ecf_to_topocentric (observer_coords, satellite_coords){
+function topocentric (observer_coords, satellite_coords){
     // http://www.celestrak.com/columns/v02n02/
     // TS Kelso's method, except I'm using ECF frame
     // and he uses ECI.
     //
     'use strict';
-    var longitude   = observer_coords[0];
-    var latitude    = observer_coords[1];
-    var height      = observer_coords[2];
+    var longitude   = observer_coords["longitude"];
+    var latitude    = observer_coords["latitude"];
+    var height      = observer_coords["height"];
 
     var observer_ecf = geodetic_to_ecf (observer_coords);
 
-    var rx      = satellite_coords[0] - observer_ecf[0];
-    var ry      = satellite_coords[1] - observer_ecf[1];
-    var rz      = satellite_coords[2] - observer_ecf[2];
+    var rx      = satellite_coords["x"] - observer_ecf["x"];
+    var ry      = satellite_coords["y"] - observer_ecf["y"];
+    var rz      = satellite_coords["z"] - observer_ecf["z"];
 
     var top_s   = ( (Math.sin(latitude) * Math.cos(longitude) * rx) +
                   (Math.sin(latitude) * Math.sin(longitude) * ry) -
@@ -2847,21 +2931,21 @@ function ecf_to_topocentric (observer_coords, satellite_coords){
     var top_z   = ( (Math.cos(latitude)*Math.cos(longitude)*rx) +
                   (Math.cos(latitude)*Math.sin(longitude)*ry) +
                   (Math.sin(latitude)*rz));
-    return [top_s, top_e, top_z];
+    return { top_s : top_s, top_e : top_e, top_z : top_z };
 }
 
-function topocentric_to_look_angles  (topocentric){
+function topocentric_to_look_angles (topocentric){
     'use strict';
-    var top_s = topocentric[0];
-    var top_e = topocentric[1];
-    var top_z = topocentric[2];
+    var top_s = topocentric["top_s"];
+    var top_e = topocentric["top_e"];
+    var top_z = topocentric["top_z"];
     var range_sat    = Math.sqrt((top_s*top_s) + (top_e*top_e) + (top_z*top_z));
     var El      = Math.asin (top_z/range_sat);
     var Az      = Math.atan2 (-top_e, top_s) + pi;
-    return [Az, El, range_sat];
+    return { azimuth : Az, elevation : El, range_sat : range_sat };
 }
 
-function degrees_long                (radians){
+function degrees_long (radians){
     'use strict';
     var degrees = (radians/pi*180) % (360);
     if (degrees > 180){
@@ -2873,7 +2957,7 @@ function degrees_long                (radians){
     return degrees;
 }
 
-function degrees_lat                 (radians){
+function degrees_lat (radians){
     'use strict';
     if (radians > pi/2 || radians < (-pi/2)){
         return "Err";
@@ -2891,15 +2975,11 @@ function degrees_lat                 (radians){
 satellite.eci_to_geodetic = function (eci_coords, gmst) {
     return eci_to_geodetic (eci_coords, gmst);
 }
-satellite.degrees_lat = function                 (radians) {
-    return degrees_lat (radians);
-}
-satellite.degrees_long = function                (radians) {
-    return degrees_long (radians);
-}
 
-satellite.ecf_to_look_angles = function (observer_coords_geodetic, satellite_coords_ecf) {
-    var topocentric_coords = ecf_to_topocentric (observer_coords_geodetic, satellite_coords_ecf);
+
+
+satellite.ecf_to_look_angles = function (observer_coords_ecf, satellite_coords_ecf) {
+    var topocentric_coords = topocentric (observer_coords_ecf, satellite_coords_ecf);
     return topocentric_to_look_angles (topocentric_coords);
 }
 
@@ -2913,31 +2993,50 @@ satellite.eci_to_ecf = function (eci_coords, gmst) {
     return eci_to_ecf (eci_coords, gmst);
 }
 
+satellite.degrees_lat = function (radians) {
+    return degrees_lat (radians);
+}
+satellite.degrees_long = function (radians) {
+    return degrees_long (radians);
+}
+/*
+ * satellite-js v1.1
+ * (c) 2013 Shashwat Kandadai and UCSC
+ * https://github.com/shashwatak/satellite-js
+ * License: MIT
+ */
 
-function doppler (my_location, position, velocity, frequency) {
+function doppler_factor (my_location, position, velocity) {
     var current_range = Math.sqrt(
-                        Math.pow(position[0] - my_location[0], 2) +
-                        Math.pow(position[1] - my_location[1], 2) +
-                        Math.pow(position[2] - my_location[2], 2));
-    var next_pos   = [position[0] + velocity[0],
-                      position[1] + velocity[1],
-                      position[2] + velocity[2]];
-    var next_range = Math.sqrt(
-                      Math.pow(next_pos[0] - my_location[0], 2) +
-                      Math.pow(next_pos[1] - my_location[1], 2) +
-                      Math.pow(next_pos[2] - my_location[2], 2));
-    var range_rate = next_range - current_range;
+                        Math.pow(position["x"] - my_location["x"], 2) +
+                        Math.pow(position["y"] - my_location["y"], 2) +
+                        Math.pow(position["z"] - my_location["z"], 2));
+    var next_pos   = {
+                        x : position["x"] + velocity["x"],
+                        y : position["y"] + velocity["y"],
+                        z : position["z"] + velocity["z"]
+                    };
+    var next_range =  Math.sqrt(
+                      Math.pow(next_pos["x"] - my_location["x"], 2) +
+                      Math.pow(next_pos["y"] - my_location["y"], 2) +
+                      Math.pow(next_pos["z"] - my_location["z"], 2));
+    var range_rate =  next_range - current_range;
 
     function sign (value) {if (value >= 0) {return 1;} else {return -1;}};
     range_rate *= sign(range_rate);
     var c = 299792.458; // Speed of light in km/s
-    var f = ((1 + range_rate/c) * frequency);
-
-    return f;
-
+    var factor = (1 + range_rate/c);
+    return factor;
 }
 
-satellite.doppler = doppler;
+satellite.doppler_factor = doppler_factor;
+/*
+ * satellite-js v1.1
+ * (c) 2013 Shashwat Kandadai and UCSC
+ * https://github.com/shashwatak/satellite-js
+ * License: MIT
+ */
+
 /*
 var satellite = (function () {
 
