@@ -2,7 +2,7 @@
  * List with coords of world cities.
  *  {cntryname:[[label, coords],...],...}
  */
-var CITIES = {
+var CITIES={
 "Afghanistan":[
   ["Asadabad",[[71.15,34.866]]],
   ["Aybak",[[68.04,36.261]]],

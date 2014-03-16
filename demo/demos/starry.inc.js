@@ -1,5 +1,5 @@
 /**
- * Starry Sky Canvas map v2.0.
+ * Starry Sky Canvas map v2.0.1.
  * View stars, constellations, planets, sattelites on Earth background.
  * egax@bk.ru, 2013
  */
@@ -116,7 +116,7 @@ function terminator(time, h, cx, cy) {
   return s;
 }
 // Render points (stars, tracs) on lonlat
-function drawlonlat(pts, ftype, areasize){
+function drawlonlat(pts, ftype, areasize) {
   if (!dw.isSpherical()) return;
   var proj = dw.initProj();
   var cx = proj.long0 * 180/Math.PI,
@@ -125,11 +125,11 @@ function drawlonlat(pts, ftype, areasize){
   dw.initProj(0, '');
   for(var i in pts) {
     var mcoords = pts[i][0],
-        msize = pts[i][1] / 8,
+        msize = pts[i][1],
         mlabel = pts[i][2],
         mftag = pts[i][3] || mlabel;
     if (msize) 
-      dw.mopt[ftype]['size'] = msize;
+      dw.mopt[ftype]['size'] = msize / 8;
     var m = dw.paintCarta(mcoords, ftype, mlabel);
     // add map area
     if (mftag) {
@@ -142,7 +142,7 @@ function drawlonlat(pts, ftype, areasize){
         'ftag': mftag,
         'pts': m['pts'],
         'desc': desc.join('<br/>')
-      };
+      }
     }
     if (areasize) // fix size for area map
       dw.mopt[ftype]['size'] = areasize;
@@ -151,7 +151,7 @@ function drawlonlat(pts, ftype, areasize){
   dw.initProj(202, ' +h=' + proj.h + ' +lon_0=' + cx + ' +lat_0=' + cy);
 }
 // Render all layers
-function draw(){
+function draw() {
   var mlayers = layers();
   var proj = dw.initProj();
   var cx = proj.long0 * 180/Math.PI,
@@ -186,14 +186,16 @@ function draw(){
       drawlonlat(mstars, 'star', 3);
       break;
     case 'cntlines':
-      var lns = CLNS;      
+      var lns = CLNS,
+          mpts = [];
       for (var i=0; i<lns.length; i=i+2) {
         var m = Starry.renderSky([lns[i], lns[i+1]], rect, skyRadius, eaRadius, cx, cy, gmtime, darkhide, true);
         if (m.length == 1)
           m = Starry.renderSky([lns[i], lns[i+1]], rect, skyRadius, eaRadius, cx, cy, gmtime, false, false);
         if (m.length > 1)
-          drawlonlat([[[m[0][0][0], m[1][0][0]]]], 'cntlines');
+          mpts.push([[m[0][0][0], m[1][0][0]]]);
       }
+      drawlonlat(mpts, 'cntlines');
       break;
     case 'cntpos':
       var cnts = CNTS,
@@ -257,14 +259,14 @@ function draw(){
             mcoords = sat[i]['mcoords'];
         // calc sat.height
         var sath = Math.sqrt(tracs[1][0][0]*tracs[1][0][0] + tracs[1][0][1]*tracs[1][0][1] + tracs[1][0][2]*tracs[1][0][2]);
-        sath -= MGeo.AE;
+        sath = (sath - MGeo.AE).toFixed(0) + ' km';
         // orbit
         if (ftype == 'sattrac')
           drawlonlat(mtracs[1], 'sattrac');
         // surface point
         if (ftype == 'satsurface') {
           dw.loadCarta([['satsurface', i, [mcoords[0]]]], 1);
-          var m = {label: tracs[0], lon: mcoords[0][0], lat: mcoords[0][1], h: sath},
+          var m = {label: tracs[0], lon: mcoords[0][0].toFixed(4), lat: mcoords[0][1].toFixed(4), h: sath},
               desc = [];
           for (var k in m) if (m[k]) desc.push('<b>' + k + '</b>: ' + m[k]);
           dw.marea['satsurface_' + i] = {
@@ -287,19 +289,22 @@ function draw(){
           if (ftype == 'satsector') {
             var pts = MGeo.circle1spheric(mcoords[0][0], mcoords[0][1], MGeo.AE * 18 * Math.PI/180, 20);
             // conv to lonlat
+            var mpts = [];
             for(var j in pts){
-              if (pt = dw.transformCoords('epsg:4326', String(dw.project), pts[j])) {
+              var pt = dw.transformCoords('epsg:4326', String(dw.project), pts[j]);
+              if (pt) {
                 if (!pt[2]) // backside intersect ea
                   pt = MGeo.lineNcircle([ mtracs[0][0][0][0], pt ], eaRadius);
                 if (j > 0) // triangle sector
-                  drawlonlat([[[mtracs[0][0][0][0], pt, pt1]]], 'satsector');
+                  mpts.push([[mtracs[0][0][0][0], pt, pt1]]);
                 var pt1 = pt; // previous pt
               }
             }
+            drawlonlat(mpts, 'satsector');
           }
           // sat.label
           if (ftype == 'satpos')
-            drawlonlat([[[mtracs[0][0][0][0]], 16, tracs[0], i, {label: tracs[0], h: Math.floor(sath)}]], 'satpos');
+            drawlonlat([[[mtracs[0][0][0][0]], 16, tracs[0], i, {label: tracs[0], h: sath}]], 'satpos');
         }
       }
       break;
@@ -356,7 +361,6 @@ function setAutoTime() {
 }
 function init() {
   var mtab = document.createElement('table');
-  mtab.width = '100%';
   mtab.style.borderCollapse = 'collapse';
   var row = document.createElement('tr');
   row.style.height = '1px';
@@ -365,6 +369,7 @@ function init() {
 
   var col = document.createElement('td');
   col.width = '10%';
+  col.style.whiteSpace = 'nowrap';
   var el = document.createElement('h2');
   el.appendChild(document.createTextNode('Starry Sky'));
   el.style.padding = '0';
@@ -373,27 +378,26 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '10%';
-  col.align = 'center';
-  el = document.createElement('button');
+  col.width = '9%';
+  var el = document.createElement('button');
   el.id = 'btup';
   el.onclick = function() { turn(0, -5) };
   el.title = 'Turn Up';
   el.appendChild(document.createTextNode('U'));
   col.appendChild(el);
-  el = document.createElement('button');
+  var el = document.createElement('button');
   el.id = 'btdown';
   el.onclick = function() { turn(0, 5) };
   el.title = 'Turn Down';
   el.appendChild(document.createTextNode('D'));
   col.appendChild(el);
-  el = document.createElement('button');
+  var el = document.createElement('button');
   el.id = 'btleft';
   el.onclick = function() { turn(5, 0) };
   el.title = 'Turn Left';
   el.appendChild(document.createTextNode('L'));
   col.appendChild(el);
-  el = document.createElement('button');
+  var el = document.createElement('button');
   el.id = 'btright';
   el.onclick = function() { turn(-5, 0) };
   el.title = 'Turn Right';
@@ -402,62 +406,55 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '1%';
+  col.width = '25%';
   var layerlist = el = document.createElement('select');
   el.id = 'layerlist';
   col.appendChild(el);
-  row.appendChild(col);
-
-  var col = document.createElement('td');
-  col.width = '1%';
   var satlist = el = document.createElement('select');
   el.id = 'satlist';
   col.appendChild(el);
-  row.appendChild(col);
-
-  var col = document.createElement('td');
-  col.width = '1%';
   var projh = el = document.createElement('select');
   el.id = 'projh';
   col.appendChild(el);
-  row.appendChild(col);
-
-  var col = document.createElement('td');
-  col.width = '1%';
-  col.align = 'center';
   var projlist = el = document.createElement('select');
   el.id = 'projlist';
   col.appendChild(el);
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '20%';
-  col.align = 'center';
-  var yy = document.createElement('select');
+  col.width = '10%';
+  var yy = el = document.createElement('select');
   yy.id = 'yy';
-  var mm = document.createElement('select');
+  col.appendChild(el);
+  var mm = el = document.createElement('select');
   mm.id = 'mm';
-  var dd = document.createElement('select');
+  col.appendChild(el);
+  var dd = el = document.createElement('select');
   dd.id = 'dd';
-  dd.style.marginRight = '0.5em';
-  var hh = document.createElement('select');
+  col.appendChild(el);
+  row.appendChild(col);
+
+  var col = document.createElement('td');
+  col.width = '9%';
+  var hh = el = document.createElement('select');
   hh.id = 'hh';
-  var mi = document.createElement('select');
+  col.appendChild(el);
+  var mi = el = document.createElement('select');
   mi.id = 'mi';
-  var ss = document.createElement('select');
+  col.appendChild(el);
+  var ss = el = document.createElement('select');
   ss.id = 'ss';
-  ss.style.marginRight = '0.5em';
+  col.appendChild(el);
+  row.appendChild(col);
+
+  var col = document.createElement('td');
+  col.width = '1%';
   el = document.createElement('button');
   el.id = 'btauto';
+  col.appendChild(el);
   el.onclick = setAutoTime;
   el.title = 'update by interval';
   el.appendChild(document.createTextNode('▶'));
-  col.appendChild(yy);
-  col.appendChild(mm);
-  col.appendChild(dd);
-  col.appendChild(hh);
-  col.appendChild(mi);
-  col.appendChild(ss);
   col.appendChild(el);
   row.appendChild(col);
 
@@ -472,7 +469,7 @@ function init() {
 
   var row = document.createElement('tr');
   var col = document.createElement('td');
-  col.colSpan = '10';
+  col.colSpan = '50';
   col.id = 'mcol';
   col.style.padding = '0';
   row.appendChild(col);
