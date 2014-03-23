@@ -767,7 +767,6 @@ function dbCarta(cfg) {
     // - events -----------------------------
     onmousemove: function(ev) {
       var pts = this.canvasXY(ev);
-      this.m.mmove = true;
       if (this.chkImg(this.m.mimg)) { // if img is loaded
         var ctx = this.getContext('2d');
         var dx = pts[0] - this.m.mpts[0],
@@ -776,6 +775,7 @@ function dbCarta(cfg) {
             cy = -this.m.offset[1] - this.m.scaleoff[1] + dy / this.m.scale;
         this.clearCarta();
         ctx.drawImage(this.m.mimg, cx, cy, this.m.mimg.width/this.m.scale, this.m.mimg.height/this.m.scale);
+        this.m.mmove = true;
       } else {
         var src = this.fromPoints(pts, false),
             dst = this.fromPoints(pts, true);
