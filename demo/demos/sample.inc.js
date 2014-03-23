@@ -121,7 +121,7 @@ function init() {
   var col = document.createElement('td');
   col.width = '15%';
   col.align = 'center';
-  col.id = 'coords';
+  col.id = 'tcoords';
   row.appendChild(col);
   
   var row = document.createElement('tr');
@@ -134,16 +134,10 @@ function init() {
   document.body.appendChild(mtab);
 
   dw = new dbCarta({id:'mcol', height:col.offsetHeight});
-  dw.loadCarta(CONTINENTS);
-  delete CONTINENTS;
-  dw.loadCarta(dw.createMeridians());
-  // point of view
-  dw.loadCarta([['DotPort', '1', [[-25,40]], 'POV']]);
-  dw.draw();
   // projlist
-  for(var i in dw.proj) {
-    var projname = dw.proj[i].split(' ')[0].split('=')[1];
-    el = document.createElement('option');
+  for(var i in dw.projlist) {
+    var projname = dw.projlist[i].split(' ')[0].split('=')[1];
+    var el = document.createElement('option');
     el.value = i;
     el.appendChild(document.createTextNode(projname));
     projlist.appendChild(el);
@@ -151,8 +145,19 @@ function init() {
   projlist.onchange = proj;
   // curr. coords
   dw.clfunc.onmousemove = function(sd, dd) {
-    mcoord = document.getElementById('coords');
-    mcoord.innerHTML = ' X: Y:';
-    if (dd) mcoord.innerHTML = ' X: ' + dd[0].toFixed(2) + ' Y: ' + dd[1].toFixed(2);
+    var tcoords = document.getElementById('tcoords');
+    tcoords.innerHTML = ' X: Y:';
+    if (dd) tcoords.innerHTML = ' X: ' + dd[0].toFixed(2) + ' Y: ' + dd[1].toFixed(2);
+  }
+  // worldmap image
+  var immap = new Image();
+  immap.src = IMGB64['worldmap'];
+  immap.onload = function() {
+    dw.loadCarta(CONTINENTS);
+    delete CONTINENTS;
+    dw.loadCarta([{0:'.Image', 1:'1', 2:[[-179.99,90],[179.99,-90],[-179.99,90],[179.99,-90]], 6:immap}]);
+    dw.loadCarta(dw.createMeridians());
+    dw.loadCarta([['DotPort', '1', [[-25,40]], 'POV']]);
+    dw.draw();
   }
 }

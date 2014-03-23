@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.5.2.
+ * dbCartajs HTML5 Canvas dymanic object map v1.6.
  * It uses Proj4js transformations.
  *
  * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
@@ -64,6 +64,7 @@ function dbCarta(cfg) {
      * }
      */
     mopt: {
+      '.Image':     {cls: 'Image'},
       '.Arctic':    {cls: 'Polygon', fg: 'rgb(210,221,195)', bg: 'rgb(210,221,195)'},
       '.Mainland':  {cls: 'Polygon', fg: 'rgb(135,159,103)', bg: 'rgb(135,159,103)'},
       '.Water':     {cls: 'Polygon', fg: 'rgb(90,140,190)', bg: 'rgb(90,140,190)'},
@@ -96,7 +97,7 @@ function dbCarta(cfg) {
     /*
      * Proj4 defs
      */
-    proj: function(){
+    projlist: function(){
       if ('Proj4js' in window){
         return {
           0: '+proj=longlat',
@@ -225,7 +226,10 @@ function dbCarta(cfg) {
           this.marea[i] = m;
         if (this.m.doreload || doreload)
           this.reload(m);
-        this.paintCartaPts(m['pts'], m['ftype'], m['label'], m['centerofpts']);
+        if (m['img'])
+          this.paintImage(m['img'], m['pts']);
+        else
+          this.paintCartaPts(m['pts'], m['ftype'], m['label'], m['centerofpts']);
       }
       this.m.doreload = false;
       this.paintScale();
@@ -287,23 +291,25 @@ function dbCarta(cfg) {
             ftype = d[0],
             ftag = d[1],
             fkey = ftype + '_' + ftag;
-        var coords = d[2],
-            label = 3 in d ? d[3] : '',
-            centerof = 4 in d ? d[4] : undefined,
-            ismap = 5 in d ? d[5] : undefined;
+        var coords = d[2];
+        var opts = {
+          'label': 3 in d ? d[3] : '',
+          'centerof': 4 in d ? d[4] : undefined,
+          'ismap': 5 in d ? d[5] : undefined,
+          'img': 6 in d ? d[6] : undefined
+        }
         var m = {
           'ftype': ftype,
           'ftag': ftag,
-          'coords': coords,
-          'label': label,
-          'centerof': centerof,
-          'ismap': ismap
+          'coords': coords
         }
+        for (var j in opts) // optional args
+          if (opts[j]) m[j] = opts[j]
         if (dopaint) {
-          if (ismap)
+          if (m['ismap'])
             this.marea[fkey] = m; // add area map
           this.reload(m); // add points
-          this.paintCartaPts(m['pts'], ftype, label, m['centerofpts']);
+          this.paintCartaPts(m['pts'], m['ftype'], m['label'], m['centerofpts']);
         }
         this.mflood[fkey] = m;
       }
@@ -312,7 +318,7 @@ function dbCarta(cfg) {
     * Refill obj in mfood new points from coords.
     */
     reload: function(m) {
-      var pts = this.interpolateCoords(m['coords'], true, this.project ? 10 : undefined),
+      var pts = this.interpolateCoords(m['coords'], true, this.isSpherical() ? 10 : undefined),
           centerofpts = this.interpolateCoords([m['centerof']], true);
       m['pts'] = pts;
       m['centerofpts'] = centerofpts;
@@ -586,6 +592,16 @@ function dbCarta(cfg) {
         }
     },
     /**
+    * Draw image IMG if loaded with sizes in PTS.
+    */
+    paintImage: function(img, pts) {
+      if (!this.isSpherical() && this.chkImg(img) && 
+          this.chkPts(pts[0]) && this.chkPts(pts[1])) {
+        var ctx = this.getContext('2d');
+        ctx.drawImage(img, pts[0][0], pts[0][1], pts[1][0]-pts[0][0], pts[1][1]-pts[0][1]);
+      }
+    },
+    /**
     * Change map scale to SCALE.
     * Use twice to fix bug with labels: scaleCarta(1)->scaleCarta(SCALE)
     */
@@ -614,7 +630,7 @@ function dbCarta(cfg) {
             project = this.project;
           }
           var old_defs = Proj4js.defs[String(project)],
-              new_defs = this.proj[project] + (defs || '');
+              new_defs = this.projlist[project] + (defs || '');
           this.m.doreload = (this.project != project) || (old_defs != new_defs); // recalc points?
           this.project = project;
           Proj4js.defs[String(project)] = new_defs;
@@ -660,9 +676,10 @@ function dbCarta(cfg) {
       return [ (rect[0] + rect[2]) / 2.0,
                (rect[1] + rect[3]) / 2.0 ];
     },
-    /**
-    * Validate points.
-    */
+    // - checks ------------------------
+    chkImg: function(img) {
+      return (img && img.height > 0 && img.width > 0);
+    },
     chkPts: function(pts) {
       return (pts && !isNaN(pts[0]) && !isNaN(pts[1]));
     },
@@ -697,7 +714,7 @@ function dbCarta(cfg) {
     * Approx. (and convert to points if DOPOINTS) coords with STEP (deg.).
     */
     interpolateCoords: function(coords, dopoints, step) {
-      var i, interpol_pts = [];
+      var i, pts, interpol_pts = [];
       for (var j in coords) {
         if (!coords[j]) {
           continue;
@@ -750,7 +767,8 @@ function dbCarta(cfg) {
     // - events -----------------------------
     onmousemove: function(ev) {
       var pts = this.canvasXY(ev);
-      if (this.m.mimg && this.m.mimg.height > 0 && this.m.mimg.width > 0) { // if img is loaded
+      this.m.mmove = true;
+      if (this.chkImg(this.m.mimg)) { // if img is loaded
         var ctx = this.getContext('2d');
         var dx = pts[0] - this.m.mpts[0],
             dy = pts[1] - this.m.mpts[1];
@@ -758,10 +776,9 @@ function dbCarta(cfg) {
             cy = -this.m.offset[1] - this.m.scaleoff[1] + dy / this.m.scale;
         this.clearCarta();
         ctx.drawImage(this.m.mimg, cx, cy, this.m.mimg.width/this.m.scale, this.m.mimg.height/this.m.scale);
-        this.m.mmove = true;
       } else {
-        var src = this.fromPoints(pts, false);
-        var dst = this.fromPoints(pts, true);
+        var src = this.fromPoints(pts, false),
+            dst = this.fromPoints(pts, true);
         for (var i in this.marea) {
           this.doMap(pts, ev);
           break;
@@ -772,27 +789,18 @@ function dbCarta(cfg) {
       }
     },
     onmousedown: function(ev) {
-      if (!this.isSpherical()) {
-        this.m.mpts = this.canvasXY(ev);
-        // save image for drag
-        this.m.mimg = new Image();
+      var pts = this.canvasXY(ev);
+      this.m.mscale = this.chkScale(pts[0], pts[1]);
+      if (!this.m.mscale && !this.isSpherical()) {
+        this.m.mpts = pts;
+        this.m.mimg = new Image(); // save image for drag
         this.m.mimg.src = this.toDataURL();
       }
     },
     onmouseup: function(ev) {
-      if (!this.isSpherical()) {
-        var pts = this.canvasXY(ev);
-        var centerof = this.centerOf();
-        this.centerCarta(
-          centerof[0] - pts[0] + this.m.mpts[0],
-          centerof[1] - pts[1] + this.m.mpts[1], true);
-        delete this.m.mimg;
-        this.draw();
-      };
-    },
-    onclick: function(ev) {
-      var scale, pts = this.canvasXY(ev);
-      if (scale = this.chkScale(pts[0], pts[1])) {
+      var pts = this.canvasXY(ev),
+          scale = this.chkScale(pts[0], pts[1]);
+      if (this.m.mscale && scale) {
         this.scaleCarta(1); // fix labels
         this.scaleCarta(scale);
       } else if (this.isSpherical()) {
@@ -800,13 +808,20 @@ function dbCarta(cfg) {
         if (!dst) return;
         var proj = this.initProj();
         this.initProj(' +h=' + proj.h + ' +lon_0=' + dst[0] + ' +lat_0=' + dst[1]);
-      } else if (!this.m.mmove)
+      } else if (!this.m.mmove) {
         this.centerCarta(pts[0], pts[1], true);
-      else
-        return;
-      this.draw();
-      if ('onclick' in this.clfunc)
-        this.clfunc.onclick();
+        delete this.m.mimg;
+      } else if (!this.isSpherical()) {
+        var centerof = this.centerOf();
+        this.centerCarta(
+          centerof[0] - pts[0] + this.m.mpts[0],
+          centerof[1] - pts[1] + this.m.mpts[1], true);
+        delete this.m.mimg;
+      } else return;
+      if ('onclick' in this.clfunc) {
+        if (this.isSpherical()) this.clfunc.onclick();
+      } else
+        this.draw();
     }
   });
   return dw;

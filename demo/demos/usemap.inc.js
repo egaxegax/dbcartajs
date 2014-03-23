@@ -56,8 +56,8 @@ function init() {
   dw.loadCarta(dw.createMeridians());
   dw.draw();
   // projlist
-  for(var i in dw.proj) {
-    var projname = dw.proj[i].split(' ')[0].split('=')[1];
+  for(var i in dw.projlist) {
+    var projname = dw.projlist[i].split(' ')[0].split('=')[1];
     el = document.createElement('option');
     el.value = i;
     el.appendChild(document.createTextNode(projname));

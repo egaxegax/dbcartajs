@@ -13,7 +13,7 @@ var mopt = {
   'planet': {cls: 'Dot', fg: 'rgb(220,200,200)', labelcolor: 'rgb(255,155,128)'},
   'earth': {},
   'sattrac': {cls: 'Line', fg: 'rgba(100,100,220,0.4)'},    
-  'satsurface': {cls: 'Dot', fg: 'rgba(0,0,220,0.5)', size: '2'},
+  'satsurface': {cls: 'Dot', fg: 'rgba(255,255,220,0.9)', size: '2'},
   'sattrace': {cls: 'Line', fg: 'rgb(255,255,0)'},
   'satsector': {cls: 'Polygon', fg: 'rgba(200,200,170,0.1)', bg: 'rgba(200,200,170,0.1)', width: '0.1'},
   'satpos':  {cls: 'Dot', fg: 'rgb(200,200,170)', labelcolor: 'rgb(200,200,170)'},
@@ -503,8 +503,8 @@ function init() {
   // list proj
   optfunc('proj...', projlist);
   projlist.options[projlist.selectedIndex].disabled = 'true';
-  for(var i in { 0: dw.proj[0], 101: dw.proj[0], 202: dw.proj[202] }) {
-    var projname = dw.proj[i].split(' ')[0].split('=')[1];
+  for(var i in { 0: dw.projlist[0], 101: dw.projlist[0], 202: dw.projlist[202] }) {
+    var projname = dw.projlist[i].split(' ')[0].split('=')[1];
     el = document.createElement('option');
     el.value = i;
     el.appendChild(document.createTextNode(projname));
@@ -550,22 +550,26 @@ function init() {
   dw.clfunc.onclick = draw;
   // curr. coords
   dw.clfunc.onmousemove = function(sd, dd) {
-    var tcoord = document.getElementById('tcoord');
+    var scoords, tcoord = document.getElementById('tcoord');
     if (dw.isSpherical()) {
       if (scoords = calcSpheric(sd, getSelTime())) {
         // in radians
         tcoord.innerHTML = 'Ra: ' + scoords[0].toFixed(4) + ' Dec: ' + scoords[1].toFixed(4);
         // in hms, dms
 //        var ra = MUtil.deg2hms(scoords[0] * 180/Math.PI).join(':'),
-//            dec = MUtil.deg2dms(scoords[1] * 180/Math.PI).join(':');
+//            dec scoords= MUtil.deg2dms(scoords[1] * 180/Math.PI).join(':');
 //        tcoord.innerHTML = 'Ra: ' + ra + ' Dec: ' + dec;
       }
     } else if (dd) {
       tcoord.innerHTML = ' Lon: ' + dd[0].toFixed(2) + ' Lat: ' + dd[1].toFixed(2);
     }
   }
+  // worldmap image
+  var immap = new Image();
+  immap.src = IMGB64['worldmap'];
   // draw
   dw.loadCarta(CONTINENTS);
+  dw.loadCarta([{0:'.Image', 1:'1', 2:[[-179.99,90],[179.99,-90],[-179.99,90],[179.99,-90]], 6:immap}]);
   dw.loadCarta(dw.createMeridians());
   dw.loadCarta([['DotPort', 'Moscow', [[37.700,55.750]], 'Москва', null, 1]]);
   // center pov
