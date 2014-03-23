@@ -25,7 +25,7 @@ Mercator Projection:
 
 Starry Sky. Featured, copmlicated demo like Orbitron, Marble, Xephem but more lightweight.
 
-![starry.png] (http://beta.hstor.org/files/c3c/22d/7a5/c3c22d7a5767401fa36afda82471c12e.png "Starry Sky")
+![starry.png] (http://img-fotki.yandex.ru/get/9802/136640652.0/0_df04b_fbe77af7_XL.png "Starry Sky")
 
 ![sat-view.png] (http://img-fotki.yandex.ru/get/9751/136640652.0/0_df049_a3bc71d1_XL.png "Satellite Viewer")
 
