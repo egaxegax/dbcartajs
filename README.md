@@ -25,7 +25,9 @@ Mercator Projection:
 
 Starry Sky. Featured, copmlicated demo like Orbitron, Marble, Xephem but more lightweight.
 
-![starry2.png] (http://img-fotki.yandex.ru/get/9555/136640652.0/0_becbd_66ad485b_XL.png "Starry Sky")
+![starry.png] (http://img-fotki.yandex.ru/get/9755/136640652.0/0_df04a_39e86845_XL.png "Starry Sky")
+
+![sat-view.png] (http://img-fotki.yandex.ru/get/9751/136640652.0/0_df049_a3bc71d1_XL.png "Satellite Viewer")
 
 Moscow Metro Map:
 
