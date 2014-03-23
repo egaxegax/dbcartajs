@@ -21,7 +21,7 @@ Controls:
 
 Mercator Projection:
 
-![mercv.png] (http://img-fotki.yandex.ru/get/9064/136640652.0/0_b999b_feccc6d_XL.jpg "Mercator")
+![mercv.png] (http://img-fotki.yandex.ru/get/9832/136640652.0/0_df04d_d154d06b_XL.png "Mercator")
 
 Starry Sky. Featured, copmlicated demo like Orbitron, Marble, Xephem but more lightweight.
 
