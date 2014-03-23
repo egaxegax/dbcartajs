@@ -819,7 +819,7 @@ function dbCarta(cfg) {
         delete this.m.mimg;
       } else return;
       if ('onclick' in this.clfunc) {
-        if (this.isSpherical()) this.clfunc.onclick();
+        this.clfunc.onclick();
       } else
         this.draw();
     }
