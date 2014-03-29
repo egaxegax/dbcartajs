@@ -21,11 +21,13 @@ Controls:
 
 Mercator Projection:
 
-![mercv.png] (http://img-fotki.yandex.ru/get/9064/136640652.0/0_b999b_feccc6d_XL.jpg "Mercator")
+![mercv.png] (http://img-fotki.yandex.ru/get/9832/136640652.0/0_df04d_d154d06b_XL.png "Mercator")
 
 Starry Sky. Featured, copmlicated demo like Orbitron, Marble, Xephem but more lightweight.
 
-![starry2.png] (http://img-fotki.yandex.ru/get/9555/136640652.0/0_becbd_66ad485b_XL.png "Starry Sky")
+![starry.png] (http://img-fotki.yandex.ru/get/9802/136640652.0/0_df04b_fbe77af7_XL.png "Starry Sky")
+
+![sat-view.png] (http://img-fotki.yandex.ru/get/9751/136640652.0/0_df049_a3bc71d1_XL.png "Satellite Viewer")
 
 Moscow Metro Map:
 
