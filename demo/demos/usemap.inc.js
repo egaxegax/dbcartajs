@@ -1,4 +1,8 @@
-// usemap.html func
+/**
+ * User Map area.
+ * View countries under mouse cursor.
+ * egax@bk.ru, 2013
+ */
 function proj() {
   dw.changeProject(document.getElementById('projlist').value);
   dw.draw();
@@ -40,7 +44,7 @@ function init() {
   var col = document.createElement('td');
   col.colSpan = '10';
   col.id = 'mcol';
-  col.style.padding = "0";
+  col.style.padding = '0';
   row.appendChild(col);
   mtab.appendChild(row);
   document.body.appendChild(mtab);
@@ -69,7 +73,7 @@ function init() {
     var mcoord = document.getElementById('coords');
     var label = '';
     if (dw.m.pmap) {
-      var o = dw.mflood[dw.m.pmap];
+      var m, o = dw.mflood[dw.m.pmap];
       // cities count
       if (m = CITIES[o['label']])
         label = ' : ' + m.length + ' cities';

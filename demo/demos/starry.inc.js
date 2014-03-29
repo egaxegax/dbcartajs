@@ -569,7 +569,7 @@ function init() {
   immap.src = IMGB64['worldmap'];
   // draw
   dw.loadCarta(CONTINENTS);
-  dw.loadCarta([{0:'.Image', 1:'1', 2:[[-179.99,90],[179.99,-90],[-179.99,90],[179.99,-90]], 6:immap}]);
+  dw.loadCarta([{0:'.Image', 1:'1', 2:[[-179.99,90],[179.99,-90]], 6:immap}]);
   dw.loadCarta(dw.createMeridians());
   dw.loadCarta([['DotPort', 'Moscow', [[37.700,55.750]], 'Москва', null, 1]]);
   // center pov

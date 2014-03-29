@@ -1,27 +1,45 @@
-// countries.html func
+/**
+ * World's countrires and flags.
+ * egax@bk.ru, 2013
+ */
 function draw() {
   var centerof, cntrylist = document.getElementById('cntrylist');
   for (var i=0; i<cntrylist.options.length; i++) {
     var opt = cntrylist.options[i];
     if (opt.selected) {
-      var mpart = opt.value,
-          cntryname = opt.parentNode.label,
-          abbr = COUNTRIES[cntryname][mpart][0],
-          coords = COUNTRIES[cntryname][mpart][1],
-          centerof = COUNTRIES[cntryname][mpart][3];
-      dw.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof, true]]);
-      dw2.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof, true]]);
-      dw3.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof, true]]);
-      dw4.loadCarta([['Area', abbr + mpart, coords, cntryname, centerof, true]]);
+      var m = {};
+      m.mpart = opt.value;
+      m.cntryname = opt.parentNode.label;
+      m.abbr = COUNTRIES[m.cntryname][m.mpart][0];
+      m.coords = COUNTRIES[m.cntryname][m.mpart][1];
+      m.abbr2 = COUNTRIES[m.cntryname][m.mpart][2].toLowerCase();
+      m.centerof = COUNTRIES[m.cntryname][m.mpart][3];
+      dw.loadCarta([['Area', m.abbr + m.mpart, m.coords, m.cntryname, m.centerof, true]]);
+      dw2.loadCarta([['Area', m.abbr + m.mpart, m.coords, m.cntryname, m.centerof, true]]);
+      dw3.loadCarta([['Area', m.abbr + m.mpart, m.coords, m.cntryname, m.centerof, true]]);
+      dw4.loadCarta([['Area', m.abbr + m.mpart, m.coords, m.cntryname, m.centerof, true]]);
+      if (FLAGSB64[m.abbr2]) {
+        var mflg = {};
+        mflg[m.abbr2] = new Image();
+        mflg[m.abbr2].m = m;
+        mflg[m.abbr2].src = FLAGSB64[m.abbr2];
+        mflg[m.abbr2].onload = function() {
+          var m = this.m;
+          dw.loadCarta([{0:'.Image', 1: m.abbr + m.mpart, 2:[m.centerof], 6:this}], 1);
+          dw2.loadCarta([{0:'.Image', 1: m.abbr + m.mpart, 2:[m.centerof], 6:this}], 1);
+          dw3.loadCarta([{0:'.Image', 1: m.abbr + m.mpart, 2:[m.centerof], 6:this}], 1);
+          dw4.loadCarta([{0:'.Image', 1: m.abbr + m.mpart, 2:[m.centerof], 6:this}], 1);
+        }
+      }
     }
   }
   // draw on centre
-  if (centerof) {
-    var points = dw.toPoints(centerof, true);
-    dw.centerCarta(points[0] + dw.m.offset[0], points[1] + dw.m.offset[1]);
-    dw2.initProj(' +lon_0=' + centerof[0] + ' +lat_0=' + centerof[1]);
-    dw3.initProj(' +lon_0=' + centerof[0] + ' +lat_0=' + centerof[1]);
-    dw4.centerCarta(points[0] + dw4.m.offset[0], points[1] + dw4.m.offset[1]);
+  if (m.centerof) {
+    var pts = dw.toPoints(m.centerof, true);
+    dw.centerCarta(pts[0] + dw.m.offset[0], pts[1] + dw.m.offset[1]);
+    dw2.initProj(' +lon_0=' + m.centerof[0] + ' +lat_0=' + m.centerof[1]);
+    dw3.initProj(' +lon_0=' + m.centerof[0] + ' +lat_0=' + m.centerof[1]);
+    dw4.centerCarta(pts[0] + dw4.m.offset[0], pts[1] + dw4.m.offset[1]);
   }
   dw.draw();
   dw2.draw();
@@ -53,7 +71,7 @@ function init() {
   var col = document.createElement('td');
   col.colSpan = '2';
   col.align = 'center';
-  col.id = 'coords';
+  col.id = 'tcoords';
   row.appendChild(col);
 
   var row = document.createElement('tr');
@@ -110,26 +128,33 @@ function init() {
   document.body.appendChild(mtab);
 
   dw = new dbCarta({id:'canvasmap'});
-  dw.loadCarta(CONTINENTS);
-  dw.loadCarta(meridians = dw.createMeridians());
-  dw.draw();
+  dw.extend(dw.mopt, {
+    'Area': {fg: 'white', bg: 'transparent'}
+  });
+  dw.cfg.mapbg = undefined; // no draw map area
+  // worldmap image
+  var im = new Image();
+  im.src = IMGB64['worldmap'];
+  im.onload = function() {
+    dw.loadCarta([{0:'.Image', 1:'1', 2:[[-179.99,90],[179.99,-90]], 6:im}]);
+    dw.loadCarta(dw.createMeridians());
+    dw.draw();
+  }
   dw2 = new dbCarta({id:'canvasmap2'});
   dw2.changeProject(203);
-  dw2.scaleCarta(3);
+  dw2.scaleCarta(1.5);
   dw2.loadCarta(CONTINENTS);
-  dw2.loadCarta(meridians);
+  dw2.loadCarta(dw2.createMeridians());
   dw2.draw();
   dw3 = new dbCarta({id:'canvasmap3'});
   dw3.changeProject(201);
-  dw3.scaleCarta(2);
   dw3.loadCarta(CONTINENTS);
-  dw3.loadCarta(meridians);
+  dw3.loadCarta(dw3.createMeridians());
   dw3.draw();
   dw4 = new dbCarta({id:'canvasmap4'});
   dw4.changeProject(101);
-  dw4.scaleCarta(3);
   dw4.loadCarta(CONTINENTS);
-  dw4.loadCarta(meridians);
+  dw4.loadCarta(dw4.createMeridians());
   dw4.draw();
   delete CONTINENTS;
 
@@ -146,7 +171,7 @@ function init() {
   }
   // curr. object
   var clfunc = function(md) {
-    var mcoord = document.getElementById('coords');
+    var mcoord = document.getElementById('tcoords');
     var label = '';
     if (md.m.pmap) {
        var o = md.mflood[md.m.pmap];

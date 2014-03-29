@@ -1,4 +1,7 @@
-// merc.html func
+/**
+ * Mercator projection.
+ * egax@bk.ru, 2013.
+ */
 function init() {
   var mtab = document.createElement('table');
   mtab.style.borderCollapse = 'collapse';
@@ -39,19 +42,31 @@ function init() {
   var route = [];
   for(var cntryname in cntrylist) {
     var npart = cntrylist[cntryname][0],
-        ncity = cntrylist[cntryname][1];
+        ncity = cntrylist[cntryname][1],
+        m = {};
     for(var mpart in COUNTRIES[cntryname]) {
-      var abbr = COUNTRIES[cntryname][mpart][0],
-          coords = COUNTRIES[cntryname][mpart][1],
-          centerof = COUNTRIES[cntryname][mpart][3];
-      dw.loadCarta([['Area', abbr + mpart, coords, (mpart==npart ? cntryname : ''), centerof]]);
+      m.abbr = COUNTRIES[cntryname][mpart][0];
+      m.coords = COUNTRIES[cntryname][mpart][1];
+      m.centerof = COUNTRIES[cntryname][mpart][3];
+      dw.loadCarta([['Area', m.abbr + mpart, m.coords, (mpart==npart ? cntryname : ''), m.centerof]]);
     }
     // capitals
     if (CITIES[cntryname]) {
-      var cityname = CITIES[cntryname][ncity][0],
-          citycoords = CITIES[cntryname][ncity][1];
-      dw.loadCarta([['DotPort', cityname, citycoords, cityname, null, 1]]);
-      route.push(citycoords[0]);
+      m.cityname = CITIES[cntryname][ncity][0];
+      m.citycoords = CITIES[cntryname][ncity][1];
+      dw.loadCarta([['DotPort', m.cityname, m.citycoords, m.cityname, null, 1]]);
+      route.push(m.citycoords[0]);
+      // flags
+      var abbrf = m.abbr.replace(mpart, '').toLowerCase();
+      if (FLAGSB64[abbrf]) {
+        var im = new Image();
+        im.m = m;
+        im.src = FLAGSB64[abbrf];
+        im.onload = function() {
+          var m = this.m;
+          dw.loadCarta([{0:'.Image', 1:m.abbr, 2:[m.citycoords], 6:this}], 1);
+        }
+      }
     }
   }
   // concat

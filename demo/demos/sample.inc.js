@@ -150,12 +150,12 @@ function init() {
     if (dd) tcoords.innerHTML = ' X: ' + dd[0].toFixed(2) + ' Y: ' + dd[1].toFixed(2);
   }
   // worldmap image
-  var immap = new Image();
-  immap.src = IMGB64['worldmap'];
-  immap.onload = function() {
+  var im = new Image();
+  im.src = IMGB64['worldmap'];
+  im.onload = function() {
     dw.loadCarta(CONTINENTS);
     delete CONTINENTS;
-    dw.loadCarta([{0:'.Image', 1:'1', 2:[[-179.99,90],[179.99,-90],[-179.99,90],[179.99,-90]], 6:immap}]);
+    dw.loadCarta([{0:'.Image', 1:'1', 2:[[-179.99,90],[179.99,-90]], 6:im}]);
     dw.loadCarta(dw.createMeridians());
     dw.loadCarta([['DotPort', '1', [[-25,40]], 'POV']]);
     dw.draw();

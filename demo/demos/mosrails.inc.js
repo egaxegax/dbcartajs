@@ -1,4 +1,8 @@
-// mosrails.html func
+/**
+ * Moscow Rail map.
+ * View lines and stations with additional info.
+ * egax@bk.ru, 2013
+ */
 function findstation(){
   var stationlist = document.getElementById('stationlist'),
       opt = stationlist.options[stationlist.selectedIndex];
