@@ -309,7 +309,10 @@ function dbCarta(cfg) {
           if (m['ismap'])
             this.marea[fkey] = m; // add area map
           this.reload(m); // add points
-          this.paintCartaPts(m['pts'], m['ftype'], m['label'], m['centerofpts']);
+          if (m['img'])
+            this.paintImage(m['img'], m['pts']);
+          else
+            this.paintCartaPts(m['pts'], m['ftype'], m['label'], m['centerofpts']);
         }
         this.mflood[fkey] = m;
       }
@@ -595,10 +598,14 @@ function dbCarta(cfg) {
     * Draw image IMG if loaded with sizes in PTS.
     */
     paintImage: function(img, pts) {
-      if (!this.isSpherical() && this.chkImg(img) && 
-          this.chkPts(pts[0]) && this.chkPts(pts[1])) {
+      if (this.chkImg(img)) {
         var ctx = this.getContext('2d');
-        ctx.drawImage(img, pts[0][0], pts[0][1], pts[1][0]-pts[0][0], pts[1][1]-pts[0][1]);
+        if (this.chkPts(pts[0]) && this.chkPts(pts[1])) { // scalable
+          if (!this.isSpherical())
+            ctx.drawImage(img, pts[0][0], pts[0][1], pts[1][0]-pts[0][0], pts[1][1]-pts[0][1]);
+        } else if (this.chkPts(pts[0])) { // fixed size
+          ctx.drawImage(img, pts[0][0], pts[0][1], img.width/this.m.scale, img.height/this.m.scale);
+        }
       }
     },
     /**
