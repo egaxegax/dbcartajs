@@ -4,6 +4,7 @@ HTML5 Canvas Карта-Навигатор с проекциями. Рисова
 Демо доступны на сайте http://dbcartajs.appspot.com.
 
 Персональный форум проекта http://egaxegax.appspot.com/guestbook/subj/112001.
+Документация по использованию https://github.com/egaxegax/dbCartajs/wiki.
 
 ## Как использовать
 
