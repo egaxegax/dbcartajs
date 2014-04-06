@@ -1,4 +1,8 @@
-// sample.html func
+/**
+ * Sample demo.
+ * Draw background images in diff. projections.
+ * egax@bk.ru, 2013
+ */
 function scale() {
   var scale = parseFloat(document.getElementById('scale').value);
   dw.scaleCarta(1); // fix labels
@@ -17,9 +21,41 @@ function turn() {
       dw.draw();
     }
 }
+// Imitate Ajax loading
+function loading() {
+  dw.clearCarta();
+  var ctx = dw.getContext('2d');
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  var pts = [[-19,6],[-12,16],[0,20],[12,16],[19,6],[19,-6],[12,-16],[0,-20],[-12,-16],[-19,-6]];
+  for (var i in pts) {
+    dw.extend(dw.mopt, {
+      loading: {cls: 'Line', width: 12*dw.m.scale, cap: 'round', fg: 'rgba(0,80,170,' + Math.random() + ')'}
+    });
+    dw.paintCarta([[pts[i][0]/2.5, pts[i][1]/2.5],
+                   [pts[i][0], pts[i][1]]], 'loading');
+  }
+  ctx.restore();
+}
 function proj() {
   dw.changeProject(document.getElementById('projlist').value);
-  dw.draw();
+  loading();
+  // worldmap raster image
+  var im = new Image();
+  if (dw.project == 0)
+    im.src = 'demodata/img/wrld-small.jpg';
+  else if (dw.project == 101)
+    im.src = 'demodata/img/wrld-small-merc.jpg';
+  else
+    dw.draw();
+  im.onload = function() {
+    if (dw.project == 0)
+      dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-180,90],[180,-90]], 6:this}]);
+    else if (dw.project == 101)
+      dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-179.99,84],[179.99,-84]], 6:this}]);
+    dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
+    dw.draw();
+  }
 }
 function draw() {
   try {
@@ -128,7 +164,7 @@ function init() {
   var col = document.createElement('td');
   col.colSpan = '10';
   col.id = 'mcol';
-  col.style.padding = "0";
+  col.style.padding = '0';
   row.appendChild(col);
   mtab.appendChild(row);
   document.body.appendChild(mtab);
@@ -149,15 +185,22 @@ function init() {
     tcoords.innerHTML = ' X: Y:';
     if (dd) tcoords.innerHTML = ' X: ' + dd[0].toFixed(2) + ' Y: ' + dd[1].toFixed(2);
   }
-  // worldmap image
-  var im = new Image();
-  im.src = IMGB64['worldmap'];
-  im.onload = function() {
-    dw.loadCarta(CONTINENTS);
-    delete CONTINENTS;
-    dw.loadCarta([{0:'.Image', 1:'1', 2:[[-179.99,90],[179.99,-90]], 6:im}]);
-    dw.loadCarta(dw.createMeridians());
-    dw.loadCarta([['DotPort', '1', [[-25,40]], 'POV']]);
-    dw.draw();
-  }
+  // layers
+  dw.extend(dw.mopt['DotPort'], {fg: 'red', labelcolor: 'rgb(255,255,0)'});
+  // load
+  dw.loadCarta(CONTINENTS);
+  delete CONTINENTS;
+  dw.loadCarta([{0:'.Image', 1:'wrld'}]);
+  dw.loadCarta(dw.createMeridians());
+  dw.loadCarta([
+    ['DotPort', 'ny', [[-73.905,40.708]], 'New York'],
+    ['DotPort', 'los', [[-118.25,34]], 'Los Angeles'],
+    ['DotPort', 'lon', [[-0.178,51.488]], 'London'],
+    ['DotPort', 'mos', [[37.7,55.75]], 'Moscow'],
+    ['DotPort', 'bij', [[116.388,39.906]], 'Beijing'],
+    ['DotPort', 'mlb', [[145.075,-37.853]], 'Melbourne'],
+    ['DotPort', 'rio', [[-43.455,-22.722]], 'Rio de Janeiro'],
+    ['DotPort', 'brz', [[15.285,-4.285]], 'Brazzaville']
+  ]);
+  proj();
 }

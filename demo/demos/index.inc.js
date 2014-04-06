@@ -33,7 +33,8 @@ function listDemos() {
       var a = document.createElement('a');
       a.href = 'http://habrahabr.ru/post/189692';
       a.appendChild(document.createTextNode('Звездное небо на Canvas'));
-      sp.appendChild(document.createTextNode('Глобус на фоне звездного неба как в Orbitron, Marble, Xephem. Подробно написано в статье на Хабре "'));
+      sp.appendChild(document.createTextNode('Глобус на фоне звездного неба как в Orbitron, Marble, Xephem c эфемеридами космических аппаратов. ' + 
+                                             'Подробно написано в статье на Хабре "'));
       sp.appendChild(a);
       sp.appendChild(document.createTextNode('".'));
       return sp; }],

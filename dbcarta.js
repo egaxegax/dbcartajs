@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.6.
+ * dbCartajs HTML5 Canvas dymanic object map v1.6.1.
  * It uses Proj4js transformations.
  *
  * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
@@ -29,8 +29,8 @@ function dbCarta(cfg) {
   };
   dw.extend({
     /**
-     * Public
-     * cfg - config {
+     * Config.
+     * cfg {
      *   pid: parent id
      *   width, height: canvas size
      *   viewportx, viewporty: offset limits for centerCarta in degrees
@@ -47,7 +47,7 @@ function dbCarta(cfg) {
       maplabelbg: cfg.maplabelbg || 'rgba(190,210,220,0.9)'
     },
     /**
-     * Base Layers
+     * Base Layers.
      * Options {
      *   cls:  type {Polygon|Line|Dot|Rect}
      *   fg: : color (stroke)
@@ -60,7 +60,7 @@ function dbCarta(cfg) {
      *   labelcolor
      *   labelscale: text scalable [0|1]
      *   anchor: text pos [textAlign, textBaseline]
-     *   rotate: text rotate
+     *   rotate: text rotate angle
      * }
      */
     mopt: {
@@ -77,7 +77,11 @@ function dbCarta(cfg) {
       'DashLine':   {cls: 'Line', fg: 'rgba(0,0,0,0.2)', dash: [1,2]}
     },
     /**
-     * Private
+     * Vars store.
+     * User defines {
+     *   marea - area info {ftype, ftag, pts, desc} for doMap
+     *   bgimg - bg image for drag (mflood ref)
+     * }
      */
     m: {
       delta: dw.width / 360.0,
@@ -87,6 +91,7 @@ function dbCarta(cfg) {
       offset: [0, 0],
       scaleoff: [0, 0],
       doreload: true
+      // marea tmap pmap lmap bgimg mimg
     },
     /**
      * Stores
@@ -226,7 +231,7 @@ function dbCarta(cfg) {
           this.marea[i] = m;
         if (this.m.doreload || doreload)
           this.reload(m);
-        if (m['img'])
+        if (m['ftype'] == '.Image')
           this.paintImage(m['img'], m['pts']);
         else
           this.paintCartaPts(m['pts'], m['ftype'], m['label'], m['centerofpts']);
@@ -284,6 +289,16 @@ function dbCarta(cfg) {
     },
     /**
     * Add obj. info from DATA to mflood store.
+    * DATA [[
+    *   0 - ftype
+    *   1 - ftag
+    *   2 - coords [[x0,y0],[x1,y1],...]
+    * Optional:  
+    *   3 - label
+    *   4 - centerof [x,y]
+    *   5 - ismap 0|1
+    *   6 - img (href | base64)
+    * ],...]
     */
     loadCarta: function(data, dopaint) {
       for (var i in data) {
@@ -309,7 +324,7 @@ function dbCarta(cfg) {
           if (m['ismap'])
             this.marea[fkey] = m; // add area map
           this.reload(m); // add points
-          if (m['img'])
+          if (m['ftype'] == '.Image')
             this.paintImage(m['img'], m['pts']);
           else
             this.paintCartaPts(m['pts'], m['ftype'], m['label'], m['centerofpts']);
@@ -598,7 +613,7 @@ function dbCarta(cfg) {
     * Draw image IMG if loaded with sizes in PTS.
     */
     paintImage: function(img, pts) {
-      if (this.chkImg(img)) {
+      if (this.chkImg(img) && pts) {
         var ctx = this.getContext('2d');
         if (this.chkPts(pts[0]) && this.chkPts(pts[1])) { // scalable
           if (!this.isSpherical())
@@ -775,13 +790,17 @@ function dbCarta(cfg) {
     onmousemove: function(ev) {
       var pts = this.canvasXY(ev);
       if (this.chkImg(this.m.mimg)) { // if img is loaded
-        var ctx = this.getContext('2d');
-        var dx = pts[0] - this.m.mpts[0],
-            dy = pts[1] - this.m.mpts[1];
-        var cx = -this.m.offset[0] - this.m.scaleoff[0] + dx / this.m.scale,
-            cy = -this.m.offset[1] - this.m.scaleoff[1] + dy / this.m.scale;
+        var dx = (pts[0] - this.m.mpts[0]) / this.m.scale,
+            dy = (pts[1] - this.m.mpts[1]) / this.m.scale;
         this.clearCarta();
-        ctx.drawImage(this.m.mimg, cx, cy, this.m.mimg.width/this.m.scale, this.m.mimg.height/this.m.scale);
+        if (this.m.bgimg) { // bg img
+          if (this.m.bgimg.pts && this.chkPts(this.m.bgimg.pts[0]) && this.chkPts(this.m.bgimg.pts[1]))
+            this.paintImage(this.m.mimg, [[dx, dy + this.m.bgimg.pts[0][1]], [dx + this.m.bgimg.pts[1][0], dy + this.m.bgimg.pts[1][1]]]);
+        } else { // snapshot
+          var cx = -this.m.offset[0] - this.m.scaleoff[0] + dx,
+              cy = -this.m.offset[1] - this.m.scaleoff[1] + dy;
+          this.paintImage(this.m.mimg, [[cx, cy], [cx + this.m.mimg.width/this.m.scale, cy + this.m.mimg.height/this.m.scale]]);
+        }
         this.m.mmove = true;
       } else {
         var src = this.fromPoints(pts, false),
@@ -800,8 +819,12 @@ function dbCarta(cfg) {
       this.m.mscale = this.chkScale(pts[0], pts[1]);
       if (!this.m.mscale && !this.isSpherical()) {
         this.m.mpts = pts;
-        this.m.mimg = new Image(); // save image for drag
-        this.m.mimg.src = this.toDataURL();
+        if (this.m.bgimg) {
+          this.m.mimg = this.m.bgimg.img; // bg img from mflood
+        } else {
+          this.m.mimg = new Image(); // snapshot for drag
+          this.m.mimg.src = this.toDataURL();
+        }
       }
     },
     onmouseup: function(ev) {

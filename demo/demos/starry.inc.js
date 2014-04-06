@@ -36,8 +36,24 @@ function proj() {
   dw.scaleCarta(1);
   dw.scaleCarta( dw.project == 101 ? 0.5 : 1 );
   dw.style.backgroundColor = dw.isSpherical() ? 'rgb(17,17,96)' : 'rgb(186,196,205)';
-  scaleheight();
-  draw();
+  // worldmap raster image
+  var im = new Image();
+  if (dw.project == 0)
+    im.src = 'demodata/img/wrld-small.jpg';
+  else if (dw.project == 101)
+    im.src = 'demodata/img/wrld-small-merc.jpg';
+  else {
+    scaleheight();
+    draw();
+  }
+  im.onload = function() {
+    if (dw.project == 0)
+      dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-180,90],[180,-90]], 6:this}]);
+    else if (dw.project == 101)
+      dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-179.99,84],[179.99,-84]], 6:this}]);
+    dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
+    draw();
+  }
 }
 // Rotate Sphere on sides
 function turn(cx, cy) {
@@ -477,8 +493,6 @@ function init() {
   document.body.appendChild(mtab);
 
   dw = new dbCarta({id:'mcol', height:col.offsetHeight});
-  // change some colors
-  dw.mopt['DotPort']['fg'] = 'rgb(220,0,0)';
   // define new layers
   dw.extend(dw.mopt, layers());
   var optfunc = function(v, o) {
@@ -564,12 +578,9 @@ function init() {
       tcoord.innerHTML = ' Lon: ' + dd[0].toFixed(2) + ' Lat: ' + dd[1].toFixed(2);
     }
   }
-  // worldmap image
-  var immap = new Image();
-  immap.src = IMGB64['worldmap'];
   // draw
   dw.loadCarta(CONTINENTS);
-  dw.loadCarta([{0:'.Image', 1:'1', 2:[[-179.99,90],[179.99,-90]], 6:immap}]);
+  dw.loadCarta([{0:'.Image', 1:'wrld'}]);
   dw.loadCarta(dw.createMeridians());
   dw.loadCarta([['DotPort', 'Moscow', [[37.700,55.750]], 'Москва', null, 1]]);
   // center pov
