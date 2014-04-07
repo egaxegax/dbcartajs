@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.6.1.
+ * dbCartajs HTML5 Canvas dymanic object map v1.6.2.
  * It uses Proj4js transformations.
  *
  * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
@@ -40,7 +40,7 @@ function dbCarta(cfg) {
      */
     cfg: {
       viewportx: cfg.viewportx || 180.0,
-      viewporty: cfg.viewporty || 90.0,
+      viewporty: cfg.viewporty || 150.0,
       scalebg: cfg.scalebg || 'rgba(255,255,255,0.3)',
       mapbg: cfg.mapbg || 'rgba(80,90,100,0.5)',
       maplabelfg: cfg.maplabelfg || 'rgba(0,0,0,0.9)',
@@ -71,7 +71,7 @@ function dbCarta(cfg) {
       '.WaterLine': {cls: 'Line', fg: 'rgb(186,196,205)'},
       '.Latitude':  {cls: 'Line', fg: 'rgb(164,164,164)', anchor: ['start', 'bottom']},
       '.Longtitude':{cls: 'Line', fg: 'rgb(164,164,164)', anchor: ['start', 'top']},
-      'DotPort':    {cls: 'Dot', fg: 'rgb(240,220,0)', anchor: ['start', 'middle'], size: 2},
+      'DotPort':    {cls: 'Dot', fg: 'rgb(240,220,0)', anchor: ['start', 'middle'], size: 2, labelcolor: 'rgb(255,155,128)'},
       'Area':       {cls: 'Polygon', fg: 'rgb(0,80,170)', bg: 'rgb(0,80,170)'},
       'Line':       {cls: 'Line', fg: 'rgb(0,130,200)'},
       'DashLine':   {cls: 'Line', fg: 'rgba(0,0,0,0.2)', dash: [1,2]}
@@ -243,19 +243,24 @@ function dbCarta(cfg) {
     * Change project to NEW_PROJECT and center by visible centre.
     */
     changeProject: function(new_project) {
-      if (this.isSpherical(new_project)) {
-        var centerof = this.centerOf(),
-            viewcenterof = this.viewcenterOf();
-      } else {
-        var centerof = [0, 0],
-            viewcenterof = [0, 0];
+      // curr. centerof
+      var centerof = this.centerOf();
+      if (this.isSpherical()) {
         var proj = this.initProj();
-        if (proj !== undefined)
-          centerof = [ proj.long0 * 180/Math.PI, proj.lat0 * 180/Math.PI ];
-        centerof = this.toPoints(centerof, false);
+        viewcenterof = [ proj.long0 * 180/Math.PI, proj.lat0 * 180/Math.PI ];
+      } else {
+        var viewcenterof = this.fromPoints(centerof, true);
       }
-      this.centerCarta(centerof[0] + this.m.offset[0], centerof[1] + this.m.offset[1]);
-      this.initProj(new_project, ' +lon_0=' + viewcenterof[0] + ' +lat_0=' + viewcenterof[1]);
+      // new centerof
+      if (this.isSpherical(new_project)) {
+        this.centerCarta(centerof[0] + this.m.offset[0], centerof[1] + this.m.offset[1]);
+        this.initProj(new_project, ' +lon_0=' + viewcenterof[0] + ' +lat_0=' + viewcenterof[1]);
+      } else {
+        this.initProj(new_project, ' +lon_0=0 +lat_0=0');
+        var centerof = this.toPoints(viewcenterof, true);
+        if (!this.chkPts(centerof)) centerof = [0, 0];
+        this.centerCarta(centerof[0] + this.m.offset[0], centerof[1] + this.m.offset[1]);
+      }
     },
     /**
     * Center map by points CX,CY. Use DOSCALE for mouse points.

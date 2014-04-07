@@ -129,7 +129,7 @@ function init() {
 
   dw = new dbCarta({id:'canvasmap'});
   dw.extend(dw.mopt, {
-    'Area': {fg: 'white', bg: 'transparent'}
+    'Area': {fg: 'yellow', bg: 'transparent', labelcolor: 'white'}
   });
   dw.cfg.mapbg = undefined; // no draw map area
   // worldmap image
@@ -153,6 +153,9 @@ function init() {
   dw3.loadCarta(dw3.createMeridians());
   dw3.draw();
   dw4 = new dbCarta({id:'canvasmap4'});
+  dw4.extend(dw4.mopt, {
+    'Area': {fg: 'yellow', bg: 'transparent', labelcolor: 'white'}
+  });
   dw4.changeProject(101);
   // worldmap image
   var im4 = new Image();

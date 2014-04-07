@@ -1,4 +1,7 @@
-// cities.html func
+/**
+ * World's cities by countries.
+ * egax@bk.ru, 2013
+ */
 function draw() {
   var centerof, citylist = document.getElementById('citylist');
   for (var i=0; i<citylist.options.length; i++) {
@@ -82,10 +85,15 @@ function init() {
   dw.changeProject(101);
   var points = dw.toPoints([0, 40], true);
   dw.centerCarta(points[0], points[1]);
-  dw.loadCarta(CONTINENTS);
-  dw.loadCarta(dw.createMeridians());
-  dw.draw();
-
+  // worldmap img
+  var im = new Image();
+  im.src = 'demodata/img/wrld-small-merc.jpg';
+  im.onload = function() {
+    dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-179.99,84],[179.99,-84]], 6:this}]);
+    dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
+    dw.loadCarta(dw.createMeridians());
+    dw.draw();
+  }
   for (var cntryname in CITIES) {
     el = document.createElement('optgroup');
     el.label = cntryname;
@@ -97,7 +105,6 @@ function init() {
     }
     citylist.appendChild(el);
   }
-  delete CONTINENTS;
   delete CITIES;
   // curr. object
   dw.clfunc.onmousemove = function(sd, dd) {

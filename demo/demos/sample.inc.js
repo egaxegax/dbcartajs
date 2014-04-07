@@ -185,8 +185,6 @@ function init() {
     tcoords.innerHTML = ' X: Y:';
     if (dd) tcoords.innerHTML = ' X: ' + dd[0].toFixed(2) + ' Y: ' + dd[1].toFixed(2);
   }
-  // layers
-  dw.extend(dw.mopt['DotPort'], {fg: 'red', labelcolor: 'rgb(255,255,0)'});
   // load
   dw.loadCarta(CONTINENTS);
   delete CONTINENTS;
