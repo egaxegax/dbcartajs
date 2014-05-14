@@ -360,10 +360,11 @@ function dbCarta(cfg) {
           cy = -this.m.offset[1] - this.m.scaleoff[1] + pts[1] / this.m.scale;
       // points func
       var addpoints = function(self, fkey, domap) {
-        if (!fkey) return;
-        var m = self.marea[fkey],
-            mopt = self.mopt[m['ftype']],
-            msize =  mopt['size']/self.m.scale,
+        var m = self.marea[fkey];
+        if (!m) return;
+        var mopt = self.mopt[m['ftype']];
+        if (!mopt) return;
+        var msize =  mopt['size']/self.m.scale,
             mwidth = (mopt['width'] || 1) / self.m.scale,
             mcolor = self.cfg.mapbg;
         ctx.beginPath();
@@ -496,8 +497,6 @@ function dbCarta(cfg) {
       ctx.beginPath(); // + -
       ctx.translate(tleft, ttop);
       with (ctx) {
-        lineTo(w, h);
-        lineTo(w, h/4 - d/2);
         for (var i = 0; i <= cols; i++)
           lineTo(w/2 + w/2 * Math.cos(i * anglestep), h/4 - d/2 - w/2 * Math.sin(i * anglestep));
         lineTo(0, h/4 - d/2);
@@ -522,7 +521,7 @@ function dbCarta(cfg) {
         lineTo(0, h/2 + h/4 - d/2);
         for (var i = 0; i <= cols; i++)
           lineTo(w/2 - w/2 * Math.cos(i * anglestep), h/2 + h/4 - d/2 + w/2 * Math.sin(i * anglestep));
-        }
+      }
       ctx.fillStyle = this.cfg.scalebg;
       ctx.fill();
       ctx.restore();
@@ -637,7 +636,7 @@ function dbCarta(cfg) {
       var centerof = this.centerOf();
       var ratio = scale/this.m.scale;
       ctx.scale(ratio, ratio);
-      var cx = centerof[0]/ratio - centerof[0];
+      var cx = centerof[0]/ratio - centerof[0],
           cy = centerof[1]/ratio - centerof[1];
       var offx = this.m.offset[0] - this.m.offset[0]/ratio,
           offy = this.m.offset[1] - this.m.offset[1]/ratio;
