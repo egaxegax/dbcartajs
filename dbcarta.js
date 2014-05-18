@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.6.2.
+ * dbCartajs HTML5 Canvas dymanic object map v1.6.3.
  * It uses Proj4js transformations.
  *
  * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
@@ -185,15 +185,17 @@ function dbCarta(cfg) {
     chkScale: function(cx, cy) {
       var cw = this.width,
           ch = this.height,
-          h = ch/5,
+          h = ch/6,
           w = h/2,
           tleft = cw - w - w/10,
           ttop = ch/2 - h/2;
       var zoom = (this.m.scale < 1 ? 2-1/this.m.scale : this.m.scale);
-      if (cx > tleft && cx < tleft + w && cy > ttop && cy < ttop + h/2.0) {
-        if (zoom < 50) zoom += 0.5;
+      if (cx > tleft && cx < tleft + w && cy > ttop + h/2.0 - w/6 && cy < ttop + h/2.0 + w/6) {
+        zoom = 1; // home
+      } else if (cx > tleft && cx < tleft + w && cy > ttop && cy < ttop + h/2.0) {
+        if (zoom < 50) zoom += 0.5; // plus
       } else if (cx > tleft && cx < tleft + w && cy > ttop + h/2.0 && cy < ttop + h) {
-        if (zoom > -18) zoom -= 0.5;
+        if (zoom > -18) zoom -= 0.5; // minus
       } else return;
       return (zoom > 1 ? zoom : 1/(2-zoom));
     },
@@ -291,6 +293,7 @@ function dbCarta(cfg) {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, this.width, this.height);
       ctx.restore();
+      delete this.m.imgcrd;
     },
     /**
     * Add obj. info from DATA to mflood store.
@@ -469,7 +472,9 @@ function dbCarta(cfg) {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       var wcrd = ctx.measureText('X 0000.00 X 0000.00').width,
           hcrd = ctx.measureText('X').width * 2;
-      ctx.clearRect(cw - wcrd, ch - hcrd, wcrd, hcrd);
+      if (!this.m.imgcrd)
+        this.m.imgcrd = ctx.getImageData(cw - wcrd, ch - hcrd, wcrd, hcrd);
+      ctx.putImageData(this.m.imgcrd, cw - wcrd, ch - hcrd);
       if (coords) {
         ctx.textBaseline = 'bottom';
         ctx.textAlign = 'end';
@@ -484,43 +489,54 @@ function dbCarta(cfg) {
     paintScale: function() {
       var cw = this.width,
           ch = this.height,
-          h = ch/5,
+          h = ch/6,
           w = h/2,
           tleft = cw - w - w/10,
           ttop = ch/2 - h/2,
-          d = w/18; // + - size
+          d = w/10; // + - size
       var cols = 20, // arc col vertex
           anglestep = Math.PI/cols;
+      var mx, my; // last pos
       var ctx = this.getContext('2d');
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.beginPath(); // + -
-      ctx.translate(tleft, ttop);
-      with (ctx) {
-        for (var i = 0; i <= cols; i++)
-          lineTo(w/2 + w/2 * Math.cos(i * anglestep), h/4 - d/2 - w/2 * Math.sin(i * anglestep));
-        lineTo(0, h/4 - d/2);
+      // print zoom
+      ctx.textBaseline = 'bottom';
+      ctx.textAlign = 'start';
+      ctx.fillStyle = 'black';
+      ctx.fillText('1 : ' + this.m.scale + 'X', 0, ch);
+      with (ctx) { // + h -
+        beginPath();
+        translate(tleft, ttop);
+        for (var i = -6; i <= cols + 6; i++) // plus round
+          lineTo(mx = (w/2 + w/2 * Math.cos(i * anglestep)), my = (h/4 - w/2 * Math.sin(i * anglestep)));
+        lineTo(w/2 - w/5, h/4 - d/2);
         lineTo(w/2 - d/2, h/4 - d/2);
-        lineTo(w/2 - d/2, h/8);
-        lineTo(w/2 + d/2, h/8);
+        lineTo(w/2 - d/2, h/4 - w/5);
+        lineTo(w/2 + d/2, h/4 - w/5);
         lineTo(w/2 + d/2, h/4 - d/2);
-        lineTo(w/2 + w/4, h/4 - d/2);
-        lineTo(w/2 + w/4, h/4 + d/2);
+        lineTo(w/2 + w/5, h/4 - d/2);
+        lineTo(w/2 + w/5, h/4 + d/2);
         lineTo(w/2 + d/2, h/4 + d/2);
-        lineTo(w/2 + d/2, h/4 + w/4);
-        lineTo(w/2 - d/2, h/4 + w/4);
+        lineTo(w/2 + d/2, h/4 + w/5);
+        lineTo(w/2 - d/2, h/4 + w/5);
         lineTo(w/2 - d/2, h/4 + d/2);
-        lineTo(w/4, h/4 + d/2);
-        lineTo(w/4, h/4 - d/2);
-        lineTo(0, h/4 - d/2);
-        lineTo(0, h/2 + h/4 - d/2);
-        lineTo(w/2 + w/4, h/2 + h/4 - d/2);
-        lineTo(w/2 + w/4, h/2 + h/4 + d/2);
-        lineTo(w/4, h/2 + h/4 + d/2);
-        lineTo(w/4, h/2 + h/4 - d/2);
-        lineTo(0, h/2 + h/4 - d/2);
-        for (var i = 0; i <= cols; i++)
-          lineTo(w/2 - w/2 * Math.cos(i * anglestep), h/2 + h/4 - d/2 + w/2 * Math.sin(i * anglestep));
+        lineTo(w/2 - w/5, h/4 + d/2);
+        lineTo(w/2 - w/5, h/4 - d/2);
+        lineTo(mx, my);
+        for (var i = -6; i <= -6; i++)
+          lineTo(w/2 - w/2 * Math.cos(i * anglestep), h/2 + h/4 + w/2 * Math.sin(i * anglestep));
+        lineTo(w/2 - w/5, h/2 + h/4 - d/2);
+        lineTo(w/2 + w/5, h/2 + h/4 - d/2);
+        lineTo(w/2 + w/5, h/2 + h/4 + d/2);
+        lineTo(w/2 - w/5, h/2 + h/4 + d/2);
+        lineTo(w/2 - w/5, h/2 + h/4 - d/2);
+        for (var i = -6; i <= cols + 6; i++) // minus round
+          lineTo(mx = (w/2 - w/2 * Math.cos(i * anglestep)), my = (h/2 + h/4 + w/2 * Math.sin(i * anglestep)));
+        for (var i = 0; i <= cols; i++) // home round
+          lineTo(w/2 + w/6 * Math.cos(i * 2.0 * anglestep), h/2 + w/6 * Math.sin(i * 2.0 * anglestep));
+        lineTo(mx, my);
+        closePath();
       }
       ctx.fillStyle = this.cfg.scalebg;
       ctx.fill();
