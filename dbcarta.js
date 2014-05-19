@@ -293,7 +293,6 @@ function dbCarta(cfg) {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, this.width, this.height);
       ctx.restore();
-      delete this.m.imgcrd;
     },
     /**
     * Add obj. info from DATA to mflood store.
@@ -472,9 +471,7 @@ function dbCarta(cfg) {
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       var wcrd = ctx.measureText('X 0000.00 X 0000.00').width,
           hcrd = ctx.measureText('X').width * 2;
-      if (!this.m.imgcrd)
-        this.m.imgcrd = ctx.getImageData(cw - wcrd, ch - hcrd, wcrd, hcrd);
-      ctx.putImageData(this.m.imgcrd, cw - wcrd, ch - hcrd);
+      ctx.clearRect(cw - wcrd, ch - hcrd, wcrd, hcrd);
       if (coords) {
         ctx.textBaseline = 'bottom';
         ctx.textAlign = 'end';
