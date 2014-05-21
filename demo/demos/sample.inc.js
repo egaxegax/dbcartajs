@@ -64,6 +64,18 @@ function draw() {
      alert('Invalid coords!\nUse:\n[[1,2],[3,4],..]'); return; }
   dw.loadCarta([[ document.getElementById('ftype').value, Math.random(), coords, 'MyTest', coords[0], true ]], 1);
 }
+// Tooltip under cursor
+function infobox(ev) {
+  var mtip = document.getElementById('maptooltip');
+  if (dw.m.pmap) {
+    mtip.innerHTML = dw.marea[dw.m.pmap]['desc'] || dw.marea[dw.m.pmap]['label'] || dw.marea[dw.m.pmap]['ftag'];
+    mtip.style.display = 'block';
+    mtip.style.left = ev.clientX + window.pageXOffset + 'px';
+    mtip.style.top = ev.clientY + window.pageYOffset - mtip.offsetHeight * 1.2 + 'px';
+  } else {
+    mtip.style.display = 'none';
+  }
+}
 function init() {
   var mtab = document.createElement('table');
   mtab.style.borderCollapse = 'collapse';
@@ -169,6 +181,16 @@ function init() {
   mtab.appendChild(row);
   document.body.appendChild(mtab);
 
+  // domap tooltip
+  var el = document.createElement('div');
+  el.id = 'maptooltip';
+  el.style.padding = '2px';
+  el.style.backgroundColor = 'rgba(255,255,255,0.5)';
+  el.style.position = 'absolute';
+  el.style.zIndex = '10000';
+  el.onmousemove = function(){ this.innerHTML = ''; };
+  document.body.appendChild(el);
+
   dw = new dbCarta({id:'mcol', height:col.offsetHeight});
   // projlist
   for(var i in dw.projlist) {
@@ -180,10 +202,11 @@ function init() {
   }
   projlist.onchange = proj;
   // curr. coords
-  dw.clfunc.onmousemove = function(sd, dd) {
+  dw.clfunc.onmousemove = function(sd, dd, ev) {
     var tcoords = document.getElementById('tcoords');
     tcoords.innerHTML = ' X: Y:';
     if (dd) tcoords.innerHTML = ' X: ' + dd[0].toFixed(2) + ' Y: ' + dd[1].toFixed(2);
+    infobox(ev);
   }
   // load
   dw.loadCarta(CONTINENTS);

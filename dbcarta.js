@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.6.4.
+ * dbCartajs HTML5 Canvas dymanic object map v1.6.5.
  * It uses Proj4js transformations.
  *
  * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
@@ -35,16 +35,14 @@ function dbCarta(cfg) {
      *   width, height: canvas size
      *   viewportx, viewporty: offset limits for centerCarta in degrees
      *   scalebg: bgcolor for paintBar
-     *   mapbg, maplabelfg, maplabelfg: colors for doMap
+     *   mapbg: bgcolor for doMap
      * }
      */
     cfg: {
       viewportx: cfg.viewportx || 180.0,
       viewporty: cfg.viewporty || 150.0,
       scalebg: cfg.scalebg || 'rgba(255,255,255,0.3)',
-      mapbg: cfg.mapbg || 'rgba(80,90,100,0.5)',
-      maplabelfg: cfg.maplabelfg || 'rgba(0,0,0,0.9)',
-      maplabelbg: cfg.maplabelbg || 'rgba(190,210,220,0.9)'
+      mapbg: cfg.mapbg || 'rgba(80,90,100,0.5)'
     },
     /**
      * Base Layers.
@@ -91,7 +89,7 @@ function dbCarta(cfg) {
       offset: [0, 0],
       scaleoff: [0, 0],
       doreload: true
-      // marea tmap pmap lmap bgimg mimg
+      // marea tmap pmap bgimg mimg
     },
     /**
      * Stores
@@ -243,6 +241,7 @@ function dbCarta(cfg) {
       // current view
       var rect = this.viewsizeOf();
       var left = rect[0], top = rect[1], right = rect[2], bottom = rect[3];
+      var xlimit, ylimit;
       if (left < (xlimit = -179.999)) left = xlimit;
       if (top > (ylimit = (this.project == 101 ? 84 : 90))) top = ylimit;
       for (var i in this.mflood) {
@@ -385,8 +384,9 @@ function dbCarta(cfg) {
     },
     /**
     * Highlight obj under mouse cursor like html MAP-AREA.
+    * Use ONMOUSEMOVE callback in your script to show div with info.
     */
-    doMap: function(pts, ev) {
+    doMap: function(pts) {
       if (Number(new Date()) - this.m.tmap < 100) // not so quickly
         return;
       this.m.tmap = Number(new Date());
@@ -446,29 +446,8 @@ function dbCarta(cfg) {
       }
       ctx.restore();
       if (this.m.pmap != fkey) {
-        // current
-        addpoints(this, fkey, true);
-        // restore prev
-        addpoints(this, this.m.pmap, false);
-      }
-      // label
-      if (fkey){
-        if (!this.m.lmap) {
-          this.m.lmap = document.createElement('div');
-          this.m.lmap.style.backgroundColor = this.cfg.maplabelbg;
-          this.m.lmap.style.color = this.cfg.maplabelfg;
-          this.m.lmap.style.position = 'absolute';
-          this.m.lmap.style.zIndex = '10000';
-          this.m.lmap.onmousemove = function(){ this.innerHTML = ''; };
-          document.body.appendChild(this.m.lmap);
-        }
-        // ftag + opt.label + opt.desc
-        this.m.lmap.innerHTML = this.marea[fkey]['desc'] || this.marea[fkey]['label'] || this.marea[fkey]['ftag'];
-        this.m.lmap.style.left = ev.clientX + window.pageXOffset + 'px';
-        this.m.lmap.style.top = ev.clientY + window.pageYOffset - this.m.lmap.offsetHeight * 1.2 + 'px';
-      } else if (this.m.lmap) {
-        document.body.removeChild(this.m.lmap);
-        delete this.m.lmap;
+        addpoints(this, fkey, true); // current
+        addpoints(this, this.m.pmap, false); // restore prev
       }
       this.m.pmap = fkey;
     },
@@ -476,7 +455,6 @@ function dbCarta(cfg) {
     * Draw Sphere radii bounds.
     */
     paintBound: function() {
-      var ctx = this.getContext('2d');
       var centerof = this.centerOf();
       var ratio, proj = this.initProj();
       // spherical radii
@@ -486,6 +464,7 @@ function dbCarta(cfg) {
         case '203': ratio = 1.0; break;
       }
       if (ratio) {
+        var ctx = this.getContext('2d');
         ctx.beginPath();
         ctx.arc(centerof[0], centerof[1], 180/Math.PI * ratio * this.m.delta, 0, Math.PI*2, 0);
         ctx.strokeStyle = this.mopt['.Arctic']['fg'];
@@ -682,14 +661,14 @@ function dbCarta(cfg) {
     * Use twice to fix bug with labels: scaleCarta(1)->scaleCarta(SCALE)
     */
     scaleCarta: function(scale) {
-      var ctx = this.getContext('2d');
       var centerof = this.centerOf();
       var ratio = scale/this.m.scale;
-      ctx.scale(ratio, ratio);
       var cx = centerof[0]/ratio - centerof[0],
           cy = centerof[1]/ratio - centerof[1];
       var offx = this.m.offset[0] - this.m.offset[0]/ratio,
           offy = this.m.offset[1] - this.m.offset[1]/ratio;
+      var ctx = this.getContext('2d');
+      ctx.scale(ratio, ratio);
       ctx.translate(cx + offx, cy + offy);
       this.m.scaleoff = [ cx, cy ];
       this.m.scale = scale;
@@ -860,12 +839,12 @@ function dbCarta(cfg) {
         var src = this.fromPoints(pts, false),
             dst = this.fromPoints(pts, true);
         for (var i in this.marea) {
-          this.doMap(pts, ev);
+          this.doMap(pts);
           break;
         }
         this.paintCoords(dst);
         if ('onmousemove' in this.clfunc)
-          this.clfunc.onmousemove(src, dst);
+          this.clfunc.onmousemove(src, dst, ev);
       }
     },
     onmousedown: function(ev) {

@@ -7,6 +7,18 @@ function proj() {
   dw.changeProject(document.getElementById('projlist').value);
   dw.draw();
 }
+// tooltip under cursor
+function infobox(ev) {
+  var mtip = document.getElementById('maptooltip');
+  if (dw.m.pmap) {
+    mtip.innerHTML = dw.marea[dw.m.pmap]['desc'] || dw.marea[dw.m.pmap]['label'] || dw.marea[dw.m.pmap]['ftag'];
+    mtip.style.display = 'block';
+    mtip.style.left = ev.clientX + window.pageXOffset + 'px';
+    mtip.style.top = ev.clientY + window.pageYOffset - mtip.offsetHeight * 1.2 + 'px';
+  } else {
+    mtip.style.display = 'none';
+  }
+}
 function init() {
   var mtab = document.createElement('table');
   mtab.width = '100%';
@@ -49,6 +61,16 @@ function init() {
   mtab.appendChild(row);
   document.body.appendChild(mtab);
 
+  // domap tooltip
+  var el = document.createElement('div');
+  el.id = 'maptooltip';
+  el.style.padding = '5px';
+  el.style.backgroundColor = 'rgba(190,170,220,0.9)';
+  el.style.position = 'absolute';
+  el.style.zIndex = '10000';
+  el.onmousemove = function(){ this.innerHTML = ''; };
+  document.body.appendChild(el);
+
   dw = new dbCarta({id:'mcol', height:col.offsetHeight});
   // add new layers
   dw.extend(dw.mopt, {
@@ -69,7 +91,7 @@ function init() {
   }
   projlist.onchange = proj;
   // curr.object
-  dw.clfunc.onmousemove = function() {
+  dw.clfunc.onmousemove = function(sd, dd, ev) {
     var mcoord = document.getElementById('coords');
     var label = '';
     if (dw.m.pmap) {
@@ -78,7 +100,8 @@ function init() {
       if (m = CITIES[o['label']])
         label = ' : ' + m.length + ' cities';
       label = o['label'] + ' : ' + dw.m.pmap.split('_')[1] + label;
-    }
+    } 
     mcoord.innerHTML = label;
+    infobox(ev);
   }
 }
