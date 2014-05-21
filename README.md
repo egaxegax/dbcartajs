@@ -12,10 +12,8 @@ Demos at http://dbcartajs.appspot.com/.
 
 Simply download, unpack and open index.html from demo folder in any browser with HTML5 support.
 Controls:
- * drag to move in lonlat, mercator projections;
- * left click to center point if mouse drag unavailable (on Tablet PC) ;
- * left click to turn globe in spherical proj.; 
- * zoom buttons [+|-] are placed on right side.
+ * drag to move map;
+ * use right bar buttons to move if mouse drag unavailable (on Tablet PC) ;
 
 ##  Screenshots
 
