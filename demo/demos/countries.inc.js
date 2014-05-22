@@ -134,7 +134,7 @@ function init() {
   dw.cfg.mapbg = undefined; // no draw map area
   // worldmap image
   var im = new Image();
-  im.src = 'demodata/img/wrld-small.jpg';
+  im.src = IMGMAP['wrld_small'];
   im.onload = function() {
     dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-180,90],[180,-90]], 6:this}]);
     dw4.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
@@ -159,7 +159,7 @@ function init() {
   dw4.changeProject(101);
   // worldmap image
   var im4 = new Image();
-  im4.src = 'demodata/img/wrld-small-merc.jpg';
+  im4.src = IMGMAP['wrld_small_merc'];
   im4.onload = function() {
     dw4.loadCarta([{0:'.Image', 1:'wrld-merc', 2:[[-179.99,84],[179.99,-84]], 6:this}]);
     dw4.m.bgimg = dw.mflood['.Image_wrld-merc']; // mark as bg

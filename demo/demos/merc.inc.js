@@ -34,7 +34,7 @@ function init() {
 
   // worldmap img
   var im = new Image();
-  im.src = 'demodata/img/wrld-small-merc.jpg';
+  im.src = IMGMAP['wrld_small_merc'];
   im.onload = function() {
     dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-179.99,84],[179.99,-84]], 6:this}]);
     dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg

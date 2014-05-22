@@ -43,9 +43,9 @@ function proj() {
   // worldmap raster image
   var im = new Image();
   if (dw.project == 0)
-    im.src = 'demodata/img/wrld-small.jpg';
+    im.src = IMGMAP['wrld_small'];
   else if (dw.project == 101)
-    im.src = 'demodata/img/wrld-small-merc.jpg';
+    im.src = IMGMAP['wrld_small_merc'];
   else
     dw.draw();
   im.onload = function() {
