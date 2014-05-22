@@ -251,7 +251,7 @@ function init() {
     var label = '';
     if (dw.m.pmap) {
       var o = dw.mflood[dw.m.pmap];
-      label = o['label'];
+      label = o['label'] || o['ftag'];
     }
     mcoord.innerHTML = label;
   }

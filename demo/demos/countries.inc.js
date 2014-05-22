@@ -137,7 +137,7 @@ function init() {
   im.src = IMGMAP['wrld_small'];
   im.onload = function() {
     dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-180,90],[180,-90]], 6:this}]);
-    dw4.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
+    dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
     dw.loadCarta(dw.createMeridians());
     dw.draw();
   }
