@@ -3,24 +3,6 @@
  * Draw background images in diff. projections.
  * egax@bk.ru, 2013
  */
-function scale() {
-  var scale = parseFloat(document.getElementById('scale').value);
-  dw.scaleCarta(1); // fix labels
-  dw.scaleCarta(scale);
-  dw.draw();
-}
-function turn() {
-  var cx = parseFloat(document.getElementById('turnx').value),
-      cy = parseFloat(document.getElementById('turny').value);
-  if (!isNaN(cx) && !isNaN(cy))
-    if (dw.isSpherical()) {
-      var proj = dw.initProj();
-      cx += proj.long0 * 180/Math.PI;
-      cy += proj.lat0 * 180/Math.PI;
-      dw.initProj(' +lon_0=' + cx + ' +lat_0=' + cy);
-      dw.draw();
-    }
-}
 // Imitate Ajax loading
 function loading() {
   dw.clearCarta();
@@ -37,25 +19,49 @@ function loading() {
   }
   ctx.restore();
 }
-function proj() {
-  dw.changeProject(document.getElementById('projlist').value);
-  loading();
-  // worldmap raster image
+// Free bg image
+function freeImg() {
+  delete dw.m.bgimg;
+  delete dw.mflood['.Image_wrld']['img'];
+}
+// Load worldmap raster image
+function loadImg() {
   var im = new Image();
   if (dw.project == 0)
     im.src = IMGMAP['wrld_small'];
   else if (dw.project == 101)
     im.src = IMGMAP['wrld_small_merc'];
+  else if (dw.project == 102)
+    im.src = IMGMAP['wrld_small_mill'];
+  else if (dw.project == 204)
+    im.src = IMGMAP['wrld_small_moll'];
   else
     dw.draw();
   im.onload = function() {
     if (dw.project == 0)
       dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-180,90],[180,-90]], 6:this}]);
     else if (dw.project == 101)
-      dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-179.99,84],[179.99,-84]], 6:this}]);
+      dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-179.99,168],[179.99,-168]], 6:this}]);
+    else if (dw.project == 102)
+      dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-179.99,132],[179.99,-132]], 6:this}]);
+    else if (dw.project == 204)
+      dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-162,81],[162,-81]], 6:this}]);
     dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
     dw.draw();
   }
+}
+function scale() {
+  var scale = parseFloat(document.getElementById('scale').value);
+  dw.scaleCarta(1); // fix labels
+  dw.scaleCarta(scale);
+  dw.draw();
+}
+function proj() {
+  dw.changeProject(document.getElementById('projlist').value);
+  freeImg();
+  document.getElementById('chkbg').checked ?
+    loading() || loadImg() :
+    dw.draw();
 }
 function draw() {
   try {
@@ -109,27 +115,6 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '15%';
-  col.align = 'center';
-  el = document.createElement('input');
-  el.type = 'text';
-  el.size= '4';
-  el.id = 'turnx';
-  el.value= '10';
-  col.appendChild(el);
-  el = document.createElement('input');
-  el.type = 'text';
-  el.size= '4';
-  el.id = 'turny';
-  el.value= '10';
-  col.appendChild(el);
-  el = document.createElement('button');
-  el.onclick = turn;
-  el.appendChild(document.createTextNode('turn'));
-  col.appendChild(el);
-  row.appendChild(col);
-
-  var col = document.createElement('td');
   col.width = '10%';
   col.align = 'center';
   col.appendChild(document.createTextNode(' proj '));
@@ -164,6 +149,21 @@ function init() {
   el.onclick = draw;
   el.appendChild(document.createTextNode('draw'));
   col.appendChild(el);
+  row.appendChild(col);
+
+  var col = document.createElement('td');
+  col.width = '10%';
+  col.align = 'center';
+  var el = document.createElement('input');
+  el.type = 'checkbox';
+  el.id = 'chkbg';
+  el.checked = true;
+  el.onclick = function(o) {
+    freeImg();
+    o.target.checked ? loadImg() : dw.draw();
+  };
+  col.appendChild(el);
+  col.appendChild(document.createTextNode(' bg'));
   row.appendChild(col);
 
   var col = document.createElement('td');
@@ -207,6 +207,7 @@ function init() {
     tcoords.innerHTML = ' X: Y:';
     if (dd) tcoords.innerHTML = ' X: ' + dd[0].toFixed(2) + ' Y: ' + dd[1].toFixed(2);
     infobox(ev);
+    dw.paintCoords(dd);
   }
   // load
   dw.loadCarta(CONTINENTS);

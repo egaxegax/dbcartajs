@@ -1,8 +1,8 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.6.5.
+ * dbCartajs HTML5 Canvas dymanic object map v1.7.
  * It uses Proj4js transformations.
  *
- * Initially ported from Python dbCarta project http://dbcarta.googlecode.com/.
+ * Source at https://github.com/egaxegax/dbCartajs.git.
  * egax@bk.ru, 2013
  */
 function dbCarta(cfg) {
@@ -42,7 +42,8 @@ function dbCarta(cfg) {
       viewportx: cfg.viewportx || 180.0,
       viewporty: cfg.viewporty || 150.0,
       scalebg: cfg.scalebg || 'rgba(255,255,255,0.3)',
-      mapbg: cfg.mapbg || 'rgba(80,90,100,0.5)'
+      mapbg: cfg.mapbg || 'rgba(80,90,100,0.5)',
+      mapfg: cfg.mapfg
     },
     /**
      * Base Layers.
@@ -50,7 +51,7 @@ function dbCarta(cfg) {
      *   cls:  type {Polygon|Line|Dot|Rect}
      *   fg: : color (stroke)
      *   bg: - background color (fill)
-     *   dash: - dash patten [1,2]
+     *   dash: - dash pattern [1,2]
      *   join: lineJoin
      *   cap: lineCap
      *   width: lineWidth
@@ -63,6 +64,8 @@ function dbCarta(cfg) {
      */
     mopt: {
       '.Image':     {cls: 'Image'},
+      '.ZoomBox':   {cls: 'Polygon', fg: 'rgb(50,150,255)', bg: 'rgba(100,140,180,0.2)'},
+      '.ZoomRect':  {cls: 'Polygon', fg: 'rgb(50,150,255)', bg: 'transparent'},
       '.Arctic':    {cls: 'Polygon', fg: 'rgb(210,221,195)', bg: 'rgb(210,221,195)'},
       '.Mainland':  {cls: 'Polygon', fg: 'rgb(135,159,103)', bg: 'rgb(135,159,103)'},
       '.Water':     {cls: 'Polygon', fg: 'rgb(90,140,190)', bg: 'rgb(90,140,190)'},
@@ -93,7 +96,7 @@ function dbCarta(cfg) {
     },
     /**
      * Stores
-     */ 
+     */
     clfunc: {}, // callbacks
     mflood: {}, // obj draw
     marea: {},  // map area
@@ -105,9 +108,11 @@ function dbCarta(cfg) {
         return {
           0: '+proj=longlat',
           101: '+proj=merc +units=m',
+          102: '+proj=mill +units=m',
           201: '+proj=laea +units=m',
           202: '+proj=nsper +units=m +h=40000000',
-          203: '+proj=ortho +units=m'
+          203: '+proj=ortho +units=m',
+          204: '+proj=moll +units=m'
         }
       }
       return {};
@@ -146,7 +151,6 @@ function dbCarta(cfg) {
       else if ('mozDash' in ctx)
         ctx.mozDash = dashlist;
     },
-    // -----------------------------------
     /**
     * Add meridians info to mflood.
     */
@@ -181,58 +185,6 @@ function dbCarta(cfg) {
     },
     // ----------------------------------
     /**
-     * Check click on right bar and do action.
-     */
-    chkBar: function(cx, cy, doaction) {
-      var cw = this.width,
-          ch = this.height,
-          h = ch/6,
-          w = h/2,
-          tleft = cw - w - w/10,
-          ttop = ch/2 - h/2,
-          d = w/10;
-      var mx = cx - tleft,
-          my = cy - (ttop - h + h/4);
-      if (mx > 0 && mx < w && my > 0 && my < h/2) { // moves
-        var sx = cw/100,
-            sy = ch/100, moves = [0, 0];
-        if (my > 0 && my < 3*d) {
-          moves = [0, sy]; // up
-        } else if (mx > 0 && mx < 3*d) {
-          moves = [sx, 0]; // left
-        } else if (mx > w - 3*d && mx < w) {
-          moves = [-sx, 0]; // right
-        } else if (my > h/2 - 3*d && my < h/2) {
-          moves = [0, -sy]; // down
-        } else if (mx > 4*d && mx < w - 4*d && my > 4*d && my < h/2 - 4*d) { // center
-          moves = [-this.m.offset[0], -this.m.offset[1]];
-        }
-        if (!doaction) return 1;
-        if (this.isSpherical()) {
-          var proj = dw.initProj();
-          this.initProj(' +lon_0=' + (proj.long0 * 180/Math.PI + moves[0]) + ' +lat_0=' + (proj.lat0 * 180/Math.PI + moves[1]));
-        } else {
-          var centerof = this.centerOf();
-          this.centerCarta(centerof[0] - moves[0], centerof[1] - moves[1], true);
-        }
-      }
-      var my = cy - ttop;
-      if (mx > 0 && mx < w && my > 0 && my < h) { // zoom
-        var zoom = (this.m.scale < 1 ? 2 - 1/this.m.scale : this.m.scale);
-        if (my > h/2 - w/6 && my < h/2 + w/6) {
-          zoom = 1; // home
-        } else if (my > 0 && my < h/2) {
-          if (zoom < 50) zoom += 0.5; // plus
-        } else if (my > h/2 && my < h) {
-          if (zoom > -18) zoom -= 0.5; // minus
-        }
-        if (!doaction) return 1;
-        zoom = (zoom > 1 ? zoom : 1/(2-zoom));
-        this.scaleCarta(1); // fix labels
-        this.scaleCarta(zoom);
-      }
-    },
-    /**
     * Draw obj from mflood on Canvas.
     */
     draw: function(dontclear) {
@@ -241,61 +193,55 @@ function dbCarta(cfg) {
       // current view
       var rect = this.viewsizeOf();
       var left = rect[0], top = rect[1], right = rect[2], bottom = rect[3];
-      var xlimit, ylimit;
-      if (left < (xlimit = -179.999)) left = xlimit;
-      if (top > (ylimit = (this.project == 101 ? 84 : 90))) top = ylimit;
+      var xlimit = -179.999, ylimit = (this.project == 101 ? 84 : 90);
+      if (left < xlimit) left = xlimit;
+      if (top > ylimit) top = ylimit;
       for (var i in this.mflood) {
-        var doreload, m = this.mflood[i];
+        var m = this.mflood[i];
         if (m['ftype'] == '.Longtitude' && m['centerof']) {
-          if (this.isSpherical()) {
-             if (m['centerof'][0] > -180 && m['centerof'][0] <= 180)
-               m['centerof'] = [m['centerof'][0], 0];
-          } else {
+          if (this.isSpherical() && m['centerof'][0] > -180 && m['centerof'][0] <= 180)
+            m['centerof'] = [m['centerof'][0], 0];
+          else {
             m['centerof'] = [m['centerof'][0], top];
-            doreload = true;
+            delete m['pts'];
           }
         } else if (m['ftype'] == '.Latitude' && m['centerof']) {
           if (this.isSpherical())
             m['centerof'] = [0, m['centerof'][1]];
           else {
             m['centerof'] = [left, m['centerof'][1]];
-            doreload = true;
+            delete m['pts'];
           }
         }
-        if (m['ismap'])
+        if (m['ismap']) // map area info
           this.marea[i] = m;
-        if (this.m.doreload || doreload)
+        if (this.m.doreload || !m['pts'])
           this.reload(m);
-        if (m['ftype'] == '.Image')
+        if (m['ftype'] == '.Image') {
           this.paintImage(m['img'], m['pts']);
-        else
+        } else {
           this.paintCartaPts(m['pts'], m['ftype'], m['label'], m['centerofpts']);
+        }
       }
       this.m.doreload = false;
       this.paintBar();
     },
     /**
-    * Change project to NEW_PROJECT and center by visible centre.
+    * Change map scale to SCALE.
+    * Use twice to fix bug with labels: scaleCarta(1)->scaleCarta(SCALE)
     */
-    changeProject: function(new_project) {
-      // curr. centerof
+    scaleCarta: function(scale) {
       var centerof = this.centerOf();
-      if (this.isSpherical()) {
-        var proj = this.initProj();
-        viewcenterof = [ proj.long0 * 180/Math.PI, proj.lat0 * 180/Math.PI ];
-      } else {
-        var viewcenterof = this.fromPoints(centerof, true);
-      }
-      // new centerof
-      if (this.isSpherical(new_project)) {
-        this.centerCarta(centerof[0] + this.m.offset[0], centerof[1] + this.m.offset[1]);
-        this.initProj(new_project, ' +lon_0=' + viewcenterof[0] + ' +lat_0=' + viewcenterof[1]);
-      } else {
-        this.initProj(new_project, ' +lon_0=0 +lat_0=0');
-        var centerof = this.toPoints(viewcenterof, true);
-        if (!this.chkPts(centerof)) centerof = [0, 0];
-        this.centerCarta(centerof[0] + this.m.offset[0], centerof[1] + this.m.offset[1]);
-      }
+      var ratio = scale/this.m.scale;
+      var cx = centerof[0]/ratio - centerof[0],
+          cy = centerof[1]/ratio - centerof[1];
+      var offx = this.m.offset[0] - this.m.offset[0]/ratio,
+          offy = this.m.offset[1] - this.m.offset[1]/ratio;
+      var ctx = this.getContext('2d');
+      ctx.scale(ratio, ratio);
+      ctx.translate(cx + offx, cy + offy);
+      this.m.scaleoff = [ cx, cy ];
+      this.m.scale = scale;
     },
     /**
     * Center map by points CX,CY. Use DOSCALE for mouse points.
@@ -373,18 +319,22 @@ function dbCarta(cfg) {
       }
     },
     /**
-    * Refill obj in mfood new points from coords.
+    * Refill obj in mflood new points from coords.
     */
     reload: function(m) {
-      var pts = this.interpolateCoords(m['coords'], true, this.isSpherical() ? 10 : undefined),
-          centerofpts = this.interpolateCoords([m['centerof']], true);
-      m['pts'] = pts;
-      m['centerofpts'] = centerofpts;
+      if (m['ftype'] == '.Image') {
+        m['pts'] = [];
+        for (var i in m['coords'])
+          m['pts'].push(this.toPoints(m['coords'][i]));
+      } else {
+        m['pts'] = this.interpolateCoords(m['coords'], true, this.isSpherical() ? 10 : undefined),
+        m['centerofpts'] = this.interpolateCoords([m['centerof']], true);
+      }
       return m;
     },
     /**
-    * Highlight obj under mouse cursor like html MAP-AREA.
-    * Use ONMOUSEMOVE callback in your script to show div with info.
+    * Find obj under mouse cursor like html MAP-AREA.
+    * Use ONMOUSEMOVE callback in your script to show info.
     */
     doMap: function(pts) {
       if (Number(new Date()) - this.m.tmap < 100) // not so quickly
@@ -402,7 +352,8 @@ function dbCarta(cfg) {
         if (!mopt) return;
         var msize =  mopt['size']/self.m.scale,
             mwidth = (mopt['width'] || 1) / self.m.scale,
-            mcolor = self.cfg.mapbg;
+            mapfg = self.cfg.mapfg,
+            mapbg = self.cfg.mapbg;
         ctx.beginPath();
         if (mopt['cls'] == 'Dot' && self.chkPts(m['pts'][0]))
           ctx.arc(m['pts'][0][0], m['pts'][0][1], msize, 0, Math.PI*2, 0);
@@ -412,21 +363,21 @@ function dbCarta(cfg) {
           for (var j in m['pts'])
             if (self.chkPts(m['pts'][j]))
               ctx.lineTo(m['pts'][j][0], m['pts'][j][1]);
-        if (domap != undefined && mcolor) {
+        if (domap != undefined && (mapfg || mapbg)) {
           ctx.lineWidth = mwidth;
           if (mopt['cls'] == 'Line') {
-            ctx.strokeStyle = (domap ? mcolor : mopt['fg']);
+            ctx.strokeStyle = (domap ? mapfg || mapbg : mopt['fg']);
             ctx.stroke();
           } else if (mopt['cls'] == 'Dot' || mopt['cls'] == 'Rect') {
             ctx.strokeStyle = mopt['fg'];
             ctx.stroke();
-            ctx.fillStyle = (domap ? mcolor : mopt['bg'] || mopt['fg']);
+            ctx.fillStyle = (domap ? mapfg || mapbg : mopt['fg'] || mopt['fg']);
             ctx.fill();
           } else {
             ctx.closePath();
-            ctx.fillStyle = (domap ? mcolor : mopt['bg']);
+            ctx.fillStyle = (domap ? mapbg || 'transparent' : mopt['bg']);
             ctx.fill();
-            ctx.strokeStyle = mopt['fg'];
+            ctx.strokeStyle = (domap ? mapfg || 'transparent' : mopt['fg']);
             ctx.stroke();
           }
         }
@@ -452,21 +403,40 @@ function dbCarta(cfg) {
       this.m.pmap = fkey;
     },
     /**
+     * Get snapshot or bg image for redraw.
+     */
+    doMapImg: function() {
+      if (this.m.bgimg) {
+        this.m.mimg = this.m.bgimg.img; // bg img from mflood
+      } else {
+        this.m.mimg = new Image(); // snapshot for drag
+        this.m.mimg.src = this.toDataURL();
+      }
+    },
+    /**
     * Draw Sphere radii bounds.
     */
     paintBound: function() {
       var centerof = this.centerOf();
-      var ratio, proj = this.initProj();
+      var rx, ry, proj = this.initProj();
       // spherical radii
       switch (String(this.project)) {
-        case '201': ratio = 2.0; break;
-        case '202': ratio = Math.sqrt((proj.p15 - 1.0)/(proj.p15 + 1.0)); break;
-        case '203': ratio = 1.0; break;
+        case '201': rx = 2.0; break;
+        case '202': rx = Math.sqrt((proj.p15 - 1.0)/(proj.p15 + 1.0)); break;
+        case '203': rx = 1.0; break;
+        case '204': ry = 1.4142135623731; rx = 2.0 * ry; break;
       }
-      if (ratio) {
+      if (rx) {
         var ctx = this.getContext('2d');
         ctx.beginPath();
-        ctx.arc(centerof[0], centerof[1], 180/Math.PI * ratio * this.m.delta, 0, Math.PI*2, 0);
+        if (ry) { // ellipse
+          var col_vertex = 100,
+              anglestep = 2.0 * Math.PI / col_vertex;
+          for (var i=0; i<=col_vertex; i++)
+            ctx.lineTo( centerof[0] - 180/Math.PI * rx * this.m.delta * Math.cos(i * anglestep), 
+                        centerof[1] + 180/Math.PI * ry * this.m.delta * Math.sin(i * anglestep) );
+        } else // circle
+          ctx.arc(centerof[0], centerof[1], 180/Math.PI * rx * this.m.delta, 0, Math.PI*2, 0);
         ctx.strokeStyle = this.mopt['.Arctic']['fg'];
         ctx.stroke();
         ctx.fillStyle = this.mopt['.Water']['bg'];
@@ -649,57 +619,11 @@ function dbCarta(cfg) {
       if (this.chkImg(img) && pts) {
         var ctx = this.getContext('2d');
         if (this.chkPts(pts[0]) && this.chkPts(pts[1])) { // scalable
-          if (!this.isSpherical())
-            ctx.drawImage(img, pts[0][0], pts[0][1], pts[1][0]-pts[0][0], pts[1][1]-pts[0][1]);
+          ctx.drawImage(img, pts[0][0], pts[0][1], pts[1][0]-pts[0][0], pts[1][1]-pts[0][1]);
         } else if (this.chkPts(pts[0])) { // fixed size
           ctx.drawImage(img, pts[0][0], pts[0][1], img.width/this.m.scale, img.height/this.m.scale);
         }
       }
-    },
-    /**
-    * Change map scale to SCALE.
-    * Use twice to fix bug with labels: scaleCarta(1)->scaleCarta(SCALE)
-    */
-    scaleCarta: function(scale) {
-      var centerof = this.centerOf();
-      var ratio = scale/this.m.scale;
-      var cx = centerof[0]/ratio - centerof[0],
-          cy = centerof[1]/ratio - centerof[1];
-      var offx = this.m.offset[0] - this.m.offset[0]/ratio,
-          offy = this.m.offset[1] - this.m.offset[1]/ratio;
-      var ctx = this.getContext('2d');
-      ctx.scale(ratio, ratio);
-      ctx.translate(cx + offx, cy + offy);
-      this.m.scaleoff = [ cx, cy ];
-      this.m.scale = scale;
-    },
-    /**
-    * Change project. to PROJECT with DEFS (see Proj4js proj. definitions).
-    * If no args return current projection info (Proj4js.Proj obj.).
-    */
-    initProj: function(project, defs) {
-      if ('Proj4js' in window) {
-        if (project !== undefined) {
-          if (defs == undefined) {
-            defs = project;
-            project = this.project;
-          }
-          var old_defs = Proj4js.defs[String(project)],
-              new_defs = this.projlist[project] + (defs || '');
-          this.m.doreload = (this.project != project) || (old_defs != new_defs); // recalc points?
-          this.project = project;
-          Proj4js.defs[String(project)] = new_defs;
-        }
-        if (String(this.project) in Proj4js.defs) {
-          this.projload['epsg:4326'] = new Proj4js.Proj('epsg:4326');
-          this.projload[String(this.project)] = new Proj4js.Proj(String(this.project));
-          return this.projload[String(this.project)];
-        }
-      }
-    },
-    isSpherical: function(project) {
-      project = project || this.project;
-      return (project > 200 && project < 300);
     },
     // - sizes ----------------------------
     sizeOf: function() {
@@ -732,6 +656,87 @@ function dbCarta(cfg) {
                (rect[1] + rect[3]) / 2.0 ];
     },
     // - checks ------------------------
+    /**
+     * Check click on right bar and do action.
+     */
+    chkBar: function(pts, doaction) {
+      var cw = this.width,
+          ch = this.height,
+          h = ch/6,
+          w = h/2,
+          tleft = cw - w - w/10,
+          ttop = ch/2 - h/2,
+          d = w/10;
+      var mx = pts[0] - tleft,
+          my = pts[1] - (ttop - h + h/4);
+      if (mx > 0 && mx < w && my > 0 && my < h/2) { // moves
+        if (!doaction) return true;
+        var sx = cw/100,
+            sy = ch/100, moves = [0, 0];
+        if (my > 0 && my < 3*d) {
+          moves = [0, sy]; // up
+        } else if (mx > 0 && mx < 3*d) {
+          moves = [sx, 0]; // left
+        } else if (mx > w - 3*d && mx < w) {
+          moves = [-sx, 0]; // right
+        } else if (my > h/2 - 3*d && my < h/2) {
+          moves = [0, -sy]; // down
+        } else if (mx > 4*d && mx < w - 4*d && my > 4*d && my < h/2 - 4*d) { // center
+          moves = [-this.m.offset[0], -this.m.offset[1]];
+        }
+        if (this.isTurnable()) {
+          var proj = dw.initProj();
+          this.initProj(' +lon_0=' + (proj.long0 * 180/Math.PI + moves[0]) + ' +lat_0=' + (proj.lat0 * 180/Math.PI + moves[1]));
+        } else {
+          var centerof = this.centerOf();
+          this.centerCarta(centerof[0] - moves[0], centerof[1] - moves[1], true);
+        }
+      }
+      var my = pts[1] - ttop;
+      if (mx > 0 && mx < w && my > 0 && my < h) { // scale
+        if (!doaction) return true;
+        var zoom = (this.m.scale > 1 ? this.m.scale : 2-1/this.m.scale);
+        if (my > h/2 - w/6 && my < h/2 + w/6) {
+          zoom = 1; // home
+        } else if (my > 0 && my < h/2) { // plus
+          if (zoom < 50) zoom += 0.5;
+        } else if (my > h/2 && my < h) { // minux
+          if (zoom > -18) zoom -= 0.5;
+        }
+        zoom = (zoom > 1 ? zoom : 1/(2-zoom));
+        this.scaleCarta(1); // fix labels
+        this.scaleCarta(zoom);
+      }
+    },
+    /**
+     * Check click into zoom box.
+     * Return coords of rect if not DOACTION or zoom in else.
+     */
+    chkZoomBox: function(pts, doaction) {
+      if ('.ZoomBox' in this.mflood) {
+        var mpts = this.mflood['.ZoomBox']['pts'];
+        var rect = [ mpts[0][0], mpts[0][1],
+                     mpts[2][0], mpts[2][1] ];
+        var cx = -this.m.offset[0] - this.m.scaleoff[0] + pts[0] / this.m.scale,
+            cy = -this.m.offset[1] - this.m.scaleoff[1] + pts[1] / this.m.scale;
+        if (((cx > rect[0] && cx < rect[2]) || (cx > rect[2] && cx < rect[0])) &&
+            ((cy > rect[1] && cy < rect[3]) || (cy > rect[3] && cy < rect[1]))) {
+          if (!doaction) return mpts;
+          var size = this.sizeOf();
+          var cs = Math.max(size[2], size[3]);
+          // zoombox
+          var centerof = [ (rect[0] + rect[2]) / 2.0,
+                           (rect[1] + rect[3]) / 2.0 ];
+          var wb = Math.abs(rect[0] - rect[2]),
+              hb = Math.abs(rect[1] - rect[3]),
+              bs = Math.max(wb, hb);
+          var zoom = Math.min(cs / bs, 50);
+          this.centerCarta(centerof[0] + this.m.offset[0], centerof[1] + this.m.offset[1]);
+          this.scaleCarta(1);
+          this.scaleCarta(zoom);
+        }
+      }
+    },
     chkImg: function(img) {
       return (img && img.height > 0 && img.width > 0);
     },
@@ -739,6 +744,61 @@ function dbCarta(cfg) {
       return (pts && !isNaN(pts[0]) && !isNaN(pts[1]));
     },
     // - transforms ------------------------
+    /**
+    * Change project to NEW_PROJECT and center by visible centre.
+    */
+    changeProject: function(new_project) {
+      // curr. centerof
+      var centerof = this.centerOf();
+      if (this.isTurnable()) {
+        var proj = this.initProj();
+        viewcenterof = [ proj.long0 * 180/Math.PI, proj.lat0 * 180/Math.PI ];
+      } else {
+        var viewcenterof = this.fromPoints(centerof, true);
+      }
+      // new centerof
+      if (this.isTurnable(new_project)) {
+        this.centerCarta(centerof[0] + this.m.offset[0], centerof[1] + this.m.offset[1]);
+        this.initProj(new_project, ' +lon_0=' + viewcenterof[0] + ' +lat_0=' + viewcenterof[1]);
+      } else {
+        this.initProj(new_project, ' +lon_0=0 +lat_0=0');
+        var centerof = this.toPoints(viewcenterof, true);
+        if (!this.chkPts(centerof)) centerof = [0, 0];
+        this.centerCarta(centerof[0] + this.m.offset[0], centerof[1] + this.m.offset[1]);
+      }
+    },
+    /**
+    * Change project. to PROJECT with DEFS (see Proj4js proj. definitions).
+    * If no args return current projection info (Proj4js.Proj obj.).
+    */
+    initProj: function(project, defs) {
+      if ('Proj4js' in window) {
+        if (project !== undefined) {
+          if (defs == undefined) {
+            defs = project;
+            project = this.project;
+          }
+          var old_defs = Proj4js.defs[String(project)],
+              new_defs = this.projlist[project] + (defs || '');
+          this.m.doreload = (this.project != project) || (old_defs != new_defs); // recalc points?
+          this.project = project;
+          Proj4js.defs[String(project)] = new_defs;
+        }
+        if (String(this.project) in Proj4js.defs) {
+          this.projload['epsg:4326'] = new Proj4js.Proj('epsg:4326');
+          this.projload[String(this.project)] = new Proj4js.Proj(String(this.project));
+          return this.projload[String(this.project)];
+        }
+      }
+    },
+    isSpherical: function(project) {
+      project = project || this.project;
+      return (project > 200 && project < 300);
+    },
+    isTurnable: function(project) {
+      project = project || this.project;
+      return (project == 202 || project == 203);
+    },
     toPoints: function(coords, dotransform) {
       var m = coords;
       if (dotransform && this.project != 0) {
@@ -750,10 +810,19 @@ function dbCarta(cfg) {
       if (m[2]) pts.push(m[2]); // bezier flag
       return pts;
     },
-    fromPoints: function(pts, dotransform) {
-      var coords = [ (pts[0] / this.m.scale - this.m.halfX / this.m.scale - this.m.offset[0]) / this.m.delta,
-                    -(pts[1] / this.m.scale - this.m.halfY / this.m.scale - this.m.offset[1]) / this.m.delta ];
-      if (dotransform && this.project != 0) {
+    /**
+     * Convert points to degrees.
+     * Use projection transform. DOTRANSFORM [0|1] and matrix transform. DONTSCALE [0|1].
+     */
+    fromPoints: function(pts, dotransform, dontscale) {
+      if (dontscale) { // dont use matrix transformations
+        var coords = [ (pts[0] - this.m.halfX) / this.m.delta,
+                      -(pts[1] - this.m.halfY) / this.m.delta ];
+      } else {
+        var coords = [ (pts[0] / this.m.scale - this.m.halfX / this.m.scale - this.m.offset[0]) / this.m.delta,
+                      -(pts[1] / this.m.scale - this.m.halfY / this.m.scale - this.m.offset[1]) / this.m.delta ];
+      }
+      if (dotransform && this.project != 0 && coords[0] != 0 && coords[1] != 0) {
         if (!(coords = this.transformCoords(String(this.project), 'epsg:4326', coords))) return;
       }
       return coords;
@@ -822,61 +891,77 @@ function dbCarta(cfg) {
     // - events -----------------------------
     onmousemove: function(ev) {
       var pts = this.canvasXY(ev);
-      if (this.m.mpts) this.m.mmove = true;
-      if (this.chkImg(this.m.mimg)) { // if img is loaded
+      if (this.m.mzoom && !ev.ctrlKey) this.onmouseup(ev);
+      if (!this.m.mzoom && ev.ctrlKey) this.onmousedown(ev);
+      if (this.m.mpts) {
+        this.m.mmove = true;
         var dx = (pts[0] - this.m.mpts[0]) / this.m.scale,
             dy = (pts[1] - this.m.mpts[1]) / this.m.scale;
-        this.clearCarta();
-        if (this.m.bgimg) { // bg img
-          if (this.m.bgimg.pts && this.chkPts(this.m.bgimg.pts[0]) && this.chkPts(this.m.bgimg.pts[1]))
-            this.paintImage(this.m.mimg, [[dx, dy + this.m.bgimg.pts[0][1]], [dx + this.m.bgimg.pts[1][0], dy + this.m.bgimg.pts[1][1]]]);
-        } else { // snapshot
-          var cx = -this.m.offset[0] - this.m.scaleoff[0] + dx,
-              cy = -this.m.offset[1] - this.m.scaleoff[1] + dy;
-          this.paintImage(this.m.mimg, [[cx, cy], [cx + this.m.mimg.width/this.m.scale, cy + this.m.mimg.height/this.m.scale]]);
+        var mx = dx, my = dy;
+        if (this.m.mzoom) mx = my = 0;
+        if (this.chkImg(this.m.mimg)) { // if img is loaded
+          this.clearCarta();
+          if (this.m.bgimg && this.m.bgimg.pts && this.chkPts(this.m.bgimg.pts[0]) && this.chkPts(this.m.bgimg.pts[1])) { // bg img
+            this.paintImage(this.m.mimg, [[mx + this.m.bgimg.pts[0][0], my + this.m.bgimg.pts[0][1]], [mx + this.m.bgimg.pts[1][0], my + this.m.bgimg.pts[1][1]]]);
+          } else { // snapshot
+            var cx = -this.m.offset[0] - this.m.scaleoff[0] + mx,
+                cy = -this.m.offset[1] - this.m.scaleoff[1] + my;
+            this.paintImage(this.m.mimg, [[cx, cy], [cx + this.m.mimg.width/this.m.scale, cy + this.m.mimg.height/this.m.scale]]);
+          }
+        }
+        if (this.m.mzoom) { // zoombox
+          var cx = -this.m.offset[0] - this.m.scaleoff[0] + this.m.mpts[0] / this.m.scale,
+              cy = -this.m.offset[1] - this.m.scaleoff[1] + this.m.mpts[1] / this.m.scale;
+          this.mflood['.ZoomBox'] = {
+            'ftype': '.ZoomBox',
+            'pts': [[cx, cy], [cx + dx, cy], [cx + dx, cy + dy], [cx, cy + dy]]
+          };
+          this.paintCartaPts(this.mflood['.ZoomBox']['pts'], '.ZoomRect');
         }
       } else { // move only
-        var src = this.fromPoints(pts, false),
-            dst = this.fromPoints(pts, true);
         for (var i in this.marea) {
           this.doMap(pts);
           break;
         }
-        this.paintCoords(dst);
-        if ('onmousemove' in this.clfunc)
-          this.clfunc.onmousemove(src, dst, ev);
       }
+      var src = this.fromPoints(pts, false),
+          dst = this.fromPoints(pts, true);
+      if ('onmousemove' in this.clfunc)
+        this.clfunc.onmousemove(src, dst, ev);
+      else
+        this.paintCoords(dst);
     },
     onmousedown: function(ev) {
       var pts = this.canvasXY(ev);
-      if (!(this.m.mbar = this.chkBar(pts[0], pts[1]))) { // if not bar
-        this.m.mpts = pts;
-        if (this.isSpherical()) { // proj.center for spherical
-          var proj = this.initProj();
-          this.m.mcenterof = [ proj.long0 * 180/Math.PI, proj.lat0 * 180/Math.PI ];
-        } else {
-          if (this.m.bgimg) {
-            this.m.mimg = this.m.bgimg.img; // bg img from mflood
-          } else {
-            this.m.mimg = new Image(); // snapshot for drag
-            this.m.mimg.src = this.toDataURL();
-          }
-        }
+      if (this.m.mbar = this.chkBar(pts)) // if bar
+        return;
+      this.m.mpts = pts;
+      if (this.isTurnable()) { // proj.center for spherical turn
+        var proj = this.initProj();
+        this.m.mcenterof = [ proj.long0 * 180/Math.PI, proj.lat0 * 180/Math.PI ];
+      } else {
+        this.m.mzoom = ev.ctrlKey;
+        this.doMapImg();
       }
     },
     onmouseup: function(ev) {
       var pts = this.canvasXY(ev);
-      if (this.m.mbar) {
-        this.chkBar(pts[0], pts[1], true);
-      } else if (!this.m.mmove) {
+      if (this.m.mbar) { // bar
+        this.chkBar(pts, true);
+      } else if (!this.m.mmove) { // click
         if ('afterclick' in this.clfunc)
-          this.clfunc.afterclick();
-      } else {
+          this.clfunc.afterclick(pts, ev);
+        else {
+          this.chkZoomBox(pts, true);
+          delete this.mflood['.ZoomBox'];
+        }
+      } else if (this.m.mzoom) {
+      } else { //drag
         var centerof = this.centerOf();
         var mpts = [
           centerof[0] - pts[0] + this.m.mpts[0],
           centerof[1] - pts[1] + this.m.mpts[1] ];
-        if (this.isSpherical()) {
+        if (this.isTurnable()) {
           var dst = this.fromPoints(mpts);
           if (!dst) return;
           var proj = this.initProj();
@@ -886,14 +971,15 @@ function dbCarta(cfg) {
         }
       }
       with (this.m) {
-        delete mcenterof;
         delete mimg;
-        delete mpts;
         delete mmove;
+        delete mzoom;
+        delete mpts;
+        delete mcenterof;
       }
-      if ('onclick' in this.clfunc) {
-        this.clfunc.onclick();
-      } else
+      if ('onclick' in this.clfunc)
+        this.clfunc.onclick(pts, ev);
+      else // draw once
         this.draw();
     }
   });

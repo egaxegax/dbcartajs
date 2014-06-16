@@ -9,6 +9,7 @@ function init() {
   dw.changeProject(203);
   dw.scaleCarta(4);
   // fix map
+  dw.onmousedown = undefined;
   dw.onmouseup = undefined;
   // add new layer
   dw.mopt['yellow'] = {cls: 'Polygon', fg: 'black', bg: 'yellow'};

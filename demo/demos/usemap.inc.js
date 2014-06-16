@@ -48,7 +48,7 @@ function init() {
 
   var col = document.createElement('td');
   col.align = 'center';
-  col.id = 'coords';
+  col.id = 'tcoords';
   row.appendChild(col);
   document.body.appendChild(mtab);
 
@@ -71,7 +71,12 @@ function init() {
   el.onmousemove = function(){ this.innerHTML = ''; };
   document.body.appendChild(el);
 
-  dw = new dbCarta({id:'mcol', height:col.offsetHeight});
+  dw = new dbCarta({
+    id:'mcol', 
+    height:col.offsetHeight,
+    mapbg: 'transparent',
+    mapfg: 'rgb(220,250,0)'
+  });
   // add new layers
   dw.extend(dw.mopt, {
     'Arctic': {cls: 'Polygon', fg: 'rgb(200,200,200)', bg: dw.mopt['.Arctic']['bg']},
@@ -80,7 +85,7 @@ function init() {
   dw.loadCarta(COUNTRIES);
   delete COUNTRIES;
   dw.loadCarta(dw.createMeridians());
-  dw.draw();
+  proj();
   // projlist
   for(var i in dw.projlist) {
     var projname = dw.projlist[i].split(' ')[0].split('=')[1];
@@ -92,13 +97,12 @@ function init() {
   projlist.onchange = proj;
   // curr.object
   dw.clfunc.onmousemove = function(sd, dd, ev) {
-    var mcoord = document.getElementById('coords');
+    var mcoord = document.getElementById('tcoords');
     var label = '';
     if (dw.m.pmap) {
       var m, o = dw.mflood[dw.m.pmap];
       // cities count
-      if (m = CITIES[o['label']])
-        label = ' : ' + m.length + ' cities';
+      if (m = CITIES[o['label']]) label = ' : ' + m.length + ' cities';
       label = o['label'] + ' : ' + dw.m.pmap.split('_')[1] + label;
     } 
     mcoord.innerHTML = label;

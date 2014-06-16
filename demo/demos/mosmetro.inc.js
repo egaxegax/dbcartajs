@@ -246,7 +246,7 @@ function init() {
   delete MLINES;
   delete MSTATIONS;
   // curr.object
-  dw.clfunc.onmousemove = function() {
+  dw.clfunc.onmousemove = function(src, dst, ev) {
     var mcoord = document.getElementById('coords');
     var label = '';
     if (dw.m.pmap) {
@@ -254,5 +254,6 @@ function init() {
       label = o['label'] || o['ftag'];
     }
     mcoord.innerHTML = label;
+    dw.paintCoords(dst);
   }
 }

@@ -42,7 +42,7 @@ function init() {
 
   var col = document.createElement('td');
   col.align = 'center';
-  col.id = 'coords';
+  col.id = 'tcoords';
   row.appendChild(col);
 
   var row = document.createElement('tr');
@@ -54,7 +54,7 @@ function init() {
   col.style.borderStyle = 'solid';
   col.style.verticalAlign = 'top';
   var el = document.createElement('div');
-  el.appendChild(document.createTextNode('Cities by country:'));    
+  el.appendChild(document.createTextNode('Cities by country:'));
   col.appendChild(el);
   var citylist = el2 = document.createElement('select');
   el2.id = 'citylist'
@@ -82,14 +82,12 @@ function init() {
   document.body.appendChild(mtab);
 
   dw = new dbCarta({id:'canvasmap'});
-  dw.changeProject(101);
-  var points = dw.toPoints([0, 40], true);
-  dw.centerCarta(points[0], points[1]);
+  dw.changeProject(102); // millner proj
   // worldmap img
   var im = new Image();
-  im.src = IMGMAP['wrld_small_merc'];
+  im.src = IMGMAP['wrld_small_mill'];
   im.onload = function() {
-    dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-179.99,84],[179.99,-84]], 6:this}]);
+    dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-179.99,132],[179.99,-132]], 6:this}]);
     dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
     dw.loadCarta(dw.createMeridians());
     dw.draw();
@@ -108,12 +106,13 @@ function init() {
   delete CITIES;
   // curr. object
   dw.clfunc.onmousemove = function(sd, dd) {
-    var mcoord = document.getElementById('coords');
+    var mcoord = document.getElementById('tcoords');
     var label = '';
     if (dw.m.pmap) {
        var o = dw.mflood[dw.m.pmap];
        label = o['label'] + ' : ' + o['coords'];
     }
     mcoord.innerHTML = label;
+    dw.paintCoords(dd);
   }
 }

@@ -36,7 +36,7 @@ function init() {
   var im = new Image();
   im.src = IMGMAP['wrld_small_merc'];
   im.onload = function() {
-    dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-179.99,84],[179.99,-84]], 6:this}]);
+    dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-179.99,168],[179.99,-168]], 6:this}]);
     dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
     dw.loadCarta(dw.createMeridians());
     // draw countries
