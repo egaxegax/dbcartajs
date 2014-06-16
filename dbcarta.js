@@ -322,7 +322,7 @@ function dbCarta(cfg) {
     * Refill obj in mflood new points from coords.
     */
     reload: function(m) {
-      if (m['ftype'] == '.Image' && this.chkPts(m['coords'][0]) && this.chkPts(m['coords'][1])) {
+      if (m['ftype'] == '.Image' && m['coords'] && this.chkPts(m['coords'][0]) && this.chkPts(m['coords'][1])) {
         m['pts'] = [this.toPoints(m['coords'][0]), this.toPoints(m['coords'][1])];
       } else {
         m['pts'] = this.interpolateCoords(m['coords'], true, this.isSpherical() ? 10 : undefined),
