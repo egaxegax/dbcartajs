@@ -33,11 +33,13 @@ Mercator Projection:
 
 ![mercv.png] (http://img-fotki.yandex.ru/get/9832/136640652.0/0_df04d_d154d06b_XL.png "Mercator")
 
+Mollweide Projection:
+
+![moll.png] (http://img-fotki.yandex.ru/get/9065/136640652.1/0_e6dd4_24ef9d71_orig "Mollweide")
+
 Starry Sky. Featured, copmlicated demo like Orbitron, Marble, Xephem but more lightweight.
 
 ![starry.png] (http://img-fotki.yandex.ru/get/9802/136640652.0/0_df04b_fbe77af7_XL.png "Starry Sky")
-
-![sat-view.png] (http://img-fotki.yandex.ru/get/9751/136640652.0/0_df049_a3bc71d1_XL.png "Satellite Viewer")
 
 Moscow Metro Map:
 
