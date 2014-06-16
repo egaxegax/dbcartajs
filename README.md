@@ -11,12 +11,11 @@ It uses Proj4js transformations. Supported projections:
  * ortho, Orthographic projection;
  * moll, Mollweide projection.
 
-Starry Sky demo include satellite-js module.
+Starry Sky demo include satellite-js module.<br>
+Demos at http://dbcartajs.appspot.com/. Docs in wiki at https://github.com/egaxegax/dbCartajs/wiki.
 
 ![ortho-ns.gif] (http://img-fotki.yandex.ru/get/9066/136640652.0/0_bf3ee_cde97104_orig "ortho-ns.gif")
 ![ortho-ew.gif] (http://img-fotki.yandex.ru/get/9167/136640652.0/0_bf3ed_d4a4a2c3_orig "ortho-ew.gif")
-
-Demos at http://dbcartajs.appspot.com/. Docs in wiki at https://github.com/egaxegax/dbCartajs/wiki.
 
 ## Usage
 
