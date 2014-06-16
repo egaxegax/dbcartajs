@@ -41,10 +41,6 @@ Starry Sky. Featured, copmlicated demo like Orbitron, Marble, Xephem but more li
 
 ![starry.png] (http://img-fotki.yandex.ru/get/9802/136640652.0/0_df04b_fbe77af7_XL.png "Starry Sky")
 
-Moscow Metro Map:
-
-![mosmetro.png] (http://img-fotki.yandex.ru/get/9328/136640652.0/0_c6660_9d3ca715_XL.png "Moscow Metro")
-
 Moscow Rail Map:
 
 ![mosrails.png] (http://habrastorage.org/files/5aa/e52/1b3/5aae521b3a02452d8ab24e25ac7c1c4d.png "Moscow Rail Map")
