@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.7.
+ * dbCartajs HTML5 Canvas dymanic object map v1.7.1.0:13 17.06.2014
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
@@ -322,10 +322,8 @@ function dbCarta(cfg) {
     * Refill obj in mflood new points from coords.
     */
     reload: function(m) {
-      if (m['ftype'] == '.Image') {
-        m['pts'] = [];
-        for (var i in m['coords'])
-          m['pts'].push(this.toPoints(m['coords'][i]));
+      if (m['ftype'] == '.Image' && this.chkPts(m['coords'][0]) && this.chkPts(m['coords'][1])) {
+        m['pts'] = [this.toPoints(m['coords'][0]), this.toPoints(m['coords'][1])];
       } else {
         m['pts'] = this.interpolateCoords(m['coords'], true, this.isSpherical() ? 10 : undefined),
         m['centerofpts'] = this.interpolateCoords([m['centerof']], true);
