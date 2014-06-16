@@ -371,7 +371,7 @@ function dbCarta(cfg) {
           } else if (mopt['cls'] == 'Dot' || mopt['cls'] == 'Rect') {
             ctx.strokeStyle = mopt['fg'];
             ctx.stroke();
-            ctx.fillStyle = (domap ? mapfg || mapbg : mopt['fg'] || mopt['fg']);
+            ctx.fillStyle = (domap ? mapbg || mapfg : mopt['bg'] || mopt['fg']);
             ctx.fill();
           } else {
             ctx.closePath();
