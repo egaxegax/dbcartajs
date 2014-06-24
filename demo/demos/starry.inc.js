@@ -1,5 +1,5 @@
 /**
- * Starry Sky Canvas map v2.1.
+ * Starry Sky Canvas map v2.1.1.
  * View stars, constellations, planets, sattelites on Earth background.
  * egax@bk.ru, 2013-14.
  */
@@ -59,6 +59,12 @@ function loadImg() {
     dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
     draw();
   }
+}
+// Rotate map
+function rotate() {
+  var tval = parseFloat(document.getElementById('tvalue').value);
+  dw.rotateCarta(tval);
+  draw();
 }
 // Change proj
 function proj() { 
@@ -164,6 +170,9 @@ function drawlonlat(pts, ftype, areasize) {
         mftag = pts[i][3] || mlabel;
     if (msize) 
       dw.mopt[ftype]['size'] = msize / 8;
+    if (mlabel == 'Achernar') {
+      ss=1;
+    }
     var m = dw.paintCarta(mcoords, ftype, mlabel);
     // add map area
     if (mftag) {
@@ -194,11 +203,13 @@ function draw() {
       skyRadius = 0.6 * Math.sqrt((rect[2]-rect[0])*(rect[2]-rect[0]) + (rect[3]-rect[1])*(rect[3]-rect[1])),
       eaRadius = Math.sqrt((proj.p15 - 1.0)/(proj.p15 + 1.0)) * 180/Math.PI,
       eaRadiusM = proj.a,
+      rotate = dw.m.rotate,
+      centerof = dw.viewcenterOf(),
       gmtime = getSelTime(),
       darkhide = ('earth' in mlayers);
   var sat = {};
   // clear all
-  dw.clearCarta();
+  dw.clearCarta();  
   for (var i in dw.mflood) {
     switch (dw.mflood[i]['ftype']) {
     case 'terminator':
@@ -216,16 +227,16 @@ function draw() {
       break;
     case 'star':
       var stars = STARS,
-          mstars = Starry.renderSky(stars, rect, skyRadius, eaRadius, cx, cy, gmtime, darkhide);
+          mstars = Starry.renderSky(stars, rect, skyRadius, eaRadius, cx, cy, rotate, centerof, gmtime, darkhide);
       drawlonlat(mstars, 'star', 3);
       break;
     case 'cntlines':
       var lns = CLNS,
           mpts = [];
       for (var i=0; i<lns.length; i=i+2) {
-        var m = Starry.renderSky([lns[i], lns[i+1]], rect, skyRadius, eaRadius, cx, cy, gmtime, darkhide, true);
+        var m = Starry.renderSky([lns[i], lns[i+1]], rect, skyRadius, eaRadius, cx, cy, rotate, centerof, gmtime, darkhide, true);
         if (m.length == 1)
-          m = Starry.renderSky([lns[i], lns[i+1]], rect, skyRadius, eaRadius, cx, cy, gmtime, false, false);
+          m = Starry.renderSky([lns[i], lns[i+1]], rect, skyRadius, eaRadius, cx, cy, rotate, centerof, gmtime, false, false);
         if (m.length > 1)
           mpts.push([[m[0][0][0], m[1][0][0]]]);
       }
@@ -233,22 +244,22 @@ function draw() {
       break;
     case 'cntpos':
       var cnts = CNTS,
-          mcnts = Starry.renderSky(cnts, rect, skyRadius, eaRadius, cx, cy, gmtime, darkhide);
+          mcnts = Starry.renderSky(cnts, rect, skyRadius, eaRadius, cx, cy, rotate, centerof, gmtime, darkhide);
       drawlonlat(mcnts, 'cntpos');
       break;
     case 'sun':
       var sun = Solar.loadSun(gmtime),
-          msun = Starry.renderSky([sun], rect, skyRadius, eaRadius, cx, cy, gmtime, darkhide);
+          msun = Starry.renderSky([sun], rect, skyRadius, eaRadius, cx, cy, rotate, centerof, gmtime, darkhide);
       drawlonlat(msun, 'sun', 5);
       break;
     case 'moon':
       var moon = Solar.loadMoon(gmtime),
-          mmoon = Starry.renderSky([moon], rect, skyRadius, eaRadius, cx, cy, gmtime, darkhide);
+          mmoon = Starry.renderSky([moon], rect, skyRadius, eaRadius, cx, cy, rotate, centerof, gmtime, darkhide);
       drawlonlat(mmoon, 'moon', 4);
       break;
     case 'planet':
       var planets = Solar.loadPlanets(gmtime),
-          mplanets = Starry.renderSky(planets, rect, skyRadius, eaRadius, cx, cy, gmtime, darkhide);
+          mplanets = Starry.renderSky(planets, rect, skyRadius, eaRadius, cx, cy, rotate, centerof, gmtime, darkhide);
       drawlonlat(mplanets, 'planet', 4);
       break;
     case 'terminator':
@@ -429,6 +440,21 @@ function init() {
 
   var col = document.createElement('td');
   col.width = '10%';
+  col.align = 'center';
+  var el = document.createElement('input');
+  el.type = 'text';
+  el.size= '3';
+  el.id = 'tvalue';
+  el.value= '1';
+  col.appendChild(el);
+  var el = document.createElement('button');
+  el.onclick = rotate;
+  el.appendChild(document.createTextNode('rotate'));
+  col.appendChild(el);
+  row.appendChild(col);
+
+  var col = document.createElement('td');
+  col.width = '10%';
   var yy = el = document.createElement('select');
   yy.id = 'yy';
   col.appendChild(el);
@@ -465,7 +491,7 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '10%';
+  col.width = '5%';
   col.align = 'center';
   var el = document.createElement('input');
   el.type = 'checkbox';

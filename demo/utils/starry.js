@@ -1,7 +1,7 @@
 /**
  * Starry Sky and Solar System Bodies.
  * Source: Marble, libnova, k-map.
- * egax@bk.ru, 2013
+ * egax@bk.ru, 2013-14.
  */
 var MUtil = {
   /**
@@ -190,8 +190,8 @@ var MGeo = {
       var d = r*r - c*c/(a*a+b*b),
           mult = Math.sqrt(d / (a*a+b*b));
       var ax = x0 + b * mult,
-          bx = x0 - b * mult;
-          ay = y0 - a * mult;
+          bx = x0 - b * mult,
+          ay = y0 - a * mult,
           by = y0 + a * mult;
       // closest
       var r1 = Math.sqrt((ma[0][0] - ax)*(ma[0][0] - ax) + (ma[0][1] - ay)*(ma[0][1] - ay)),
@@ -422,6 +422,8 @@ var Starry = {
     earthRadius,  // degrees
     centerx,      // degrees
     centery,      // degrees
+    rotate,       // map rotate
+    centerof,     // rotate centre
     time,         // array date/time UTC
     darkhide,
     outhide
@@ -449,19 +451,20 @@ var Starry = {
       var qpos = Qn.fromSpherical(ra, dec);      
       var q = Qn.rotateAroundAxis(qpos, skyAxisMatrix);
       var w = q[0], x = q[1], y = q[2], z = q[3];
-      
+
       if ( z > 0 )
         continue;
-        
+
       var px = x * skyRadius,
           py = y * skyRadius;
-      
+
       // darkside
       if ( darkhide && (z < 0 && ((px * px + py * py) < (earthRadius * earthRadius))) )
           continue;
 
       // outside
-      if ( outhide && ((px < left || px >= right) || (py > top || py <= bottom)) )
+      var pt = MVector.rotateZ(px, py, rotate, centerof[0], centerof[1]);
+      if ( outhide && ((pt[0] < left || pt[0] >= right) || (pt[1] > top || pt[1] <= bottom)) )
           continue;
 
       // star size
