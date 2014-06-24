@@ -1,8 +1,8 @@
 dbCartajs
 ===========
 
-HTML5 Canvas dymanic object map. Pure JavaScript and serverless.
-It uses Proj4js transformations. Supported projections:
+HTML5 Canvas dymanic object map. Pure JavaScript and serverless. 
+Drag, move, scale, rotate map. It supports Proj4js projections:
  * espg:4326, longlat;
  * epsg:3875, Mercator projection;
  * mill, Miller Cylindrical projection;
