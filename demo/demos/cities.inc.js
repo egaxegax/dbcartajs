@@ -1,6 +1,6 @@
 /**
  * World's cities by countries.
- * egax@bk.ru, 2013
+* egax@bk.ru, 2013-14.
  */
 function draw() {
   var centerof, citylist = document.getElementById('citylist');

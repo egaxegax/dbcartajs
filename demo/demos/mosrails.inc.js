@@ -1,7 +1,7 @@
 /**
  * Moscow Rail map.
  * View lines and stations with additional info.
- * egax@bk.ru, 2013
+ * egax@bk.ru, 2013-14.
  */
 function findstation(){
   var stationlist = document.getElementById('stationlist'),

@@ -1,7 +1,7 @@
 /**
  * Moscow Metro map.
  * View lines and stations with additional info.
- * egax@bk.ru, 2013
+ * egax@bk.ru, 2013-14.
  */
 function findstation(){
   var stationlist = document.getElementById('stationlist'),
@@ -27,6 +27,11 @@ function drawcrosshair() {
   ctx.stroke();
   ctx.restore();
 }
+function rotate() {
+  var tval = parseFloat(document.getElementById('tvalue').value);
+  dw.rotateCarta(tval);
+  dw.draw();
+}
 function init() {
   var mtab = document.createElement('table');
   mtab.width = '100%';
@@ -42,6 +47,21 @@ function init() {
   el.appendChild(document.createTextNode('Московское Метро'));
   el.style.padding = '0';
   el.style.margin = '0';
+  col.appendChild(el);
+  row.appendChild(col);
+
+  var col = document.createElement('td');
+  col.width = '15%';
+  col.align = 'center';
+  var el = document.createElement('input');
+  el.type = 'text';
+  el.size= '3';
+  el.id = 'tvalue';
+  el.value= '1';
+  col.appendChild(el);
+  var el = document.createElement('button');
+  el.onclick = rotate;
+  el.appendChild(document.createTextNode('rotate'));
   col.appendChild(el);
   row.appendChild(col);
 

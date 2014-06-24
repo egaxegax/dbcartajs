@@ -1,6 +1,6 @@
 /**
  * Mercator projection.
- * egax@bk.ru, 2013
+ * egax@bk.ru, 2013-14.
  */
 function init() {
   var mtab = document.createElement('table');

@@ -1,7 +1,7 @@
 /**
  * Sample demo.
  * Draw background images in diff. projections.
- * egax@bk.ru, 2013
+ * egax@bk.ru, 2013-14.
  */
 // Imitate Ajax loading
 function loading() {
@@ -50,10 +50,15 @@ function loadImg() {
     dw.draw();
   }
 }
+function rotate() {
+  var tval = parseFloat(document.getElementById('tvalue').value);
+  dw.rotateCarta(tval);
+  dw.draw();
+}
 function scale() {
-  var scale = parseFloat(document.getElementById('scale').value);
+  var tval = parseFloat(document.getElementById('tvalue').value);
   dw.scaleCarta(1); // fix labels
-  dw.scaleCarta(scale);
+  dw.scaleCarta(tval);
   dw.draw();
 }
 function proj() {
@@ -68,7 +73,12 @@ function draw() {
     coords = eval(document.getElementById('getcoords').value); coords.length; } 
   catch (e) { 
      alert('Invalid coords!\nUse:\n[[1,2],[3,4],..]'); return; }
-  dw.loadCarta([[ document.getElementById('ftype').value, Math.random(), coords, 'MyTest', coords[0], true ]], 1);
+  dw.loadCarta([[ document.getElementById('ftype').value, Math.random(), coords, 'MyTest', coords[0], true ]]);
+  // center pov
+  var pov = coords[0],
+      pts = dw.toPoints(pov, true);
+  dw.centerCarta(pts[0] + dw.m.offset[0], pts[1] + dw.m.offset[1]);
+  dw.draw();
 }
 // Tooltip under cursor
 function infobox(ev) {
@@ -91,7 +101,7 @@ function init() {
   mtab.appendChild(row);
 
   var col = document.createElement('td');
-  col.width = '15%';
+  col.width = '10%';
   var el = document.createElement('h2');
   el.appendChild(document.createTextNode('Sample'));
   el.style.padding = '0';
@@ -100,17 +110,21 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '10%';
+  col.width = '15%';
   col.align = 'center';
   var el = document.createElement('input');
   el.type = 'text';
   el.size= '3';
-  el.id = 'scale';
+  el.id = 'tvalue';
   el.value= '1';
   col.appendChild(el);
-  el = document.createElement('button');
+  var el = document.createElement('button');
   el.onclick = scale;
   el.appendChild(document.createTextNode('scale'));
+  col.appendChild(el);
+  var el = document.createElement('button');
+  el.onclick = rotate;
+  el.appendChild(document.createTextNode('rotate'));
   col.appendChild(el);
   row.appendChild(col);
 
@@ -224,5 +238,6 @@ function init() {
     ['DotPort', 'rio', [[-43.455,-22.722]], 'Rio de Janeiro'],
     ['DotPort', 'brz', [[15.285,-4.285]], 'Brazzaville']
   ]);
+  imgMapB64(); // reload images base64
   proj();
 }

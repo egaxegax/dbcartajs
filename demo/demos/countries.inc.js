@@ -1,9 +1,9 @@
 /**
  * World's countrires and flags.
- * egax@bk.ru, 2013
+ * egax@bk.ru, 2013-14.
  */
 function draw() {
-  var centerof, cntrylist = document.getElementById('cntrylist');
+  var cntrylist = document.getElementById('cntrylist');
   for (var i=0; i<cntrylist.options.length; i++) {
     var opt = cntrylist.options[i];
     if (opt.selected) {
@@ -148,7 +148,7 @@ function init() {
   dw2.loadCarta(dw2.createMeridians());
   dw2.draw();
   dw3 = new dbCarta({id:'canvasmap3'});
-  dw3.changeProject(201);
+  dw3.changeProject(204);
   dw3.loadCarta(CONTINENTS);
   dw3.loadCarta(dw3.createMeridians());
   dw3.draw();
@@ -156,14 +156,14 @@ function init() {
   dw4.extend(dw4.mopt, {
     'Area': {fg: 'yellow', bg: 'transparent', labelcolor: 'white'}
   });
-  dw4.changeProject(101);
+  dw4.changeProject(102);
   // worldmap image
   var im4 = new Image();
-  im4.src = IMGMAP['wrld_small_merc'];
+  im4.src = IMGMAP['wrld_small_mill'];
   im4.onload = function() {
-    dw4.loadCarta([{0:'.Image', 1:'wrld-merc', 2:[[-179.99,168],[179.99,-168]], 6:this}]);
-    dw4.m.bgimg = dw.mflood['.Image_wrld-merc']; // mark as bg
-    dw4.loadCarta(dw.createMeridians());
+    dw4.loadCarta([{0:'.Image', 1:'wrld-mill', 2:[[-179.99,132],[179.99,-132]], 6:this}]);
+    dw4.m.bgimg = dw4.mflood['.Image_wrld-mill']; // mark as bg
+    dw4.loadCarta(dw4.createMeridians());
     dw4.draw();
   }  
   delete CONTINENTS;

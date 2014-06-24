@@ -1,9 +1,9 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.7.1.0:13 17.06.2014
+ * dbCartajs HTML5 Canvas dymanic object map v1.7.2.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
- * egax@bk.ru, 2013
+ * egax@bk.ru, 2013-14.
  */
 function dbCarta(cfg) {
   cfg = cfg||{};
@@ -88,6 +88,7 @@ function dbCarta(cfg) {
       delta: dw.width / 360.0,
       halfX: dw.width / 2.0,
       halfY: dw.height / 2.0,
+      rotate: 0,
       scale: 1,
       offset: [0, 0],
       scaleoff: [0, 0],
@@ -225,6 +226,14 @@ function dbCarta(cfg) {
       }
       this.m.doreload = false;
       this.paintBar();
+    },
+    rotateCarta: function(angle) {
+      var ctx = this.getContext('2d');
+      var centerof = this.centerOf();
+      ctx.translate(centerof[0] - this.m.offset[0], centerof[1] - this.m.offset[1]);
+      ctx.rotate(angle * Math.PI/180);
+      ctx.translate(-centerof[0] + this.m.offset[0], -centerof[1] + this.m.offset[1]);
+      this.m.rotate += angle;
     },
     /**
     * Change map scale to SCALE.
@@ -602,8 +611,10 @@ function dbCarta(cfg) {
           } else {
             ctx.save();
             ctx.setTransform(1, 0, 0, 1, 0, 0);
-            ctx.translate((this.m.offset[0] + this.m.scaleoff[0] + centerofpts[0][0] + msize + 3/this.m.scale) * this.m.scale,
-                          (this.m.offset[1] + this.m.scaleoff[1] + centerofpts[0][1]) * this.m.scale);
+            var mpts = [ (this.m.offset[0] + this.m.scaleoff[0] + centerofpts[0][0] + msize + 3/this.m.scale) * this.m.scale,
+                         (this.m.offset[1] + this.m.scaleoff[1] + centerofpts[0][1]) * this.m.scale ];
+            mpts = this.rotateCoords(mpts, -this.m.rotate, this.centerOf());
+            ctx.translate(mpts[0], mpts[1]);
             ctx.rotate(mtrotate * Math.PI/180);
             ctx.fillText(ftext, 0, 0);
             ctx.restore();
@@ -669,8 +680,8 @@ function dbCarta(cfg) {
           my = pts[1] - (ttop - h + h/4);
       if (mx > 0 && mx < w && my > 0 && my < h/2) { // moves
         if (!doaction) return true;
-        var sx = cw/100,
-            sy = ch/100, moves = [0, 0];
+        var sx = cw/50,
+            sy = ch/50, moves = [0, 0];
         if (my > 0 && my < 3*d) {
           moves = [0, sy]; // up
         } else if (mx > 0 && mx < 3*d) {
@@ -825,6 +836,9 @@ function dbCarta(cfg) {
       }
       return coords;
     },
+    /**
+     * Return spherical arc in radians between 2 points in degrees.
+     */
     distance: function(coords2) {
       var x = coords2[0][0] * Math.PI/180.0,
           y = coords2[0][1] * Math.PI/180.0,
@@ -886,9 +900,25 @@ function dbCarta(cfg) {
       } else
         return coords;
     },
+    /**
+    * Return new COORDS rotated around Z-axis with ANGLE relative to center of [CX,CY].
+    */
+    rotateCoords: function(coords, angle, centerof) {
+      var roll = angle * Math.PI/180,
+          x = coords[0], y = coords[1], cx = centerof[0], cy = centerof[1],
+          r = Math.sqrt((cx - x) * (cx - x) + (y - cy) * (y - cy));
+      if (r > 0) {
+          var a = Math.acos((cx - x) / r);
+          if (y < cy) a = 2.0 * Math.PI - a;
+          coords = [ cx - r * Math.cos(roll + a),
+                     cy + r * Math.sin(roll + a) ];
+      }
+      return coords;
+    },
     // - events -----------------------------
     onmousemove: function(ev) {
-      var pts = this.canvasXY(ev);
+      var spts = this.canvasXY(ev),
+          pts = this.rotateCoords(spts, this.m.rotate, this.centerOf());
       if (this.m.mzoom && !ev.ctrlKey) this.onmouseup(ev);
       if (!this.m.mzoom && ev.ctrlKey) this.onmousedown(ev);
       if (this.m.mpts) {
@@ -902,9 +932,13 @@ function dbCarta(cfg) {
           if (this.m.bgimg && this.m.bgimg.pts && this.chkPts(this.m.bgimg.pts[0]) && this.chkPts(this.m.bgimg.pts[1])) { // bg img
             this.paintImage(this.m.mimg, [[mx + this.m.bgimg.pts[0][0], my + this.m.bgimg.pts[0][1]], [mx + this.m.bgimg.pts[1][0], my + this.m.bgimg.pts[1][1]]]);
           } else { // snapshot
-            var cx = -this.m.offset[0] - this.m.scaleoff[0] + mx,
-                cy = -this.m.offset[1] - this.m.scaleoff[1] + my;
-            this.paintImage(this.m.mimg, [[cx, cy], [cx + this.m.mimg.width/this.m.scale, cy + this.m.mimg.height/this.m.scale]]);
+            var mpts = [ -this.m.offset[0] - this.m.scaleoff[0] + mx,
+                         -this.m.offset[1] - this.m.scaleoff[1] + my ];
+            var rotate = this.m.rotate;
+            this.rotateCarta(-rotate);
+            mpts = this.rotateCoords(mpts, -rotate, [mpts[0] - mx, mpts[1] - my]);
+            this.paintImage(this.m.mimg, [mpts, [mpts[0] + this.m.mimg.width/this.m.scale, mpts[1] + this.m.mimg.height/this.m.scale]]);
+            this.rotateCarta(rotate);
           }
         }
         if (this.m.mzoom) { // zoombox
@@ -930,8 +964,9 @@ function dbCarta(cfg) {
         this.paintCoords(dst);
     },
     onmousedown: function(ev) {
-      var pts = this.canvasXY(ev);
-      if (this.m.mbar = this.chkBar(pts)) // if bar
+      var spts = this.canvasXY(ev),
+          pts = this.rotateCoords(spts, this.m.rotate, this.centerOf());
+      if (this.m.mbar = this.chkBar(spts)) // if bar
         return;
       this.m.mpts = pts;
       if (this.isTurnable()) { // proj.center for spherical turn
@@ -943,9 +978,10 @@ function dbCarta(cfg) {
       }
     },
     onmouseup: function(ev) {
-      var pts = this.canvasXY(ev);
+      var spts = this.canvasXY(ev),
+          pts = this.rotateCoords(spts, this.m.rotate, this.centerOf());
       if (this.m.mbar) { // bar
-        this.chkBar(pts, true);
+        this.chkBar(spts, true);
       } else if (!this.m.mmove) { // click
         if ('afterclick' in this.clfunc)
           this.clfunc.afterclick(pts, ev);

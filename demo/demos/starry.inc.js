@@ -1,7 +1,7 @@
 /**
  * Starry Sky Canvas map v2.1.
  * View stars, constellations, planets, sattelites on Earth background.
- * egax@bk.ru, 2013
+ * egax@bk.ru, 2013-14.
  */
 // list layers in order
 var mopt = {
@@ -593,16 +593,16 @@ function init() {
   }
   // draw
   dw.loadCarta(CONTINENTS);
+  //delete CONTINENTS;
   dw.loadCarta([{0:'.Image', 1:'wrld'}]);
   dw.loadCarta(dw.createMeridians());
   dw.loadCarta([['DotPort', 'Moscow', [[37.700,55.750]], 'Москва', null, 1]]);
+  imgMapB64(); // reload images base64
   // center pov
   var pov = dw.mflood['DotPort_Moscow']['coords'][0],
       pts = dw.toPoints(pov, true);
   dw.centerCarta(pts[0] + dw.m.offset[0], pts[1] + dw.m.offset[1]);
-  delete dw.cfg.mapbg;
-  delete dw.cfg.mapfg; // no draw map area
-  //delete CONTINENTS;
+  delete dw.cfg.mapbg; // no draw map area
   setSelTime();
   proj();
 }

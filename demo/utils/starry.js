@@ -162,10 +162,10 @@ var MVector = {
     if (r > 0) {
         var a = Math.acos((cx - x) / r);
         if (y < cy) a = 2.0 * Math.PI - a;
-        coords = [ cx - r * Math.cos(roll + a),
-                   cy + r * Math.sin(roll + a) ];
+        x = cx - r * Math.cos(roll + a);
+        y = cy + r * Math.sin(roll + a);
     }
-    return coords;
+    return [x, y];
   }
 };
 var MGeo = {
