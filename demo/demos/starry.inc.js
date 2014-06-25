@@ -170,9 +170,6 @@ function drawlonlat(pts, ftype, areasize) {
         mftag = pts[i][3] || mlabel;
     if (msize) 
       dw.mopt[ftype]['size'] = msize / 8;
-    if (mlabel == 'Achernar') {
-      ss=1;
-    }
     var m = dw.paintCarta(mcoords, ftype, mlabel);
     // add map area
     if (mftag) {
@@ -209,7 +206,7 @@ function draw() {
       darkhide = ('earth' in mlayers);
   var sat = {};
   // clear all
-  dw.clearCarta();  
+  dw.clearCarta();
   for (var i in dw.mflood) {
     switch (dw.mflood[i]['ftype']) {
     case 'terminator':
