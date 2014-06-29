@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.7.2.
+ * dbCartajs HTML5 Canvas dymanic object map v1.8.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
@@ -92,7 +92,8 @@ function dbCarta(cfg) {
       scale: 1,
       offset: [0, 0],
       scaleoff: [0, 0],
-      doreload: true
+      doreload: true,
+      touches: []
       // marea tmap pmap bgimg mimg
     },
     /**
@@ -680,8 +681,8 @@ function dbCarta(cfg) {
           my = pts[1] - (ttop - h + h/4);
       if (mx > 0 && mx < w && my > 0 && my < h/2) { // moves
         if (!doaction) return true;
-        var sx = cw/50,
-            sy = ch/50, moves = [0, 0];
+        var sx = cw/50, sy = ch/50,
+            moves = [0, 0];
         if (my > 0 && my < 3*d) {
           moves = [0, sy]; // up
         } else if (mx > 0 && mx < 3*d) {
@@ -691,7 +692,6 @@ function dbCarta(cfg) {
         } else if (my > h/2 - 3*d && my < h/2) {
           moves = [0, -sy]; // down
         } else if (mx > 4*d && mx < w - 4*d && my > 4*d && my < h/2 - 4*d) { // center
-          moves = [-this.m.offset[0], -this.m.offset[1]];
         }
         if (this.isTurnable()) {
           var proj = dw.initProj();
@@ -915,12 +915,12 @@ function dbCarta(cfg) {
       }
       return coords;
     },
-    // - events -----------------------------
-    onmousemove: function(ev) {
+    // - handlers -----------------------------
+    mousemove: function(ev) {
       var spts = this.canvasXY(ev),
           pts = this.rotateCoords(spts, this.m.rotate, this.centerOf());
-      if (this.m.mzoom && !ev.ctrlKey) this.onmouseup(ev);
-      if (!this.m.mzoom && ev.ctrlKey) this.onmousedown(ev);
+      if (this.m.mzoom && !ev.ctrlKey) this.mouseup(ev);
+      if (!this.m.mzoom && ev.ctrlKey) this.mousedown(ev);
       if (this.m.mpts) {
         this.m.mmove = true;
         var dx = (pts[0] - this.m.mpts[0]) / this.m.scale,
@@ -963,7 +963,7 @@ function dbCarta(cfg) {
       else
         this.paintCoords(dst);
     },
-    onmousedown: function(ev) {
+    mousedown: function(ev) {
       var spts = this.canvasXY(ev),
           pts = this.rotateCoords(spts, this.m.rotate, this.centerOf());
       if (this.m.mbar = this.chkBar(spts)) // if bar
@@ -977,7 +977,7 @@ function dbCarta(cfg) {
         this.doMapImg();
       }
     },
-    onmouseup: function(ev) {
+    mouseup: function(ev) {
       var spts = this.canvasXY(ev),
           pts = this.rotateCoords(spts, this.m.rotate, this.centerOf());
       if (this.m.mbar) { // bar
@@ -1015,7 +1015,50 @@ function dbCarta(cfg) {
         this.clfunc.onclick(pts, ev);
       else // draw once
         this.draw();
+    },
+    // - events -----------------------------
+    touchmove: function(ev) {
+      var touches = ev.changedTouches;
+      if (this.m.touches.length < 2) {
+        ev.preventDefault();
+        this.mousemove(touches[touches.length - 1]);
+      }
+    },
+    touchstart: function(ev) {
+      var touches = ev.changedTouches;
+      for (var i=0; i<touches.length; i++)
+        this.m.touches.push(touches[i]);
+      if (touches.length)
+        this.mousedown(touches[0]);
+    },
+    touchend: function(ev) {
+      var touches = ev.changedTouches;
+      for (var i=0; i<touches.length; i++) {
+        for (var j=0; j<this.m.touches.length; j++) {
+          if (this.m.touches[j].identifier == touches[i].identifier)
+            this.m.touches.splice(j, 1);
+        }
+      }
+      if (!this.m.touches.length)
+        this.mouseup(touches[touches.length - 1]);
+    },
+    onmousemove: function(ev) {
+      this.mousemove(ev);
+    },
+    onmousedown: function(ev) {
+      if (!this.m.touches.length) this.mousedown(ev);
+    },
+    onmouseup: function(ev) {
+      if (!this.m.touches.length) this.mouseup(ev);
     }
   });
+  dw.addEventListener('onmousemove', dw.mousemove);
+  dw.addEventListener('onmousedown', dw.mousedown);
+  dw.addEventListener('onmouseup', dw.mouseup);
+  dw.addEventListener('touchmove', dw.touchmove);
+  dw.addEventListener('touchstart', dw.touchstart);
+  dw.addEventListener('touchend', dw.touchend);
+  el.addEventListener("touchleave", dw.touchend);
+  el.addEventListener("touchcancel", dw.touchcancel);
   return dw;
 }
