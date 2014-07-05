@@ -1052,13 +1052,12 @@ function dbCarta(cfg) {
       if (!this.m.touches.length) this.mouseup(ev);
     }
   });
-  dw.addEventListener('onmousemove', dw.mousemove);
-  dw.addEventListener('onmousedown', dw.mousedown);
-  dw.addEventListener('onmouseup', dw.mouseup);
-  dw.addEventListener('touchmove', dw.touchmove);
-  dw.addEventListener('touchstart', dw.touchstart);
-  dw.addEventListener('touchend', dw.touchend);
-  el.addEventListener("touchleave", dw.touchend);
-  el.addEventListener("touchcancel", dw.touchcancel);
+  dw.addEventListener('onmousemove', dw.mousemove, false);
+  dw.addEventListener('onmousedown', dw.mousedown, false);
+  dw.addEventListener('onmouseup', dw.mouseup, false);
+  dw.addEventListener('touchmove', dw.touchmove, false);
+  dw.addEventListener('touchstart', dw.touchstart, false);
+  dw.addEventListener('touchend', dw.touchend, false);
+  dw.addEventListener("touchleave", dw.touchend, false);
   return dw;
 }
