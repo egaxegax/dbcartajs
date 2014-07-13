@@ -2,7 +2,7 @@
  * List with coords of Moscow Metro lines and stations
  *  [[ftype, ftag, coords, label, centerof, ismap],...]
  * Three points with coords and 'Q' literal implements to bezierCurveTo (...) method.
- * egax@bk.ru, 2013
+ * egax@bk.ru, 2013-14.
  */
 var MLINES=[
 ['moskva_canal','mc',[
@@ -757,7 +757,7 @@ var MSTATIONS=[
 ['s1_2','Lubyanka',[[11.5,14.5]],'Лубянка',null,1],
 ['s1_1','Okhotny_Ryad',[[-4,-1]],'Охотный ряд',null,1],
 ['s1_4','Biblioteka_Imeni_Lenina',[[-14,-11]],'Библиотека имени Ленина',null,1],
-['s1_1','Kropotkinskaya',[[-29.83,-26.83]],'Кропоткинская'],
+['s1_1','Kropotkinskaya',[[-29.83,-26.83]],'Кропоткинская',null,1],
 ['s1_2','Park_Kultury',[[-53,-50]],'Парк Культуры',null,1],
 ['s1','Frunzenskaya',[[-60.96,-57.96]],'Фрунзенская',null,1],
 ['s1','Sportivnaya',[[-68.81,-65.81]],'Спортивная',null,1],

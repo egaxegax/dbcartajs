@@ -1,6 +1,6 @@
 // noncart.html func
 function init() {
-  dw = new dbCarta();
+  dw = new dbCarta({draggable: false});
   dw.style.backgroundColor = 'white';
   dw.style.border = '1px dashed lightgray';
   // center by A
@@ -8,10 +8,9 @@ function init() {
   dw.centerCarta(points[0] + dw.m.offset[0], points[1] + dw.m.offset[1]);
   dw.changeProject(203);
   dw.scaleCarta(4);
-  // fix map
-  dw.onmousedown = undefined;
-  dw.onmouseup = undefined;
   // add new layer
+  dw.mopt['.Arctic']['fg'] = 'white';
+  dw.mopt['.Water']['bg'] = 'white';
   dw.mopt['yellow'] = {cls: 'Polygon', fg: 'black', bg: 'yellow'};
   dw.mopt['red'] = {cls: 'Polygon', fg: 'black', bg: 'red'};
   dw.mopt['hole'] = {cls: 'Polygon', fg: 'black', bg: 'white'};

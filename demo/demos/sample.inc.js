@@ -216,7 +216,7 @@ function init() {
   }
   projlist.onchange = proj;
   // curr. coords
-  dw.clfunc.onmousemove = function(sd, dd, ev) {
+  dw.clfunc.onmousemove = function(dw, sd, dd, ev) {
     var tcoords = document.getElementById('tcoords');
     tcoords.innerHTML = ' X: Y:';
     if (dd) tcoords.innerHTML = ' X: ' + dd[0].toFixed(2) + ' Y: ' + dd[1].toFixed(2);

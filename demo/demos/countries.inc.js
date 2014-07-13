@@ -179,7 +179,7 @@ function init() {
     cntrylist.appendChild(el);
   }
   // curr. object
-  var clfunc = function(src, dst, ev) {
+  var clfunc = function(dw, src, dst, ev) {
     var mcoord = document.getElementById('tcoords');
     var label = '';
     if (ev.target.m.pmap) {
@@ -189,8 +189,8 @@ function init() {
     mcoord.innerHTML = label;
     ev.target.paintCoords(dst);
   }
-  dw.clfunc.onmousemove = function(src, dst, ev){ clfunc(src, dst, ev); };
-  dw2.clfunc.onmousemove = function(src, dst, ev){ clfunc(src, dst, ev); };
-  dw3.clfunc.onmousemove = function(src, dst, ev){ clfunc(src, dst, ev); };
-  dw4.clfunc.onmousemove = function(src, dst, ev){ clfunc(src, dst, ev); };
+  dw.clfunc.onmousemove = function(dw, src, dst, ev){ clfunc(dw, src, dst, ev); };
+  dw2.clfunc.onmousemove = function(dw, src, dst, ev){ clfunc(dw, src, dst, ev); };
+  dw3.clfunc.onmousemove = function(dw, src, dst, ev){ clfunc(dw, src, dst, ev); };
+  dw4.clfunc.onmousemove = function(dw, src, dst, ev){ clfunc(dw, src, dst, ev); };
 }

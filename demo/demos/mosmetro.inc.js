@@ -3,6 +3,11 @@
  * View lines and stations with additional info.
  * egax@bk.ru, 2013-14.
  */
+function rotate() {
+  var tval = parseFloat(document.getElementById('tvalue').value);
+  dw.rotateCarta(tval);
+  dw.draw();
+}
 function findstation(){
   var stationlist = document.getElementById('stationlist'),
       opt = stationlist.options[stationlist.selectedIndex];
@@ -27,10 +32,17 @@ function drawcrosshair() {
   ctx.stroke();
   ctx.restore();
 }
-function rotate() {
-  var tval = parseFloat(document.getElementById('tvalue').value);
-  dw.rotateCarta(tval);
-  dw.draw();
+// tooltip under cursor
+function infobox(ev, label) {
+  var mtip = document.getElementById('maptooltip');
+  if (dw.m.pmap && label) {
+    mtip.innerHTML = label;
+    mtip.style.display = 'block';
+    mtip.style.left = ev.clientX + window.pageXOffset + 'px';
+    mtip.style.top = ev.clientY + window.pageYOffset - mtip.offsetHeight * 1.2 + 'px';
+  } else {
+    mtip.style.display = 'none';
+  }
 }
 function init() {
   var mtab = document.createElement('table');
@@ -66,7 +78,7 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '40%';
+  col.width = '30%';
   col.align = 'center';
   col.appendChild(document.createTextNode('Станции '));
   var stationlist = el = document.createElement('select');
@@ -76,7 +88,7 @@ function init() {
 
   var col = document.createElement('td');
   col.align = 'center';
-  col.id = 'coords';
+  col.id = 'tcoords';
   row.appendChild(col);
   document.body.appendChild(mtab);
 
@@ -88,6 +100,20 @@ function init() {
   row.appendChild(col);
   mtab.appendChild(row);
   document.body.appendChild(mtab);
+
+  // domap tooltip
+  var el = document.createElement('div');
+  el.id = 'maptooltip';
+  el.style.padding = '5px';
+  el.style.color = '#333333';
+  el.style.font = '12px Verdana';
+  el.style.border = '2px solid rgba(19,64,117,0.5)';
+  el.style.borderRadius = '4px';
+  el.style.backgroundColor = 'rgba(250,250,250,0.9)';
+  el.style.position = 'absolute';
+  el.style.zIndex = '10000';
+  el.onmousemove = function(){ this.innerHTML = ''; };
+  document.body.appendChild(el);
 
   dw = new dbCarta({
     id: 'mcol',
@@ -182,7 +208,6 @@ function init() {
     's3_3': inst({fg: dw.mopt['r3'].fg, anchor: ['end', 'bottom']}),
     's3_4': inst({fg: dw.mopt['r3'].fg, anchor: ['start', 'bottom']}),
     's3_5': inst({fg: dw.mopt['r3'].fg, anchor: ['end', 'top']}),
-    's3_6': inst({fg: dw.mopt['r3'].fg, anchor: ['start', 'middle']}),
     's3_6': inst({fg: dw.mopt['r3'].fg, anchor: ['end', 'middle']}),
     's4': station({fg: dw.mopt['r4'].fg}),
     's4_1': station({fg: dw.mopt['r4'].fg, anchor: ['end', 'top']}),
@@ -250,6 +275,26 @@ function init() {
     'sMono': inst({fg: dw.mopt['monorail'].fg, size: 1, anchor: ['start', 'top']}),
     'sMono_1': inst({fg: dw.mopt['monorail'].fg, size: 1, anchor: ['start', 'middle']})
   });
+  // callbacks
+  dw.extend(dw.clfunc, {
+    onmousemove: function(dw, sd, dd, ev) {
+      var mcoord = document.getElementById('tcoords');
+      var mtip, label = '';
+      if (dw.m.pmap) {
+        var o, m = dw.mflood[dw.m.pmap];
+        label = m['label'] || m['ftag'];
+        // tooltip
+        mtip = label;
+        if (INFOMST[dw.m.pmap]) {
+          var st = INFOMST[dw.m.pmap];
+          mtip = label + '<br>' + 'Открыта: ' + st[0] + '<br>' + 'Глубина: ' + st[1];
+        }
+      }
+      // text
+      mcoord.innerHTML = label;
+      infobox(ev, mtip);
+    }
+  });
   dw.loadCarta(MLINES);
   dw.loadCarta(MSTATIONS);
   dw.draw();
@@ -265,15 +310,4 @@ function init() {
   stationlist.onchange = findstation;
   delete MLINES;
   delete MSTATIONS;
-  // curr.object
-  dw.clfunc.onmousemove = function(src, dst, ev) {
-    var mcoord = document.getElementById('coords');
-    var label = '';
-    if (dw.m.pmap) {
-      var o = dw.mflood[dw.m.pmap];
-      label = o['label'] || o['ftag'];
-    }
-    mcoord.innerHTML = label;
-    dw.paintCoords(dst);
-  }
 }

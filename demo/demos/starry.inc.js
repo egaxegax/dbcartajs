@@ -146,10 +146,11 @@ function terminator(time, h, cx, cy) {
     }
   } else {
     var s = MGeo.bigcircle1spheric(sgeo[0], sgeo[1], 5),
-        isnight = MGeo.isnight(srect, 179.99, 89.99);
+        isnight = MGeo.isnight(srect, 179.99, ylimit),
+        ylimit = (dw.project == 101 ? 84 : 89.99);
     if (dw.project != 201) {
-      if (isnight) s.push([179.99,89.99]); else s.push([179.99,-89.99]);
-      if (isnight) s.push([-179.99,89.99]); else s.push([-179.99,-89.99]);
+      if (isnight) s.push([179.99,ylimit]); else s.push([179.99,-ylimit]);
+      if (isnight) s.push([-179.99,ylimit]); else s.push([-179.99,-ylimit]);
     }
     s.push(s[0]);
   }
@@ -523,9 +524,11 @@ function init() {
   // domap tooltip
   var el = document.createElement('div');
   el.id = 'maptooltip';
-  el.style.padding = '2px';
+  el.style.borderRadius = '4px';
+  el.style.border = '1px solid rgb(190,210,220)';
   el.style.backgroundColor = 'rgba(190,210,220,0.7)';
   el.style.color = 'rgba(0,0,0,0.7)';
+  el.style.padding = '4px';
   el.style.position = 'absolute';
   el.style.zIndex = '10000';
   el.onmousemove = function(){ this.innerHTML = ''; };
@@ -597,7 +600,7 @@ function init() {
   ss.onchange = draw;
   dw.clfunc.onclick = draw;
   // curr. coords
-  dw.clfunc.onmousemove = function(sd, dd, ev) {
+  dw.clfunc.onmousemove = function(dw, sd, dd, ev) {
     var scoords, tcoord = document.getElementById('tcoord');
     tcoord.innerHTML = '';
     if (dw.isTurnable()) {

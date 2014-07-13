@@ -82,7 +82,7 @@ function init() {
   document.body.appendChild(mtab);
 
   dw = new dbCarta({id:'canvasmap'});
-  dw.changeProject(102); // millner proj
+  dw.changeProject(102); // miller proj
   // worldmap img
   var im = new Image();
   im.src = IMGMAP['wrld_small_mill'];
@@ -105,7 +105,7 @@ function init() {
   }
   delete CITIES;
   // curr. object
-  dw.clfunc.onmousemove = function(sd, dd) {
+  dw.clfunc.onmousemove = function(dw, sd, dd) {
     var mcoord = document.getElementById('tcoords');
     var label = '';
     if (dw.m.pmap) {

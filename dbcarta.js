@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.8.
+ * dbCartajs HTML5 Canvas dymanic object map v1.8.1.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
@@ -33,15 +33,19 @@ function dbCarta(cfg) {
      * cfg {
      *   pid: parent id
      *   width, height: canvas size
+     *   draggable: move map by cursor
      *   viewportx, viewporty: offset limits for centerCarta in degrees
      *   scalebg: bgcolor for paintBar
+     *   rbar: show right bar?
      *   mapbg: bgcolor for doMap
      * }
      */
     cfg: {
+      draggable: cfg.draggable == undefined ? true : cfg.draggable,
       viewportx: cfg.viewportx || 180.0,
       viewporty: cfg.viewporty || 150.0,
       scalebg: cfg.scalebg || 'rgba(255,255,255,0.3)',
+      rbar: cfg.rbar == undefined ? true : cfg.rbar,
       mapbg: cfg.mapbg || 'rgba(80,90,100,0.5)',
       mapfg: cfg.mapfg
     },
@@ -162,10 +166,10 @@ function dbCarta(cfg) {
           scale_x = 180;
       while (x <= scale_x) {
         var lon = [];
-        var y = -89.99;
-        while (y <= 89.99) {
+        var y = -90;
+        while (y <= 90) {
           lon.push([x, y]);
-          y += 89.99;
+          y += (y == -90 || y == 84 ? 6 : 84); // mercator fix
         }
         lonlat.push( ['.Longtitude', [x, y].toString(), lon, x.toString(), lon[0]] );
         x += 30;
@@ -226,7 +230,7 @@ function dbCarta(cfg) {
         }
       }
       this.m.doreload = false;
-      this.paintBar();
+      if (this.cfg.rbar) this.paintBar();
     },
     rotateCarta: function(angle) {
       var ctx = this.getContext('2d');
@@ -513,23 +517,6 @@ function dbCarta(cfg) {
         lineTo(mx, my);
         closePath();
         fill();
-        // draw moves
-        translate(0, -h + h/4);
-        beginPath();
-        for (var i = 0; i <= cols/2.0 - cols/4.0; i++)
-          lineTo(mx = (w/2 * Math.cos(i * 2.0 * anglestep)), my = (-w/2 * Math.sin(i * 2.0 * anglestep)));
-        lineTo(mx, my + d); lineTo(mx + d, my + d + d); lineTo(mx - d, my + d + d); lineTo(mx, my + d); lineTo(mx, my);
-        for (var i = cols/2.0 - cols/4.0; i <= cols/2.0; i++)
-          lineTo(mx = (w/2 * Math.cos(i * 2.0 * anglestep)), my = (-w/2 * Math.sin(i * 2.0 * anglestep)));
-        lineTo(mx + d, my); lineTo(mx + d + d, my - d); lineTo(mx + d + d, my + d); lineTo(mx + d, my); lineTo(mx, my);
-        for (var i = cols/2.0; i <= cols/2.0 + cols/4.0; i++)
-          lineTo(mx = (w/2 * Math.cos(i * 2.0 * anglestep)), my = (-w/2 * Math.sin(i * 2.0 * anglestep)));
-        lineTo(mx, my - d); lineTo(mx - d, my - d - d); lineTo(mx + d, my - d - d); lineTo(mx, my - d); lineTo(mx, my);
-        for (var i = cols/2.0 + cols/4.0; i <= cols; i++)
-          lineTo(mx = (w/2 * Math.cos(i * 2.0 * anglestep)), my = (-w/2 * Math.sin(i * 2.0 * anglestep)));
-        lineTo(mx - d, my); lineTo(mx - d - d, my + d); lineTo(mx - d - d, my - d); lineTo(mx - d, my); lineTo(mx, my);
-        closePath();
-        fill();
       }
       ctx.restore();
     },
@@ -670,6 +657,7 @@ function dbCarta(cfg) {
      * Check click on right bar and do action.
      */
     chkBar: function(pts, doaction) {
+      if (!this.cfg.rbar) return;
       var cw = this.width,
           ch = this.height,
           h = ch/6,
@@ -678,35 +666,12 @@ function dbCarta(cfg) {
           ttop = ch/2 - h/2,
           d = w/10;
       var mx = pts[0] - tleft,
-          my = pts[1] - (ttop - h + h/4);
-      if (mx > 0 && mx < w && my > 0 && my < h/2) { // moves
-        if (!doaction) return true;
-        var sx = cw/50, sy = ch/50,
-            moves = [0, 0];
-        if (my > 0 && my < 3*d) {
-          moves = [0, sy]; // up
-        } else if (mx > 0 && mx < 3*d) {
-          moves = [sx, 0]; // left
-        } else if (mx > w - 3*d && mx < w) {
-          moves = [-sx, 0]; // right
-        } else if (my > h/2 - 3*d && my < h/2) {
-          moves = [0, -sy]; // down
-        } else if (mx > 4*d && mx < w - 4*d && my > 4*d && my < h/2 - 4*d) { // center
-        }
-        if (this.isTurnable()) {
-          var proj = dw.initProj();
-          this.initProj(' +lon_0=' + (proj.long0 * 180/Math.PI + moves[0]) + ' +lat_0=' + (proj.lat0 * 180/Math.PI + moves[1]));
-        } else {
-          var centerof = this.centerOf();
-          this.centerCarta(centerof[0] - moves[0], centerof[1] - moves[1], true);
-        }
-      }
-      var my = pts[1] - ttop;
+          my = pts[1] - ttop;
       if (mx > 0 && mx < w && my > 0 && my < h) { // scale
         if (!doaction) return true;
         var zoom = (this.m.scale > 1 ? this.m.scale : 2-1/this.m.scale);
-        if (my > h/2 - w/6 && my < h/2 + w/6) {
-          zoom = 1; // home
+        if (my > h/2 - w/6 && my < h/2 + w/6) { // home
+          zoom = 1;
         } else if (my > 0 && my < h/2) { // plus
           if (zoom < 50) zoom += 0.5;
         } else if (my > h/2 && my < h) { // minux
@@ -715,6 +680,11 @@ function dbCarta(cfg) {
         zoom = (zoom > 1 ? zoom : 1/(2-zoom));
         this.scaleCarta(1); // fix labels
         this.scaleCarta(zoom);
+        if (zoom == 1) {
+          var centerof = this.centerOf();
+          this.centerCarta(centerof[0] + this.m.offset[0] - this.m.scaleoff[0], 
+                           centerof[1] + this.m.offset[1] - this.m.scaleoff[1], true);
+        }
       }
     },
     /**
@@ -922,23 +892,25 @@ function dbCarta(cfg) {
       if (this.m.mzoom && !ev.ctrlKey) this.mouseup(ev);
       if (!this.m.mzoom && ev.ctrlKey) this.mousedown(ev);
       if (this.m.mpts) {
-        this.m.mmove = true;
-        var dx = (pts[0] - this.m.mpts[0]) / this.m.scale,
-            dy = (pts[1] - this.m.mpts[1]) / this.m.scale;
-        var mx = dx, my = dy;
-        if (this.m.mzoom) mx = my = 0;
-        if (this.chkImg(this.m.mimg)) { // if img is loaded
-          this.clearCarta();
-          if (this.m.bgimg && this.m.bgimg.pts && this.chkPts(this.m.bgimg.pts[0]) && this.chkPts(this.m.bgimg.pts[1])) { // bg img
-            this.paintImage(this.m.mimg, [[mx + this.m.bgimg.pts[0][0], my + this.m.bgimg.pts[0][1]], [mx + this.m.bgimg.pts[1][0], my + this.m.bgimg.pts[1][1]]]);
-          } else { // snapshot
-            var mpts = [ -this.m.offset[0] - this.m.scaleoff[0] + mx,
-                         -this.m.offset[1] - this.m.scaleoff[1] + my ];
-            var rotate = this.m.rotate;
-            this.rotateCarta(-rotate);
-            mpts = this.rotateCoords(mpts, -rotate, [mpts[0] - mx, mpts[1] - my]);
-            this.paintImage(this.m.mimg, [mpts, [mpts[0] + this.m.mimg.width/this.m.scale, mpts[1] + this.m.mimg.height/this.m.scale]]);
-            this.rotateCarta(rotate);
+        if (this.cfg.draggable || this.m.mzoom) {
+          this.m.mmove = true;
+          var dx = (pts[0] - this.m.mpts[0]) / this.m.scale,
+              dy = (pts[1] - this.m.mpts[1]) / this.m.scale;
+          var mx = dx, my = dy;
+          if (this.m.mzoom) mx = my = 0;
+          if (this.chkImg(this.m.mimg)) { // if img is loaded
+            this.clearCarta();
+            if (this.m.bgimg && this.m.bgimg.pts && this.chkPts(this.m.bgimg.pts[0]) && this.chkPts(this.m.bgimg.pts[1])) { // bg img
+              this.paintImage(this.m.mimg, [[mx + this.m.bgimg.pts[0][0], my + this.m.bgimg.pts[0][1]], [mx + this.m.bgimg.pts[1][0], my + this.m.bgimg.pts[1][1]]]);
+            } else { // snapshot
+              var mpts = [ -this.m.offset[0] - this.m.scaleoff[0] + mx,
+                           -this.m.offset[1] - this.m.scaleoff[1] + my ];
+              var rotate = this.m.rotate;
+              this.rotateCarta(-rotate);
+              mpts = this.rotateCoords(mpts, -rotate, [mpts[0] - mx, mpts[1] - my]);
+              this.paintImage(this.m.mimg, [mpts, [mpts[0] + this.m.mimg.width/this.m.scale, mpts[1] + this.m.mimg.height/this.m.scale]]);
+              this.rotateCarta(rotate);
+            }
           }
         }
         if (this.m.mzoom) { // zoombox
@@ -959,7 +931,7 @@ function dbCarta(cfg) {
       var src = this.fromPoints(pts, false),
           dst = this.fromPoints(pts, true);
       if ('onmousemove' in this.clfunc)
-        this.clfunc.onmousemove(src, dst, ev);
+        this.clfunc.onmousemove(this, src, dst, ev);
       else
         this.paintCoords(dst);
     },
@@ -983,9 +955,12 @@ function dbCarta(cfg) {
       if (this.m.mbar) { // bar
         this.chkBar(spts, true);
       } else if (!this.m.mmove) { // click
-        if ('afterclick' in this.clfunc)
-          this.clfunc.afterclick(pts, ev);
-        else {
+        if ('afterclick' in this.clfunc) {
+          this.clfunc.afterclick(this, pts, ev);
+          delete this.m.mimg;
+          delete this.m.mpts;
+          return;
+        } else {
           this.chkZoomBox(pts, true);
           delete this.mflood['.ZoomBox'];
         }
@@ -997,7 +972,6 @@ function dbCarta(cfg) {
           centerof[1] - pts[1] + this.m.mpts[1] ];
         if (this.isTurnable()) {
           var dst = this.fromPoints(mpts);
-          if (!dst) return;
           var proj = this.initProj();
           this.initProj(' +h=' + proj.h + ' +lon_0=' + (this.m.mcenterof[0] + dst[0]) + ' +lat_0=' + (this.m.mcenterof[1] + dst[1]));
         } else {
@@ -1012,7 +986,7 @@ function dbCarta(cfg) {
         delete mcenterof;
       }
       if ('onclick' in this.clfunc)
-        this.clfunc.onclick(pts, ev);
+        this.clfunc.onclick(this, pts, ev);
       else // draw once
         this.draw();
     },

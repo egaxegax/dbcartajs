@@ -12,7 +12,8 @@ function listDemos() {
       var a = document.createElement('a');
       a.href = 'http://habrahabr.ru/post/193778';
       a.appendChild(document.createTextNode('Карта Московского Метро на Canvas'));
-      sp.appendChild(document.createTextNode(' на Wikipedia. Загружается намного быстрее оригинала. Пунктирные линии строящихся станций отображаются только в Firefox (поддержка метода setDashLine в Canvas). Подробности в статье на Хабре "'));
+      sp.appendChild(document.createTextNode(' на Wikipedia. Загружается намного быстрее оригинала. Также добавлен вывод информации о станции при наведении. ' +
+                                             'Пунктирные линии строящихся станций отображаются только в Firefox (поддержка метода setDashLine в Canvas). Подробности в статье на Хабре "'));
       sp.appendChild(a);
       sp.appendChild(document.createTextNode('".'));
       return sp; }],
@@ -41,15 +42,27 @@ function listDemos() {
     [['merc.html'], ['Avia Routes'], function() {
       return document.createTextNode('На карте в проекции "Меркатор" изображены несколько стран со столицами. Города соединены маршрутными линиями.'); }],
     [['usemap.html'], ['Area Map'], function() {
-      return document.createTextNode('Карта стран мира с возможностью наведения на них и выводом дополнительной информации по ним.'); }],
+      var sp = document.createElement('span');
+      sp.appendChild(document.createTextNode('Карта стран мира с возможностью наведения на них и выводом дополнительной информации по клику. ')); 
+      sp.appendChild(document.createTextNode('Идея и стиль позаимствованы с примеров для ')); 
+      var a = document.createElement('a');
+      a.href = 'http://www.highcharts.com/maps/demo';
+      a.appendChild(document.createTextNode('highmaps'));
+      sp.appendChild(a);
+      sp.appendChild(document.createTextNode(' из проекта '));
+      var a = document.createElement('a');
+      a.href = 'http://www.highcharts.com';
+      a.appendChild(document.createTextNode('highcharts.com'));
+      sp.appendChild(a);
+      return sp; }],
     [['noncart.html'], ['Noncart'], function() {
       return document.createTextNode('Выводим слово dbcarta по буквам в координатах.'); }],
     [['sample.html'], ['Sample'], function() {
-      return document.createTextNode('Демо с возможностью нанесения объкетов с заданными координатами в выбранной проекции.'); }],
+      return document.createTextNode('Демо с возможностью нанесения объектов с заданными координатами в выбранной проекции.'); }],
     [['cities.html'], ["World's Cities"], function() {
-      return document.createTextNode('Список крупнейших городов мира с возможностью выбора на карте в проекции "Меркатор".'); }],
+      return document.createTextNode('Список крупнейших городов мира с выводом на карте в проекции "Миллер".'); }],
     [['countries.html'], ["World's Countries"], function() {
-      return document.createTextNode('Список стран мира с возможностью выбора в различных проекциях.'); }]
+      return document.createTextNode('Список стран мира с отображением в различных проекциях.'); }]
   ];
 }
 function init() {
