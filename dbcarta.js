@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.8.1.
+ * dbCartajs HTML5 Canvas dymanic object map v1.8.2.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
@@ -991,6 +991,23 @@ function dbCarta(cfg) {
         this.draw();
     },
     // - events -----------------------------
+    mousewheel: function(ev) {
+      var delta = 0;
+      if (ev.wheelDelta) { // WebKit / Opera / Explorer 9
+        delta = ev.wheelDelta / 40;
+      } else if (ev.detail) { // Firefox
+        delta = -ev.detail / 3;
+      }
+      var zoom = (this.m.scale > 1 ? this.m.scale : 2-1/this.m.scale);
+      zoom += delta * 0.5;
+      zoom = (zoom > 1 ? zoom : 1/(2-zoom));
+      this.scaleCarta(1); // fix labels
+      this.scaleCarta(zoom);
+      if ('onclick' in this.clfunc)
+        this.clfunc.onclick(this);
+      else // draw once
+        this.draw();
+    },
     touchmove: function(ev) {
       var touches = ev.changedTouches;
       if (this.m.touches.length < 2) {
@@ -1016,6 +1033,7 @@ function dbCarta(cfg) {
       if (!this.m.touches.length)
         this.mouseup(touches[touches.length - 1]);
     },
+    // both touch and click
     onmousemove: function(ev) {
       this.mousemove(ev);
     },
@@ -1029,6 +1047,8 @@ function dbCarta(cfg) {
   dw.addEventListener('onmousemove', dw.mousemove, false);
   dw.addEventListener('onmousedown', dw.mousedown, false);
   dw.addEventListener('onmouseup', dw.mouseup, false);
+  dw.addEventListener('mousewheel', dw.mousewheel, false);
+  dw.addEventListener('DOMMouseScroll', dw.mousewheel, false); // firefox
   dw.addEventListener('touchmove', dw.touchmove, false);
   dw.addEventListener('touchstart', dw.touchstart, false);
   dw.addEventListener('touchend', dw.touchend, false);
