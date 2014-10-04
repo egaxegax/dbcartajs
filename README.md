@@ -20,7 +20,7 @@ Docs in wiki at https://github.com/egaxegax/dbCartajs/wiki.
 
 ## Usage
 
-Simply download, unpack and open index.html from demo folder in any browser with HTML5 support.
+Simply download and unpack an archive, open index.html from demo folder in any browser with HTML5 support.
 
 ## Controls
 
