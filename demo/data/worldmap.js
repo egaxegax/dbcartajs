@@ -5,10 +5,10 @@ var IMGMAP;
 // images urls
 function imgMapByUrl() { 
 IMGMAP = {
-'wrld_small': 'demodata/img/wrld-small.jpg',
-'wrld_small_merc': 'demodata/img/wrld-small-merc.jpg',
-'wrld_small_mill': 'demodata/img/wrld-small-mill.jpg',
-'wrld_small_moll': 'demodata/img/wrld-small-moll.jpg' }
+'wrld_small': 'data/img/wrld-small.jpg',
+'wrld_small_merc': 'data/img/wrld-small-merc.jpg',
+'wrld_small_mill': 'data/img/wrld-small-mill.jpg',
+'wrld_small_moll': 'data/img/wrld-small-moll.jpg' }
 }
 // base64 encoded images
 function imgMapB64() {

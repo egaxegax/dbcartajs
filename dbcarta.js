@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.8.2.
+ * dbCartajs HTML5 Canvas dymanic object map v1.8.3.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
@@ -555,14 +555,23 @@ function dbCarta(cfg) {
       if (m['cls'] == 'Dot' || m['cls'] == 'Rect') {
         if (this.chkPts(pts[0])){
           centerofpts = pts;
-          if (m['cls'] == 'Dot')
-            ctx.arc(pts[0][0], pts[0][1], msize, 0, Math.PI*2, 0);
-          else
+          if (m['cls'] == 'Dot') {
+            for (var i in pts)
+              if (this.chkPts(pts[i])){
+                ctx.beginPath();
+                ctx.arc(pts[i][0], pts[i][1], msize, 0, Math.PI*2, 0);
+                ctx.strokeStyle = m['fg'];
+                ctx.stroke();
+                ctx.fillStyle = m['bg'] || m['fg'];
+                ctx.fill();
+              }
+          } else {
             ctx.rect(pts[0][0] - msize/2.0, pts[0][1] - msize/2.0, msize, msize);
-          ctx.strokeStyle = m['fg'];
-          ctx.stroke();
-          ctx.fillStyle = m['bg'] || m['fg'];
-          ctx.fill();
+            ctx.strokeStyle = m['fg'];
+            ctx.stroke();
+            ctx.fillStyle = m['bg'] || m['fg'];
+            ctx.fill();
+          }
         }
       } else {
         var mpts = [];
