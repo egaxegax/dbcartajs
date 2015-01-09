@@ -1,6 +1,6 @@
 /**
  * World's countrires and flags.
- * egax@bk.ru, 2013-14.
+ * egax@bk.ru, 2013-15.
  */
 function draw() {
   var cntrylist = document.getElementById('cntrylist');
@@ -63,7 +63,7 @@ function init() {
   var col = document.createElement('td');
   col.width = '15%';
   el = document.createElement('h2');
-  el.appendChild(document.createTextNode("World's Countries"));
+  el.appendChild(document.createTextNode("Страны мира"));
   el.style.margin = '0';
   col.appendChild(el);
   row.appendChild(col);
@@ -84,7 +84,7 @@ function init() {
   col.style.borderStyle = 'solid';
   col.style.verticalAlign = 'top';
   var el = document.createElement('div');
-  el.appendChild(document.createTextNode('Countries by part:'));
+  el.appendChild(document.createTextNode('Страны по частям:'));
   col.appendChild(el);
   var cntrylist = el2 = document.createElement('select');
   el2.id = 'cntrylist'

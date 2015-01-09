@@ -1,6 +1,6 @@
 /**
- * Mercator projection.
- * egax@bk.ru, 2013-14.
+ * Avia routes in Mercator projection.
+ * egax@bk.ru, 2013-15.
  */
 function init() {
   var mtab = document.createElement('table');
@@ -13,7 +13,7 @@ function init() {
   var col = document.createElement('td');
   col.width = '15%';
   var el = document.createElement('h2');
-  el.appendChild(document.createTextNode('Mercator Proj'));
+  el.appendChild(document.createTextNode('Маршруты'));
   el.style.padding = '0';
   el.style.margin = '0';
   col.appendChild(el);

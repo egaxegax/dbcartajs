@@ -2,12 +2,12 @@
 // list demos with brief
 function listDemos() {
   return [
-    [['mosmetro.html'], ['Moscow Metro'], function() {
+    [['mosmetro.html'], ['Карта метро Москвы'], function() {
       var sp = document.createElement('span');
       var a = document.createElement('a');
       a.href = 'http://upload.wikimedia.org/wikipedia/commons/f/f3/Moscow_metro_map_ru_sb.svg';
       a.appendChild(document.createTextNode('SVG-карты'));
-      sp.appendChild(document.createTextNode('Карта Московского Метрополитена 2013 с выбором станций. Переделена с '));
+      sp.appendChild(document.createTextNode('Карта Московского Метрополитена 2015 с выбором станций. Переделена с '));
       sp.appendChild(a);
       var a = document.createElement('a');
       a.href = 'http://habrahabr.ru/post/193778';
@@ -17,7 +17,7 @@ function listDemos() {
       sp.appendChild(a);
       sp.appendChild(document.createTextNode('".'));
       return sp; }],
-    [['mosrails.html'], ['Moscow Rail Roads'], function() {
+    [['mosrails.html'], ['Карта ж/д Москвы и МО'], function() {
       return document.createTextNode('Ещё одна карта на тему железных дорог. Схема пригородного ж/д транспорта Москвы и МО. ' + 
                                      'Оригинал этой карты можно видеть на стенах тамбуров подмосковных электричек под названием ' + 
                                      'Moscow Underground and Commuter Rail Map. Подробности на Хабре.'); }],
@@ -25,11 +25,11 @@ function listDemos() {
       'http://dbcartajs.blogspot.ru/2014/02/metro-novosibirsk.html#cont-nsbmetro',
       'http://dbcartajs.blogspot.ru/2014/02/metro-kiev.html#cont-kievmetro',
       'http://dbcartajs.blogspot.ru/2014/02/metro-tbilisi.html#cont-tbilisimetro'], [
-      'Saint-Petersburg', 'Novosibirsk', 'Kiev', 'Tbilisi'], function() {
+      'Санкт-Петербург', 'Новосибирск', 'Киев', 'Тбилиси'], function() {
       return document.createTextNode('Подборка прочих карт со схемами метро наиболее крупных городов России и СНГ из блога проекта. ' + 
                                      'Небольшие схемы по сравнению с московской. В целом вообще по протяженности и количеству станций с московским метро ' + 
                                      'могут сравниться только метро Нью-Йорка и Лондона.'); }],
-    [['starry.html'], ['Starry Sky'], function() {
+    [['starry.html'], ['Звездное небо'], function() {
       var sp = document.createElement('span');
       var a = document.createElement('a');
       a.href = 'http://habrahabr.ru/post/189692';
@@ -39,12 +39,36 @@ function listDemos() {
       sp.appendChild(a);
       sp.appendChild(document.createTextNode('".'));
       return sp; }],
-    [['merc.html'], ['Avia Routes'], function() {
-      return document.createTextNode('На карте в проекции "Меркатор" изображены несколько стран со столицами. Города соединены маршрутными линиями.'); }],
-    [['usemap.html'], ['Area Map'], function() {
+    [['sky3d.html'], ['Звездное небо 3D'], function() {
       var sp = document.createElement('span');
-      sp.appendChild(document.createTextNode('Карта стран мира с возможностью наведения на них и выводом дополнительной информации по клику. ')); 
-      sp.appendChild(document.createTextNode('Идея и стиль позаимствованы с примеров для ')); 
+      var a = document.createElement('a');
+      a.href = 'http://habrahabr.ru/post/189692';
+      a.appendChild(document.createTextNode('Звездное небо 3D'));
+      sp.appendChild(document.createTextNode('Переделанный вариант "Звездного неба" с Canvas на отрисовку через WebGL с использованием скриптов three.js. ' + 
+                                             'Вращайте, перемещайте левой и правой кнопками мыши объекты Солнечной Системы. ' + 
+                                             'Подробно написано в статье на Хабре "'));
+      sp.appendChild(a);
+      sp.appendChild(document.createTextNode('".'));
+      sp.appendChild(document.createTextNode('Идея и стиль позаимствованы с примеров на ')); 
+      var a = document.createElement('a');
+      a.href = 'http://www.apoapsys.com';
+      a.appendChild(document.createTextNode('apoapsys.com'));
+      sp.appendChild(a);
+      return sp; }],
+    [['merc.html'], ['Маршруты'], function() {
+      return document.createTextNode('На карте в проекции "Меркатор" изображены несколько стран со столицами. Города соединены маршрутными линиями.'); }],
+    [['noncart.html'], ['Изображение по точкам'], function() {
+      return document.createTextNode('Выводим слово dbcarta по буквам в координатах.'); }],
+    [['sample.html'], ['Атлас'], function() {
+      return document.createTextNode('Демо с возможностью нанесения объектов с заданными координатами в выбранной проекции.'); }],
+    [['cities.html'], ["Города мира"], function() {
+      return document.createTextNode('Список крупнейших городов мира с выводом на карте в проекции "Миллер".'); }],
+    [['countries.html'], ["Страны мира"], function() {
+      return document.createTextNode('Список стран мира с отображением в различных проекциях.'); }],
+    [['usemap.html'], ['Население мира'], function() {
+      var sp = document.createElement('span');
+      sp.appendChild(document.createTextNode('Карта плотности населения мира по странам с возможностью наведения на них и выводом дополнительной информации по клику. ')); 
+      sp.appendChild(document.createTextNode('Идея и стиль позаимствованы с примеров ')); 
       var a = document.createElement('a');
       a.href = 'http://www.highcharts.com/maps/demo';
       a.appendChild(document.createTextNode('highmaps'));
@@ -54,22 +78,14 @@ function listDemos() {
       a.href = 'http://www.highcharts.com';
       a.appendChild(document.createTextNode('highcharts.com'));
       sp.appendChild(a);
-      return sp; }],
-    [['noncart.html'], ['Noncart'], function() {
-      return document.createTextNode('Выводим слово dbcarta по буквам в координатах.'); }],
-    [['sample.html'], ['Sample'], function() {
-      return document.createTextNode('Демо с возможностью нанесения объектов с заданными координатами в выбранной проекции.'); }],
-    [['cities.html'], ["World's Cities"], function() {
-      return document.createTextNode('Список крупнейших городов мира с выводом на карте в проекции "Миллер".'); }],
-    [['countries.html'], ["World's Countries"], function() {
-      return document.createTextNode('Список стран мира с отображением в различных проекциях.'); }]
+      return sp; }]
   ];
 }
 function init() {
   var el = document.createElement('h2');
   el.style.textAlign = 'center';
-  el.style.backgroundColor = 'rgb(230,230,230)';
-  el.appendChild(document.createTextNode('dbCartajs - HTML5 Canvas map with some Proj4js projections'));
+  el.style.backgroundColor = '#d2e0f0';
+  el.appendChild(document.createTextNode('dbCartajs - HTML5 Canvas карта с проекциями Proj4js'));
   document.body.appendChild(el);
 
   // anim table
@@ -155,7 +171,7 @@ function init() {
   row.appendChild(col);
   for(var i in (mdemos=listDemos())){
     var div = document.createElement('div');
-    if (i%2 == 0) div.style.backgroundColor = '#EEEEEE';
+    if (i%2 == 0) div.style.backgroundColor = '#d2e0f0';
     var dt = document.createElement('dt');
     var dd = document.createElement('dd');
     var ul = document.createElement('ul');
@@ -192,23 +208,23 @@ function init() {
   el2.target = '_blank';
   el2.appendChild(document.createTextNode('egaxegax'));
   el.appendChild(el2);
-  el.appendChild(document.createTextNode(', 2014'));
+  el.appendChild(document.createTextNode(', 2015'));
   document.body.appendChild(el);
 
   // add anim
   var cx = Math.random() * 360,
       cy = Math.random() * 180;
-  dbcarta1 = new dbCarta({id: 'demo1'});
+  dbcarta1 = new dbCarta({id: 'demo1', rbar: false});
   dbcarta1.initProj(203, ' +lon_0=' + cx + ' +lat_0=' + cy);
   dbcarta1.loadCarta(CONTINENTS);
   dbcarta1.loadCarta(dbcarta1.createMeridians());
   dbcarta1.scaleCarta(1.4);
   dbcarta1.draw();
-  dbcarta2 = new dbCarta({id: 'demo2'});
-  dbcarta2.initProj(203, ' +lon_0=' + (180-cx) + ' +lat_0=' + (-cy/2.0));
+  dbcarta2 = new dbCarta({id: 'demo2', rbar: false});
+  dbcarta2.initProj(202, ' +lon_0=' + (180-cx) + ' +lat_0=' + (-cy/2.0));
   dbcarta2.loadCarta(CONTINENTS);
   dbcarta2.loadCarta(dbcarta2.createMeridians());
-  dbcarta2.scaleCarta(1.4);
+  dbcarta2.scaleCarta(1.6);
   delete CONTINENTS;
   dbcarta2.draw();
 }

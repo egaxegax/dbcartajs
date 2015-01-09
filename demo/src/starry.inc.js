@@ -1,16 +1,16 @@
 /**
  * Starry Sky Canvas map v2.1.1.
  * View stars, constellations, planets, sattelites on Earth background.
- * egax@bk.ru, 2013-14.
+ * egax@bk.ru, 2013-15.
  */
 // list layers in order
 var mopt = {
   'cntlines': {cls: 'Line', fg: 'rgba(200,200,170,0.3)', labelcolor: 'rgb(200,200,170)'},
   'cntpos': {cls: 'Dot', fg: 'rgb(17,17,96)', labelcolor: 'rgb(0,200,0)'},
-  'star': {cls: 'Dot', fg: 'rgb(255,255,255)', labelcolor: 'rgb(155,155,200)'},
+  'stars': {cls: 'Dot', fg: 'rgb(255,255,255)', labelcolor: 'rgb(155,155,200)'},
   'sun': {cls: 'Dot', fg: 'rgb(255,255,0)', labelcolor: 'rgb(255,255,0)'},
   'moon': {cls: 'Dot', fg: 'rgb(200,200,200)', labelcolor: 'rgb(200,200,200)'},
-  'planet': {cls: 'Dot', fg: 'rgb(220,200,200)', labelcolor: 'rgb(255,155,128)'},
+  'planets': {cls: 'Dot', fg: 'rgb(220,200,200)', labelcolor: 'rgb(255,155,128)'},
   'earth': {},
   'sattrac': {cls: 'Line', fg: 'rgba(100,100,220,0.4)'},    
   'satsurface': {cls: 'Dot', fg: 'rgba(255,255,220,0.9)', size: '2'},
@@ -58,7 +58,7 @@ function loadImg() {
       dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-162,81],[162,-81]], 6:this}]);
     dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
     draw();
-  }
+  };
 }
 // Rotate map
 function rotate() {
@@ -148,7 +148,7 @@ function terminator(time, h, cx, cy) {
     var s = MGeo.bigcircle1spheric(sgeo[0], sgeo[1], 5),
         isnight = MGeo.isnight(srect, 179.99, ylimit),
         ylimit = (dw.project == 101 ? 84 : 89.99);
-    if (dw.project != 201) {
+    if (dw.project !== 201) {
       if (isnight) s.push([179.99,ylimit]); else s.push([179.99,-ylimit]);
       if (isnight) s.push([-179.99,ylimit]); else s.push([-179.99,-ylimit]);
     }
@@ -183,7 +183,7 @@ function drawlonlat(pts, ftype, areasize) {
         'ftag': mftag,
         'pts': m['pts'],
         'desc': desc.join('<br/>')
-      }
+      };
     }
     if (areasize) // fix size for area map
       dw.mopt[ftype]['size'] = areasize;
@@ -223,10 +223,10 @@ function draw() {
     case 'earth':
       dw.draw(1);
       break;
-    case 'star':
+    case 'stars':
       var stars = STARS,
           mstars = Starry.renderSky(stars, rect, skyRadius, eaRadius, cx, cy, rotate, centerof, gmtime, darkhide);
-      drawlonlat(mstars, 'star', 3);
+      drawlonlat(mstars, ftype, 3);
       break;
     case 'cntlines':
       var lns = CLNS,
@@ -238,38 +238,38 @@ function draw() {
         if (m.length > 1)
           mpts.push([[m[0][0][0], m[1][0][0]]]);
       }
-      drawlonlat(mpts, 'cntlines');
+      drawlonlat(mpts, ftype);
       break;
     case 'cntpos':
       var cnts = CNTS,
           mcnts = Starry.renderSky(cnts, rect, skyRadius, eaRadius, cx, cy, rotate, centerof, gmtime, darkhide);
-      drawlonlat(mcnts, 'cntpos');
+      drawlonlat(mcnts, ftype);
       break;
     case 'sun':
       var sun = Solar.loadSun(gmtime),
           msun = Starry.renderSky([sun], rect, skyRadius, eaRadius, cx, cy, rotate, centerof, gmtime, darkhide);
-      drawlonlat(msun, 'sun', 5);
+      drawlonlat(msun, ftype, 5);
       break;
     case 'moon':
       var moon = Solar.loadMoon(gmtime),
           mmoon = Starry.renderSky([moon], rect, skyRadius, eaRadius, cx, cy, rotate, centerof, gmtime, darkhide);
-      drawlonlat(mmoon, 'moon', 4);
+      drawlonlat(mmoon, ftype, 4);
       break;
-    case 'planet':
+    case 'planets':
       var planets = Solar.loadPlanets(gmtime),
           mplanets = Starry.renderSky(planets, rect, skyRadius, eaRadius, cx, cy, rotate, centerof, gmtime, darkhide);
-      drawlonlat(mplanets, 'planet', 4);
+      drawlonlat(mplanets, ftype, 4);
       break;
     case 'terminator':
       var term = terminator(gmtime, proj.h/1000, cx, cy);
-      dw.loadCarta([['terminator', '1', term]], 1);
+      dw.loadCarta([[ftype, '1', term]], 1);
       break;
     case 'satpos':
     case 'sattrac':
     case 'sattrace':
     case 'satsurface':
     case 'satsector':
-      var tledata = TLEDATA;
+      var tledata = TLEDATA.GLONASS;
       for (var i in tledata){
         if (!tledata[i])
           continue; // check data
@@ -305,26 +305,26 @@ function draw() {
         sath = (sath - MGeo.AE).toFixed(0) + ' km';
         // orbit
         if (ftype == 'sattrac')
-          drawlonlat(mtracs[1], 'sattrac');
+          drawlonlat(mtracs[1], ftype);
         // surface point
         if (ftype == 'satsurface') {
-          dw.loadCarta([['satsurface', i, [mcoords[0]]]], 1);
+          dw.loadCarta([[ftype, i, [mcoords[0]]]], 1);
           var m = {label: tracs[0], lon: mcoords[0][0].toFixed(4), lat: mcoords[0][1].toFixed(4), h: sath},
               desc = [];
           for (var k in m) if (m[k]) desc.push('<b>' + k + '</b>: ' + m[k]);
-          dw.marea['satsurface_' + i] = {
-            'ftype': 'satsurface',
+          dw.marea[ftype + '_' + i] = {
+            'ftype': ftype,
             'ftag': i,
-            'pts': dw.mflood['satsurface_' + i]['pts'],
+            'pts': dw.mflood[ftype + '_' + i]['pts'],
             'desc': desc.join('<br/>')
-          }
+          };
         }
         // surface trace
         if (ftype == 'sattrace') {
           var trace = [];
           for (var j in mcoords)
             if (mcoords[j-1] && mcoords[j][0] - mcoords[j-1][0] < 90)
-              trace.push(['sattrace', i + '.' + j, [mcoords[j-1], mcoords[j]]]);
+              trace.push([ftype, i + '.' + j, [mcoords[j-1], mcoords[j]]]);
           dw.loadCarta(trace, 1);
         }
         if (dw.isTurnable() && mtracs[0].length) {
@@ -343,11 +343,11 @@ function draw() {
                 var pt1 = pt; // previous pt
               }
             }
-            drawlonlat(mpts, 'satsector');
+            drawlonlat(mpts, ftype);
           }
           // sat.label
           if (ftype == 'satpos')
-            drawlonlat([[[mtracs[0][0][0][0]], 16, tracs[0], i, {label: tracs[0], h: sath}]], 'satpos');
+            drawlonlat([[[mtracs[0][0][0][0]], 16, tracs[0], i, {label: tracs[0], h: sath}]], ftype);
         }
       }
       break;
@@ -369,12 +369,12 @@ function scaleheight() {
   dw.scaleCarta(1/rhscale * 4/proj.p15);
 }
 function getSelTime() {
-  return [Number(document.getElementById('yy').value),
-          Number(document.getElementById('mm').value),
-          Number(document.getElementById('dd').value),
-          Number(document.getElementById('hh').value),
-          Number(document.getElementById('mi').value),
-          Number(document.getElementById('ss').value)]
+  return [ Number(document.getElementById('yy').value),
+           Number(document.getElementById('mm').value),
+           Number(document.getElementById('dd').value),
+           Number(document.getElementById('hh').value),
+           Number(document.getElementById('mi').value),
+           Number(document.getElementById('ss').value) ];
 }
 function setSelTime(interval) {
   if (interval) {
@@ -383,6 +383,7 @@ function setSelTime(interval) {
     var dt = new Date(ut + interval);
   } else
     var dt = new Date();
+//    var dt = new Date(Date.UTC(2010, 12-1, 22, 7, 33, 0));
   document.getElementById('yy').value = dt.getUTCFullYear();
   document.getElementById('mm').value = dt.getUTCMonth()+1;
   document.getElementById('dd').value = dt.getUTCDate();
@@ -407,14 +408,14 @@ function init() {
   mtab.style.borderCollapse = 'collapse';
   var row = document.createElement('tr');
   row.style.height = '1px';
-  row.style.backgroundColor = 'rgb(230,230,230)';
+  row.style.backgroundColor = '#d2e0f0';
   mtab.appendChild(row);
 
   var col = document.createElement('td');
-  col.width = '10%';
+  col.width = '5%';
   col.style.whiteSpace = 'nowrap';
   var el = document.createElement('h2');
-  el.appendChild(document.createTextNode('Starry Sky'));
+  el.appendChild(document.createTextNode('Звезды'));
   el.style.padding = '0';
   el.style.margin = '0';
   col.appendChild(el);
@@ -483,7 +484,7 @@ function init() {
   el.id = 'btauto';
   col.appendChild(el);
   el.onclick = setAutoTime;
-  el.title = 'update by interval';
+  el.title = 'Обновлять по таймеру';
   el.appendChild(document.createTextNode('▶'));
   col.appendChild(el);
   row.appendChild(col);
@@ -500,7 +501,7 @@ function init() {
     o.target.checked ? loadImg() : draw();
   };
   col.appendChild(el);
-  col.appendChild(document.createTextNode(' bg'));
+  col.appendChild(document.createTextNode('Фон'));
   row.appendChild(col);
 
   var col = document.createElement('td');
@@ -544,20 +545,20 @@ function init() {
     o.appendChild(el);
   };
   // list layers
-  optfunc(layerlist, 'layers...');
+  optfunc(layerlist, 'Слои...');
   layerlist.options[layerlist.selectedIndex].disabled = 'true';
   for(var i in layers()) optfunc(layerlist, i);
   // list sat
-  optfunc(satlist, 'satellites...');
+  optfunc(satlist, 'Аппараты...');
   satlist.options[satlist.selectedIndex].disabled = 'true';
-  for(var i in TLEDATA) if (TLEDATA[i]) optfunc(satlist, TLEDATA[i][0]);
+  for(var i in TLEDATA.GLONASS) optfunc(satlist, TLEDATA.GLONASS[i][0]);
   // list nsper proj height
-  optfunc(projh, 'height...');
+  optfunc(projh, 'Высота...');
   projh.options[projh.selectedIndex].disabled = 'true';
   for(var i=1000; i<103000; i+=3000) optfunc(projh, i);
   projh.value = 40000;
   // list proj
-  optfunc(projlist, 'proj...');
+  optfunc(projlist, 'Проекции...');
   projlist.options[projlist.selectedIndex].disabled = 'true';
   var pl = [0, 101, 102, 201, 202, 204]; // exlude ortho
   for(var i in pl) optfunc(projlist, pl[i], dw.projlist[pl[i]].split(' ')[0].split('=')[1]);
@@ -573,13 +574,15 @@ function init() {
   layerlist.onchange = function() {
     mopt[this.value]['hide'] = (!mopt[this.value]['hide']);
     this.options[this.selectedIndex].style.color = (mopt[this.value]['hide'] ? 'lightgray' : '');
+    this.selectedIndex = 0;
     draw();
-  }
+  };
   satlist.onchange = function() {
     msat[this.value] = (!msat[this.value]);
     this.options[this.selectedIndex].style.color = (msat[this.value] ? 'lightgray' : '');
+    this.selectedIndex = 0;
     draw();
-  }
+  };
   // hide some sat
   for(var i=0; i<satlist.options.length; i++) {
     if (i>1) {
@@ -590,7 +593,7 @@ function init() {
   projh.onchange = function() {
     scaleheight();
     draw();
-  }
+  };
   projlist.onchange = proj;
   yy.onchange = draw;
   mm.onchange = draw;
@@ -616,7 +619,7 @@ function init() {
       tcoord.innerHTML = ' Lon: ' + dd[0].toFixed(2) + ' Lat: ' + dd[1].toFixed(2);
     }
     infobox(ev);
-  }
+  };
   // draw
   dw.loadCarta(CONTINENTS);
   //delete CONTINENTS;

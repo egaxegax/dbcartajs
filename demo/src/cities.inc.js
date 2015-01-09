@@ -1,6 +1,6 @@
 /**
  * World's cities by countries.
-* egax@bk.ru, 2013-14.
+ * egax@bk.ru, 2013-15.
  */
 function draw() {
   var centerof, citylist = document.getElementById('citylist');
@@ -35,7 +35,7 @@ function init() {
   var col = document.createElement('td');
   col.width = '15%';
   var el = document.createElement('h2');
-  el.appendChild(document.createTextNode("World's Cities"));
+  el.appendChild(document.createTextNode("Города мира"));
   el.style.margin = '0';
   col.appendChild(el);
   row.appendChild(col);
@@ -54,7 +54,7 @@ function init() {
   col.style.borderStyle = 'solid';
   col.style.verticalAlign = 'top';
   var el = document.createElement('div');
-  el.appendChild(document.createTextNode('Cities by country:'));
+  el.appendChild(document.createTextNode('Города по странам:'));
   col.appendChild(el);
   var citylist = el2 = document.createElement('select');
   el2.id = 'citylist'

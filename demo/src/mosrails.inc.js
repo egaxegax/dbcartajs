@@ -1,7 +1,7 @@
 /**
- * Moscow Rail map.
+ * Moscow Rail Roads map.
  * View lines and stations with additional info.
- * egax@bk.ru, 2013-14.
+ * egax@bk.ru, 2013-15.
  */
 function findstation(){
   var stationlist = document.getElementById('stationlist'),
@@ -33,7 +33,7 @@ function init() {
   mtab.style.borderCollapse = 'collapse';
   var row = document.createElement('tr');
   row.style.height = '1px';
-  row.style.backgroundColor = 'rgb(230,230,230)';
+  row.style.backgroundColor = '#d2e0f0';
   mtab.appendChild(row);
 
   var col = document.createElement('td');

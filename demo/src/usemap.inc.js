@@ -1,7 +1,7 @@
 /**
- * Use Map area.
+ * Population density by country.
  * View countries under mouse cursor.
- * egax@bk.ru, 2013-14.
+ * egax@bk.ru, 2013-15.
  */
 function rotate() {
   var tval = parseFloat(document.getElementById('tvalue').value);
@@ -60,7 +60,7 @@ function zoomOne(dw, pts, ev) {
     }
     // help message
     var mcoord = document.getElementById('tcoords');
-    mcoord.innerHTML = 'Click to return back to full view';
+    mcoord.innerHTML = 'Кликните для возврата к обзорной карте';
     dw.clfunc.afterclick = zoomBack;
     dw.draw();
   }
@@ -80,7 +80,7 @@ function zoomBack(dw, pts, ev) {
                    centerof[1] + dw.m.offset[1] - dw.m.scaleoff[1], true);
   }
   var mcoord = document.getElementById('tcoords');
-  mcoord.innerHTML = 'Click to show cities in country';
+  mcoord.innerHTML = 'Кликните по стране для показа городов';
   dw.clfunc.afterclick = zoomOne;
   dw.draw();
 }
@@ -90,13 +90,13 @@ function init() {
   mtab.style.borderCollapse = 'collapse';
   var row = document.createElement('tr');
   row.style.height = '1px';
-  row.style.backgroundColor = 'rgb(230,230,230)';
+  row.style.backgroundColor = '#d2e0f0';
   mtab.appendChild(row);
 
   var col = document.createElement('td');
   col.width = '20%';
   var el = document.createElement('h2');
-  el.appendChild(document.createTextNode('Use Map Area'));
+  el.appendChild(document.createTextNode('Население мира'));
   el.style.padding = '0';
   el.style.margin = '0';
   col.appendChild(el);
@@ -120,7 +120,7 @@ function init() {
   var col = document.createElement('td');
   col.width = '15%';
   col.align = 'center';
-  col.appendChild(document.createTextNode('proj '));
+  col.appendChild(document.createTextNode('Проекции '));
   var projlist = el = document.createElement('select');
   el.id = 'projlist';
   col.appendChild(el);
@@ -129,7 +129,7 @@ function init() {
   var col = document.createElement('td');
   col.align = 'center';
   col.id = 'tcoords';
-  col.innerHTML = 'Click to show cities in country';
+  col.innerHTML = 'Кликните по стране для показа городов';
   row.appendChild(col);
   document.body.appendChild(mtab);
 
@@ -174,11 +174,11 @@ function init() {
       if (dw.m.pmap) {
         var o, m = dw.mflood[dw.m.pmap];
         // cities count
-        if (o = CITIES[m['label']]) label = ' : ' + o.length + ' cities';
+        if (o = CITIES[m['label']]) label = ' : ' + o.length + ' городов';
         label = m['label'] + ' : ' + dw.m.pmap.split('_')[1] + label;
         // tooltip
         var ds = INFOCNT[m['label']] ? INFOCNT[m['label']][0] : 0;
-        mtip = m['label'] + '<br>' + 'Population density: ' + ds;
+        mtip = m['label'] + '<br>' + 'Плотность населения: ' + ds;
       }
       // text
       mcoord.innerHTML = label;

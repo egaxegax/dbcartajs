@@ -1,7 +1,7 @@
 /**
- * Sample demo.
+ * Atlas demo.
  * Draw background images in diff. projections.
- * egax@bk.ru, 2013-14.
+ * egax@bk.ru, 2013-15.
  */
 // Imitate Ajax loading
 function loading() {
@@ -97,13 +97,13 @@ function init() {
   mtab.style.borderCollapse = 'collapse';
   var row = document.createElement('tr');
   row.style.height = '1px';
-  row.style.backgroundColor = 'rgb(230,230,230)';
+  row.style.backgroundColor = '#d2e0f0';
   mtab.appendChild(row);
 
   var col = document.createElement('td');
   col.width = '10%';
   var el = document.createElement('h2');
-  el.appendChild(document.createTextNode('Sample'));
+  el.appendChild(document.createTextNode('Атлас'));
   el.style.padding = '0';
   el.style.margin = '0';
   col.appendChild(el);
@@ -131,7 +131,7 @@ function init() {
   var col = document.createElement('td');
   col.width = '10%';
   col.align = 'center';
-  col.appendChild(document.createTextNode(' proj '));
+  col.appendChild(document.createTextNode(' Проекции '));
   var projlist = el = document.createElement('select');
   el.id = 'projlist';
   col.appendChild(el);
@@ -177,7 +177,7 @@ function init() {
     o.target.checked ? loadImg() : dw.draw();
   };
   col.appendChild(el);
-  col.appendChild(document.createTextNode(' bg'));
+  col.appendChild(document.createTextNode('Фон'));
   row.appendChild(col);
 
   var col = document.createElement('td');
@@ -185,7 +185,7 @@ function init() {
   col.align = 'center';
   col.id = 'tcoords';
   row.appendChild(col);
-  
+
   var row = document.createElement('tr');
   var col = document.createElement('td');
   col.colSpan = '10';
