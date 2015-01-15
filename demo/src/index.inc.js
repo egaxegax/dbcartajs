@@ -42,13 +42,13 @@ function listDemos() {
     [['sky3d.html'], ['Звездное небо 3D'], function() {
       var sp = document.createElement('span');
       var a = document.createElement('a');
-      a.href = 'http://habrahabr.ru/post/189692';
+      a.href = 'http://habrahabr.ru/post/247571';
       a.appendChild(document.createTextNode('Звездное небо 3D'));
       sp.appendChild(document.createTextNode('Переделанный вариант "Звездного неба" с Canvas на отрисовку через WebGL с использованием скриптов three.js. ' + 
                                              'Вращайте, перемещайте левой и правой кнопками мыши объекты Солнечной Системы. ' + 
                                              'Подробно написано в статье на Хабре "'));
       sp.appendChild(a);
-      sp.appendChild(document.createTextNode('".'));
+      sp.appendChild(document.createTextNode('". '));
       sp.appendChild(document.createTextNode('Идея и стиль позаимствованы с примеров на ')); 
       var a = document.createElement('a');
       a.href = 'http://www.apoapsys.com';

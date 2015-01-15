@@ -1,9 +1,9 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.8.3.
+ * dbCartajs HTML5 Canvas dymanic object map v1.8.4.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
- * egax@bk.ru, 2013-14.
+ * egax@bk.ru, 2013-15.
  */
 function dbCarta(cfg) {
   cfg = cfg||{};
@@ -1025,6 +1025,7 @@ function dbCarta(cfg) {
       }
     },
     touchstart: function(ev) {
+      this.m.dotouch = true;
       var touches = ev.changedTouches;
       for (var i=0; i<touches.length; i++)
         this.m.touches.push(touches[i]);
@@ -1042,15 +1043,14 @@ function dbCarta(cfg) {
       if (!this.m.touches.length)
         this.mouseup(touches[touches.length - 1]);
     },
-    // both touch and click
     onmousemove: function(ev) {
       this.mousemove(ev);
     },
     onmousedown: function(ev) {
-      if (!this.m.touches.length) this.mousedown(ev);
+      if (!this.m.dotouch) this.mousedown(ev);
     },
     onmouseup: function(ev) {
-      if (!this.m.touches.length) this.mouseup(ev);
+      if (!this.m.dotouch) this.mouseup(ev);
     }
   });
   dw.addEventListener('onmousemove', dw.mousemove, false);
