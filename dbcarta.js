@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.8.4.
+ * dbCartajs HTML5 Canvas dymanic object map v1.8.5.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
@@ -9,8 +9,7 @@ function dbCarta(cfg) {
   cfg = cfg||{};
   var dw = document.createElement('canvas'),
       el = document.getElementById(cfg.id);
-  if (!el) el = document.body;
-  el.appendChild(dw);
+  if (el) el.appendChild(dw);
   // styles
   dw.style.border = 'none';
   dw.style.backgroundColor = cfg.bg||'rgb(186,196,205)';

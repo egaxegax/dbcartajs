@@ -39,22 +39,6 @@ function listDemos() {
       sp.appendChild(a);
       sp.appendChild(document.createTextNode('".'));
       return sp; }],
-    [['sky3d.html'], ['Звездное небо 3D'], function() {
-      var sp = document.createElement('span');
-      var a = document.createElement('a');
-      a.href = 'http://habrahabr.ru/post/247571';
-      a.appendChild(document.createTextNode('Звездное небо 3D'));
-      sp.appendChild(document.createTextNode('Переделанный вариант "Звездного неба" с Canvas на отрисовку через WebGL с использованием скриптов three.js. ' + 
-                                             'Вращайте, перемещайте левой и правой кнопками мыши объекты Солнечной Системы. ' + 
-                                             'Подробно написано в статье на Хабре "'));
-      sp.appendChild(a);
-      sp.appendChild(document.createTextNode('". '));
-      sp.appendChild(document.createTextNode('Идея и стиль позаимствованы с примеров на ')); 
-      var a = document.createElement('a');
-      a.href = 'http://www.apoapsys.com';
-      a.appendChild(document.createTextNode('apoapsys.com'));
-      sp.appendChild(a);
-      return sp; }],
     [['merc.html'], ['Маршруты'], function() {
       return document.createTextNode('На карте в проекции "Меркатор" изображены несколько стран со столицами. Города соединены маршрутными линиями.'); }],
     [['noncart.html'], ['Изображение по точкам'], function() {
@@ -78,6 +62,33 @@ function listDemos() {
       a.href = 'http://www.highcharts.com';
       a.appendChild(document.createTextNode('highcharts.com'));
       sp.appendChild(a);
+      return sp; }],
+      [['sky3d.html'], ['Звездное небо 3D'], function() {
+      var sp = document.createElement('span');
+      var a = document.createElement('a');
+      a.href = 'http://habrahabr.ru/post/247571';
+      a.appendChild(document.createTextNode('Звездное небо 3D'));
+      sp.appendChild(document.createTextNode('Переделанный вариант "Звездного неба" с канваса 2d на отрисовку через WebGL с использованием скриптов three.js. ' + 
+                                             'Вращайте, перемещайте левой и правой кнопками мыши объекты Солнечной Системы. ' + 
+                                             'Подробно написано в статье на Хабре "'));
+      sp.appendChild(a);
+      sp.appendChild(document.createTextNode('". '));
+      sp.appendChild(document.createTextNode('Идея и стиль позаимствованы с примеров на ')); 
+      var a = document.createElement('a');
+      a.href = 'http://www.apoapsys.com';
+      a.appendChild(document.createTextNode('apoapsys.com'));
+      sp.appendChild(a);
+      return sp; }],
+    [['map3d.html'], ['Проекции 3D'], function() {
+      var sp = document.createElement('span');
+      var a = document.createElement('a');
+      a.href = 'http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/';
+      a.appendChild(document.createTextNode('Spinnable World Maps'));
+      sp.appendChild(document.createTextNode('Отрисовка картинки плоской карты, сформированной в канвасе 2d, в различных проекциях ' + 
+                                             'с использованием шейдеров на движке WebGL и формул пересчета координат, написанных на javascript. ' + 
+                                             'Идея и коды позаимствованы с сайта "'));
+      sp.appendChild(a);
+      sp.appendChild(document.createTextNode('". '));
       return sp; }]
   ];
 }

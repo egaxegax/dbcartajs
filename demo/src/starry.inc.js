@@ -1,5 +1,5 @@
 /**
- * Starry Sky Canvas map v2.1.1.
+ * Starry Sky Canvas map r4.
  * View stars, constellations, planets, sattelites on Earth background.
  * egax@bk.ru, 2013-15.
  */

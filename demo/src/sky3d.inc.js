@@ -1,15 +1,10 @@
 /**
- * Starry Sky 3D v1.0. 
+ * Starry Sky 3D r2. 
  * It uses WebGL rendering by Three.js framework.
  * View stars, constellations, planets, sattelites bodies and orbits in motion.
  * egax@bk.ru, 2014-15.
  */
 var initMap = function() {
-
-  if (!Detector.webgl) { // require webgl support
-    document.body.appendChild(Detector.getWebGLErrorMessage());
-    return;
-  }
 
   // layers
   var mopt = {
@@ -497,10 +492,13 @@ var initMap = function() {
     render();
   };
 
-  // renderer
-  var dw = new THREE.WebGLRenderer( { antialias: false } );
-//  dw.setSize( 0, 0 );
-  dw.setClearColor( 0x070741, 0 );
+  if (Detector.webgl) { // require webgl support
+    var dw = new THREE.WebGLRenderer( { antialias: false } );
+  } else {
+    var dw = new THREE.CanvasRenderer();
+  }
+
+  dw.setClearColor( 0x070741 );
 
   var camera = new THREE.PerspectiveCamera( 25, 1, 50, 1e15 );
   camera.position.x = radius * 6;
@@ -517,12 +515,12 @@ var initMap = function() {
 
   var scene = new THREE.Scene();
 
-  var planetTexture   = THREE.ImageUtils.loadTexture('data/img/textures/earth_kmap.jpg');
-  var cloudsTexture   = THREE.ImageUtils.loadTexture('data/img/textures/earth_clouds_1024.png');
-  var coronaTexture   = THREE.ImageUtils.loadTexture('data/img/textures/corona.png');
-  var starTexture = THREE.ImageUtils.loadTexture('data/img/textures/star_particle.png');
-  var satelliteTexture = THREE.ImageUtils.loadTexture('data/img/textures/satellite_100x100.png');
-  var issTexture = THREE.ImageUtils.loadTexture('data/img/textures/iss_100x100.png');
+  var planetTexture   = THREE.ImageUtils.loadTexture('data/textures/earth_kmap.jpg');
+  var cloudsTexture   = THREE.ImageUtils.loadTexture('data/textures/earth_clouds_1024.png');
+  var coronaTexture   = THREE.ImageUtils.loadTexture('data/textures/corona.png');
+  var starTexture = THREE.ImageUtils.loadTexture('data/textures/star_particle.png');
+  var satelliteTexture = THREE.ImageUtils.loadTexture('data/textures/satellite_100x100.png');
+  var issTexture = THREE.ImageUtils.loadTexture('data/textures/iss_100x100.png');
 
   // layer groups
   var gplanet = new THREE.Object3D();
@@ -681,12 +679,12 @@ var initMap = function() {
   for(i=0; i<60; i++) optfunc(mi, i);
   for(i=0; i<60; i++) optfunc(ss, i);
 
-  yy.onchange = update;
-  mm.onchange = update;
-  dd.onchange = update;
-  hh.onchange = update;
-  mi.onchange = update;
-  ss.onchange = update;
+  yy.onchange = function() { update(); };
+  mm.onchange = function() { update(); };
+  dd.onchange = function() { update(); };
+  hh.onchange = function() { update(); };
+  mi.onchange = function() { update(); };
+  ss.onchange = function() { update(); };
 
   // events
   mcol.appendChild(dw.domElement);
