@@ -1,6 +1,6 @@
 // noncart.html func
 function init() {
-  dw = new dbCarta({draggable: false});
+  dw = new dbCarta({id: 'mcont', draggable: false});
   dw.style.backgroundColor = 'white';
   dw.style.border = '1px dashed lightgray';
   // center by A
