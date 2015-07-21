@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.8.5.
+ * dbCartajs HTML5 Canvas dymanic object map v1.8.6.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
@@ -125,6 +125,10 @@ function dbCarta(cfg) {
     projload: {},
     project: 0,
     /**
+     * Context 2d
+     */
+    ctx: dw.getContext('2d'),
+    /**
     * Convert pixels to points.
     */
     canvasXY: function(ev) {
@@ -150,11 +154,10 @@ function dbCarta(cfg) {
     * Dash support.
     */
     setDashLine: function(dashlist) {
-      var ctx = this.getContext('2d');
-      if ('setLineDash' in ctx)
-        ctx.setLineDash(dashlist);
-      else if ('mozDash' in ctx)
-        ctx.mozDash = dashlist;
+      if ('setLineDash' in this.ctx)
+        this.ctx.setLineDash(dashlist);
+      else if ('mozDash' in this.ctx)
+        this.ctx.mozDash = dashlist;
     },
     /**
     * Add meridians info to mflood.
@@ -232,11 +235,10 @@ function dbCarta(cfg) {
       if (this.cfg.rbar) this.paintBar();
     },
     rotateCarta: function(angle) {
-      var ctx = this.getContext('2d');
       var centerof = this.centerOf();
-      ctx.translate(centerof[0] - this.m.offset[0], centerof[1] - this.m.offset[1]);
-      ctx.rotate(angle * Math.PI/180);
-      ctx.translate(-centerof[0] + this.m.offset[0], -centerof[1] + this.m.offset[1]);
+      this.ctx.translate(centerof[0] - this.m.offset[0], centerof[1] - this.m.offset[1]);
+      this.ctx.rotate(angle * Math.PI/180);
+      this.ctx.translate(-centerof[0] + this.m.offset[0], -centerof[1] + this.m.offset[1]);
       this.m.rotate += angle;
     },
     /**
@@ -250,9 +252,8 @@ function dbCarta(cfg) {
           cy = centerof[1]/ratio - centerof[1];
       var offx = this.m.offset[0] - this.m.offset[0]/ratio,
           offy = this.m.offset[1] - this.m.offset[1]/ratio;
-      var ctx = this.getContext('2d');
-      ctx.scale(ratio, ratio);
-      ctx.translate(cx + offx, cy + offy);
+      this.ctx.scale(ratio, ratio);
+      this.ctx.translate(cx + offx, cy + offy);
       this.m.scaleoff = [ cx, cy ];
       this.m.scale = scale;
     },
@@ -274,17 +275,15 @@ function dbCarta(cfg) {
       var vp = this.toPoints([this.cfg.viewportx, this.cfg.viewporty], false);
       if ((dx <= vp[0] - this.width/2.0 && dx >= this.width/2.0 - vp[0]) &&
           (dy <= this.height/2.0 - vp[1] && dy >= vp[1] - this.height/2.0)) {
-        var ctx = this.getContext('2d');
-        ctx.translate(offx, offy);
+        this.ctx.translate(offx, offy);
         this.m.offset = [ dx, dy ];
       }
     },
     clearCarta: function() {
-      var ctx = this.getContext('2d');
-      ctx.save();
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.clearRect(0, 0, this.width, this.height);
-      ctx.restore();
+      this.ctx.save();
+      this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+      this.ctx.clearRect(0, 0, this.width, this.height);
+      this.ctx.restore();
     },
     /**
     * Add obj. info from DATA to mflood store.
@@ -300,7 +299,7 @@ function dbCarta(cfg) {
     * ],...]
     */
     loadCarta: function(data, dopaint) {
-      for (var i in data) {
+      for (var i=0; i<data.length; i++) {
         var d = data[i],
             ftype = d[0],
             ftag = d[1],
@@ -352,7 +351,6 @@ function dbCarta(cfg) {
         return;
       this.m.tmap = Number(new Date());
       var fkey; // current map id
-      var ctx = this.getContext('2d');
       var cx = -this.m.offset[0] - this.m.scaleoff[0] + pts[0] / this.m.scale,
           cy = -this.m.offset[1] - this.m.scaleoff[1] + pts[1] / this.m.scale;
       // points func
@@ -365,48 +363,48 @@ function dbCarta(cfg) {
             mwidth = (mopt['width'] || 1) / self.m.scale,
             mapfg = self.cfg.mapfg,
             mapbg = self.cfg.mapbg;
-        ctx.beginPath();
+        self.ctx.beginPath();
         if (mopt['cls'] == 'Dot' && self.chkPts(m['pts'][0]))
-          ctx.arc(m['pts'][0][0], m['pts'][0][1], msize, 0, Math.PI*2, 0);
+          self.ctx.arc(m['pts'][0][0], m['pts'][0][1], msize, 0, Math.PI*2, 0);
         else if (mopt['cls'] == 'Rect' && self.chkPts(m['pts'][0]))
-          ctx.rect(m['pts'][0][0] - msize/2.0, m['pts'][0][1] - msize/2.0, msize, msize);
+          self.ctx.rect(m['pts'][0][0] - msize/2.0, m['pts'][0][1] - msize/2.0, msize, msize);
         else
-          for (var j in m['pts'])
+          for (var j=0; j<m['pts'].length; j++)
             if (self.chkPts(m['pts'][j]))
-              ctx.lineTo(m['pts'][j][0], m['pts'][j][1]);
+              self.ctx.lineTo(m['pts'][j][0], m['pts'][j][1]);
         if (domap != undefined && (mapfg || mapbg)) {
-          ctx.lineWidth = mwidth;
+          self.ctx.lineWidth = mwidth;
           if (mopt['cls'] == 'Line') {
-            ctx.strokeStyle = (domap ? mapfg || mapbg : mopt['fg']);
-            ctx.stroke();
+            self.ctx.strokeStyle = (domap ? mapfg || mapbg : mopt['fg']);
+            self.ctx.stroke();
           } else if (mopt['cls'] == 'Dot' || mopt['cls'] == 'Rect') {
-            ctx.strokeStyle = mopt['fg'];
-            ctx.stroke();
-            ctx.fillStyle = (domap ? mapbg || mapfg : mopt['bg'] || mopt['fg']);
-            ctx.fill();
+            self.ctx.strokeStyle = mopt['fg'];
+            self.ctx.stroke();
+            self.ctx.fillStyle = (domap ? mapbg || mapfg : mopt['bg'] || mopt['fg']);
+            self.ctx.fill();
           } else {
-            ctx.closePath();
-            ctx.fillStyle = (domap ? mapbg || 'transparent' : mopt['bg']);
-            ctx.fill();
-            ctx.strokeStyle = (domap ? mapfg || 'transparent' : mopt['fg']);
-            ctx.stroke();
+            self.ctx.closePath();
+            self.ctx.fillStyle = (domap ? mapbg || 'transparent' : mopt['bg']);
+            self.ctx.fill();
+            self.ctx.strokeStyle = (domap ? mapfg || 'transparent' : mopt['fg']);
+            self.ctx.stroke();
           }
         }
       }
-      ctx.save();
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      this.ctx.save();
+      this.ctx.setTransform(1, 0, 0, 1, 0, 0);
       if (this.m.pmap) { // check prev ismap
-        if (addpoints(this, this.m.pmap) || ctx.isPointInPath(cx, cy))
+        if (addpoints(this, this.m.pmap) || this.ctx.isPointInPath(cx, cy))
           fkey = this.m.pmap;
       } else { // check all
         for (var i in this.marea) {
-          if (addpoints(this, i) || ctx.isPointInPath(cx, cy)) {
+          if (addpoints(this, i) || this.ctx.isPointInPath(cx, cy)) {
             fkey = i;
             break;
           }
         }
       }
-      ctx.restore();
+      this.ctx.restore();
       if (this.m.pmap != fkey) {
         addpoints(this, fkey, true); // current
         addpoints(this, this.m.pmap, false); // restore prev
@@ -438,20 +436,19 @@ function dbCarta(cfg) {
         case '204': ry = 1.4142135623731; rx = 2.0 * ry; break;
       }
       if (rx) {
-        var ctx = this.getContext('2d');
-        ctx.beginPath();
+        this.ctx.beginPath();
         if (ry) { // ellipse
           var col_vertex = 100,
               anglestep = 2.0 * Math.PI / col_vertex;
           for (var i=0; i<=col_vertex; i++)
-            ctx.lineTo( centerof[0] - 180/Math.PI * rx * this.m.delta * Math.cos(i * anglestep), 
-                        centerof[1] + 180/Math.PI * ry * this.m.delta * Math.sin(i * anglestep) );
+            this.ctx.lineTo( centerof[0] - 180/Math.PI * rx * this.m.delta * Math.cos(i * anglestep), 
+                             centerof[1] + 180/Math.PI * ry * this.m.delta * Math.sin(i * anglestep) );
         } else // circle
-          ctx.arc(centerof[0], centerof[1], 180/Math.PI * rx * this.m.delta, 0, Math.PI*2, 0);
-        ctx.strokeStyle = this.mopt['.Arctic']['fg'];
-        ctx.stroke();
-        ctx.fillStyle = this.mopt['.Water']['bg'];
-        ctx.fill();
+          this.ctx.arc(centerof[0], centerof[1], 180/Math.PI * rx * this.m.delta, 0, Math.PI*2, 0);
+        this.ctx.strokeStyle = this.mopt['.Arctic']['fg'];
+        this.ctx.stroke();
+        this.ctx.fillStyle = this.mopt['.Water']['bg'];
+        this.ctx.fill();
       }
     },
     /**
@@ -460,19 +457,18 @@ function dbCarta(cfg) {
     paintCoords: function(coords) {
       var cw = this.width,
           ch = this.height;
-      var ctx = this.getContext('2d');
-      ctx.save();
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      var wcrd = ctx.measureText('X 0000.00 X 0000.00').width,
-          hcrd = ctx.measureText('X').width * 2;
-      ctx.clearRect(cw - wcrd, ch - hcrd, wcrd, hcrd);
+      this.ctx.save();
+      this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+      var wcrd = this.ctx.measureText('X 0000.00 X 0000.00').width,
+          hcrd = this.ctx.measureText('X').width * 2;
+      this.ctx.clearRect(cw - wcrd, ch - hcrd, wcrd, hcrd);
       if (coords) {
-        ctx.textBaseline = 'bottom';
-        ctx.textAlign = 'end';
-        ctx.fillStyle = 'black';
-        ctx.fillText('X ' + coords[0].toFixed(2) + ' Y ' + coords[1].toFixed(2), cw, ch);
+        this.ctx.textBaseline = 'bottom';
+        this.ctx.textAlign = 'end';
+        this.ctx.fillStyle = 'black';
+        this.ctx.fillText('X ' + coords[0].toFixed(2) + ' Y ' + coords[1].toFixed(2), cw, ch);
       }
-      ctx.restore();
+      this.ctx.restore();
     },
     /**
     * Draw right bar with moves and scale buttons.
@@ -488,36 +484,35 @@ function dbCarta(cfg) {
       var cols = 20, // arc col vertex
           anglestep = Math.PI/cols;
       var mx, my; // last pos
-      var ctx = this.getContext('2d');
-      ctx.save();
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      this.ctx.save();
+      this.ctx.setTransform(1, 0, 0, 1, 0, 0);
       // right bar
-      ctx.fillStyle = this.cfg.scalebg;
-      with (ctx) {
+      this.ctx.fillStyle = this.cfg.scalebg;
+      with (this.ctx) {
         // draw scale + h -
         translate(tleft + w/2, ttop + h/4);
         beginPath();
-        for (var i = -6; i <= cols + 6; i++) // plus round
+        for (var i=-6; i<=cols+6; i++) // plus round
           lineTo(mx = (w/2 * Math.cos(i * anglestep)), my = (-w/2 * Math.sin(i * anglestep)));
         lineTo(-w/5, -d/2); lineTo(-d/2, -d/2); lineTo(-d/2, -w/5);
         lineTo(d/2, -w/5);  lineTo(d/2, -d/2);  lineTo(w/5, -d/2);
         lineTo(w/5, d/2);   lineTo(d/2, d/2);   lineTo(d/2, w/5);
         lineTo(-d/2, w/5);  lineTo(-d/2, d/2);  lineTo(-w/5, d/2);
         lineTo(-w/5, -d/2); lineTo(mx, my);
-        for (var i = -6; i <= -6; i++)
+        for (var i=-6; i<=-6; i++)
           lineTo(-w/2 * Math.cos(i * anglestep), h/2 + w/2 * Math.sin(i * anglestep));
         lineTo(-w/5, h/2 - d/2); lineTo(w/5, h/2 - d/2);
         lineTo(w/5, h/2 + d/2);  lineTo(-w/5, h/2 + d/2);
         lineTo(-w/5, h/2 - d/2);
-        for (var i = -6; i <= cols + 6; i++) // minus round
+        for (var i=-6; i<=cols+6; i++) // minus round
           lineTo(mx = (-w/2 * Math.cos(i * anglestep)), my = (h/2 + w/2 * Math.sin(i * anglestep)));
-        for (var i = 0; i <= cols; i++) // home round
+        for (var i=0; i<=cols; i++) // home round
           lineTo(w/6 * Math.cos(i * 2.0 * anglestep), h/2 - h/4 + w/6 * Math.sin(i * 2.0 * anglestep));
         lineTo(mx, my);
         closePath();
         fill();
       }
-      ctx.restore();
+      this.ctx.restore();
     },
     /**
     * Draw obj with COORDS (see paintCartaPts).
@@ -545,75 +540,74 @@ function dbCarta(cfg) {
           mtalign = m['anchor'] && m['anchor'][0] || 'start',
           mtbaseline = m['anchor'] && m['anchor'][1] || 'alphabetic',
           mtfont = (m['labelscale'] ? parseInt(this.width/125) : 10) + "px sans-serif";
-      var ctx = this.getContext('2d');
-      ctx.lineWidth = mwidth;
-      ctx.lineJoin = mjoin;
-      ctx.lineCap = mcap;
-      ctx.beginPath();
+      this.ctx.lineWidth = mwidth;
+      this.ctx.lineJoin = mjoin;
+      this.ctx.lineCap = mcap;
+      this.ctx.beginPath();
       this.setDashLine(m['dash'] || []);
       if (m['cls'] == 'Dot' || m['cls'] == 'Rect') {
         if (this.chkPts(pts[0])){
           centerofpts = pts;
           if (m['cls'] == 'Dot') {
-            for (var i in pts)
+            for (var i=0; i<pts.length; i++)
               if (this.chkPts(pts[i])){
-                ctx.beginPath();
-                ctx.arc(pts[i][0], pts[i][1], msize, 0, Math.PI*2, 0);
-                ctx.strokeStyle = m['fg'];
-                ctx.stroke();
-                ctx.fillStyle = m['bg'] || m['fg'];
-                ctx.fill();
+                this.ctx.beginPath();
+                this.ctx.arc(pts[i][0], pts[i][1], msize, 0, Math.PI*2, 0);
+                this.ctx.strokeStyle = m['fg'];
+                this.ctx.stroke();
+                this.ctx.fillStyle = m['bg'] || m['fg'];
+                this.ctx.fill();
               }
           } else {
-            ctx.rect(pts[0][0] - msize/2.0, pts[0][1] - msize/2.0, msize, msize);
-            ctx.strokeStyle = m['fg'];
-            ctx.stroke();
-            ctx.fillStyle = m['bg'] || m['fg'];
-            ctx.fill();
+            this.ctx.rect(pts[0][0] - msize/2.0, pts[0][1] - msize/2.0, msize, msize);
+            this.ctx.strokeStyle = m['fg'];
+            this.ctx.stroke();
+            this.ctx.fillStyle = m['bg'] || m['fg'];
+            this.ctx.fill();
           }
         }
       } else {
         var mpts = [];
-        for (var i in pts) {
+        for (var i=0; i<pts.length; i++) {
           if (!mpts.length && this.chkPts(pts[i]))
-            ctx.lineTo(pts[i][0], pts[i][1]);
+            this.ctx.lineTo(pts[i][0], pts[i][1]);
           if (pts[i][2] == 'Q') {
             mpts.push(pts[i]);
             if (mpts.length == 3) {
-              ctx.bezierCurveTo(mpts[0][0], mpts[0][1], mpts[1][0], mpts[1][1], mpts[2][0], mpts[2][1]);
+              this.ctx.bezierCurveTo(mpts[0][0], mpts[0][1], mpts[1][0], mpts[1][1], mpts[2][0], mpts[2][1]);
               mpts = [];
             }
           }
         }
         if (m['cls'] == 'Polygon') {
-          ctx.closePath();
-          ctx.fillStyle = m['bg'];
-          ctx.fill();
+          this.ctx.closePath();
+          this.ctx.fillStyle = m['bg'];
+          this.ctx.fill();
         }
-        ctx.strokeStyle = m['fg'];
-        ctx.stroke();
+        this.ctx.strokeStyle = m['fg'];
+        this.ctx.stroke();
       }
       if (ftext && centerofpts)
         if (centerofpts.length && this.chkPts(centerofpts[0])) {
-          ctx.fillStyle = mtcolor;
-          ctx.textAlign = mtalign;
-          ctx.textBaseline = mtbaseline;
-          if (ctx.font != mtfont) ctx.font = mtfont;
+          this.ctx.fillStyle = mtcolor;
+          this.ctx.textAlign = mtalign;
+          this.ctx.textBaseline = mtbaseline;
+          if (this.ctx.font != mtfont) this.ctx.font = mtfont;
           // offset direct
           var hs = (mtalign == 'end' ? -1 : (mtalign == 'start' ? 1 : 0)),
               vs = (mtbaseline == 'bottom' ? -1 : (mtbaseline == 'top' ? 1 : 0));
           if (m['labelscale']) {
-            ctx.fillText(ftext, centerofpts[0][0] + (msize + 3) * hs, centerofpts[0][1] + (msize + 3) * vs);
+            this.ctx.fillText(ftext, centerofpts[0][0] + (msize + 3) * hs, centerofpts[0][1] + (msize + 3) * vs);
           } else {
-            ctx.save();
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            this.ctx.save();
+            this.ctx.setTransform(1, 0, 0, 1, 0, 0);
             var mpts = [ (this.m.offset[0] + this.m.scaleoff[0] + centerofpts[0][0] + msize + 3/this.m.scale) * this.m.scale,
                          (this.m.offset[1] + this.m.scaleoff[1] + centerofpts[0][1]) * this.m.scale ];
             mpts = this.rotateCoords(mpts, -this.m.rotate, this.centerOf());
-            ctx.translate(mpts[0], mpts[1]);
-            ctx.rotate(mtrotate * Math.PI/180);
-            ctx.fillText(ftext, 0, 0);
-            ctx.restore();
+            this.ctx.translate(mpts[0], mpts[1]);
+            this.ctx.rotate(mtrotate * Math.PI/180);
+            this.ctx.fillText(ftext, 0, 0);
+            this.ctx.restore();
           }
         }
     },
@@ -622,11 +616,10 @@ function dbCarta(cfg) {
     */
     paintImage: function(img, pts) {
       if (this.chkImg(img) && pts) {
-        var ctx = this.getContext('2d');
         if (this.chkPts(pts[0]) && this.chkPts(pts[1])) { // scalable
-          ctx.drawImage(img, pts[0][0], pts[0][1], pts[1][0]-pts[0][0], pts[1][1]-pts[0][1]);
+          this.ctx.drawImage(img, pts[0][0], pts[0][1], pts[1][0]-pts[0][0], pts[1][1]-pts[0][1]);
         } else if (this.chkPts(pts[0])) { // fixed size
-          ctx.drawImage(img, pts[0][0], pts[0][1], img.width/this.m.scale, img.height/this.m.scale);
+          this.ctx.drawImage(img, pts[0][0], pts[0][1], img.width/this.m.scale, img.height/this.m.scale);
         }
       }
     },
