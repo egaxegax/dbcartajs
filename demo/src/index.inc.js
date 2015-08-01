@@ -41,6 +41,8 @@ function listDemos() {
       return sp; }],
     [['merc.html'], ['Маршруты'], function() {
       return document.createTextNode('На карте в проекции "Меркатор" изображены несколько стран со столицами. Города соединены маршрутными линиями.'); }],
+    [['imgviewer.html'], ['Просмотровщик картинок'], function() {
+      return document.createTextNode('Просмотр картинок с возможностью масштабирования.'); }],
     [['noncart.html'], ['Изображение по точкам'], function() {
       return document.createTextNode('Выводим слово dbcarta по буквам в координатах.'); }],
     [['sample.html'], ['Атлас'], function() {
@@ -63,7 +65,7 @@ function listDemos() {
       a.appendChild(document.createTextNode('highcharts.com'));
       sp.appendChild(a);
       return sp; }],
-      [['sky3d.html'], ['Звездное небо 3D'], function() {
+    [['sky3d.html'], ['Звездное небо 3D'], function() {
       var sp = document.createElement('span');
       var a = document.createElement('a');
       a.href = 'http://habrahabr.ru/post/247571';

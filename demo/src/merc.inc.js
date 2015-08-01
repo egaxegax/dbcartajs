@@ -7,7 +7,7 @@ function init() {
   mtab.style.borderCollapse = 'collapse';
   var row = document.createElement('tr');
   row.style.height = '1px';
-  row.style.backgroundColor = 'rgb(230,230,230)';
+  row.style.backgroundColor = '#d2e0f0';
   mtab.appendChild(row);
 
   var col = document.createElement('td');

@@ -57,7 +57,7 @@ function init() {
   var tb = document.createElement('tbody');
   mtab.appendChild(tb);
   var row = document.createElement('tr');
-  row.style.backgroundColor = 'rgb(230,230,230)';
+  row.style.backgroundColor = '#d2e0f0';
   tb.appendChild(row);
 
   var col = document.createElement('td');
@@ -84,16 +84,13 @@ function init() {
   col.style.borderStyle = 'solid';
   col.style.verticalAlign = 'top';
   var el = document.createElement('div');
-  el.appendChild(document.createTextNode('Страны по частям:'));
   col.appendChild(el);
   var cntrylist = el2 = document.createElement('select');
-  el2.id = 'cntrylist'
-  el2.multiple='true';
+  el2.id = 'cntrylist';
+  el2.multiple = 'true';
   el2.size = '20';
-  el = document.createElement('div');
   el.appendChild(el2);
   col.appendChild(el);
-  el = document.createElement('div');
   var el2 = document.createElement('button');
   el2.onclick = draw;
   el2.appendChild(document.createTextNode('show'));

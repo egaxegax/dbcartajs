@@ -1,7 +1,7 @@
 dbCartajs
 ===========
 
-HTML5 Canvas dymanic object map. Pure JavaScript and serverless.
+HTML5 Canvas object map viewer. Pure JavaScript and serverless.
 It uses Proj4js transformations. Supported projections:
  * espg:4326, longlat;
  * epsg:3875, Mercator projection;
@@ -33,7 +33,7 @@ Simply download and unpack an archive, open index.html from demo folder in any b
 
 Mercator Projection:
 
-![mercv.png] (http://img-fotki.yandex.ru/get/9832/136640652.0/0_df04d_d154d06b_XL.png "Mercator")
+![merc.jpg] (http://img-fotki.yandex.ru/get/9832/136640652.0/0_df04d_d154d06b_XL.png "Mercator")
 
 Mollweide Projection:
 
@@ -46,3 +46,7 @@ Starry Sky. Featured, copmlicated demo like Orbitron, Marble, Xephem but more li
 Moscow Rail Map:
 
 ![mosrails.png] (http://habrastorage.org/files/5aa/e52/1b3/5aae521b3a02452d8ab24e25ac7c1c4d.png "Moscow Rail Map")
+
+Image Viewer:
+
+![imgviewer.png] (https://img-fotki.yandex.ru/get/9064/136640652.1/0_12331c_48691622_orig "Image Viewer")
