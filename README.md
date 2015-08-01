@@ -35,10 +35,6 @@ Mercator Projection:
 
 ![merc.jpg] (https://img-fotki.yandex.ru/get/5624/136640652.1/0_12331d_b190b78a_orig "Mercator")
 
-Mollweide Projection:
-
-![moll.png] (http://img-fotki.yandex.ru/get/9065/136640652.1/0_e6dd4_24ef9d71_orig "Mollweide")
-
 Starry Sky. Featured, copmlicated demo like Orbitron, Marble, Xephem but more lightweight.
 
 ![starry.png] (http://img-fotki.yandex.ru/get/9802/136640652.0/0_df04b_fbe77af7_XL.png "Starry Sky")
