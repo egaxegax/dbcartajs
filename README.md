@@ -33,7 +33,7 @@ Simply download and unpack an archive, open index.html from demo folder in any b
 
 Mercator Projection:
 
-![merc.jpg] (http://img-fotki.yandex.ru/get/9832/136640652.0/0_df04d_d154d06b_XL.png "Mercator")
+![merc.jpg] (https://img-fotki.yandex.ru/get/5624/136640652.1/0_12331d_b190b78a_orig "Mercator")
 
 Mollweide Projection:
 
