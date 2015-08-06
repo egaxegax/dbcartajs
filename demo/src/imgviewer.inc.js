@@ -44,7 +44,6 @@ function init() {
 
   var col = document.createElement('td');
   col.colSpan = '10';
-  col.width = '1%';
   var el = document.createElement('h2');
   el.appendChild(document.createTextNode("Просмотровщик"));
   el.style.margin = '0';
@@ -52,7 +51,7 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '10%';
+  col.width = '1%';
   col.align = 'center';
   var el = document.createElement('button');
   el.appendChild(document.createTextNode("Сетка"));
@@ -66,6 +65,7 @@ function init() {
   row.appendChild(col);
 
   var row = document.createElement('tr');
+  mtab.appendChild(row);
 
   var col = document.createElement('td');
   col.width = '120px';
@@ -81,45 +81,52 @@ function init() {
   col.id = 'mcol';
   col.style.padding = '0';
   row.appendChild(col);
-  mtab.appendChild(row);
   document.body.appendChild(mtab);
 
   md.style.height = col.offsetHeight + 'px';
   md.style.overflow = 'auto';
-  // local img
-  for (var i in IMGMAP) {
-    var el2 = document.createElement('img');
-    el2.style.display = 'block';
-    el2.width = 100;
-    el2.src = IMGMAP[i];
-    el2.onclick = function(){ 
-      im.src = this.src;
-    };
-    md.appendChild(el2);
-  }
+
   // urls img
-  var urls = [
+  var imgurls = [
+    // google appspot.com
     'http://lh4.ggpht.com/5VuzQYNHzN_HgUDdCVnnL0JlRV34NA-ZY9LJq32WpMnq-YOe7nC0gZ8seBEn45tjUQfewSAaq632FbYKo_A',
     'http://lh3.ggpht.com/jYrGCi0FD5EOaGaourdjhWIwqUTYzQ66NJmb-dOHrSh0Uw1rpv1Qm5eW5DCVSzyGpZlRu1qwXM0RQtUA1-g',
     'http://lh5.ggpht.com/Mbb_vJ9fWs5Hp-BUItjEvgA3d0wdrd2OLJhL9u8MfDbWQnZba9msNR8gmd6tHvyjYUSHbcObRsx9zIgeZSs',
-    'http://lh4.ggpht.com/Vjcwowzd6fHMnDwOQqqa5Pil0xzXlaNGXJuka4RjYa-Pnz-_RrUsNfeFgbNmO5Vf7qadJUphQ4jpCdFpzT0B'
+    'http://lh4.ggpht.com/Vjcwowzd6fHMnDwOQqqa5Pil0xzXlaNGXJuka4RjYa-Pnz-_RrUsNfeFgbNmO5Vf7qadJUphQ4jpCdFpzT0B',
+    // windows walls
+    'file:///C:/Windows/Web/Wallpaper/Theme1/img1.jpg',
+    'file:///C:/Windows/Web/Wallpaper/Theme1/img2.jpg',
+    'file:///C:/Windows/Web/Wallpaper/Theme1/img3.jpg',
+    'file:///C:/Windows/Web/Wallpaper/Theme1/img4.jpg'
   ];
-  for (var i=0; i<urls.length; i++) {
-    var el2 = document.createElement('img');
-    el2.style.display = 'block';
-    el2.width = 100;
-    el2.src = urls[i] + '=s320'; // google image size change for appspot.com
-    el2.onclick = function(){
-      im.src = this.src;
-    };
-    md.appendChild(el2);
+  
+  for (var i=0; i<2; i++){
+    var res;
+    switch (i){
+      case 0: res = imgurls; break;
+      case 1: res = IMGMAP; break;
+    }
+    for (var k in res) {
+      var el2 = document.createElement('img');
+      el2.style.display = 'block';
+      el2.width = 100;
+      el2.src = res[k];
+      if (res[k].search('ggpht.com')==0)
+        el2.src += '=s320'; // google image size change for appspot.com
+      el2.onclick = function(){ 
+        im.src = this.src;
+      };
+      el2.onload = function(){
+        md.appendChild(this);
+      };
+    }
   }
 
   dw = new dbCarta({id:'mcol', height:col.offsetHeight});
   dw.extend(dw.mopt, {'.Latitude': {fg: 'white', width: .25}});
   // worldmap img
   var im = new Image();
-  im.src = IMGMAP['wrld_small'];
+  im.src = IMGMAP['wrld_small']; // default img
   im.onload = function() {
     var ratio = im.width/im.height;
     dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-90*ratio,90],[90*ratio,-90]], 6:this}]);

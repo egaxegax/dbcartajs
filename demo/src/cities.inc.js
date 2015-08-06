@@ -9,7 +9,7 @@ function draw() {
     if (opt.selected) {
       var coords = eval('[' + opt.value + ']');
       if (!centerof) centerof = coords;
-      dw.loadCarta([['City', opt.text, [coords], opt.text, null, 1]]);
+      dw.loadCarta([['DotPort', opt.text, [coords], opt.text, null, 1]]);
     }
   }
   if (centerof) {
@@ -22,15 +22,12 @@ function refresh() {
   window.location.reload(false);
 }
 function init() {
-  document.body.style.margin = "0";
   var mtab = document.createElement('table');
-  mtab.width = '100%';
   mtab.style.borderCollapse = 'collapse';
-  var tb = document.createElement('tbody');
-  mtab.appendChild(tb);
   var row = document.createElement('tr');
+  row.style.height = '1px';
   row.style.backgroundColor = '#d2e0f0';
-  tb.appendChild(row);
+  mtab.appendChild(row);
 
   var col = document.createElement('td');
   col.width = '15%';
@@ -46,31 +43,27 @@ function init() {
   row.appendChild(col);
 
   var row = document.createElement('tr');
-  tb.appendChild(row);
+  mtab.appendChild(row);
 
   var col = document.createElement('td');
   col.width = '15%';
   col.style.borderWidth = '1';
   col.style.borderStyle = 'solid';
   col.style.verticalAlign = 'top';
-  var el = document.createElement('div');
-  col.appendChild(el);
 
   var citylist = el2 = document.createElement('select');
   el2.id = 'citylist';
   el2.multiple = 'true';
   el2.size = '20';
-  el.appendChild(el2);
-  col.appendChild(el);
+  col.appendChild(el2);
   var el2 = document.createElement('button');
   el2.onclick = draw;
   el2.appendChild(document.createTextNode('show'));
-  el.appendChild(el2);
+  col.appendChild(el2);
   var el2 = document.createElement('button');
   el2.onclick = refresh;
   el2.appendChild(document.createTextNode('refresh'));
-  el.appendChild(el2);
-  col.appendChild(el);
+  col.appendChild(el2);
   row.appendChild(col);
 
   var col = document.createElement('td');
@@ -80,7 +73,7 @@ function init() {
   document.body.appendChild(mtab);
 
   dw = new dbCarta({id:'mcol', height:col.offsetHeight});
-  dw.extend(dw.mopt, {'City': {cls: 'Dot', labelcolor: 'yellow'}});
+  dw.extend(dw.mopt['DotPort'], {labelcolor: 'yellow'});
   dw.changeProject(102); // miller proj
   // worldmap img
   var im = new Image();

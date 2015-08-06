@@ -50,15 +50,12 @@ function refresh() {
   window.location.reload(false);
 }
 function init() {
-  document.body.style.margin = "0";
   var mtab = document.createElement('table');
-  mtab.width = '100%';
   mtab.style.borderCollapse = 'collapse';
-  var tb = document.createElement('tbody');
-  mtab.appendChild(tb);
   var row = document.createElement('tr');
+  row.style.height = '1px';
   row.style.backgroundColor = '#d2e0f0';
-  tb.appendChild(row);
+  mtab.appendChild(row);
 
   var col = document.createElement('td');
   col.width = '15%';
@@ -75,7 +72,7 @@ function init() {
   row.appendChild(col);
 
   var row = document.createElement('tr');
-  tb.appendChild(row);
+  mtab.appendChild(row);
 
   var col = document.createElement('td');
   col.rowSpan = '2';
@@ -83,23 +80,19 @@ function init() {
   col.style.borderWidth = '1';
   col.style.borderStyle = 'solid';
   col.style.verticalAlign = 'top';
-  var el = document.createElement('div');
-  col.appendChild(el);
   var cntrylist = el2 = document.createElement('select');
   el2.id = 'cntrylist';
   el2.multiple = 'true';
   el2.size = '20';
-  el.appendChild(el2);
-  col.appendChild(el);
+  col.appendChild(el2);
   var el2 = document.createElement('button');
   el2.onclick = draw;
   el2.appendChild(document.createTextNode('show'));
-  el.appendChild(el2);
-  el2 = document.createElement('button');
+  col.appendChild(el2);
+  var el2 = document.createElement('button');
   el2.onclick = refresh;
   el2.appendChild(document.createTextNode('refresh'));
-  el.appendChild(el2);
-  col.appendChild(el);
+  col.appendChild(el2);
   row.appendChild(col);
 
   var col = document.createElement('td');
@@ -112,7 +105,7 @@ function init() {
   row.appendChild(col);
 
   var row = document.createElement('tr');
-  tb.appendChild(row);
+  mtab.appendChild(row);
 
   var col = document.createElement('td');
   col.id = 'canvasmap3';
@@ -124,7 +117,7 @@ function init() {
   row.appendChild(col);
   document.body.appendChild(mtab);
 
-  dw = new dbCarta({id:'canvasmap'});
+  dw = new dbCarta({id:'canvasmap', height: mtab.offsetHeight/2.0*0.99});
   dw.extend(dw.mopt, {
     'Area': {fg: 'yellow', bg: 'transparent', labelcolor: 'white'}
   });
@@ -138,18 +131,18 @@ function init() {
     dw.loadCarta(dw.createMeridians());
     dw.draw();
   }
-  dw2 = new dbCarta({id:'canvasmap2'});
+  dw2 = new dbCarta({id:'canvasmap2', height: mtab.offsetHeight/2.0*0.99});
   dw2.changeProject(203);
   dw2.scaleCarta(1.5);
   dw2.loadCarta(CONTINENTS);
   dw2.loadCarta(dw2.createMeridians());
   dw2.draw();
-  dw3 = new dbCarta({id:'canvasmap3'});
+  dw3 = new dbCarta({id:'canvasmap3', height: mtab.offsetHeight/2.0*0.99});
   dw3.changeProject(204);
   dw3.loadCarta(CONTINENTS);
   dw3.loadCarta(dw3.createMeridians());
   dw3.draw();
-  dw4 = new dbCarta({id:'canvasmap4'});
+  dw4 = new dbCarta({id:'canvasmap4', height: mtab.offsetHeight/2.0*0.99});
   dw4.extend(dw4.mopt, {
     'Area': {fg: 'yellow', bg: 'transparent', labelcolor: 'white'}
   });
