@@ -11,10 +11,10 @@ function setka(coords, n) {
   var xstep = (right - left)/n,
       ystep = (top - bottom)/n;
   var x = left;
-  while (x <= right) {
+  for (var i=0; i<=n; i++) {
     var lon = [];
     var y = bottom;
-    while (y <= top) {
+    for (var j=0; j<=n; j++) {
       lon.push([x, y]);
       y += ystep;
     }
@@ -22,10 +22,10 @@ function setka(coords, n) {
     x += xstep;
   }
   var y = bottom;
-  while (y <= top) {
+  for (var i=0; i<=n; i++) {
     var lat = [];
     var x = left;
-    while (x <= right) {
+    for (var j=0; j<=n; j++) {
       lat.push([x, y]);
       x += xstep;
     }
