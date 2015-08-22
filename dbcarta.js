@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.8.6.
+ * dbCartajs HTML5 Canvas dymanic object map v1.8.7.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
@@ -54,11 +54,12 @@ function dbCarta(cfg) {
      *   cls:  type {Polygon|Line|Dot|Rect}
      *   fg: : color (stroke)
      *   bg: - background color (fill)
-     *   dash: - dash pattern [1,2]
+     *   dash: dash pattern [1,2]
      *   join: lineJoin
      *   cap: lineCap
      *   width: lineWidth
      *   size: arc radii or rect size
+     *   scale: scalable size [0|1]
      *   labelcolor
      *   labelscale: text scalable [0|1]
      *   anchor: text pos [textAlign, textBaseline]
@@ -530,7 +531,7 @@ function dbCarta(cfg) {
       if (!(ftype in this.mopt))
         return;
       var m = this.mopt[ftype];
-      var msize = (m['size'] || 1) / this.m.scale,
+      var msize = m['scale'] ? (m['size'] || 1) : (m['size'] || 1) / this.m.scale,
           mwidth = (m['width'] || 1) / this.m.scale,
           mjoin = m['join'] || 'miter',
           mcap = m['cap'] || 'butt',
@@ -545,26 +546,25 @@ function dbCarta(cfg) {
       this.ctx.lineCap = mcap;
       this.ctx.beginPath();
       this.setDashLine(m['dash'] || []);
-      if (m['cls'] == 'Dot' || m['cls'] == 'Rect') {
-        if (this.chkPts(pts[0])){
-          centerofpts = pts;
-          if (m['cls'] == 'Dot') {
-            for (var i=0; i<pts.length; i++)
-              if (this.chkPts(pts[i])){
-                this.ctx.beginPath();
-                this.ctx.arc(pts[i][0], pts[i][1], msize, 0, Math.PI*2, 0);
-                this.ctx.strokeStyle = m['fg'];
-                this.ctx.stroke();
-                this.ctx.fillStyle = m['bg'] || m['fg'];
-                this.ctx.fill();
-              }
-          } else {
-            this.ctx.rect(pts[0][0] - msize/2.0, pts[0][1] - msize/2.0, msize, msize);
+      if (this.chkPts(pts[0]))
+        centerofpts = pts;
+      if (m['cls'] == 'Dot') {
+        for (var i=0; i<pts.length; i++)
+          if (this.chkPts(pts[i])){
+            this.ctx.beginPath();
+            this.ctx.arc(pts[i][0], pts[i][1], msize, 0, Math.PI*2, 0);
             this.ctx.strokeStyle = m['fg'];
             this.ctx.stroke();
             this.ctx.fillStyle = m['bg'] || m['fg'];
             this.ctx.fill();
           }
+      } else if (m['cls'] == 'Rect') {
+        if (this.chkPts(pts[0])){
+          this.ctx.rect(pts[0][0] - msize/2.0, pts[0][1] - msize/2.0, msize, msize);
+          this.ctx.strokeStyle = m['fg'];
+          this.ctx.stroke();
+          this.ctx.fillStyle = m['bg'] || m['fg'];
+          this.ctx.fill();
         }
       } else {
         var mpts = [];

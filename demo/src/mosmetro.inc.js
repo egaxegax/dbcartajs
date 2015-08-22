@@ -125,13 +125,14 @@ function init() {
   dw.style.backgroundColor = 'white';
   // define new layers
   var route = function(o){ return dw.extend({cls: 'Line', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
-      route_d = function(o){ return route(dw.extend({dash: [2,4]}, o||{})) },
+      route_d = function(o){ return route(dw.extend({dash: [2,4]}, o||{})) },      
       interchange = function(o){ return route(dw.extend({fg: '#000000', join: 'round', cap: 'round', width: 8}, o||{})) },
       interchange_d = function(o) { return interchange(dw.extend({fg: '#FFFFFF', width: 7}, o||{})) },
       river = function(o){ return route(dw.extend({fg: '#E2FCFC', join: 'round', cap: 'round', labelcolor: '#5555FF', labelscale: 0}, o||{})) },
-      aeroexpress = function(o){ return route(dw.extend({fg: '#DDDDDD'}, o||{})) },
-      aeroexpress_d = function(o){ return route(dw.extend({fg: '#FFFFFF', width: 4, dash: [10,10]}, o||{})) },
-      station = function(o){ return dw.extend({cls: 'Dot', bg: 'white', size: 2, width: 5, labelscale: 1}, o||{}) },
+      aeroexpress = function(o){ return route(dw.extend({fg: '#DDDDDD', labelscale: 0}, o||{})) },
+      aeroexpress_d = function(o){ return route(dw.extend({fg: '#FFFFFF', labelscale: 0, width: 4, dash: [10,10]}, o||{})) },
+      label = function(o){ return dw.extend({cls: 'Label', labelscale: 0, anchor: ['start', 'top']}, o||{}) },
+      station = function(o){ return dw.extend({cls: 'Dot', bg: 'white', size: 2, width: 5, scale: 1, labelscale: 1}, o||{}) },
       inst = function(o){ return station(dw.extend({size: 3, labelcolor: o['fg'], bg: o['fg']}, o)) },
       inst_d = function(o){ return inst(dw.extend({size: 2, width: 1}, o||{})) };
   // lines
@@ -169,24 +170,33 @@ function init() {
   // rivers
   dw.extend(dw.mopt, {
     'moskva_canal': river({width: 5, rotate: -90}),
+    'moskva_canal_label': label({rotate: -90, anchor: ['start', 'middle'], labelcolor: river().labelcolor}),
     'strogino_lake_exit': river({cls: 'Polygon', bg: river().fg, width: 5}),
     'vodootvodny_canal': river({width: 5}),
-    'yauza_river': river({width: 5, rotate: 45, anchor: ['start', 'top']}),
+    'yauza_river': river({width: 5, rotate: 45}),
+    'yauza_river_label': river({width: 5, rotate: 45, anchor: ['start', 'top'], labelcolor: river().labelcolor}),
     'Nagatino_Kozhukhovo': river({width: 5}),
     'Nagatino_poyma': river({width: 6}),
     'grebnoy_canal': river({width: 3}),
-    'moskva_river': river({width: 15, rotate: 45, anchor: ['start', 'top']})
+    'moskva_river': river({width: 15, rotate: 45}),
+    'moskva_river_label': label({rotate: 45, anchor: ['start', 'top'], labelcolor: river().labelcolor})
   });
   // rails
   dw.extend(dw.mopt, {
     'monorail': route({fg: '#2C87C5', width: 2, labelcolor: '#2C87C5', anchor: ['start', 'bottom']}),
     'monorail_legend': route({fg: '#2C87C5', width: 2}),
-    'sheremetyevo_express_line': aeroexpress({anchor: ['end', 'middle']}),
-    'sheremetyevo_express_line_d': aeroexpress_d({anchor: ['end', 'top']}),
-    'vnukovo_express_line': aeroexpress({anchor: ['start', 'middle']}),
-    'vnukovo_express_line_d': aeroexpress_d({anchor: ['center', 'top']}),
-    'domodedovo_express_line': aeroexpress({anchor: ['start', 'middle']}),
-    'domodedovo_express_line_d': aeroexpress_d()
+    'sheremetyevo_express_line': aeroexpress(),
+    'sheremetyevo_express_line_label': label({anchor: ['end', 'middle']}),
+    'sheremetyevo_express_line_d': aeroexpress_d(),
+    'sheremetyevo_express_line_d_label': label({anchor: ['end', 'top']}),
+    'vnukovo_express_line': aeroexpress(),
+    'vnukovo_express_line_label': label({anchor: ['start', 'middle']}),
+    'vnukovo_express_line_d': aeroexpress_d(),
+    'vnukovo_express_line_d_label': label({anchor: ['center', 'top']}),
+    'domodedovo_express_line': aeroexpress(),
+    'domodedovo_express_line_label': label({anchor: ['start', 'middle']}),
+    'domodedovo_express_line_d': aeroexpress_d(),
+    'domodedovo_express_line_d_label': label()
   });
   // stations
   dw.extend(dw.mopt, {
@@ -294,11 +304,22 @@ function init() {
       // text
       mcoord.innerHTML = label;
       infobox(ev, mtip);
+      dw.paintCoords(dd);
     }
   });
-  dw.loadCarta(MLINES);
+  dw.loadCarta([{0:'.Image', 1:'bg'}]); // first layer
+//  dw.loadCarta(MLINES);
+//  dw.loadCarta(MLEGEND);
+  dw.loadCarta(MLABEL);
   dw.loadCarta(MSTATIONS);
-  dw.draw();
+  // bgimg from mlines
+  var im = new Image();
+  im.src = 'data/img/mosmetro.png';
+  im.onload = function() {
+    dw.loadCarta([{0:'.Image', 1:'bg', 2:[[-174.65,155.5],[170.2,-199.7]], 6:this}]);
+    dw.m.bgimg = dw.mflood['.Image_bg']; // mark as bg
+    dw.draw();
+  }
   // station list
   MSTATIONS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1});
   for (var i in MSTATIONS) {

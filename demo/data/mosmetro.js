@@ -2,7 +2,7 @@
  * List with coords of Moscow Metro lines and stations
  *  [[ftype, ftag, coords, label, centerof, ismap],...]
  * Three points with coords and 'Q' literal implements to bezierCurveTo (...) method.
- * egax@bk.ru, 2013-14.
+ * egax@bk.ru, 2013-15.
  */
 var MLINES=[
 ['moskva_canal','mc',[
@@ -11,7 +11,7 @@ var MLINES=[
   [-115,60,'Q'],[-115,64,'Q'],[-113,67,'Q'],
   [-99,80,'Q'],[-97,83,'Q'],[-97,86,'Q'],
   [-97,152]
-],'Канал имени Москвы',[-97,111]
+]
 ],
 ['strogino_lake_exit','sle',[
   [-138,65],
@@ -40,7 +40,7 @@ var MLINES=[
   [42,103,'Q'],[32,103,'Q'],[32,113,'Q'],
   [32,114,'Q'],[32,121,'Q'],[39,127,'Q'],
   [63,147]
-],'Яуза',[59,99]
+]
 ],
 ['Nagatino_Kozhukhovo','nk',[
   [58,-88],[66,-81]
@@ -57,7 +57,7 @@ var MLINES=[
 ]
 ],
 ['moskva_river','mr',[
-  [-232,78],
+  [-175,78],
   [-119,78,'Q'],[-110,78,'Q'],[-110,71.5,'Q'],
   [-110,71.5,'Q'],[-110,65,'Q'],[-119,65,'Q'],
   [-135,65,'Q'],[-144,65,'Q'],[-144,61,'Q'],
@@ -82,7 +82,7 @@ var MLINES=[
   [74,-131,'Q'],[74,-141,'Q'],[84,-141,'Q'],
   [102,-141,'Q'],[106,-141,'Q'],[111,-147,'Q'],
   [233,-272]
-],'Москва-река',[111,-147]
+]
 ],
 //
 ['sheremetyevo_express_line','sheremetyevo_express',[
@@ -90,14 +90,14 @@ var MLINES=[
   [-23,83,'Q'],[-20,86,'Q'],[-20,90,'Q'],
   [-20,149,'Q'],[-20,153,'Q'],[-23,153,'Q'],
   [-29,153]
-],'Шереметьево',[-29,153]
+]
 ],
 ['sheremetyevo_express_line_d','sheremetyevo_express',[
   [-51,55],
   [-23,83,'Q'],[-20,86,'Q'],[-20,90,'Q'],
   [-20,149,'Q'],[-20,153,'Q'],[-23,153,'Q'],
   [-29,153]
-],'Белорусский',[-51,55]
+]
 ],
 ['vnukovo_express_line','vnukovo_express',[
   [-75,-20],
@@ -106,7 +106,7 @@ var MLINES=[
   [-163,-96,'Q'],[-166,-99,'Q'],[-166,-102,'Q'],
   [-166,-119,'Q'],[-166,-121,'Q'],[-163,-121,'Q'],
   [-160,-121]
-],'Внуково',[-160,-121]
+]
 ],
 ['vnukovo_express_line_d','vnukovo_express',[
   [-75,-20],
@@ -115,11 +115,11 @@ var MLINES=[
   [-163,-96,'Q'],[-166,-99,'Q'],[-166,-102,'Q'],
   [-166,-119,'Q'],[-166,-121,'Q'],[-163,-121,'Q'],
   [-160,-121]
-],'Киевский',[-75,-20]
+]
 ],
 ['domodedovo_express_line','domodedovo_express',[
   [51,-61],[51,-179]
-],'Павелецкий',[51,-61]
+]
 ],
 ['domodedovo_express_line_d','domodedovo_express',[
   [51,-61],[51,-179]
@@ -312,7 +312,7 @@ var MLINES=[
 ],
 ['monorail','mn',[
   [-26,101],[43,101]
-],'M1',[-26,101]
+]
 ],
 //
 ['interchange','Kievskaya',[
@@ -674,8 +674,9 @@ var MLINES=[
 ['interchange_d','Pechatniki-Yozhnoportovaya',[
   [96.83,-87.83],[93,-92.46]
 ]
-],
-//
+]
+];
+var MLEGEND=[
 ['.Latitude','legend_border',[
   [-170,-185],[150,-185],[150,-220],[-170,-220],[-170,-185]
 ]
@@ -744,6 +745,18 @@ var MLINES=[
   [60,-210],[40,-210]
 ],'Московский монорельс',[60,-210]
 ]
+];
+var MLABEL=[
+['moskva_canal_label','mc',[[-97,111]],'Канал имени Москвы'],
+['moskva_river_label','mr',[111,-147],'Москва-река'],
+['yauza_river_label','yr',[[59,99]],'Яуза'],
+['sheremetyevo_express_line_label','sheremetyevo_express',[[-32,153]],'Шереметьево'],
+['sheremetyevo_express_line_d_label','sheremetyevo_express',[[-51,55]],'Белорусский'],
+['vnukovo_express_line_label','vnukovo_express',[[-160,-121]],'Внуково'],
+['vnukovo_express_line_d_label','vnukovo_express',[[-75,-20.1]],'Киевский'],
+['domodedovo_express_line_label','domodedovo_express',[[51,-61]],'Павелецкий'],
+['domodedovo_express_line_d_label','domodedovo_express',[[51,-179]],'Домодедово'],
+['monorail_label','mn',[[-26,101]],'M1']
 ];
 var MSTATIONS=[
 ['s1','Ulitsa_Podbelskogo',[[102,85]],'Улица Подбельского',null,1],
