@@ -626,7 +626,6 @@ function init() {
   dw.loadCarta([{0:'.Image', 1:'wrld'}]);
   dw.loadCarta(dw.createMeridians());
   dw.loadCarta([['DotPort', 'Moscow', [[37.700,55.750]], 'Москва', null, 1]]);
-  imgMapB64(); // reload images base64
   // center pov
   var pov = dw.mflood['DotPort_Moscow']['coords'][0],
       pts = dw.toPoints(pov, true);
