@@ -548,6 +548,7 @@ function dbCarta(cfg) {
       this.ctx.beginPath();
       this.setDashLine(m['dash'] || []);
       if (m['cls'] == 'Dot') {
+        centerofpts = pts;
         for (var i=0; i<pts.length; i++)
           if (this.chkPts(pts[i])){
             this.ctx.beginPath();
@@ -558,6 +559,7 @@ function dbCarta(cfg) {
             this.ctx.fill();
           }
       } else if (m['cls'] == 'Rect') {
+        centerofpts = pts;
         if (this.chkPts(pts[0])){
           this.ctx.rect(pts[0][0] - msize/2.0, pts[0][1] - msize/2.0, msize, msize);
           this.ctx.strokeStyle = m['fg'];
@@ -587,8 +589,6 @@ function dbCarta(cfg) {
         this.ctx.stroke();
       }
       if (ftext) {
-        if (!(centerofpts && centerofpts.length))
-          centerofpts = pts;
         if (centerofpts && centerofpts.length && this.chkPts(centerofpts[0])) {
           this.ctx.fillStyle = mtcolor;
           this.ctx.textAlign = mtalign;

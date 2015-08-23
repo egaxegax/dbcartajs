@@ -747,16 +747,16 @@ var MLEGEND=[
 ]
 ];
 var MLABEL=[
-['moskva_canal_label','mc',[[-97,111]],'Канал имени Москвы'],
-['moskva_river_label','mr',[111,-147],'Москва-река'],
-['yauza_river_label','yr',[[59,99]],'Яуза'],
-['sheremetyevo_express_line_label','sheremetyevo_express',[[-32,153]],'Шереметьево'],
-['sheremetyevo_express_line_d_label','sheremetyevo_express',[[-51,55]],'Белорусский'],
-['vnukovo_express_line_label','vnukovo_express',[[-160,-121]],'Внуково'],
-['vnukovo_express_line_d_label','vnukovo_express',[[-75,-20.1]],'Киевский'],
-['domodedovo_express_line_label','domodedovo_express',[[51,-61]],'Павелецкий'],
-['domodedovo_express_line_d_label','domodedovo_express',[[51,-179]],'Домодедово'],
-['monorail_label','mn',[[-26,101]],'M1']
+['moskva_canal_label','mc',[],'Канал имени Москвы',[-97,111]],
+['moskva_river_label','mr',[],'Москва-река',[111,-147]],
+['yauza_river_label','yr',[],'Яуза',[59,99]],
+['sheremetyevo_express_line_label','sheremetyevo_express',[],'Шереметьево',[-32,153]],
+['sheremetyevo_express_line_d_label','sheremetyevo_express',[],'Белорусский',[-51,55]],
+['vnukovo_express_line_label','vnukovo_express',[],'Внуково',[-160,-121]],
+['vnukovo_express_line_d_label','vnukovo_express',[],'Киевский',[-75,-20.1]],
+['domodedovo_express_line_label','domodedovo_express',[],'Павелецкий',[51,-61]],
+['domodedovo_express_line_d_label','domodedovo_express',[],'Домодедово',[51,-179]],
+['monorail_label','mn',[],'M1',[-26,101]]
 ];
 var MSTATIONS=[
 ['s1','Ulitsa_Podbelskogo',[[102,85]],'Улица Подбельского',null,1],

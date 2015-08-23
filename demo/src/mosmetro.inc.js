@@ -131,7 +131,7 @@ function init() {
       river = function(o){ return route(dw.extend({fg: '#e2fcfc', join: 'round', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})) },
       aeroexpress = function(o){ return route(dw.extend({fg: '#dddddd', labelscale: 0}, o||{})) },
       aeroexpress_d = function(o){ return route(dw.extend({fg: '#ffffff', labelscale: 0, width: 4, dash: [10,10]}, o||{})) },
-      label = function(o){ return dw.extend({cls: 'Label', labelscale: 0, anchor: ['start', 'top']}, o||{}) },
+      label = function(o){ return dw.extend({cls: 'Label', labelscale: 1, anchor: ['start', 'top']}, o||{}) },
       station = function(o){ return dw.extend({cls: 'Rect', bg: 'white', size: 5, width: 3, scale: 1, labelscale: 1}, o||{}) },
       inst = function(o){ return station(dw.extend({size: 3, labelcolor: o['fg'], bg: o['fg']}, o)) },
       inst_d = function(o){ return inst(dw.extend({size: 2, width: 1}, o||{})) };
@@ -169,17 +169,17 @@ function init() {
   });
   // rivers
   dw.extend(dw.mopt, {
-    'moskva_canal': river({width: 5, rotate: -90}),
-    'moskva_canal_label': label({rotate: -90, anchor: ['start', 'middle'], labelcolor: river().labelcolor}),
+    'moskva_canal': river({width: 5}),
+    'moskva_canal_label': river({rotate: -90, anchor: ['start', 'middle']}),
     'strogino_lake_exit': river({cls: 'Polygon', bg: river().fg, width: 5}),
     'vodootvodny_canal': river({width: 5}),
-    'yauza_river': river({width: 5, rotate: 45}),
-    'yauza_river_label': river({width: 5, rotate: 45, anchor: ['start', 'top'], labelcolor: river().labelcolor}),
+    'yauza_river': river({width: 5}),
+    'yauza_river_label': river({rotate: 45, anchor: ['start', 'top']}),
     'Nagatino_Kozhukhovo': river({width: 5}),
     'Nagatino_poyma': river({width: 6}),
     'grebnoy_canal': river({width: 3}),
-    'moskva_river': river({width: 15, rotate: 45}),
-    'moskva_river_label': label({rotate: 45, anchor: ['start', 'top'], labelcolor: river().labelcolor})
+    'moskva_river': river({width: 15}),
+    'moskva_river_label': river({rotate: 45, anchor: ['start', 'top']})
   });
   // rails
   dw.extend(dw.mopt, {

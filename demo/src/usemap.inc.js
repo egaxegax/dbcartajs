@@ -86,7 +86,6 @@ function zoomBack(dw, pts, ev) {
 }
 function init() {
   var mtab = document.createElement('table');
-  mtab.width = '100%';
   mtab.style.borderCollapse = 'collapse';
   var row = document.createElement('tr');
   row.style.height = '1px';
@@ -109,7 +108,7 @@ function init() {
   el.type = 'text';
   el.size= '3';
   el.id = 'tvalue';
-  el.value= '1';
+  el.value= '10';
   col.appendChild(el);
   var el = document.createElement('button');
   el.onclick = rotate;
