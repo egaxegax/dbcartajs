@@ -1664,7 +1664,7 @@ function initMap() {
       satlist.options[i].style.color = 'lightgray';
       msat[satlist.options[i].value] = true;
     }
-  }
+  };
 
   // list proj
   optfunc(projlist, 'Проекции...');

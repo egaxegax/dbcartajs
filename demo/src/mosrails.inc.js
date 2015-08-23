@@ -29,7 +29,6 @@ function drawcrosshair() {
 }
 function init() {
   var mtab = document.createElement('table');
-  mtab.width = '100%';
   mtab.style.borderCollapse = 'collapse';
   var row = document.createElement('tr');
   row.style.height = '1px';
@@ -81,7 +80,8 @@ function init() {
       route_d = function(o){ return route(dw.extend({width: 1, fg: 'white', dash: [4,2]}, o||{})) },
       interchange = function(o){ return route(dw.extend({fg: 'black', join: 'round', cap: 'round', width: 6}, o||{})) },
       interchange_d = function(o) { return interchange(dw.extend({fg: 'white', width: 5}, o||{})) },
-      station = function(o){ return dw.extend({cls: 'Dot', bg: 'white', size: 3, width: 5, labelscale: 1}, o||{}) },
+      label = function(o){ return dw.extend({cls: 'Label', labelscale: 1, labelcolor: dw.mopt['mr'].fg}, o||{}) },
+      station = function(o){ return dw.extend({cls: 'Rect', bg: 'white', size: 5, width: 3, scale: 1, labelscale: 1}, o||{}) },
       inst = function(o){ return station(dw.extend({fg: '#a5a6aa', labelcolor: o['labelcolor']}, o)) },
       inst_l = function(o){ return inst(dw.extend({bg: o['labelcolor'], fg: o['labelcolor']}, o)) },
       rst = function(o){ return station(dw.extend({cls: 'Rect', size: 8, width: 4, join: 'round', labelcolor: 'black'}, o)) },
@@ -117,16 +117,18 @@ function init() {
     't9': route({fg: '#fdcd45'}),
     't10': route({fg: '#14a256'}),
     't11': route({fg: '#eb479d'}),
-    'monorail': route({fg: '#2C87C5', width: 2, labelcolor: '#2C87C5', anchor: ['start', 'bottom']})
+    'monorail': route({fg: '#2c87c5', width: 2, labelcolor: '#2c87c5', anchor: ['start', 'bottom']})
   });
   // roads
   dw.extend(dw.mopt, {
-    'mkad': route({cls: 'Polygon', bg: 'white', fg: 'rgb(180,180,180)', width: 1, anchor: ['center', 'middle']})
+    'mkad': route({cls: 'Polygon', bg: 'white', fg: 'rgb(180,180,180)', width: 1, labelcolor: 'rgb(180,180,180)', anchor: ['center', 'middle']})
   });
   // lines ext
   dw.extend(dw.mopt, {
-    'mr_1': route({fg: dw.mopt['mr'].fg, labelcolor: dw.mopt['mr'].fg, anchor: ['end', 'middle']}),
-    'mr_2': route({fg: dw.mopt['mr'].fg, labelcolor: dw.mopt['mr'].fg, anchor: ['start', 'middle']}),
+    'mr_1': route({fg: dw.mopt['mr'].fg}),
+    'mr_2': route({fg: dw.mopt['mr'].fg}),
+    'mr_1_label': label({anchor: ['end', 'middle']}),
+    'mr_2_label': label({anchor: ['start', 'middle']}),
     't2_ext': route_d(),
     't3_ext': route_d(),
     't7_ext': route_d()
@@ -287,19 +289,40 @@ function init() {
     'a11_1': rst({fg: dw.mopt['t11'].fg, anchor: ['center', 'bottom']}),
     'a11_2': rst({fg: dw.mopt['t11'].fg, anchor: ['start', 'top']}),
     'a11_3': rst({fg: dw.mopt['t11'].fg, anchor: ['end', 'middle']}),
-    'a11_3': rst({fg: dw.mopt['t11'].fg, anchor: ['end', 'middle']}),
     'a11_4': ost({anchor: ['end', 'middle']}),
     'a11_5': ost({anchor: ['start', 'middle']}),
     'a11_6': ost({anchor: ['center', 'bottom']}),
     'a11_7': ost({anchor: ['center', 'top']}),
     'a11_8': ost({anchor: ['start', 'bottom']})
   });
-  dw.loadCarta(RLINES);
+  // curr.object
+  dw.clfunc.onmousemove = function(dw, sd, dd, ev) {
+    var mcoord = document.getElementById('coords');
+    var label = '';
+    if (dw.m.pmap) {
+      var o = dw.mflood[dw.m.pmap];
+      label = o['label'] || o['ftag'];
+    }
+    mcoord.innerHTML = label;
+    dw.paintCoords(sd);
+  };
+  dw.loadCarta([{0:'.Image', 1:'bg'}]); // first layer
+//  dw.loadCarta(RLINES);
+  dw.loadCarta(RLABEL);
   dw.loadCarta(MSTATIONS);
   for(var i in RSTATIONS)
     dw.loadCarta(RSTATIONS[i][1]);
-  dw.draw();
-  // station list
+
+  // bgimg from mlines
+  var im = new Image();
+  im.src = IMGDATA['mosrails'];
+  im.onload = function() {
+    dw.loadCarta([{0:'.Image', 1:'bg', 2:[[-234.8,290.45],[239.8,-376.35]], 6:this}]);
+    dw.m.bgimg = dw.mflood['.Image_bg']; // mark as bg
+    dw.draw();
+  };
+
+  // fill station list
   for(var i in RSTATIONS) {
     var mlist = RSTATIONS[i];
     // line caption
@@ -319,19 +342,10 @@ function init() {
       el.appendChild(document.createTextNode(mlist[1][i][3]));
       stationlist.appendChild(el);
     }
-  }
+  };
   stationlist.onchange = findstation;
+  
   delete RLINES;
   delete MSTATIONS;
   delete RSTATIONS;
-  // curr.object
-  dw.clfunc.onmousemove = function() {
-    var mcoord = document.getElementById('coords');
-    var label = '';
-    if (dw.m.pmap) {
-      var o = dw.mflood[dw.m.pmap];
-      label = o['label'] || o['ftag'];
-    }
-    mcoord.innerHTML = label;
-  }
 }

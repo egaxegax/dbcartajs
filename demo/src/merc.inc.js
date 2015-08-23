@@ -55,7 +55,7 @@ function init() {
         m.coords = COUNTRIES[cntryname][mpart][1];
         m.centerof = COUNTRIES[cntryname][mpart][3];
         dw.loadCarta([['Area', m.abbr + mpart, m.coords, (mpart==npart ? cntryname : ''), m.centerof]]);
-      }
+      };
       // capitals
       if (CITIES[cntryname]) {
         m.cityname = CITIES[cntryname][ncity][0];
@@ -74,12 +74,12 @@ function init() {
           }
         }
       }
-    }
+    };
     // concat
     if (route) {
       route.push(route[0]);
       route.push(route[1]);
-    }
+    };
     dw.loadCarta([['Line', 'route1', route, null, null, 1]]);
     delete COUNTRIES;
     delete CITIES;

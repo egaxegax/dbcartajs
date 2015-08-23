@@ -2,14 +2,11 @@
  * World's countrires and flags.
  * egax@bk.ru, 2013-15.
  */
-function draw() {
-  var cntrylist = document.getElementById('cntrylist');
-  for (var i=0; i<cntrylist.options.length; i++) {
-    var opt = cntrylist.options[i];
-    if (opt.selected) {
+function draw(opt) {
+    if (opt) {
       var m = {};
-      m.mpart = opt.value;
-      m.cntryname = opt.parentNode.label;
+      m.mpart = opt.target.value;
+      m.cntryname = opt.target.value2;
       m.abbr = COUNTRIES[m.cntryname][m.mpart][0];
       m.coords = COUNTRIES[m.cntryname][m.mpart][1];
       m.abbr2 = COUNTRIES[m.cntryname][m.mpart][2].toLowerCase();
@@ -32,7 +29,6 @@ function draw() {
         }
       }
     }
-  }
   // draw on centre
   if (m.centerof) {
     var pts = dw.toPoints(m.centerof, true);
@@ -59,7 +55,8 @@ function init() {
 
   var col = document.createElement('td');
   col.width = '15%';
-  el = document.createElement('h2');
+  col.style.whiteSpace = 'nowrap';
+  var el = document.createElement('h2');
   el.appendChild(document.createTextNode("Страны мира"));
   el.style.margin = '0';
   col.appendChild(el);
@@ -74,34 +71,29 @@ function init() {
   var row = document.createElement('tr');
   mtab.appendChild(row);
 
-  var col = document.createElement('td');
-  col.rowSpan = '2';
-  col.width = '15%';
-  col.style.borderWidth = '1';
-  col.style.borderStyle = 'solid';
-  col.style.verticalAlign = 'top';
-  var cntrylist = el2 = document.createElement('select');
-  el2.id = 'cntrylist';
-  el2.multiple = 'true';
-  el2.size = '20';
-  col.appendChild(el2);
-  var el2 = document.createElement('button');
-  el2.onclick = draw;
-  el2.appendChild(document.createTextNode('show'));
-  col.appendChild(el2);
-  var el2 = document.createElement('button');
-  el2.onclick = refresh;
-  el2.appendChild(document.createTextNode('refresh'));
-  col.appendChild(el2);
-  row.appendChild(col);
+  var dcol = document.createElement('td');
+  dcol.rowSpan = '2';
+  dcol.width = '15%';
+  dcol.style.verticalAlign = 'top';
+  var cntrylist = el = document.createElement('dl');
+  el.id = 'cntrylist';
+  el.style.margin = '0';
+  el.style.padding = '0';
+  el.style.fontSize = 'smaller';
+  dcol.appendChild(el);
+  row.appendChild(dcol);
 
   var col = document.createElement('td');
   col.id = 'canvasmap';
   col.width = '40%';
+//  col.style.padding = '0';
+  col.style.verticalAlign = 'top';
   row.appendChild(col);
   var col = document.createElement('td');
   col.id = 'canvasmap2';
   col.width = '40%';
+  col.style.padding = '0';
+  col.style.verticalAlign = 'top';
   row.appendChild(col);
 
   var row = document.createElement('tr');
@@ -110,14 +102,21 @@ function init() {
   var col = document.createElement('td');
   col.id = 'canvasmap3';
   col.width = '40%';
+//  col.style.padding = '0';
+  col.style.verticalAlign = 'top';
   row.appendChild(col);
   var col = document.createElement('td');
   col.id = 'canvasmap4';
   col.width = '40%';
+//  col.style.padding = '0';
+  col.style.verticalAlign = 'top';
   row.appendChild(col);
   document.body.appendChild(mtab);
 
-  dw = new dbCarta({id:'canvasmap', height: mtab.offsetHeight/2.0*0.99});
+  cntrylist.style.height = dcol.offsetHeight + 'px';
+  cntrylist.style.overflow = 'auto';
+
+  dw = new dbCarta({id:'canvasmap', height: dcol.offsetHeight/2.0*0.98});
   dw.extend(dw.mopt, {
     'Area': {fg: 'yellow', bg: 'transparent', labelcolor: 'white'}
   });
@@ -130,19 +129,19 @@ function init() {
     dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
     dw.loadCarta(dw.createMeridians());
     dw.draw();
-  }
-  dw2 = new dbCarta({id:'canvasmap2', height: mtab.offsetHeight/2.0*0.99});
+  };
+  dw2 = new dbCarta({id:'canvasmap2', height: dcol.offsetHeight/2.0*0.98});
   dw2.changeProject(203);
   dw2.scaleCarta(1.5);
   dw2.loadCarta(CONTINENTS);
   dw2.loadCarta(dw2.createMeridians());
   dw2.draw();
-  dw3 = new dbCarta({id:'canvasmap3', height: mtab.offsetHeight/2.0*0.99});
+  dw3 = new dbCarta({id:'canvasmap3', height: dcol.offsetHeight/2.0*0.98});
   dw3.changeProject(204);
   dw3.loadCarta(CONTINENTS);
   dw3.loadCarta(dw3.createMeridians());
   dw3.draw();
-  dw4 = new dbCarta({id:'canvasmap4', height: mtab.offsetHeight/2.0*0.99});
+  dw4 = new dbCarta({id:'canvasmap4', height: dcol.offsetHeight/2.0*0.98});
   dw4.extend(dw4.mopt, {
     'Area': {fg: 'yellow', bg: 'transparent', labelcolor: 'white'}
   });
@@ -155,19 +154,26 @@ function init() {
     dw4.m.bgimg = dw4.mflood['.Image_wrld-mill']; // mark as bg
     dw4.loadCarta(dw4.createMeridians());
     dw4.draw();
-  }  
+  };
   delete CONTINENTS;
+  
+  //fill list
   for (var cntryname in COUNTRIES) {
-    el = document.createElement('optgroup');
-    el.label = cntryname;
-    for (var mpart in COUNTRIES[cntryname]) {
-      el2 = document.createElement('option');
-      el2.value = mpart;
-      el2.appendChild(document.createTextNode(COUNTRIES[cntryname][mpart][0]));
-      el.appendChild(el2);
-    }
+    var el = document.createElement('dt');
+    el.style.fontStyle = 'italic';
+    el.style.fontWeight = 'bolder';
+    el.appendChild(document.createTextNode(cntryname));
     cntrylist.appendChild(el);
+    for (var mpart in COUNTRIES[cntryname]) {
+      var el2 = document.createElement('dd');
+      el2.value = mpart;
+      el2.value2 = cntryname;
+      el2.appendChild(document.createTextNode(COUNTRIES[cntryname][mpart][0]));
+      el2.onclick = draw;
+      cntrylist.appendChild(el2);
+    }
   }
+  
   // curr. object
   var clfunc = function(dw, src, dst, ev) {
     var mcoord = document.getElementById('tcoords');

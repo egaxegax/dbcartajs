@@ -46,7 +46,6 @@ function infobox(ev, label) {
 }
 function init() {
   var mtab = document.createElement('table');
-  mtab.width = '100%';
   mtab.style.borderCollapse = 'collapse';
   var row = document.createElement('tr');
   row.style.height = '1px';
@@ -67,9 +66,9 @@ function init() {
   col.align = 'center';
   var el = document.createElement('input');
   el.type = 'text';
-  el.size= '3';
+  el.size = '3';
   el.id = 'tvalue';
-  el.value= '1';
+  el.value = '10';
   col.appendChild(el);
   var el = document.createElement('button');
   el.onclick = rotate;
@@ -80,6 +79,7 @@ function init() {
   var col = document.createElement('td');
   col.width = '30%';
   col.align = 'center';
+  col.style.whiteSpace = 'nowrap';
   col.appendChild(document.createTextNode('Станции '));
   var stationlist = el = document.createElement('select');
   el.id = 'stationlist';
@@ -127,30 +127,30 @@ function init() {
   var route = function(o){ return dw.extend({cls: 'Line', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
       route_d = function(o){ return route(dw.extend({dash: [2,4]}, o||{})) },      
       interchange = function(o){ return route(dw.extend({fg: '#000000', join: 'round', cap: 'round', width: 8}, o||{})) },
-      interchange_d = function(o) { return interchange(dw.extend({fg: '#FFFFFF', width: 7}, o||{})) },
-      river = function(o){ return route(dw.extend({fg: '#E2FCFC', join: 'round', cap: 'round', labelcolor: '#5555FF', labelscale: 0}, o||{})) },
-      aeroexpress = function(o){ return route(dw.extend({fg: '#DDDDDD', labelscale: 0}, o||{})) },
-      aeroexpress_d = function(o){ return route(dw.extend({fg: '#FFFFFF', labelscale: 0, width: 4, dash: [10,10]}, o||{})) },
+      interchange_d = function(o) { return interchange(dw.extend({fg: '#ffffff', width: 7}, o||{})) },
+      river = function(o){ return route(dw.extend({fg: '#e2fcfc', join: 'round', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})) },
+      aeroexpress = function(o){ return route(dw.extend({fg: '#dddddd', labelscale: 0}, o||{})) },
+      aeroexpress_d = function(o){ return route(dw.extend({fg: '#ffffff', labelscale: 0, width: 4, dash: [10,10]}, o||{})) },
       label = function(o){ return dw.extend({cls: 'Label', labelscale: 0, anchor: ['start', 'top']}, o||{}) },
-      station = function(o){ return dw.extend({cls: 'Dot', bg: 'white', size: 2, width: 5, scale: 1, labelscale: 1}, o||{}) },
+      station = function(o){ return dw.extend({cls: 'Rect', bg: 'white', size: 5, width: 3, scale: 1, labelscale: 1}, o||{}) },
       inst = function(o){ return station(dw.extend({size: 3, labelcolor: o['fg'], bg: o['fg']}, o)) },
       inst_d = function(o){ return inst(dw.extend({size: 2, width: 1}, o||{})) };
   // lines
   dw.extend(dw.mopt, {
-    'r1': route({fg: '#ED1B35'}),
-    'r2': route({fg: '#44B85C'}),
-    'r3': route({fg: '#0078BF'}),
-    'r4': route({fg: '#19C1F3'}),
-    'r5': route({fg: '#894E35'}),
-    'r6': route({fg: '#F58631'}),
-    'r7': route({fg: '#8E479C'}),
-    'r8': route({fg: '#FFCB31'}),
-    'r9': route({fg: '#A1A2A3'}),
-    'r10': route({fg: '#B3D445'}),
-    'r11': route({fg: '#79CDCD'}),
-    'r12': route({fg: '#ACBFE1'}),
-    'rTPK': route_d({fg: '#554D26'}),
-    'rKOZH': route_d({fg: '#DE62BE'})
+    'r1': route({fg: '#ed1b35'}),
+    'r2': route({fg: '#44b85c'}),
+    'r3': route({fg: '#0078bf'}),
+    'r4': route({fg: '#19c1f3'}),
+    'r5': route({fg: '#894e35'}),
+    'r6': route({fg: '#f58631'}),
+    'r7': route({fg: '#8e479c'}),
+    'r8': route({fg: '#ffcb31'}),
+    'r9': route({fg: '#a1a2a3'}),
+    'r10': route({fg: '#b3d445'}),
+    'r11': route({fg: '#79cdcd'}),
+    'r12': route({fg: '#acbfe1'}),
+    'rTPK': route_d({fg: '#554d26'}),
+    'rKOZH': route_d({fg: '#de62be'})
   });
   // lines ext
   dw.extend(dw.mopt, {
@@ -183,8 +183,8 @@ function init() {
   });
   // rails
   dw.extend(dw.mopt, {
-    'monorail': route({fg: '#2C87C5', width: 2, labelcolor: '#2C87C5', anchor: ['start', 'bottom']}),
-    'monorail_legend': route({fg: '#2C87C5', width: 2}),
+    'monorail': route({fg: '#2c87c5', width: 2, labelcolor: '#2c87c5', anchor: ['start', 'bottom']}),
+    'monorail_legend': route({fg: '#2c87c5', width: 2}),
     'sheremetyevo_express_line': aeroexpress(),
     'sheremetyevo_express_line_label': label({anchor: ['end', 'middle']}),
     'sheremetyevo_express_line_d': aeroexpress_d(),
@@ -283,8 +283,8 @@ function init() {
     'sKOZH_1': station({fg: dw.mopt['rKOZH'].fg, anchor: ['end', 'middle']}),
     'sKOZH_2': inst({fg: dw.mopt['rKOZH'].fg, anchor: ['start', 'middle']}),
     'sKOZH_3': inst_d({fg: dw.mopt['rKOZH'].fg, anchor: ['start', 'middle']}),
-    'sMono': inst({fg: dw.mopt['monorail'].fg, size: 1, anchor: ['start', 'top']}),
-    'sMono_1': inst({fg: dw.mopt['monorail'].fg, size: 1, anchor: ['start', 'middle']})
+    'sMono': inst({fg: dw.mopt['monorail'].fg, size: 3, anchor: ['start', 'top']}),
+    'sMono_1': inst({fg: dw.mopt['monorail'].fg, size: 3, anchor: ['start', 'middle']})
   });
   // callbacks
   dw.extend(dw.clfunc, {
@@ -314,13 +314,14 @@ function init() {
   dw.loadCarta(MSTATIONS);
   // bgimg from mlines
   var im = new Image();
-  im.src = 'data/img/mosmetro.png';
+  im.src = IMGDATA['mosmetro'];
   im.onload = function() {
-    dw.loadCarta([{0:'.Image', 1:'bg', 2:[[-174.65,155.5],[170.2,-199.7]], 6:this}]);
+    dw.loadCarta([{0:'.Image', 1:'bg', 2:[[-174.65,155.35],[170.2,-199.65]], 6:this}]);
     dw.m.bgimg = dw.mflood['.Image_bg']; // mark as bg
     dw.draw();
-  }
-  // station list
+  };
+  
+  // fill station list
   MSTATIONS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1});
   for (var i in MSTATIONS) {
     if (!MSTATIONS[i][3]) continue;
@@ -328,8 +329,11 @@ function init() {
     el.value = MSTATIONS[i][0] + '_' + MSTATIONS[i][1];
     el.appendChild(document.createTextNode(MSTATIONS[i][3]));
     stationlist.appendChild(el);
-  }
+  };
   stationlist.onchange = findstation;
+  
   delete MLINES;
+  delete MLEGEND;
+  delete MLABEL;
   delete MSTATIONS;
 }

@@ -2,15 +2,12 @@
  * World's cities by countries.
  * egax@bk.ru, 2013-15.
  */
-function draw() {
-  var centerof, citylist = document.getElementById('citylist');
-  for (var i=0; i<citylist.options.length; i++) {
-    var opt = citylist.options[i];
-    if (opt.selected) {
-      var coords = eval('[' + opt.value + ']');
-      if (!centerof) centerof = coords;
-      dw.loadCarta([['DotPort', opt.text, [coords], opt.text, null, 1]]);
-    }
+function draw(opt) {
+  var centerof;
+  if (opt) {
+    var coords = eval('[' + opt.target.value + ']');
+    if (!centerof) centerof = coords;
+    dw.loadCarta([['DotPort', opt.target.innerHTML, [coords], opt.target.innerHTML, null, 1]]);
   }
   if (centerof) {
     var points = dw.toPoints(centerof, true);
@@ -31,6 +28,7 @@ function init() {
 
   var col = document.createElement('td');
   col.width = '15%';
+  col.style.whiteSpace = 'nowrap';
   var el = document.createElement('h2');
   el.appendChild(document.createTextNode("Города мира"));
   el.style.margin = '0';
@@ -47,33 +45,29 @@ function init() {
 
   var col = document.createElement('td');
   col.width = '15%';
-  col.style.borderWidth = '1';
-  col.style.borderStyle = 'solid';
+  col.style.padding = '0';
   col.style.verticalAlign = 'top';
 
-  var citylist = el2 = document.createElement('select');
-  el2.id = 'citylist';
-  el2.multiple = 'true';
-  el2.size = '20';
-  col.appendChild(el2);
-  var el2 = document.createElement('button');
-  el2.onclick = draw;
-  el2.appendChild(document.createTextNode('show'));
-  col.appendChild(el2);
-  var el2 = document.createElement('button');
-  el2.onclick = refresh;
-  el2.appendChild(document.createTextNode('refresh'));
-  col.appendChild(el2);
+  var citylist = el = document.createElement('dl');
+  el.id = 'citylist';
+  el.style.margin = '0';
+  el.style.padding = '0';
+  el.style.fontSize = 'smaller';
+  col.appendChild(el);
   row.appendChild(col);
 
   var col = document.createElement('td');
   col.id = 'mcol';
   col.style.padding = '0';
+  col.style.verticalAlign = 'top';
   row.appendChild(col);
   document.body.appendChild(mtab);
 
+  citylist.style.height = col.offsetHeight + 'px';
+  citylist.style.overflow = 'auto';
+
   dw = new dbCarta({id:'mcol', height:col.offsetHeight});
-  dw.extend(dw.mopt['DotPort'], {labelcolor: 'yellow'});
+  dw.extend(dw.mopt['DotPort'], {scale: 1, labelscale: 1});
   dw.changeProject(102); // miller proj
   // worldmap img
   var im = new Image();
@@ -83,18 +77,21 @@ function init() {
     dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
     dw.loadCarta(dw.createMeridians());
     dw.draw();
-  }
+  };
   for (var cntryname in CITIES) {
-    el = document.createElement('optgroup');
-    el.label = cntryname;
+    var el = document.createElement('dt');
+    el.style.fontStyle = 'italic';
+    el.style.fontWeight = 'bolder';
+    el.appendChild(document.createTextNode(cntryname));
+    citylist.appendChild(el);
     for (var mpart in CITIES[cntryname]) {
-      el2 = document.createElement('option');
+      var el2 = document.createElement('dd');
       el2.value = CITIES[cntryname][mpart][1];
       el2.appendChild(document.createTextNode(CITIES[cntryname][mpart][0]));
-      el.appendChild(el2);
+      el2.onclick = draw;
+      citylist.appendChild(el2);
     }
-    citylist.appendChild(el);
-  }
+  };
   delete CITIES;
   // curr. object
   dw.clfunc.onmousemove = function(dw, sd, dd) {

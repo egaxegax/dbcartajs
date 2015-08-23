@@ -129,7 +129,7 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '10%';
+  col.width = '15%';
   col.align = 'center';
   col.appendChild(document.createTextNode(' Проекции '));
   var projlist = el = document.createElement('select');
@@ -238,6 +238,5 @@ function init() {
     ['DotPort', 'rio', [[-43.455,-22.722]], 'Rio de Janeiro'],
     ['DotPort', 'brz', [[15.285,-4.285]], 'Brazzaville']
   ]);
-  imgMapB64(); // reload images base64
   proj();
 }

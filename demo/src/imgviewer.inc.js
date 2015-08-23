@@ -69,8 +69,7 @@ function init() {
 
   var col = document.createElement('td');
   col.width = '120px';
-  col.style.borderWidth = '1';
-  col.style.borderStyle = 'solid';
+  col.style.padding = '0';
   col.style.verticalAlign = 'top';
   row.appendChild(col);
   var md = document.createElement('div');
@@ -80,6 +79,7 @@ function init() {
   col.colSpan = '10';
   col.id = 'mcol';
   col.style.padding = '0';
+  col.style.verticalAlign = 'top';
   row.appendChild(col);
   document.body.appendChild(mtab);
 
@@ -100,6 +100,7 @@ function init() {
     'file:///C:/Windows/Web/Wallpaper/Theme1/img4.jpg'
   ];
   
+  // fill list
   for (var i=0; i<2; i++){
     var res;
     switch (i){
@@ -113,7 +114,7 @@ function init() {
       el2.src = res[k];
       if (res[k].search('ggpht.com')==0)
         el2.src += '=s320'; // google image size change for appspot.com
-      el2.onclick = function(){ 
+      el2.onclick = function(){
         im.src = this.src;
       };
       el2.onload = function(){

@@ -51,9 +51,9 @@ function dbCarta(cfg) {
     /**
      * Base Layers.
      * Options {
-     *   cls:  type {Polygon|Line|Dot|Rect}
+     *   cls: type {Image|Polygon|Line|Dot|Rect|Label}
      *   fg: : color (stroke)
-     *   bg: - background color (fill)
+     *   bg: background color (fill)
      *   dash: dash pattern [1,2]
      *   join: lineJoin
      *   cap: lineCap
@@ -180,13 +180,14 @@ function dbCarta(cfg) {
       var y = -90;
       while (y <= 90) {
         var x = -180;
-        var centerof = prev = [x, y];
+        var centerof = prev = [x, y],
+            label = y;
         while (x < scale_x) {
           x += 90;
           var lat = [prev, [x, y]],
               prev = [x, y];
-          lonlat.push( ['.Latitude', [x, y].toString(), lat, y.toString(), centerof] );
-          centerof = undefined;
+          lonlat.push( ['.Latitude', [x, y].toString(), lat, label, centerof] );
+          label = centerof = undefined;
         }
         y += 30;
       }
@@ -360,7 +361,7 @@ function dbCarta(cfg) {
         if (!m) return;
         var mopt = self.mopt[m['ftype']];
         if (!mopt) return;
-        var msize =  mopt['size']/self.m.scale,
+        var msize = mopt['scale'] ? (mopt['size'] || 1) : (mopt['size'] || 1) / self.m.scale,
             mwidth = (mopt['width'] || 1) / self.m.scale,
             mapfg = self.cfg.mapfg,
             mapbg = self.cfg.mapbg;
@@ -546,8 +547,6 @@ function dbCarta(cfg) {
       this.ctx.lineCap = mcap;
       this.ctx.beginPath();
       this.setDashLine(m['dash'] || []);
-      if (this.chkPts(pts[0]))
-        centerofpts = pts;
       if (m['cls'] == 'Dot') {
         for (var i=0; i<pts.length; i++)
           if (this.chkPts(pts[i])){
@@ -587,8 +586,10 @@ function dbCarta(cfg) {
         this.ctx.strokeStyle = m['fg'];
         this.ctx.stroke();
       }
-      if (ftext && centerofpts)
-        if (centerofpts.length && this.chkPts(centerofpts[0])) {
+      if (ftext) {
+        if (!(centerofpts && centerofpts.length))
+          centerofpts = pts;
+        if (centerofpts && centerofpts.length && this.chkPts(centerofpts[0])) {
           this.ctx.fillStyle = mtcolor;
           this.ctx.textAlign = mtalign;
           this.ctx.textBaseline = mtbaseline;
@@ -610,6 +611,7 @@ function dbCarta(cfg) {
             this.ctx.restore();
           }
         }
+      }
     },
     /**
     * Draw image IMG if loaded with sizes in PTS.
