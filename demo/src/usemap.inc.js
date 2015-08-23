@@ -196,7 +196,7 @@ function init() {
     // add new layers
     if (!dw.mopt[dclr]) dw.mopt[dclr] = {cls: 'Polygon', fg: 'silver', bg: dclr};
     dw.loadCarta([[dclr, mabbr, mcoords, mcntryname, undefined, true]]);
-  }
+  };
   delete COUNTRIES;
   // projlist
   for(var i in dw.projlist) {
@@ -205,7 +205,7 @@ function init() {
     el.value = i;
     el.appendChild(document.createTextNode(projname));
     projlist.appendChild(el);
-  }
+  };
   projlist.onchange = proj;
   proj();
 }
