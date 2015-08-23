@@ -183,8 +183,9 @@ function init() {
   });
   // rails
   dw.extend(dw.mopt, {
-    'monorail': route({fg: '#2c87c5', width: 2, labelcolor: '#2c87c5', anchor: ['start', 'bottom']}),
+    'monorail': route({fg: '#2c87c5', width: 2}),
     'monorail_legend': route({fg: '#2c87c5', width: 2}),
+    'monorail_label': route({labelcolor: '#2c87c5', anchor: ['start', 'bottom']}),
     'sheremetyevo_express_line': aeroexpress(),
     'sheremetyevo_express_line_label': label({anchor: ['end', 'middle']}),
     'sheremetyevo_express_line_d': aeroexpress_d(),
@@ -221,7 +222,7 @@ function init() {
     's3_6': inst({fg: dw.mopt['r3'].fg, anchor: ['end', 'middle']}),
     's3_7': inst({fg: dw.mopt['r3'].fg, anchor: ['end']}),
     's4': station({fg: dw.mopt['r4'].fg}),
-    's4_1': station({fg: dw.mopt['r4'].fg, anchor: ['end', 'top']}),
+    's4_1': station({fg: dw.mopt['r4'].fg, anchor: ['end', 'hanging']}),
     's4_2': inst({fg: dw.mopt['r4'].fg, anchor: ['end', 'middle']}),
     's4_3': station({fg: dw.mopt['r4'].fg, anchor: ['start', 'bottom']}),
     's4_4': inst({fg: dw.mopt['r4'].fg, anchor: ['end', 'top']}),
