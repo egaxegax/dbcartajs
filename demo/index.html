@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-<title>dbCartajs - HTML5 Canvas map</title>
+<title>dbCartajs - HTML5 Canvas+SVG map</title>
 <script src="data/google_counter.js"></script>
 <script src="data/metatags.js"></script>
 </head>
@@ -14,10 +14,10 @@
 <script src="../proj4js-combined.js"></script>
 <script src="../dbcarta.js"></script>
 <script src="data/continents.js"></script>
-<script src="src/index.inc.js"></script>
+<script>
 function listDemos() {
   return [
-    [['mosmetro.html'], ['Карта метро Москвы'], function() {
+    [['mosmetro.html', 'svg/mosmetro.html'], ['Карта метро Москвы', 'SVG версия'], function() {
       var sp = document.createElement('span');
       var a = document.createElement('a');
       a.href = 'http://upload.wikimedia.org/wikipedia/commons/f/f3/Moscow_metro_map_ru_sb.svg';
@@ -60,13 +60,13 @@ function listDemos() {
       return document.createTextNode('Просмотр картинок с возможностью масштабирования.'); }],
     [['noncart.html'], ['Изображение по точкам'], function() {
       return document.createTextNode('Выводим слово dbcarta по буквам в координатах.'); }],
-    [['sample.html'], ['Атлас'], function() {
+    [['sample.html', 'svg/atlas.html'], ['Атлас', 'SVG версия'], function() {
       return document.createTextNode('Демо с возможностью нанесения объектов с заданными координатами в выбранной проекции.'); }],
     [['cities.html'], ["Города мира"], function() {
       return document.createTextNode('Список крупнейших городов мира с выводом на карте в проекции "Миллер".'); }],
     [['countries.html'], ["Страны мира"], function() {
       return document.createTextNode('Список стран мира с отображением в различных проекциях.'); }],
-    [['usemap.html'], ['Население мира'], function() {
+    [['usemap.html', 'svg/usemap.html'], ['Население мира', 'SVG версия'], function() {
       var sp = document.createElement('span');
       sp.appendChild(document.createTextNode('Карта плотности населения мира по странам с возможностью наведения на них и выводом дополнительной информации по клику. ')); 
       sp.appendChild(document.createTextNode('Идея и стиль позаимствованы с примеров ')); 
@@ -113,7 +113,7 @@ function init() {
   var el = document.createElement('h2');
   el.style.textAlign = 'center';
   el.style.backgroundColor = '#d2e0f0';
-  el.appendChild(document.createTextNode('dbCartajs - HTML5 Canvas карта с проекциями Proj4js'));
+  el.appendChild(document.createTextNode('dbCartajs - HTML5 Canvas+SVG карта с проекциями Proj4js'));
   document.body.appendChild(el);
 
   // anim table
@@ -147,12 +147,12 @@ function init() {
 
   var el = document.createElement('p');
   el.style.textAlign = 'center';
-  el.appendChild(document.createTextNode('It uses HTML5 Canvas 2D. Pure javascript and serverless. Draw, color, move, zoom map and objects.'));
+  el.appendChild(document.createTextNode('It uses HTML5 Canvas 2D or SVG renderer. Pure javascript and serverless. Draw, color, move, zoom map and objects.'));
   document.body.appendChild(el);
   
   var el = document.createElement('p');
   el.style.textAlign = 'center';
-  el.appendChild(document.createTextNode('Карта-Навигатор с проекциями. Использует HTML5 Canvas 2D и JavaScript без сервера. Рисование, масштабирование объектов.'));
+  el.appendChild(document.createTextNode('Карта-Навигатор с проекциями. Использует HTML5 Canvas 2D или SVG обработчик на javascript. Рисование, масштабирование объектов.'));
   document.body.appendChild(el);
   
   // demos table
@@ -259,6 +259,6 @@ function init() {
 
 addMetaTags('');
 init();
-
+</script>
 </body>
 </html>
