@@ -1,7 +1,7 @@
 dbCartajs
 ===========
 
-HTML5 Canvas object map viewer. Pure JavaScript and serverless.
+HTML5 Canvas+SVG vector map viewer. Pure JavaScript and serverless.
 It uses Proj4js transformations. Supported projections:
  * espg:4326, longlat;
  * epsg:3875, Mercator projection;
