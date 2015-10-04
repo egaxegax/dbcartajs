@@ -909,7 +909,7 @@ var MSTATIONS=[
 ['s7','Vykhino',[[160,-90]],'Выхино',null,1],
 ['s7_1','Lermontovsky_Prospekt',[[147,-106]],'Лермонтовский проспект',null,1],
 ['s7','Zhulebino',[[136,-117]],'Жулебино',null,1],
-['s7','Kotelniki',[[133,-126]],'Котельники',null,1],
+['s7_8','Kotelniki',[[133,-126]],'Котельники',null,1],
 //
 ['s8','Rasskazovka',[[-162,-105]],'Рассказовка',null,1],
 ['s8','Novoperedelkino',[[-154.62,-97.43]],'Новопеределкино',null,1],
@@ -995,7 +995,7 @@ var MSTATIONS=[
 ['s12_3','Lesoparkovaya',[[-27.21,-158.56]],'Лесопарковая',null,1],
 ['s12_5','Ulitsa_Starokachalovskaya',[[-16.56,-168]],'Улица Старокачаловская',null,1],
 ['s12_2','Ulitsa_Skobelevskaya',[[-26,-174]],'Улица Скобелевская',null,1],
-['s12_1','Bulvar_Admirala_Ushakova',[[-45,-174]],'Бульвар Адмирала Ушакова',null,1],
+['s12_1','Bulvar_Admirala_Ushakova',[[-45,-174]],'Б-р Адм Ушакова',null,1],
 ['s12','Ulitsa_Gorchakova',[[-66,-174]],'Улица Горчакова',null,1],
 ['s12_1','Buninskaya_Alleya',[[-87,-174]],'Бунинская аллея',null,1],
 ['s12','Potapovo',[[-108,-174]],'Потапово',null,1],

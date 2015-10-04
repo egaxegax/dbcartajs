@@ -1,0 +1,124 @@
+<!--
+ Population density by country. SVG version.
+ View countries under mouse cursor.
+ egax@bk.ru, 2015.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<title>Население мира - HTML5 SVG vector map</title>
+<style type="text/css">html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
+<script src="../data/google_counter.js"></script>
+<script src="../data/metatags.js"></script>
+</head>
+<body>
+<script src="../data/countries.js"></script>
+<script src="../data/countries_info.js"></script>
+<script src="../data/citiesd.js"></script>
+<script src="../../proj4js-combined.js"></script>
+<script src="../../dbcartasvg.js"></script>
+<table><tr><td id="mcont"></td></tr></table>
+<script type='text/javascript'>
+  var allmaps = [];
+  function initmaps(){
+    addMetaTags('Страны мира, highmaps');
+    for(var i in allmaps){
+      allmaps[i]();
+    }
+  }
+  if(window.addEventListener) {
+    window.addEventListener('load', initmaps, false);
+  } else {
+    window.attachEvent('onload', initmaps);
+  }
+</script>
+<script type="text/javascript">
+  var dw;
+  // domap tooltip
+  var el = document.createElement('div');
+  el.id = 'maptooltip';
+  el.style.padding = '5px';
+  el.style.color = '#333333';
+  el.style.font = '12px Verdana';
+  el.style.border = '2px solid rgba(19,64,117,0.5)';
+  el.style.borderRadius = '4px';
+  el.style.backgroundColor = 'rgba(250,250,250,0.9)';
+  el.style.position = 'absolute';
+  el.style.zIndex = '10000';
+  el.style.display = 'none';
+  el.onmousemove = function(){ this.innerHTML = ''; };
+  document.body.appendChild(el);
+  // tooltip under cursor
+  function infobox(ev) {
+    var mtip = document.getElementById('maptooltip');
+    if (dw.m.pmap) {
+      mtip.innerHTML = dw.m.pmap.ev.target.getAttribute('class');
+      mtip.style.display = 'block';
+      mtip.style.left = ev.clientX + window.pageXOffset + 'px';
+      mtip.style.top = ev.clientY + window.pageYOffset - mtip.offsetHeight * 1.2 + 'px';
+    } else {
+      mtip.style.display = 'none';
+    }
+  }
+  // density color by country
+  function densityColor(cntryname) {
+    var ds = INFOCNT[cntryname] ? INFOCNT[cntryname][0] : 0;
+    return (
+      (ds < 3) ? 'rgb(243,245,248)' :
+      (ds < 10) ? 'rgb(208,217,227)' :
+      (ds < 30) ? 'rgb(162,179,200)' :
+      (ds < 100) ? 'rgb(137,159,186)' :
+      (ds < 300) ? 'rgb(113,140,172)' :
+      (ds < 1000) ? 'rgb(66,102,145)' : 'rgb(19,64,117)');
+  };
+  function draw() {
+    // countries
+    for (var i=0; i<COUNTRIES.length; i++) {
+      var mcntryname = COUNTRIES[i][3],
+          mpart = COUNTRIES[i],
+          mabbr = mpart[1],
+          mcoords = mpart[2];
+      var dclr = densityColor(mcntryname);
+      var pts = dw.interpolateCoords(mcoords, true, 10);
+      // add new layers
+      var cntry = dw.append('polygon', {
+        class: mcntryname,
+        points: pts.join(' '),
+        fill: dclr,
+        stroke: 'silver'
+      });
+      dw.extend(cntry, {
+        onmousemove: function(ev){
+          dw.doMap(ev, {
+            fill: 'rgb(255,127,0)',
+            stroke: 'yellow'
+          });
+          var mcntryname = this.getAttribute('class');
+          var label = mcntryname;
+          if (CITIES[mcntryname]) // cities count
+            label += '<br>' + CITIES[mcntryname].length + ' городов';
+          if (INFOCNT[mcntryname]) // density
+            label += '<br>' + 'Плотность населения: ' + INFOCNT[mcntryname][0];
+          this.setAttribute('class', label);
+        }
+      });
+    };
+  };
+  
+  dw = new dbCartaSvg({
+    id: 'mcont',
+    bg: 'white',
+    sbarpos: 'left'
+  });
+  // events
+  dw.extend(dw.root, {
+    onmousemove: function(ev){
+      dw.mousemove(ev);
+      infobox(ev); // show/hide tooltip
+    }
+  });
+  allmaps.push(draw);
+</script>
+</body>
+</html>

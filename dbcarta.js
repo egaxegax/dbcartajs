@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas dymanic object map v1.8.7.
+ * dbCartajs HTML5 Canvas vector object map v2.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
@@ -84,7 +84,6 @@ function dbCarta(cfg) {
     /**
      * Vars store.
      * User defines {
-     *   marea - area info {ftype, ftag, pts, desc} for doMap
      *   bgimg - bg image for drag (mflood ref)
      * }
      */
@@ -103,9 +102,9 @@ function dbCarta(cfg) {
     /**
      * Stores
      */
-    clfunc: {}, // callbacks
+    clfunc: {}, // user callbacks
     mflood: {}, // obj draw
-    marea: {},  // map area
+    marea: {},  // area info {ftype, ftag, pts, desc} for doMap
     /*
      * Proj4 defs
      */
@@ -152,7 +151,7 @@ function dbCarta(cfg) {
                pts[1] / ch * ph ];
     },
     /**
-    * Dash support.
+    * Init dash support.
     */
     setDashLine: function(dashlist) {
       if ('setLineDash' in this.ctx)
@@ -161,7 +160,7 @@ function dbCarta(cfg) {
         this.ctx.mozDash = dashlist;
     },
     /**
-    * Add meridians info to mflood.
+    * Return meridians info for loadCarta.
     */
     createMeridians: function () {
       var lonlat = [];
@@ -236,6 +235,9 @@ function dbCarta(cfg) {
       this.m.doreload = false;
       if (this.cfg.rbar) this.paintBar();
     },
+    /**
+     * Rotate map on ANGLE in degrees.
+     */
     rotateCarta: function(angle) {
       var centerof = this.centerOf();
       this.ctx.translate(centerof[0] - this.m.offset[0], centerof[1] - this.m.offset[1]);
@@ -264,7 +266,7 @@ function dbCarta(cfg) {
     */
     centerCarta: function(cx, cy, doscale) {
       var centerof = this.centerOf();
-      var offx = centerof[0] - cx;
+      var offx = centerof[0] - cx,
           offy = centerof[1] - cy;
       if (doscale) {
         offx /= this.m.scale;
@@ -353,8 +355,8 @@ function dbCarta(cfg) {
         return;
       this.m.tmap = Number(new Date());
       var fkey; // current map id
-      var cx = -this.m.offset[0] - this.m.scaleoff[0] + pts[0] / this.m.scale,
-          cy = -this.m.offset[1] - this.m.scaleoff[1] + pts[1] / this.m.scale;
+      var cx = pts[0]/this.m.scale - this.m.offset[0] - this.m.scaleoff[0],
+          cy = pts[1]/this.m.scale - this.m.offset[1] - this.m.scaleoff[1];
       // points func
       var addpoints = function(self, fkey, domap) {
         var m = self.marea[fkey];
@@ -473,12 +475,13 @@ function dbCarta(cfg) {
       this.ctx.restore();
     },
     /**
-    * Draw right bar with moves and scale buttons.
+    * Draw right bar with scale buttons.
     */
     paintBar: function() {
-      var cw = this.width,
-          ch = this.height,
-          h = ch/6,
+      var sz = this.sizeOf(),
+          cw = sz[2],
+          ch = sz[3];
+      var h = ch/6,
           w = h/2,
           tleft = cw - w - w/10,
           ttop = ch/2 - h/2,
@@ -661,9 +664,10 @@ function dbCarta(cfg) {
      */
     chkBar: function(pts, doaction) {
       if (!this.cfg.rbar) return;
-      var cw = this.width,
-          ch = this.height,
-          h = ch/6,
+      var sz = this.sizeOf(),
+          cw = sz[2],
+          ch = sz[3];
+      var h = ch/6,
           w = h/2,
           tleft = cw - w - w/10,
           ttop = ch/2 - h/2,
@@ -676,9 +680,9 @@ function dbCarta(cfg) {
         if (my > h/2 - w/6 && my < h/2 + w/6) { // home
           zoom = 1;
         } else if (my > 0 && my < h/2) { // plus
-          if (zoom < 50) zoom += 0.5;
+          if (zoom < 50) zoom += 0.1;
         } else if (my > h/2 && my < h) { // minux
-          if (zoom > -18) zoom -= 0.5;
+          if (zoom > -18) zoom -= 0.1;
         }
         zoom = (zoom > 1 ? zoom : 1/(2-zoom));
         this.scaleCarta(1); // fix labels
@@ -699,8 +703,8 @@ function dbCarta(cfg) {
         var mpts = this.mflood['.ZoomBox']['pts'];
         var rect = [ mpts[0][0], mpts[0][1],
                      mpts[2][0], mpts[2][1] ];
-        var cx = -this.m.offset[0] - this.m.scaleoff[0] + pts[0] / this.m.scale,
-            cy = -this.m.offset[1] - this.m.scaleoff[1] + pts[1] / this.m.scale;
+        var cx = pts[0]/this.m.scale - this.m.offset[0] - this.m.scaleoff[0],
+            cy = pts[1]/this.m.scale - this.m.offset[1] - this.m.scaleoff[1];
         if (((cx > rect[0] && cx < rect[2]) || (cx > rect[2] && cx < rect[0])) &&
             ((cy > rect[1] && cy < rect[3]) || (cy > rect[3] && cy < rect[1]))) {
           if (!doaction) return mpts;
@@ -801,8 +805,8 @@ function dbCarta(cfg) {
         var coords = [ (pts[0] - this.m.halfX) / this.m.delta,
                       -(pts[1] - this.m.halfY) / this.m.delta ];
       } else {
-        var coords = [ (pts[0] / this.m.scale - this.m.halfX / this.m.scale - this.m.offset[0]) / this.m.delta,
-                      -(pts[1] / this.m.scale - this.m.halfY / this.m.scale - this.m.offset[1]) / this.m.delta ];
+        var coords = [ (pts[0]/this.m.scale - this.m.halfX/this.m.scale - this.m.offset[0]) / this.m.delta,
+                      -(pts[1]/this.m.scale - this.m.halfY/this.m.scale - this.m.offset[1]) / this.m.delta ];
       }
       if (dotransform && this.project != 0 && coords[0] != 0 && coords[1] != 0) {
         if (!(coords = this.transformCoords(String(this.project), 'epsg:4326', coords))) return;
@@ -810,17 +814,17 @@ function dbCarta(cfg) {
       return coords;
     },
     /**
-     * Return spherical arc in radians between 2 points in degrees.
+     * Return spherical arc between CRD1 and CRD2 in degrees.
      */
-    distance: function(coords2) {
-      var x = coords2[0][0] * Math.PI/180.0,
-          y = coords2[0][1] * Math.PI/180.0,
-          x1 = coords2[1][0] * Math.PI/180.0,
-          y1 = coords2[1][1] * Math.PI/180.0;
+    distance: function(coord1, coord2) {
+      var x = coord1[0] * Math.PI/180.0,
+          y = coord1[1] * Math.PI/180.0,
+          x1 = coord2[0] * Math.PI/180.0,
+          y1 = coord2[1] * Math.PI/180.0;
       return Math.acos(Math.cos(y) * Math.cos(y1) * Math.cos(x - x1) + Math.sin(y) * Math.sin(y1)) * 180.0/Math.PI;
     },
     /**
-    * Approx. (and convert to points if DOPOINTS) coords with STEP (deg.).
+    * Interpolate (and convert to points if DOPOINTS) coords with STEP in degrees.
     */
     interpolateCoords: function(coords, dopoints, step) {
       var i, pts, interpol_pts = [];
@@ -835,7 +839,7 @@ function dbCarta(cfg) {
               y = coords[i][1],
               x1 = coords[j][0],
               y1 = coords[j][1];
-          var d = this.distance([[x, y], [x1, y1]]),
+          var d = this.distance([x, y], [x1, y1]),
               scalestep = 1;
           if (d > step)
             scalestep = parseInt(d / step);
@@ -851,6 +855,9 @@ function dbCarta(cfg) {
       }
       return interpol_pts;
     },
+    /**
+     * Reproject COORDS from SOURCE to DEST proj4 string definition.
+     */
     transformCoords: function(sourcestr, deststr, coords) {
       if ('Proj4js' in window) {
         var sourceproj = this.projload[sourcestr],
@@ -874,7 +881,7 @@ function dbCarta(cfg) {
         return coords;
     },
     /**
-    * Return new COORDS rotated around Z-axis with ANGLE relative to center of [CX,CY].
+    * Return new COORDS rotated around Z-axis with ANGLE relative to CENTEROF.
     */
     rotateCoords: function(coords, angle, centerof) {
       var roll = angle * Math.PI/180,
@@ -906,8 +913,8 @@ function dbCarta(cfg) {
             if (this.m.bgimg && this.m.bgimg.pts && this.chkPts(this.m.bgimg.pts[0]) && this.chkPts(this.m.bgimg.pts[1])) { // bg img
               this.paintImage(this.m.mimg, [[mx + this.m.bgimg.pts[0][0], my + this.m.bgimg.pts[0][1]], [mx + this.m.bgimg.pts[1][0], my + this.m.bgimg.pts[1][1]]]);
             } else { // snapshot
-              var mpts = [ -this.m.offset[0] - this.m.scaleoff[0] + mx,
-                           -this.m.offset[1] - this.m.scaleoff[1] + my ];
+              var mpts = [ mx - this.m.offset[0] - this.m.scaleoff[0],
+                           my - this.m.offset[1] - this.m.scaleoff[1] ];
               var rotate = this.m.rotate;
               this.rotateCarta(-rotate);
               mpts = this.rotateCoords(mpts, -rotate, [mpts[0] - mx, mpts[1] - my]);
@@ -917,8 +924,8 @@ function dbCarta(cfg) {
           }
         }
         if (this.m.mzoom) { // zoombox
-          var cx = -this.m.offset[0] - this.m.scaleoff[0] + this.m.mpts[0] / this.m.scale,
-              cy = -this.m.offset[1] - this.m.scaleoff[1] + this.m.mpts[1] / this.m.scale;
+          var cx = this.m.mpts[0]/this.m.scale - this.m.offset[0] - this.m.scaleoff[0],
+              cy = this.m.mpts[1]/this.m.scale - this.m.offset[1] - this.m.scaleoff[1];
           this.mflood['.ZoomBox'] = {
             'ftype': '.ZoomBox',
             'pts': [[cx, cy], [cx + dx, cy], [cx + dx, cy + dy], [cx, cy + dy]]
@@ -1002,7 +1009,7 @@ function dbCarta(cfg) {
         delta = -ev.detail / 3;
       }
       var zoom = (this.m.scale > 1 ? this.m.scale : 2-1/this.m.scale);
-      zoom += delta * 0.5;
+      zoom += delta * 0.1;
       zoom = (zoom > 1 ? zoom : 1/(2-zoom));
       this.scaleCarta(1); // fix labels
       this.scaleCarta(zoom);

@@ -4,6 +4,8 @@
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <title>dbCartajs - Карта метро Тбилиси</title>
 <script type="text/javascript" src="../dbcarta.js"></script>
+<script src="data/google_counter.js"></script>
+<script src="data/metatags.js"></script>
 </head>
 <body>
 <select id="tbilisimetro-stationlist"><option value="">Выберите...</option></select>
@@ -11,6 +13,7 @@
 <script type='text/javascript'>
   var allmaps = [];
   function initmaps(){
+    addMetaTags('Карта метро, Схема метро Тбилиси');
     for(var i in allmaps){
       allmaps[i]();
     }
