@@ -759,7 +759,7 @@ var MLABEL=[
 ['monorail_label','mn',[],'M1',[-26,101]]
 ];
 var MSTATIONS=[
-['s1','Ulitsa_Podbelskogo',[[102,85]],'Улица Подбельского',null,1],
+['s1','Bulvar_Rokossovskogo',[[102,85]],'Бульвар Рокоссовского',null,1],
 ['s1','Cherkizovskaya',[[94.16,77.15]],'Черкизовская',null,1],
 ['s1','Preobrazhenskaya_Ploshchad',[[86.31,69.31]],'Преображенская площадь',null,1],
 ['s1_1','Sokolniki',[[76.37,59.36]],'Сокольники',null,1],

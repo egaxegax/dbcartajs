@@ -1093,7 +1093,7 @@ var RLABEL=[
 ];
 var MSTATIONS=[
 // Metro
-['s1','Ulitsa_Podbelskogo',[[69,103]],'Улица Подбельского',null,1],
+['s1','Bulvar_Rokossovskogo',[[69,103]],'Бульвар Рокоссовского',null,1],
 ['s1_2','Komsomolskaya',[[51.875,46.96]],'Комсомольская',null,1],
 ['s1_1','Chistye_Prudy',[[29.732,25]],'Чистые пруды',null,1],
 ['s1_2','Lubyanka',[[14,9.39]],'Лубянка',null,1],
