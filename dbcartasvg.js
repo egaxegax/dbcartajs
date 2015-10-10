@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 SVG vector object map v2.0.1.
+ * dbCartajs HTML5 SVG vector object map v2.0.2.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
@@ -622,6 +622,11 @@ function dbCartaSvg(cfg) {
     }
   });
   root.addEventListener('DOMMouseScroll', root.mousewheel, false); // firefox
+  root.addEventListener('touchmove', root.touchmove, false);
+  root.addEventListener('touchstart', root.touchstart, false);
+  root.addEventListener('touchend', root.touchend, false);
+  root.addEventListener("touchleave", root.touchend, false);
+
   this.paintBar();
   return this;
 }
