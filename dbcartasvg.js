@@ -621,6 +621,7 @@ function dbCartaSvg(cfg) {
       if (!self.m.dotouch) self.mouseup(ev);
     }
   });
+  root.addEventListener('mousewheel', root.mousewheel, false);
   root.addEventListener('DOMMouseScroll', root.mousewheel, false); // firefox
   root.addEventListener('touchmove', root.touchmove, false);
   root.addEventListener('touchstart', root.touchstart, false);
