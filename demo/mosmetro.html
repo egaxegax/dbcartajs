@@ -327,19 +327,20 @@ function init() {
       dw.paintCoords(dd);
     }
   });
-  dw.loadCarta([{0:'.Image', 1:'bg'}]); // first layer
-//  dw.loadCarta(MLINES);
+//  dw.loadCarta([{0:'.Image', 1:'bg'}]); // first layer
+  dw.loadCarta(MLINES);
 //  dw.loadCarta(MLEGEND);
   dw.loadCarta(MLABEL);
   dw.loadCarta(MSTATIONS);
+  dw.draw();
   // bgimg from mlines
-  var im = new Image();
-  im.src = IMGDATA['mosmetro'];
-  im.onload = function() {
-    dw.loadCarta([{0:'.Image', 1:'bg', 2:[[-174.65,155.35],[170.2,-199.65]], 6:this}]);
-    dw.m.bgimg = dw.mflood['.Image_bg']; // mark as bg
-    dw.draw();
-  };
+//  var im = new Image();
+//  im.src = IMGDATA['mosmetro'];
+//  im.onload = function() {
+//    dw.loadCarta([{0:'.Image', 1:'bg', 2:[[-174.65,155.35],[170.2,-199.65]], 6:this}]);
+//    dw.m.bgimg = dw.mflood['.Image_bg']; // mark as bg
+//    dw.draw();
+//  };
   
   // fill station list
   MSTATIONS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1});
