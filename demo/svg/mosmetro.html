@@ -13,10 +13,9 @@
 <script src="../data/google_counter.js"></script>
 <script src="../data/metatags.js"></script>
 </head>
-<body>
+<table><tr><td id="mcont"></td></tr></table>
 <script src="../data/mosmetro.js"></script>
 <script src="../../dbcartasvg.js"></script>
-<table><tr><td id="mcont"></td></tr></table>
 <script type='text/javascript'>
   var allmaps = [];
   function initmaps(){
@@ -256,14 +255,6 @@
         'stroke-width': mopt[ftype].width,
         d: path
       });
-//      dw.extend(o, {
-//        onmousemove: function(ev){
-//          dw.doMap(ev, {
-////            fill: 'rgb(255,127,0)',
-//            stroke: 'yellow'
-//          });
-//        }
-//      });
     };
     // stations
     for (var i=0; i<MSTATIONS.length; i++) {
@@ -312,7 +303,7 @@
    
   dw = new dbCartaSvg({
     id: 'mcont',
-//    height: document.getElementById('mcont').offsetHeight,
+    height: document.getElementById('mcont').offsetHeight,
     sbarpos: 'left',
     bg: 'white',
     scalebg: 'rgba(100,200,100,0.2)'

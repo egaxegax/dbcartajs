@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 SVG vector object map v2.
+ * dbCartajs HTML5 SVG vector object map v2.0.1.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
@@ -8,7 +8,7 @@
 var SVG_NS = 'http://www.w3.org/2000/svg';
 
 function dbCartaSvg(cfg) {
-  var cont, root, vp,
+  var el, cont, root, vp,
       self = this;
   var extend = function(dst, src){
     if (!src) {
@@ -33,25 +33,27 @@ function dbCartaSvg(cfg) {
     if (!at) {
       at = name;
       name = parent;
-      parent = vp || root || cont;
+      parent = vp || root;
     }
     var el = document.createElementNS(SVG_NS, name);
-    parent.appendChild(el);
+    if (parent) parent.appendChild(el);
     attr(el, at);
     return el;
   };
   cfg = cfg||{};
-  cont = document.getElementById(cfg.id);
+  el = document.getElementById(cfg.id);
+  cont = document.createElement('div'); // container
+  if (el) el.appendChild(cont);
   // root node
-  root = append('svg', {
-    width: cfg.width ? cfg.width : cont.offsetWidth,
-    height: cfg.height ? cfg.height : cont.offsetWidth / 2.0,
+  root = append(cont, 'svg', {
+    width: cfg.width ? cfg.width : el.offsetWidth,
+    height: cfg.height ? cfg.height : el.offsetWidth / 2.0,
     version: '1.1',
     xlmns: SVG_NS
   });
   root.style.backgroundColor = cfg.bg||'rgb(186,196,205)';
   // child
-  vp = append('g', {
+  vp = append(root, 'g', {
     width: root.getAttribute('width'),
     height: root.getAttribute('height')
   });
@@ -263,21 +265,24 @@ function dbCartaSvg(cfg) {
           anglestep = Math.PI/cols;
       var mx, my; // last pos
       var pts = [];
-      for (var i=-6; i<=cols+6; i++) // plus round
+      // plus round
+      for (var i=-6; i<=cols+6; i++)
         pts.push(mx = (w/2 * Math.cos(i * anglestep)), my = (-w/2 * Math.sin(i * anglestep)));
       pts.push(-w/5, -d/2); pts.push(-d/2, -d/2); pts.push(-d/2, -w/5);
       pts.push(d/2, -w/5);  pts.push(d/2, -d/2);  pts.push(w/5, -d/2);
       pts.push(w/5, d/2);   pts.push(d/2, d/2);   pts.push(d/2, w/5);
       pts.push(-d/2, w/5);  pts.push(-d/2, d/2);  pts.push(-w/5, d/2);
       pts.push(-w/5, -d/2); pts.push(mx, my);
+      // minus round
       for (var i=-6; i<=-6; i++)
         pts.push(-w/2 * Math.cos(i * anglestep), h/2 + w/2 * Math.sin(i * anglestep));
       pts.push(-w/5, h/2 - d/2); pts.push(w/5, h/2 - d/2);
       pts.push(w/5, h/2 + d/2);  pts.push(-w/5, h/2 + d/2);
       pts.push(-w/5, h/2 - d/2);
-      for (var i=-6; i<=cols+6; i++) // minus round
+      for (var i=-6; i<=cols+6; i++)
         pts.push(mx = (-w/2 * Math.cos(i * anglestep)), my = (h/2 + w/2 * Math.sin(i * anglestep)));
-      for (var i=0; i<=cols; i++) // home round
+      // home round
+      for (var i=0; i<=cols; i++)
         pts.push(w/6 * Math.cos(i * 2.0 * anglestep), h/2 - h/4 + w/6 * Math.sin(i * 2.0 * anglestep));
       pts.push(mx, my);
       var dx = tleft + w/2,

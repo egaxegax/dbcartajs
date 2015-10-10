@@ -94,7 +94,7 @@ function init() {
   col.colSpan = '10';
   col.id = 'mcol';
   col.style.padding = '0';
-  col.style.verticalAlign = 'top';
+  col.style.verticalAlign = 'middle';
   row.appendChild(col);
   document.body.appendChild(mtab);
 
@@ -138,7 +138,7 @@ function init() {
     }
   }
 
-  dw = new dbCarta({id:'mcol', height:col.offsetHeight});
+  dw = new dbCarta({id:'mcol'});
   dw.extend(dw.mopt, {'.Latitude': {fg: 'white', width: .25}});
   // worldmap img
   var im = new Image();

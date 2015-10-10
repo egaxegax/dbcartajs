@@ -16,6 +16,8 @@
 <body>
 <script src="../../proj4js-combined.js"></script>
 <script src="../../dbcartasvg.js"></script>
+<script src="../data/continents.js"></script>
+<script src="../data/imgmap.js"></script>
 <table><tr><td id="mcont"></td></tr></table>
 <script type='text/javascript'>
   var allmaps = [];
@@ -40,17 +42,54 @@
       dw.vp.removeChild(childs[i]);
     }
     childs = [];
+
+    if (dw.isSpherical()) {
+      // globus boundary
+      var o = dw.paintBound();
+      if (o) childs.push( o );
+      // conts
+      for (var i=0; i<CONTINENTS.length; i++) {
+        var mcoords = CONTINENTS[i][2];
+        var pts = dw.interpolateCoords(mcoords, true, 10);
+        // add new layers
+        var land = dw.append('polygon', {
+          points: pts.join(' '),
+          fill: 'silver',
+          stroke: 'silver'
+        });
+        childs.push( land );
+      };
+    };
     // bg image
-    var pts = [dw.toPoints([180, -132]),
-               dw.toPoints([-180, 132])];
-    var img = dw.append('image', {
-      width:  pts[0][0]-pts[1][0],
-      height: pts[0][1]-pts[1][1],
-      x: pts[1][0],
-      y: pts[1][1],
-      preserveAspectRatio:'none'
-    });
-    img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../data/img/wrld-small-mill.jpg');
+    var crds, src;
+    if (dw.project == 0){
+      src = 'wrld_small';
+      crds = [[-180,90],[180,-90]];
+    } else if (dw.project == 101) {
+      src = 'wrld_small_merc';
+      crds = [[-179.99,168],[179.99,-168]];
+    } else if (dw.project == 102) {
+      src = 'wrld_small_mill';
+      crds = [[-179.99,132],[179.99,-132]];
+    } else if (dw.project == 204) {
+      src = 'wrld_small_moll';
+      crds = [[-162,81],[162,-81]];
+    };
+
+    if (src) { // if img exists load it
+      var pts = [dw.toPoints(crds[1]), dw.toPoints(crds[0])];
+      var img = dw.append('image', {
+        width:  pts[0][0]-pts[1][0],
+        height: pts[0][1]-pts[1][1],
+        x: pts[1][0],
+        y: pts[1][1],
+        preserveAspectRatio:'none'
+      });
+
+      img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../' + IMGMAP[src]);
+      childs.push( img );
+    }
+
     // meridians
     var merids = dw.createMeridians();
     for (var i=0; i<merids.length; i++) {
@@ -64,9 +103,6 @@
       });
       childs.push( o );
     }
-    // globus boundary
-    var o = dw.paintBound();
-    if (o) childs.push( o );
     //cities
     var cities = [
       [[-73.905,40.708], 'Нью-Йорк'],
@@ -79,6 +115,7 @@
       [[15.285,-4.285], 'Браззавиль'] ];
     for (var i=0; i<cities.length; i++){
       var pts = dw.toPoints(cities[i][0], true);
+      if (!dw.chkPts(pts)) continue;
       var city = dw.append('circle', {
         class: cities[i][1],
         cx: pts[0], cy: pts[1], r: 3, fill: 'rgb(240,220,0)'
@@ -87,7 +124,7 @@
         x: pts[0], y: pts[1], dx: 4, dy: 3, fill: 'rgb(255,155,128)', 
         'font-family': 'sans-serif', 'font-size': '10px'
       });
-      label.appendChild(document.createTextNode(city.getAttribute('class')))
+      label.appendChild(document.createTextNode(city.getAttribute('class')));
       childs.push( label );
       dw.extend(city, {
         onmousemove: function(ev){
@@ -100,9 +137,68 @@
     }
   };
   
+  // change proj.
+  function chProj(ev){
+    dw.initProj(ev.target.name, '+lon_0=0 +lat_0=0'); //set proj
+    draw();
+  }
+  
+  var mcont = document.getElementById('mcont');
+  var dx = (mcont.offsetWidth*0.98 - 50) + 'px';
+
+  var el = document.createElement('input');
+  mcont.appendChild(el);
+  el.type = 'button';
+  el.name = '203';
+  el.value = 'ortho';
+  el.style.position = 'fixed';
+  el.style.top = '5%';
+  el.style.left = dx;
+  el.onclick = chProj;
+
+  var el = document.createElement('input');
+  mcont.appendChild(el);
+  el.type = 'button';
+  el.name = '101';
+  el.value = 'merc';
+  el.style.position = 'fixed';
+  el.style.top = '12%';
+  el.style.left = dx;
+  el.onclick = chProj;
+
+  var el = document.createElement('input');
+  mcont.appendChild(el);
+  el.type = 'button';
+  el.name = '102';
+  el.value = 'mill';
+  el.style.position = 'fixed';
+  el.style.top = '19%';
+  el.style.left = dx;
+  el.onclick = chProj;
+
+  var el = document.createElement('input');
+  mcont.appendChild(el);
+  el.type = 'button';
+  el.name = '0';
+  el.value = 'lonlat';
+  el.style.position = 'fixed';
+  el.style.top = '26%';
+  el.style.left = dx;
+  el.onclick = chProj;
+
+  var el = document.createElement('input');
+  mcont.appendChild(el);
+  el.type = 'button';
+  el.name = '204';
+  el.value = 'moll';
+  el.style.position = 'fixed';
+  el.style.top = '33%';
+  el.style.left = dx;
+  el.onclick = chProj;
+  
   dw = new dbCartaSvg({
     id: 'mcont',
-//    height: document.getElementById('mcont').offsetHeight,
+    height: document.getElementById('mcont').offsetHeight,
     sbarpos: 'left'
   });
   dw.initProj(102, '+lon_0=0 +lat_0=0'); //miller proj
