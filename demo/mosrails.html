@@ -321,21 +321,22 @@ function init() {
     mcoord.innerHTML = label;
     dw.paintCoords(sd);
   };
-  dw.loadCarta([{0:'.Image', 1:'bg'}]); // first layer
-//  dw.loadCarta(RLINES);
+//  dw.loadCarta([{0:'.Image', 1:'bg'}]); // first layer
+  dw.loadCarta(RLINES);
   dw.loadCarta(RLABEL);
   dw.loadCarta(MSTATIONS);
-  for(var i in RSTATIONS)
+  for(var i=0; i<RSTATIONS.length; i++)
     dw.loadCarta(RSTATIONS[i][1]);
+  dw.draw();
 
   // bgimg from mlines
-  var im = new Image();
-  im.src = IMGDATA['mosrails'];
-  im.onload = function() {
-    dw.loadCarta([{0:'.Image', 1:'bg', 2:[[-234.8,290.45],[239.8,-376.35]], 6:this}]);
-    dw.m.bgimg = dw.mflood['.Image_bg']; // mark as bg
-    dw.draw();
-  };
+//  var im = new Image();
+//  im.src = IMGDATA['mosrails'];
+//  im.onload = function() {
+//    dw.loadCarta([{0:'.Image', 1:'bg', 2:[[-234.8,290.45],[239.8,-376.35]], 6:this}]);
+//    dw.m.bgimg = dw.mflood['.Image_bg']; // mark as bg
+//    dw.draw();
+//  };
 
   // fill station list
   for(var i in RSTATIONS) {
