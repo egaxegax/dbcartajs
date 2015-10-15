@@ -5,7 +5,7 @@
  * From ru.wikipedia.org.
  */
 var INFOMST={
-'s1_Ulitsa_Podbelskogo':['1 августа 1990','−8 м'],
+'s1_Bulvar_Rokossovskogo':['1 августа 1990','−8 м'],
 's1_Cherkizovskaya':['1 августа 1990','−9 м'],
 's1_Preobrazhenskaya_Ploshchad':['31 декабря 1965','−8 м'],
 's1_1_Sokolniki':['15 мая 1935','−9 м'],
@@ -137,6 +137,7 @@ var INFOMST={
 's7_Vykhino':['31 декабря 1966','0 м'],
 's7_1_Lermontovsky_Prospekt':['9 ноября 2013',''],
 's7_Zhulebino':['9 ноября 2013',''],
+'s7_8_Kotelniki':['21 сентября 2015',''],
 's8_6_Park_Pobedy':['6 мая 2003','−73,6 м'],
 's8_5_Delovoy_Tsentr':['31 января 2014',''],
 's8_6_Tretyakovskaya':['25 января 1986','−46 м'],
