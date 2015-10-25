@@ -10,7 +10,7 @@ var addMetaTags = function(text){
     'HTML5 Canvas+SVG vector map with some Proj4js projections. ' +
     'Pure javascript and serverless';
   document.getElementsByTagName('head')[0].appendChild(meta);
-  // 
+  //
   var meta = document.createElement('meta');
   meta.name = 'keywords';
   meta.content = text + ', ' +
