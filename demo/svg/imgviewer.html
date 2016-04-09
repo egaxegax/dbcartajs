@@ -1,0 +1,149 @@
+<!--
+ Image viewer. SVG version.
+ egax@bk.ru, 2016.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<title>Просмотровщик картинок - HTML5 SVG vector map</title>
+<link rel='shortcut icon' href='data/img/fav.ico?1422400155' />
+<style type="text/css">html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
+<style type="text/css">img{border:2px transparent solid} img:hover{border:2px red solid}</style>
+<script src="../data/google_counter.js"></script>
+<script src="../data/metatags.js"></script>
+</head>
+<body>
+<script src="../../dbcartasvg.js"></script>
+<script>
+var childs = [];
+function setka() {
+  // meridians
+  var merids = dw.createMeridians(ratio);
+  for (var i=0; i<merids.length; i++) {
+    var pts = dw.interpolateCoords(merids[i], true, 10),
+        path = ('M ' + pts[0] + ' L ' + pts).replace(/,/g, ' ');
+    var o = dw.append('path', {
+      fill: 'transparent',
+      stroke: 'rgba(164,164,164,0.6)',
+      'stroke-dasharray': '4',
+      d: path
+    });
+    childs.push( o );
+  }
+}
+function init() {
+  var mtab = document.createElement('table');
+  mtab.style.borderCollapse = 'collapse';
+  var row = document.createElement('tr');
+  row.style.height = '1px';
+  row.style.backgroundColor = '#d2e0f0';
+  mtab.appendChild(row);
+
+  var col = document.createElement('td');
+  col.colSpan = '10';
+  var el = document.createElement('h2');
+  el.appendChild(document.createTextNode("Просмотровщик"));
+  el.style.margin = '0';
+  col.appendChild(el);
+  row.appendChild(col);
+
+  var col = document.createElement('td');
+  col.width = '1%';
+  col.align = 'center';
+  var el = document.createElement('button');
+  el.appendChild(document.createTextNode("Сетка"));
+  el.onclick = function(o) {
+    setka();
+  };
+  col.appendChild(el);
+  row.appendChild(col);
+
+  var row = document.createElement('tr');
+  mtab.appendChild(row);
+
+  var col = document.createElement('td');
+  col.width = '120px';
+  col.style.padding = '0';
+  col.style.verticalAlign = 'top';
+  row.appendChild(col);
+  var md = document.createElement('div');
+  col.appendChild(md);
+
+  var col = document.createElement('td');
+  col.colSpan = '10';
+  col.id = 'mcol';
+  col.style.padding = '0';
+  col.style.verticalAlign = 'middle';
+  row.appendChild(col);
+  document.body.appendChild(mtab);
+
+  md.style.height = col.offsetHeight + 'px';
+  md.style.overflow = 'auto';
+
+  // urls img
+  var imgurls = [
+    // mail.ru
+    'https://content-10.foto.my.mail.ru/community/gid_puteshestvii/_groupsphoto/b-25434.jpg',
+    'https://content-23.foto.my.mail.ru/community/gid_puteshestvii/_groupsphoto/b-40.jpg',
+    'https://content-18.foto.my.mail.ru/community/gid_puteshestvii/_groupsphoto/b-51.jpg',
+    'https://content-10.foto.my.mail.ru/community/mir/_groupsphoto/b-395.jpg',
+    // windows walls
+    'file:///C:/Windows/Web/Wallpaper/Theme1/img1.jpg',
+    'file:///C:/Windows/Web/Wallpaper/Theme1/img2.jpg',
+    'file:///C:/Windows/Web/Wallpaper/Theme1/img3.jpg',
+    'file:///C:/Windows/Web/Wallpaper/Theme1/img4.jpg'
+  ];
+  
+  // fill list
+  for (var k in imgurls) {
+    var el2 = document.createElement('img');
+    el2.style.display = 'block';
+    el2.width = 100;
+    el2.src = imgurls[k];
+    el2.onclick = function(){
+      im.src = this.src;
+    };
+    el2.onload = function(){
+      md.appendChild(this);
+    };
+  }
+
+  dw = new dbCartaSvg({
+    id:'mcol',
+    bg: 'transparent',
+    sbarpos: 'left'
+  });
+  // img
+  var im = new Image();
+  im.src = imgurls[0]; // default img
+  im.onload = function() {
+    for (var i=0; i<childs.length; i++) {
+      dw.vp.removeChild(childs[i]);
+    }
+    childs = [];
+    var ratio = this.width/this.height;
+    var crds = [[-90*ratio,90],[90*ratio,-90]],
+        pts = [dw.toPoints(crds[1]), dw.toPoints(crds[0])];
+    var img = dw.append('image', {
+      width:  pts[0][0]-pts[1][0],
+      height: pts[0][1]-pts[1][1],
+      x: pts[1][0],
+      y: pts[1][1],
+      preserveAspectRatio:'none'
+    });
+    img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.src);
+    dw.attr(img, {
+      title: "Image",
+      cursor: 'pointer'
+    });
+    childs.push(img);    
+  }
+};
+
+addMetaTags("Просмотровщик картинок, image viewer");
+init();
+
+</script>
+</body>
+</html>

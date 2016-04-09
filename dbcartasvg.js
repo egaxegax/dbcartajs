@@ -137,7 +137,7 @@ function dbCartaSvg(cfg) {
     /**
     * Return meridians coords.
     */
-    createMeridians: function () {
+    createMeridians: function() {
       var lonlat = [];
       var x = -180,
           scale_x = 180;
