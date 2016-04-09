@@ -108,6 +108,11 @@ function init() {
     'http://lh3.ggpht.com/jYrGCi0FD5EOaGaourdjhWIwqUTYzQ66NJmb-dOHrSh0Uw1rpv1Qm5eW5DCVSzyGpZlRu1qwXM0RQtUA1-g',
     'http://lh5.ggpht.com/Mbb_vJ9fWs5Hp-BUItjEvgA3d0wdrd2OLJhL9u8MfDbWQnZba9msNR8gmd6tHvyjYUSHbcObRsx9zIgeZSs',
     'http://lh4.ggpht.com/Vjcwowzd6fHMnDwOQqqa5Pil0xzXlaNGXJuka4RjYa-Pnz-_RrUsNfeFgbNmO5Vf7qadJUphQ4jpCdFpzT0B',
+    // mail.ru
+    'https://content-24.foto.my.mail.ru/community/mir/_groupsphoto/b-17373.jpg',
+    'https://content-17.foto.my.mail.ru/community/mir/_groupsphoto/b-17378.jpg',
+    'https://content.foto.my.mail.ru/community/mir/_groupsphoto/i-17417.jpg',
+    'https://content.foto.my.mail.ru/community/mir/_groupsphoto/h-17424.jpg',
     // windows walls
     'file:///C:/Windows/Web/Wallpaper/Theme1/img1.jpg',
     'file:///C:/Windows/Web/Wallpaper/Theme1/img2.jpg',
@@ -116,33 +121,26 @@ function init() {
   ];
   
   // fill list
-  for (var i=0; i<2; i++){
-    var res;
-    switch (i){
-      case 0: res = imgurls; break;
-      case 1: res = IMGMAP; break;
-    }
-    for (var k in res) {
-      var el2 = document.createElement('img');
-      el2.style.display = 'block';
-      el2.width = 100;
-      el2.src = res[k];
-      if (res[k].search('ggpht.com')==0)
-        el2.src += '=s320'; // google image size change for appspot.com
-      el2.onclick = function(){
-        im.src = this.src;
-      };
-      el2.onload = function(){
-        md.appendChild(this);
-      };
-    }
+  for (var k in imgurls) {
+    var el2 = document.createElement('img');
+    el2.style.display = 'block';
+    el2.width = 100;
+    el2.src = imgurls[k];
+    if (imgurls[k].search('ggpht.com')==0)
+      el2.src += '=s320'; // google image size change for appspot.com
+    el2.onclick = function(){
+      im.src = this.src;
+    };
+    el2.onload = function(){
+      md.appendChild(this);
+    };
   }
 
   dw = new dbCarta({id:'mcol'});
   dw.extend(dw.mopt, {'.Latitude': {fg: 'white', width: .25}});
   // worldmap img
   var im = new Image();
-  im.src = IMGMAP['wrld_small']; // default img
+  im.src = imgurls[0]; // default img
   im.onload = function() {
     var ratio = im.width/im.height;
     dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-90*ratio,90],[90*ratio,-90]], 6:this}]);

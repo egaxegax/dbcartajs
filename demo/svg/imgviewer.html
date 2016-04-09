@@ -7,7 +7,7 @@
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <title>Просмотровщик картинок - HTML5 SVG vector map</title>
-<link rel='shortcut icon' href='data/img/fav.ico?1422400155' />
+<link rel='shortcut icon' href='../data/img/fav.ico?1422400155' />
 <style type="text/css">html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
 <style type="text/css">img{border:2px transparent solid} img:hover{border:2px red solid}</style>
 <script src="../data/google_counter.js"></script>
@@ -16,20 +16,51 @@
 <body>
 <script src="../../dbcartasvg.js"></script>
 <script>
-var childs = [];
-function setka() {
-  // meridians
-  var merids = dw.createMeridians(ratio);
-  for (var i=0; i<merids.length; i++) {
-    var pts = dw.interpolateCoords(merids[i], true, 10),
-        path = ('M ' + pts[0] + ' L ' + pts).replace(/,/g, ' ');
+var childs = [], childs1 = [];
+function setka(coords) {
+  var left = coords[0][0],
+      right = coords[1][0],
+      top = coords[0][1],
+      bottom = coords[1][1];
+  var n = 3;
+  var lonlat = [];
+  var xstep = (right - left)/n,
+      ystep = (top - bottom)/n;
+  var x = left;
+  for (var i=0; i<=n; i++) {
+    var lon = [];
+    var y = bottom;
+    for (var j=0; j<=n; j++) {
+      lon.push([x, y]);
+      y += ystep;
+    }
+    lonlat.push( lon );
+    x += xstep;
+  }
+  var y = bottom;
+  for (var i=0; i<=n; i++) {
+    var lat = [];
+    var x = left;
+    for (var j=0; j<=n; j++) {
+      lat.push([x, y]);
+      x += xstep;
+    }
+    lonlat.push( lat );
+    y += ystep;
+  }
+  for (var i=0; i<childs1.length; i++)
+    dw.vp.removeChild(childs1[i]);
+  childs1 = [];
+  for (var i=0; i<lonlat.length; i++){
+    var pts = dw.interpolateCoords(lonlat[i], true, 10);
+    var path = ('M ' + pts[0] + ' L ' + pts).replace(/,/g, ' ');
     var o = dw.append('path', {
       fill: 'transparent',
       stroke: 'rgba(164,164,164,0.6)',
       'stroke-dasharray': '4',
       d: path
     });
-    childs.push( o );
+    childs1.push( o );
   }
 }
 function init() {
@@ -54,7 +85,7 @@ function init() {
   var el = document.createElement('button');
   el.appendChild(document.createTextNode("Сетка"));
   el.onclick = function(o) {
-    setka();
+    if (im) setka([[-90*im.width/im.height,90],[90*im.width/im.height,-90]]);
   };
   col.appendChild(el);
   row.appendChild(col);
@@ -88,6 +119,11 @@ function init() {
     'https://content-23.foto.my.mail.ru/community/gid_puteshestvii/_groupsphoto/b-40.jpg',
     'https://content-18.foto.my.mail.ru/community/gid_puteshestvii/_groupsphoto/b-51.jpg',
     'https://content-10.foto.my.mail.ru/community/mir/_groupsphoto/b-395.jpg',
+    'https://content-1.foto.my.mail.ru/community/mir/_groupsphoto/b-17462.jpg',
+    'https://content-7.foto.my.mail.ru/community/mir/_groupsphoto/b-17460.jpg',
+    'https://content.foto.my.mail.ru/community/mir/_groupsphoto/h-17416.jpg',
+    'https://content.foto.my.mail.ru/community/mir/_groupsphoto/h-17412.jpg',
+    'https://content-9.foto.my.mail.ru/community/mir/_groupsphoto/b-17363.jpg',
     // windows walls
     'file:///C:/Windows/Web/Wallpaper/Theme1/img1.jpg',
     'file:///C:/Windows/Web/Wallpaper/Theme1/img2.jpg',
@@ -118,9 +154,8 @@ function init() {
   var im = new Image();
   im.src = imgurls[0]; // default img
   im.onload = function() {
-    for (var i=0; i<childs.length; i++) {
+    for (var i=0; i<childs.length; i++)
       dw.vp.removeChild(childs[i]);
-    }
     childs = [];
     var ratio = this.width/this.height;
     var crds = [[-90*ratio,90],[90*ratio,-90]],

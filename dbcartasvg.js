@@ -153,15 +153,13 @@ function dbCartaSvg(cfg) {
       }
       var y = -90;
       while (y <= 90) {
-        var prev, x = -180;
-        var centerof = prev = [x, y],
-            label = y;
+        var x = -180,
+            prev = [x, y];
         while (x < scale_x) {
           x += 90;
           var lat = [prev, [x,y]],
               prev = [x, y];
           lonlat.push( lat );
-          label = centerof = undefined;
         }
         y += 30;
       }
