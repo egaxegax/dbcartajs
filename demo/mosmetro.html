@@ -140,7 +140,7 @@ function init() {
   });
   dw.style.backgroundColor = 'white';
   // define new layers
-  var route = function(o){ return dw.extend({cls: 'Line', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
+  var route = function(o){ return dw.extend({cls: 'Line', width: 6, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
       route_d = function(o){ return route(dw.extend({dash: [2,4]}, o||{})) },      
       interchange = function(o){ return route(dw.extend({fg: '#000000', join: 'round', cap: 'round', width: 8}, o||{})) },
       interchange_d = function(o) { return interchange(dw.extend({fg: '#ffffff', width: 7}, o||{})) },
