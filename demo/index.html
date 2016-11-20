@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-<meta name="description" content="Карта-Навигатор с проекциями Proj4js. HTML5 Canvas+SVG vector map with some Proj4js projections. Pure javascript and serverless">
+<meta name="description" content="Карта-Навигатор с проекциями Proj4js. Отрисовка векторных данных. Вывод изображений. Управление, масштабирование карты. HTML5 Canvas+SVG vector map with some Proj4js projections. Pure javascript and serverless">
 <meta name="keywords" content=", карта, html5, canvas, svg, 2d, vector, proj4js, projection, javascript, dbcartajs, map">
 <meta name="author" content="Grigoriy Eremin">
 <meta name="google-site-verification" content="tDIIwt3nNSOeRwaSbOPKjWIuVvKvi6E7YCLV_WOnCqE">
@@ -28,12 +28,12 @@ function listDemos() {
       var a = document.createElement('a');
       a.href = 'http://upload.wikimedia.org/wikipedia/commons/f/f3/Moscow_metro_map_ru_sb.svg';
       a.appendChild(document.createTextNode('SVG-карты'));
-      sp.appendChild(document.createTextNode('Карта Московского Метрополитена 2015 с выбором станций. Переделена с '));
+      sp.appendChild(document.createTextNode('Карта Московского Метрополитена 2016 с выбором станций. Переделена с '));
       sp.appendChild(a);
       var a = document.createElement('a');
       a.href = 'http://habrahabr.ru/post/193778';
       a.appendChild(document.createTextNode('Карта Московского Метро на Canvas'));
-      sp.appendChild(document.createTextNode(' на Wikipedia. Загружается намного быстрее оригинала. Также добавлен вывод информации о станции при наведении. ' +
+      sp.appendChild(document.createTextNode(' на Wikipedia. Добавлена линия МЦК. Загружается намного быстрее оригинала. Также добавлен вывод информации о станции при наведении. ' +
                                              'Пунктирные линии строящихся станций отображаются только в Firefox (поддержка метода setDashLine в Canvas). Подробности в статье на Хабре "'));
       sp.appendChild(a);
       sp.appendChild(document.createTextNode('".'));
