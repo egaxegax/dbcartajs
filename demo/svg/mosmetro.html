@@ -240,7 +240,7 @@
       'sMono_1': inst({fg: mopt['monorail'].fg, size: 3, anchor: ['start', 'middle']}),
       'sMCK': mck_station({anchor: ['start', 'middle']}),
       'sMCK_1': mck_station({anchor: ['start', 'top']}),
-      'sMCK_2': mck_station({anchor: ['center', 'middle']}),
+      'sMCK_2': mck_station({anchor: ['end', 'middle']}),
       'sMCK_3': mck_station({anchor: ['center', 'bottom']}),
       'sMCK_4': mck_station({anchor: ['start', 'bottom']})
     });
@@ -323,12 +323,25 @@
           label = MLABEL[i][3],
           coords = MLABEL[i][4];
       var pts = dw.toPoints(coords, true);
+      if (a = mopt[ftype].anchor) {
+        if (a[0] == 'start')    dx = 10;
+        else if (a[0] == 'center') dx = -40;
+        else if (a[0] == 'end') dx = -10;
+        if (a[1] == 'top') dy = 10;
+        else if (a[1] == 'middle') dy = 4;
+        else if (a[1] == 'bottom') dy = -10;
+      };
       var text = dw.append('text', {
-        x: pts[0]+4, y: pts[1]+4,
+        x: pts[0]+dx, y: pts[1]+dy,
         fill: mopt[ftype].labelcolor || '',
         'font-family': 'sans-serif', 'font-size': '9px',
-        'text-anchor': 'center'
+        'text-anchor': a ? a[0] : ''
       });
+      if ('rotate' in mopt[ftype]){
+        dw.attr(text, {
+          transform: 'rotate(' + mopt[ftype].rotate + ',' + pts[0] + ',' + pts[1] + ')'
+        });
+      }
       text.appendChild(document.createTextNode(label));
     };
   };

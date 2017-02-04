@@ -1167,7 +1167,7 @@ var MSTATIONS=[
 ['sMCK','Delovoy_Tsentr',[[114.3,-25]],'Андроновка ',null,1],
 ['sMCK','Shosse_Entuziastov',[[115.7,-17]],'Шоссе Энтузиастов',null,1],
 ['sMCK','Sokolinaya_Gora',[[116.3,12]],'Соколиная гора',null,1],
-['sMCK','Izmaylovo',[[106.7,48]],'Измайлово',null,1],
+['sMCK_2','Izmaylovo',[[106.7,48]],'Измайлово',null,1],
 ['sMCK','Lokomotiv',[[94.2,69.4]],'Локомотив',null,1],
 ['sMCK','Bulvar_Rokossovskogo',[[87.2,78]],'',null,1],
 ['sMCK','Izmaylovo',[[74.8,90]],'Белокаменная',null,1],
