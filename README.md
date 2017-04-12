@@ -3,6 +3,7 @@ dbCartajs
 
 HTML5 Canvas+SVG vector map viewer. Pure JavaScript and serverless.
 It uses Proj4js transformations. Supported projections:
+
  * espg:4326, longlat;
  * epsg:3875, Mercator projection;
  * mill, Miller Cylindrical projection;
@@ -12,11 +13,8 @@ It uses Proj4js transformations. Supported projections:
  * moll, Mollweide projection.
 
 Starry Sky demo include satellite-js module.<br>
-Demos at http://dbcartajs.appspot.com/.
+Demos at http://dbcartajs.appspot.com/.<br>
 Docs in wiki at https://github.com/egaxegax/dbCartajs/wiki.
-
-![ortho-ns.gif] (http://img-fotki.yandex.ru/get/9066/136640652.0/0_bf3ee_cde97104_orig "ortho-ns.gif")
-![ortho-ew.gif] (http://img-fotki.yandex.ru/get/9167/136640652.0/0_bf3ed_d4a4a2c3_orig "ortho-ew.gif")
 
 ## Usage
 
@@ -31,22 +29,25 @@ Simply download and unpack an archive, open index.html from demo folder in any b
 
 ##  Screenshots
 
+![ortho-ns.gif]( http://img-fotki.yandex.ru/get/9066/136640652.0/0_bf3ee_cde97104_orig)
+![ortho-ew.gif]( http://img-fotki.yandex.ru/get/9167/136640652.0/0_bf3ed_d4a4a2c3_orig)
+
 Mercator Projection:
 
-![merc.jpg] (https://img-fotki.yandex.ru/get/5624/136640652.1/0_12331d_b190b78a_orig "Mercator")
+![merc.jpg](https://img-fotki.yandex.ru/get/5624/136640652.1/0_12331d_b190b78a_orig )
 
 Mollweide Projection:
 
-![moll.png] (http://img-fotki.yandex.ru/get/9065/136640652.1/0_e6dd4_24ef9d71_orig "Mollweide")
+![moll.png](http://img-fotki.yandex.ru/get/9065/136640652.1/0_e6dd4_24ef9d71_orig )
 
 Starry Sky. Featured, copmlicated demo like Orbitron, Marble, Xephem but more lightweight.
 
-![starry.png] (http://img-fotki.yandex.ru/get/9802/136640652.0/0_df04b_fbe77af7_XL.png "Starry Sky")
+![starry.png](http://img-fotki.yandex.ru/get/9802/136640652.0/0_df04b_fbe77af7_XL.png )
 
 Moscow Rail Map:
 
-![mosrails.png] (http://habrastorage.org/files/5aa/e52/1b3/5aae521b3a02452d8ab24e25ac7c1c4d.png "Moscow Rail Map")
+![mosrails.png](http://habrastorage.org/files/5aa/e52/1b3/5aae521b3a02452d8ab24e25ac7c1c4d.png )
 
 Image Viewer:
 
-![imgviewer.png] (https://img-fotki.yandex.ru/get/9064/136640652.1/0_12331c_48691622_orig "Image Viewer")
+![imgviewer.png](https://img-fotki.yandex.ru/get/9064/136640652.1/0_12331c_48691622_orig )
