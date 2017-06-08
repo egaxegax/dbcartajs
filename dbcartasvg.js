@@ -343,9 +343,9 @@ function dbCartaSvg(cfg) {
         if (my > h/2 - w/6 && my < h/2 + w/6) { // home
           zoom = 1;
         } else if (my > 0 && my < h/2) { // plus
-          if (zoom < 50) zoom += 0.1;
+          if (zoom < 50) zoom += 0.5;
         } else if (my > h/2 && my < h) { // minux
-          if (zoom > -18) zoom -= 0.1;
+          if (zoom > -18) zoom -= 0.5;
         }
         zoom = (zoom > 1 ? zoom : 1/(2-zoom));
         this.scaleCarta(zoom);
