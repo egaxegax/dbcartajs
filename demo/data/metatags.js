@@ -3,9 +3,10 @@
  */
 var addMetaTags = function(text){
   // 
+  if (text) text += ', ';
   var meta = document.createElement('meta');
   meta.name = 'description';
-  meta.content = text + '. ' +
+  meta.content = text +
     'Карта-Навигатор с проекциями Proj4js. ' +
     'HTML5 Canvas+SVG vector map with some Proj4js projections. ' +
     'Pure javascript and serverless';
@@ -13,7 +14,7 @@ var addMetaTags = function(text){
   //
   var meta = document.createElement('meta');
   meta.name = 'keywords';
-  meta.content = text + ', ' +
+  meta.content = text +
     'карта, html5, canvas, svg, 2d, vector, proj4js, projection, javascript, dbcartajs, map';
   document.getElementsByTagName('head')[0].appendChild(meta);
   //

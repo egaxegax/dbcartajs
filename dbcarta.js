@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 Canvas vector object map v2.0.1.
+ * dbCartajs HTML5 Canvas vector object map. Build 170917.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
@@ -481,7 +481,7 @@ function dbCarta(cfg) {
       var sz = this.sizeOf(),
           cw = sz[2],
           ch = sz[3];
-      var h = ch/6,
+      var h = ch/4,
           w = h/2,
           tleft = cw - w - w/10,
           ttop = ch/2 - h/2,
@@ -680,9 +680,9 @@ function dbCarta(cfg) {
         if (my > h/2 - w/6 && my < h/2 + w/6) { // home
           zoom = 1;
         } else if (my > 0 && my < h/2) { // plus
-          if (zoom < 50) zoom += 0.1;
+          if (zoom < 50) zoom += 0.5;
         } else if (my > h/2 && my < h) { // minux
-          if (zoom > -18) zoom -= 0.1;
+          if (zoom > -18) zoom -= 0.5;
         }
         zoom = (zoom > 1 ? zoom : 1/(2-zoom));
         this.scaleCarta(1); // fix labels
