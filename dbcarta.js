@@ -3,7 +3,7 @@
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
- * egax@bk.ru, 2013-15.
+ * egax@bk.ru, 2013-17.
  */
 function dbCarta(cfg) {
   cfg = cfg||{};

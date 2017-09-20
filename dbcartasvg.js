@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 SVG vector object map. Build 170604.
+ * dbCartajs HTML5 SVG vector object map. Build 170921.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
@@ -288,7 +288,7 @@ function dbCartaSvg(cfg) {
       var dx = tleft + w/2,
           dy = ttop + h/4,
           path = 'M ' + pts[0] + ' ' + pts[1] + ' L ' + pts.join(' ') + ' z';
-      append(root, 'path', {
+      return append(root, 'path', {
         fill: this.cfg.scalebg,
         d: path,
         transform: 'translate (' + dx + ',' + dy + ')'
@@ -350,7 +350,7 @@ function dbCartaSvg(cfg) {
         zoom = (zoom > 1 ? zoom : 1/(2-zoom));
         this.scaleCarta(zoom);
         if (zoom == 1) {
-          var centerof = this.centerOf();
+//          var centerof = this.centerOf();
 //          this.centerCarta(centerof[0] + this.m.offset[0] - this.m.scaleoff[0], 
 //                           centerof[1] + this.m.offset[1] - this.m.scaleoff[1], true);
         }
@@ -582,6 +582,29 @@ function dbCartaSvg(cfg) {
       with (this.m) {
         delete mpts;
       }
+    },
+    savetoimage: function() {
+      if (this.cfg.sbar) this.cfg.sbar.setAttribute('fill', 'none');
+      var xml  = new XMLSerializer().serializeToString(root),
+          data = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(xml))),
+          img  = new Image();
+      if (this.cfg.sbar) this.cfg.sbar.setAttribute('fill', this.cfg.scalebg);
+      img.src = data;
+      img.onload = function() {
+        var canvas = document.createElement('canvas'),
+            ctx = canvas.getContext('2d');
+        attr(canvas, {
+          width: root.getAttribute('width'), 
+          height: root.getAttribute('height'),
+        });
+        ctx.drawImage(img, 0, 0);
+        var a = document.createElement('a');
+        a.download = 'image.png';
+        a.href = canvas.toDataURL('image/png');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      };
     }
   });
   // - events -----------------------------
@@ -639,8 +662,8 @@ function dbCartaSvg(cfg) {
   root.addEventListener('touchmove', root.touchmove, false);
   root.addEventListener('touchstart', root.touchstart, false);
   root.addEventListener('touchend', root.touchend, false);
-  root.addEventListener("touchleave", root.touchend, false);
+  root.addEventListener('touchleave', root.touchend, false);
 
-  this.paintBar();
+  this.cfg.sbar = this.paintBar();
   return this;
 }

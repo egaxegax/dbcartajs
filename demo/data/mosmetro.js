@@ -78,7 +78,7 @@ var MLINES=[
   [80,-120.5,'Q'],[74,-124,'Q'],[74,-130,'Q'],
   [74,-131,'Q'],[74,-141,'Q'],[84,-141,'Q'],
   [102,-141,'Q'],[106,-141,'Q'],[111,-147,'Q'],
-  [233,-272]
+  [133,-172]
 ]
 ],
 //
@@ -834,7 +834,7 @@ var MLEGEND=[
 ];
 var MLABEL=[
 ['moskva_canal_label','mc',[],'Канал имени Москвы',[-97,111]],
-['moskva_river_label','mr',[],'Москва-река',[111,-147]],
+['moskva_river_label','mr',[],'Москва-река',[113,-147]],
 ['yauza_river_label','yr',[],'Яуза',[59,99]],
 ['sheremetyevo_express_line_label','sheremetyevo_express',[],'Шереметьево',[-32,153]],
 ['sheremetyevo_express_line_d_label','sheremetyevo_express',[],'Белорусский',[-51,55]],
