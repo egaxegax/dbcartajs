@@ -1,9 +1,9 @@
 /*
- * dbCartajs HTML5 SVG vector object map. Build 170921.
+ * dbCartajs HTML5 SVG vector object map. Build 171224.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
- * egax@bk.ru, 2015-2017.
+ * egax@bk.ru, 2015-2018.
  */
 var SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -636,16 +636,8 @@ function dbCartaSvg(cfg) {
       if (touches.length)
         self.mousedown(touches[0]);
     },
-    touchend: function(ev) {
-      var touches = ev.changedTouches;
-      for (var i=0; i<touches.length; i++) {
-        for (var j=0; j<self.m.touches.length; j++) {
-          if (self.m.touches[j].identifier == touches[i].identifier)
-            self.m.touches.splice(j, 1);
-        }
-      }
-      if (!self.m.touches.length)
-        self.mouseup(touches[touches.length - 1]);
+    touchend: function(ev) { 
+      return false;
     },
     onmousemove: function(ev) {
       self.mousemove(ev);

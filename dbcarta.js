@@ -1,9 +1,9 @@
 /*
- * dbCartajs HTML5 Canvas vector object map. Build 170917.
+ * dbCartajs HTML5 Canvas vector object map. Build 171224.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
- * egax@bk.ru, 2013-17.
+ * egax@bk.ru, 2013-18.
  */
 function dbCarta(cfg) {
   cfg = cfg||{};
@@ -1034,15 +1034,7 @@ function dbCarta(cfg) {
         this.mousedown(touches[0]);
     },
     touchend: function(ev) {
-      var touches = ev.changedTouches;
-      for (var i=0; i<touches.length; i++) {
-        for (var j=0; j<this.m.touches.length; j++) {
-          if (this.m.touches[j].identifier == touches[i].identifier)
-            this.m.touches.splice(j, 1);
-        }
-      }
-      if (!this.m.touches.length)
-        this.mouseup(touches[touches.length - 1]);
+      return false;
     },
     onmousemove: function(ev) {
       this.mousemove(ev);
