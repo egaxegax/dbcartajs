@@ -116,9 +116,12 @@ function listDemos() {
   ];
 }
 function init() {
+  document.body.style.backgroundColor = '#fff';
   var el = document.createElement('h2');
   el.style.textAlign = 'center';
   el.style.backgroundColor = '#d2e0f0';
+  el.style.width = '75%';
+  el.style.margin = '0.6em auto';
   el.appendChild(document.createTextNode('dbCartajs - HTML5 Canvas+SVG карта с проекциями Proj4js'));
   document.body.appendChild(el);
 
@@ -205,6 +208,8 @@ function init() {
   row.appendChild(col);
   for(var i in (mdemos=listDemos())){
     var div = document.createElement('div');
+    div.style.margin = '0 0';
+    div.style.padding = '0.5em';
     if (i%2 == 0) div.style.backgroundColor = '#d2e0f0';
     var dt = document.createElement('dt');
     var dd = document.createElement('dd');
@@ -242,7 +247,7 @@ function init() {
   el2.target = '_blank';
   el2.appendChild(document.createTextNode('egaxegax'));
   el.appendChild(el2);
-  el.appendChild(document.createTextNode(', 2016'));
+  el.appendChild(document.createTextNode(', 2013-2018'));
   document.body.appendChild(el);
 
   // add anim
