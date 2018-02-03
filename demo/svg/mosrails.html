@@ -39,7 +39,7 @@
   el.id = 'maptooltip';
   el.style.padding = '5px';
   el.style.color = '#333333';
-  el.style.font = '12px Verdana';
+  el.style.font = '12px sans-serif';
   el.style.border = '2px solid rgba(19,64,117,0.5)';
   el.style.borderRadius = '4px';
   el.style.backgroundColor = 'rgba(250,250,250,0.9)';
@@ -339,7 +339,7 @@
         var text = dw.append('text', {
           x: pts[0] + dx, y: pts[1] + dy,
           fill: mopt[ftype].labelcolor || '',
-          'font-family': 'sans-serif', 'font-size': '9px',
+          'font-family': 'sans-serif', 'font-size': '12px',
           'text-anchor': a ? a[0] : ''
         });
         text.appendChild(document.createTextNode(station.getAttribute('class')))
@@ -374,6 +374,7 @@
     bg: 'rgb(240,245,251)',
     scalebg: 'rgba(100,200,100,0.2)'
   });
+  dw.scaleCarta(0.7);
   // events
   dw.extend(dw.root, {
     onmousemove: function(ev){
