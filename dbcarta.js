@@ -1034,7 +1034,15 @@ function dbCarta(cfg) {
         this.mousedown(touches[0]);
     },
     touchend: function(ev) {
-      return false;
+      var touches = ev.changedTouches;
+      for (var i=0; i<touches.length; i++) {
+        for (var j=0; j<this.m.touches.length; j++) {
+          if (this.m.touches[j].identifier == touches[i].identifier)
+            this.m.touches.splice(j, 1);
+        }
+      }
+      if (!this.m.touches.length)
+        this.mouseup(touches[touches.length - 1]);
     },
     onmousemove: function(ev) {
       this.mousemove(ev);

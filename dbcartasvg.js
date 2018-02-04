@@ -538,6 +538,29 @@ function dbCartaSvg(cfg) {
       }
       return coords;
     },
+    savetoimage: function() {
+      if (this.cfg.sbar) this.cfg.sbar.setAttribute('fill', 'none');
+      var xml  = new XMLSerializer().serializeToString(root),
+          data = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(xml))),
+          img  = new Image();
+      if (this.cfg.sbar) this.cfg.sbar.setAttribute('fill', this.cfg.scalebg);
+      img.src = data;
+      img.onload = function() {
+        var canvas = document.createElement('canvas'),
+            ctx = canvas.getContext('2d');
+        attr(canvas, {
+          width: root.getAttribute('width'), 
+          height: root.getAttribute('height'),
+        });
+        ctx.drawImage(img, 0, 0);
+        var a = document.createElement('a');
+        a.download = 'image.png';
+        a.href = canvas.toDataURL('image/png');
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      };
+    },
     // - handlers -----------------------------
     mousemove: function(ev) {
       var spts = this.canvasXY(ev),
@@ -582,29 +605,6 @@ function dbCartaSvg(cfg) {
       with (this.m) {
         delete mpts;
       }
-    },
-    savetoimage: function() {
-      if (this.cfg.sbar) this.cfg.sbar.setAttribute('fill', 'none');
-      var xml  = new XMLSerializer().serializeToString(root),
-          data = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(xml))),
-          img  = new Image();
-      if (this.cfg.sbar) this.cfg.sbar.setAttribute('fill', this.cfg.scalebg);
-      img.src = data;
-      img.onload = function() {
-        var canvas = document.createElement('canvas'),
-            ctx = canvas.getContext('2d');
-        attr(canvas, {
-          width: root.getAttribute('width'), 
-          height: root.getAttribute('height'),
-        });
-        ctx.drawImage(img, 0, 0);
-        var a = document.createElement('a');
-        a.download = 'image.png';
-        a.href = canvas.toDataURL('image/png');
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      };
     }
   });
   // - events -----------------------------
@@ -637,7 +637,15 @@ function dbCartaSvg(cfg) {
         self.mousedown(touches[0]);
     },
     touchend: function(ev) { 
-      return false;
+      var touches = ev.changedTouches;
+      for (var i=0; i<touches.length; i++) {
+        for (var j=0; j<self.m.touches.length; j++) {
+          if (self.m.touches[j].identifier == touches[i].identifier)
+            self.m.touches.splice(j, 1);
+        }
+      }
+      if (!self.m.touches.length)
+        self.mouseup(touches[touches.length - 1]);
     },
     onmousemove: function(ev) {
       self.mousemove(ev);

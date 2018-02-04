@@ -321,7 +321,7 @@
       var text = dw.append('text', {
         x: pts[0] + dx, y: pts[1] + dy,
         fill: mopt[ftype].labelcolor || '',
-        'font-family': 'sans-serif', 'font-size': '12px',
+        'font-family': 'sans-serif', 'font-size': dw.root.getAttribute('width')/125,
         'text-anchor': a ? a[0] : ''
       });
       text.appendChild(document.createTextNode(label));
