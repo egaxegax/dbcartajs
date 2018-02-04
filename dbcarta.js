@@ -667,7 +667,7 @@ function dbCarta(cfg) {
       var sz = this.sizeOf(),
           cw = sz[2],
           ch = sz[3];
-      var h = ch/6,
+      var h = ch/4,
           w = h/2,
           tleft = cw - w - w/10,
           ttop = ch/2 - h/2,
