@@ -53,7 +53,7 @@ function init() {
   mtab.appendChild(row);
 
   var col = document.createElement('td');
-  col.width = '40%';
+  col.width = '30%';
   var el = document.createElement('h2');
   el.appendChild(document.createTextNode('Московские железные дороги'));
   el.style.padding = '0';
@@ -62,7 +62,7 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '30%';
+  col.width = '20%';
   col.align = 'center';
   col.appendChild(document.createTextNode('Станции '));
   var stationlist = el = document.createElement('select');
@@ -323,22 +323,13 @@ function init() {
     mcoord.innerHTML = label;
     dw.paintCoords(sd);
   };
-//  dw.loadCarta([{0:'.Image', 1:'bg'}]); // first layer
   dw.loadCarta(RLINES);
   dw.loadCarta(RLABEL);
   dw.loadCarta(MSTATIONS);
   for(var i=0; i<RSTATIONS.length; i++)
     dw.loadCarta(RSTATIONS[i][1]);
+  dw.scaleCarta(0.7);
   dw.draw();
-
-  // bgimg from mlines
-//  var im = new Image();
-//  im.src = IMGDATA['mosrails'];
-//  im.onload = function() {
-//    dw.loadCarta([{0:'.Image', 1:'bg', 2:[[-234.8,290.45],[239.8,-376.35]], 6:this}]);
-//    dw.m.bgimg = dw.mflood['.Image_bg']; // mark as bg
-//    dw.draw();
-//  };
 
   // fill station list
   for(var i in RSTATIONS) {
