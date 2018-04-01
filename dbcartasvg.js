@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 SVG vector object map. Build 171224.
+ * dbCartajs HTML5 SVG vector object map. Build 180401.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
@@ -210,18 +210,33 @@ function dbCartaSvg(cfg) {
      * Select obj under mouse cursor like html MAP-AREA.
      */
     doMap: function(ev, at) {
-      this.mousemove(ev);
+      this.mousemove(ev[0] || ev);
       if (!this.m.pmap) {
-        var mattr = {};
-        for (var prop in at) { // save current
-          mattr[prop] = ev.target.getAttribute(prop);
+        var elems = [];
+        if(!ev.length) {
+          ev = [ev];
         }
-        if (!mattr['transform']) mattr['transform'] = 'scale(1)';
-        attr(ev.target, at); // set new
-        this.m.pmap = {
-          ev: ev,
-          attr: mattr
+        if(!at.length) {
+          at = [at];
+        }
+        for(var i=0; i<ev.length; i++) {
+          var el = ev[i].target,
+              ats = at[i],
+              mattr = {}
+          if(!el || !ats) continue;
+          for (var prop in ats) { // save current
+            mattr[prop] = el.getAttribute(prop);
+          }
+          if (!mattr['transform']) mattr['transform'] = 'scale(1)';
+          attr(el, ats); // set new
+          elems.push({
+            el: el,
+            attr: mattr
+          });
         };
+        this.m.pmap = {
+          elems: elems
+        }
       };
       this.m.pmap.i = 1; // set counter
     },
@@ -570,7 +585,9 @@ function dbCartaSvg(cfg) {
       }
       if (this.m.pmap) {
         if (this.m.pmap.i === 0) {
-          attr(this.m.pmap.ev.target, this.m.pmap.attr);
+          for(var i=0; i<this.m.pmap.elems.length; i++) {
+            attr(this.m.pmap.elems[i].el, this.m.pmap.elems[i].attr);
+          }
           delete this.m.pmap;
         } else
           this.m.pmap.i = 0;

@@ -167,7 +167,7 @@ function init() {
   // demos table
   var mtab = document.createElement('table');
   mtab.align = 'center';
-  mtab.width = '75%';
+  mtab.width = '60%';
   //mtab.border = '1';
   var tb = document.createElement('tbody');
   mtab.appendChild(tb);
@@ -222,7 +222,6 @@ function init() {
       li.style.paddingRight = '20px';
       var a = document.createElement('a');
       a.href = mdemos[i][0][j];
-      a.target = '_blank';
       a.appendChild(document.createTextNode(mdemos[i][1][j]));
       li.appendChild(a);
       ul.appendChild(li);

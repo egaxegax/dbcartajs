@@ -167,10 +167,13 @@ function init() {
     'r8': route({fg: '#ffcb31'}),
     'r9': route({fg: '#a1a2a3'}),
     'r10': route({fg: '#b3d445'}),
-    'r11': route({fg: '#79cdcd'}),
     'r12': route({fg: '#acbfe1'}),
-    'rTPK': route_d({fg: '#554d26'}),
-    'rKOZH': route_d({fg: '#de62be'})
+    'rKOM': route_d({fg: '#554d26'}),
+    'rKOZH': route_d({fg: '#de62be'}),
+    'rMCK': route({fg: '#f76093'}),
+    'rMCK_d': route({fg: '#fff', width: 2}),
+    'rMono': route({fg: '#2c87c5', width: 2}),
+    'rTPK': route({fg: '#79cdcd'})
   });
   // lines ext
   dw.extend(dw.mopt, {
@@ -180,7 +183,9 @@ function init() {
     'r7_ext': route_d({fg: dw.mopt['r7'].fg}),
     'r8_ext': route_d({fg: dw.mopt['r8'].fg}),
     'r10_ext': route_d({fg: dw.mopt['r10'].fg}),
-    'r12_ext': route_d({fg: dw.mopt['r12'].fg})
+    'r12_ext': route_d({fg: dw.mopt['r12'].fg}),
+    'rKOM_ext': route_d({fg: dw.mopt['rKOM'].fg}),
+    'rTPK_ext': route_d({fg: dw.mopt['rTPK'].fg})
   });
   // interchanges
   dw.extend(dw.mopt, {
@@ -196,19 +201,13 @@ function init() {
     'vodootvodny_canal': river({width: 5}),
     'yauza_river': river({width: 5}),
     'yauza_river_label': river({rotate: 45, anchor: ['start', 'top']}),
-    'Nagatino_Kozhukhovo': river({width: 5}),
     'Nagatino_poyma': river({width: 6}),
     'grebnoy_canal': river({width: 3}),
     'moskva_river': river({width: 15}),
-    'moskva_river_label': river({rotate: 45, anchor: ['start', 'top']})
+    'moskva_river_label': river({rotate: 48, anchor: ['start', 'top']})
   });
   // rails
   dw.extend(dw.mopt, {
-    'monorail': route({fg: '#2c87c5', width: 2}),
-    'monorail_legend': route({fg: '#2c87c5', width: 2}),
-    'monorail_label': route({labelcolor: '#2c87c5', anchor: ['start', 'bottom']}),
-    'mck': route({fg: '#f76093'}),
-    'mck_d': route({fg: 'white', width: 2}),
     'sheremetyevo_express_line': aeroexpress(),
     'sheremetyevo_express_line_label': label({anchor: ['end', 'middle']}),
     'sheremetyevo_express_line_d': aeroexpress_d(),
@@ -229,12 +228,13 @@ function init() {
     's1_2': inst({fg: dw.mopt['r1'].fg, anchor: ['end', 'middle']}),
     's1_3': inst({fg: dw.mopt['r1'].fg, anchor: ['end', 'bottom']}),
     's1_4': inst({fg: dw.mopt['r1'].fg, anchor: ['start', 'top']}),
+    's1_5': station({fg: dw.mopt['r1'].fg, anchor: ['end', 'middle']}),
     's2': station({fg: dw.mopt['r2'].fg}),
     's2_1': inst({fg: dw.mopt['r2'].fg}),
     's2_2': inst({fg: dw.mopt['r2'].fg, anchor: ['end', 'middle']}),
     's2_3': inst({fg: dw.mopt['r2'].fg, anchor: ['start', 'bottom']}),
     's2_4': station({fg: dw.mopt['r2'].fg, anchor: ['end', 'middle']}),
-    's2_5': inst({fg: dw.mopt['r2'].fg, anchor: ['end', 'top']}),
+    's2_5': inst({fg: dw.mopt['r2'].fg, anchor: ['center', 'top']}),
     's2_6': station({fg: dw.mopt['r2'].fg, anchor: ['start', 'top']}),
     's3': station({fg: dw.mopt['r3'].fg, anchor: ['start', 'middle']}),
     's3_1': station({fg: dw.mopt['r3'].fg, anchor: ['end', 'middle']}),
@@ -272,9 +272,11 @@ function init() {
     's7_6': inst({fg: dw.mopt['r7'].fg, anchor: ['start', 'middle']}),
     's7_7': station({fg: dw.mopt['r7'].fg, anchor: ['center', 'bottom']}),
     's7_8': station({fg: dw.mopt['r7'].fg, anchor: ['end', 'top']}),
+    's7_9': station({fg: dw.mopt['r7'].fg, anchor: ['start', 'middle']}),
     's8': station({fg: dw.mopt['r8'].fg, anchor: ['start', 'middle']}),
     's8_1': inst({fg: dw.mopt['r8'].fg}),
     's8_2': inst({fg: dw.mopt['r8'].fg, anchor: ['start', 'top']}),
+    's8_3': inst({fg: dw.mopt['r8'].fg, anchor: ['start', 'top']}),
     's8_4': inst({fg: dw.mopt['r8'].fg, anchor: ['end', 'top']}),
     's8_5': inst({fg: dw.mopt['r8'].fg, anchor: ['end', 'bottom']}),
     's8_6': inst_d({fg: dw.mopt['r8'].fg}),
@@ -290,20 +292,22 @@ function init() {
     's10_2': inst({fg: dw.mopt['r10'].fg, anchor: ['start', 'middle']}),
     's10_3': inst({fg: dw.mopt['r10'].fg, anchor: ['end', 'top']}),
     's10_4': inst_d({fg: dw.mopt['r10'].fg}),
-    's11': station({fg: dw.mopt['r11'].fg, anchor: ['center', 'bottom']}),
-    's11_1': inst({fg: dw.mopt['r11'].fg, anchor: ['start', 'hanging']}),
-    's11_2': inst_d({fg: dw.mopt['r11'].fg}),
+    's10_5': station({fg: dw.mopt['r10'].fg, anchor: ['end', 'top']}),
+    's11': station({fg: dw.mopt['rTPK'].fg, anchor: ['center', 'bottom']}),
+    's11_1': inst({fg: dw.mopt['rTPK'].fg, anchor: ['start', 'hanging']}),
+    's11_2': inst_d({fg: dw.mopt['rTPK'].fg}),
     's12': station({fg: dw.mopt['r12'].fg, anchor: ['center', 'bottom']}),
     's12_1': station({fg: dw.mopt['r12'].fg, anchor: ['center', 'top']}),
     's12_2': station({fg: dw.mopt['r12'].fg, anchor: ['start', 'top']}),
     's12_3': station({fg: dw.mopt['r12'].fg, anchor: ['end', 'middle']}),
     's12_4': inst({fg: dw.mopt['r12'].fg, anchor: ['center', 'bottom']}),
     's12_5': inst({fg: dw.mopt['r12'].fg, anchor: ['start', 'top']}),
+    'sKOM': station({fg: dw.mopt['rKOM'].fg, anchor: ['start', 'middle']}),
     'sTPK': station({fg: dw.mopt['rTPK'].fg, anchor: ['start', 'top']}),
     'sTPK_1': station({fg: dw.mopt['rTPK'].fg, anchor: ['start', 'middle']}),
     'sTPK_2': station({fg: dw.mopt['rTPK'].fg, anchor: ['end', 'middle']}),
     'sTPK_3': inst({fg: dw.mopt['rTPK'].fg, anchor: ['start', 'middle']}),
-    'sTPK_4': inst({fg: dw.mopt['rTPK'].fg, anchor: ['end', 'bottom']}),
+    'sTPK_4': inst({fg: dw.mopt['rTPK'].fg, anchor: ['start', 'bottom']}),
     'sTPK_5': inst_d({fg: dw.mopt['rTPK'].fg}),
     'sTPK_6': station({fg: dw.mopt['rTPK'].fg, anchor: ['center', 'bottom']}),
     'sTPK_7': station({fg: dw.mopt['rTPK'].fg, anchor: ['start', 'middle']}),
@@ -318,8 +322,8 @@ function init() {
     'sKOZH_1': station({fg: dw.mopt['rKOZH'].fg, anchor: ['end', 'middle']}),
     'sKOZH_2': inst({fg: dw.mopt['rKOZH'].fg, anchor: ['start', 'middle']}),
     'sKOZH_3': inst_d({fg: dw.mopt['rKOZH'].fg, anchor: ['start', 'middle']}),
-    'sMono': inst({fg: dw.mopt['monorail'].fg, size: 3, anchor: ['start', 'top']}),
-    'sMono_1': inst({fg: dw.mopt['monorail'].fg, size: 3, anchor: ['start', 'middle']}),
+    'sMono': inst({fg: dw.mopt['rMono'].fg, size: 3, anchor: ['start', 'top']}),
+    'sMono_1': inst({fg: dw.mopt['rMono'].fg, size: 3, anchor: ['start', 'middle']}),
     'sMCK': mck_station({anchor: ['start', 'middle']}),
     'sMCK_1': mck_station({anchor: ['start', 'hanging']}),
     'sMCK_2': mck_station({anchor: ['end', 'middle']}),
@@ -334,7 +338,7 @@ function init() {
       if (dw.m.pmap) {
         var o, m = dw.mflood[dw.m.pmap];
         label = m['label'] || m['ftag'];
-        // tooltip
+          // tooltip
         mtip = label;
         if (INFOMST[dw.m.pmap]) {
           var st = INFOMST[dw.m.pmap];
@@ -343,8 +347,8 @@ function init() {
       }
       // text
       mcoord.innerHTML = label;
-      infobox(ev, mtip);
       dw.paintCoords(dd);
+      infobox(ev, mtip);
     }
   });
   dw.loadCarta(MLINES);

@@ -54,7 +54,7 @@
   function infobox(ev) {
     var mtip = document.getElementById('maptooltip');
     if (dw.m.pmap) {
-      mtip.innerHTML = dw.m.pmap.ev.target.getAttribute('class');
+      mtip.innerHTML = ev.target.getAttribute('class');
       mtip.style.display = 'block';
       mtip.style.left = ev.clientX + window.pageXOffset + 'px';
       mtip.style.top = ev.clientY + window.pageYOffset - mtip.offsetHeight * 1.2 + 'px';
