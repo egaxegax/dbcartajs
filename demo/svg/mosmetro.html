@@ -289,14 +289,17 @@
           abbr = MSTATIONS[i][1],
           coords = MSTATIONS[i][2][0],
           label = MSTATIONS[i][3],
-          mtip = label,
-          mkey = ftype + '_' + abbr;
+          mtip = '<b>' + (label||abbr) + '</b>',
+          skey = ftype + '_' + abbr,
+          rkey = 'r' + ftype.split('_')[0].slice(1);
       var pts = dw.toPoints(coords, true),
           a, dx = 10, dy = 0;
-      // station info
-      if (INFOMST[mkey]) {
-        var st = INFOMST[mkey];
-        mtip = mtip + '<br>' + 'Открыта: ' + st[0] + '<br>' + 'Глубина: ' + st[1];
+        // station info
+      if (INFOMST[skey]) {
+        mtip += '<br><br>' + 'Открыта: ' + INFOMST[skey].join('<br>' + 'Глубина: ');
+      }
+      if (INFOMLINES[rkey]) {
+        mtip += '<br><br>' + INFOMLINES[rkey];
       }
       var station = dw.append('circle', {
         class: mtip,

@@ -321,7 +321,6 @@ var MLINES=[
   [101,-4,'Q'],[103,-7,'Q'],[103,-11,'Q'],
   [103,-24,'Q'],[103,-27,'Q'],[106,-30,'Q'],
   [124,-48],[124,-53,'Q'],[124,-55,'Q'],[123,-56,'Q'],
-  [93,-92.46],
   [68,-129]
 ]
 ],
@@ -619,11 +618,11 @@ var MLINES=[
 ]
 ],
 ['interchange','Tekstilshchiki',[
-  [105.5,-80],[108.5,-76]
+  [105,-80],[108,-76]
 ]
 ],
 ['interchange_d','Tekstilshchiki',[
-  [105.5,-80],[108.5,-76]
+  [105,-80],[108,-76]
 ]
 ],
 ['interchange','Lermontovsky_Prospekt-Kosino',[
@@ -1014,7 +1013,7 @@ var MSTATIONS=[
 ['s7_2','Taganskaya',[[60,-45]],'',null,1],
 ['s7_6','Proletarskaya',[[80,-65]],'Пролетарская',null,1],
 ['s7_4','Volgogradsky_Prospekt',[[92,-77]],'Волгоградский проспект',null,1],
-['s7_3','Tekstilshchiki',[[105.5,-80]],'Текстильщики',null,1],
+['s7_3','Tekstilshchiki',[[105,-80]],'Текстильщики',null,1],
 ['s7_7','Kuzminki',[[126,-80]],'Кузьминки',null,1],
 ['s7_4','Ryazanskiy_Prospekt',[[142,-80]],'Рязанский проспект',null,1],
 ['s7','Vykhino',[[160,-90]],'Выхино',null,1],
@@ -1133,7 +1132,7 @@ var MSTATIONS=[
 ['sTPK_7','Lefortovo',[[98.63,-1.76]],'Лефортово',null,1],
 ['sTPK_3','Aviamotornaya',[[106,-30]],'Авиамоторная',null,1],
 ['sTPK_3','Nizhegorodskaya_Ulitsa',[[120,-44]],'Нижегородская улица',null,1],
-['sTPK_3','Tekstilshchiki',[[108.5,-76]],'',null,1],
+['sTPK_3','Tekstilshchiki',[[108,-76]],'',null,1],
 ['sTPK','Yozhnoportovaya',[[94.6,-94]],'Южнопортовая',null,1],
 ['sTPK_7','Nagatinsky_Zaton',[[78.5,-115]],'Кленовый бульвар',null,1],
 ['sTPK_10','Zyuzino',[[-12,-133]],'Зюзино',null,1],
