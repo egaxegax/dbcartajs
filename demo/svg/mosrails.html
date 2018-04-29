@@ -35,7 +35,7 @@
 </script>
 <script type="text/javascript">
   var dw;
-  // domap tooltip
+    // domap tooltip
   var el = document.createElement('div');
   el.id = 'maptooltip';
   el.style.padding = '5px';
@@ -49,7 +49,7 @@
   el.style.display = 'none';
   el.onmousemove = function(){ this.innerHTML = ''; };
   document.body.appendChild(el);
-  // tooltip under cursor
+    // tooltip under cursor
   function infobox(ev) {
     var mtip = document.getElementById('maptooltip');
     if (dw.m.pmap) {
@@ -63,21 +63,21 @@
   }
   function draw() {
     var mopt = {};
-    var route = function(o){ return dw.extend({cls: 'Line', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
+    var route = function(o){ return dw.extend({cls: 'Line', width: 6, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
         route_d = function(o){ return route(dw.extend({width: 1, fg: 'white', dash: [4,2]}, o||{})) },
         interchange = function(o){ return route(dw.extend({fg: 'black', join: 'round', cap: 'round', width: 6}, o||{})) },
         interchange_d = function(o) { return interchange(dw.extend({fg: 'white', width: 5}, o||{})) },
-        label = function(o){ return dw.extend({cls: 'Label', labelscale: 1, labelcolor: mopt['mr'].fg}, o||{}) },
-        station = function(o){ return dw.extend({cls: 'Rect', bg: 'white', size: 3, width: 3, scale: 1, labelscale: 1}, o||{}) },
+        label = function(o){ return dw.extend({cls: 'Label', labelscale: 1, labelcolor: mopt['r'].fg}, o||{}) },
+        station = function(o){ return dw.extend({cls: 'Rect', bg: 'white', size: 4, width: 3, scale: 1, labelscale: 1}, o||{}) },
         inst = function(o){ return station(dw.extend({fg: '#a5a6aa', labelcolor: o['labelcolor']}, o)) },
         inst_l = function(o){ return inst(dw.extend({bg: o['labelcolor'], fg: o['labelcolor']}, o)) },
         rst = function(o){ return station(dw.extend({cls: 'Rect', size: 6, width: 4, join: 'round', labelcolor: 'black'}, o)) },
         rst_d = function(o){ return rst(dw.extend({size: 3}, o)) },
         rst_l = function(o){ return rst(dw.extend({labelcolor: o['fg']}, o)) },
         ost = function(o){ return rst(dw.extend({size: 3, width: 1, fg: 'white'}, o)) };
-        // metro lines
+          // metro lines
         dw.extend(mopt, {
-          'mr': route({fg: '#a5a6aa'}),
+          'r': route({fg: '#a5a6aa'}),
           'r1': route({fg: '#f92b40'}),
           'r2': route({fg: '#3e8249'}),
           'r3': route({fg: '#0055ac'}),
@@ -91,7 +91,7 @@
           'r11': route({fg: '#81cec8'}),
           'r12': route({fg: '#000000'})
         });
-        // rail lines
+          // rail lines
         dw.extend(mopt, {
           't1': route({fg: '#f6422b'}),
           't2': route({fg: '#005a96'}),
@@ -104,29 +104,27 @@
           't9': route({fg: '#fdcd45'}),
           't10': route({fg: '#14a256'}),
           't11': route({fg: '#eb479d'}),
-          'monorail': route({fg: '#2c87c5', width: 2, labelcolor: '#2c87c5', anchor: ['start', 'bottom']})
+          'mono': route({fg: '#2c87c5', width: 2, labelcolor: '#2c87c5', anchor: ['start', 'bottom']})
         });
-        // roads
+          // roads
         dw.extend(mopt, {
           'mkad': route({cls: 'Polygon', bg: 'white', fg: 'rgb(180,180,180)', width: 1, labelcolor: 'rgb(180,180,180)', anchor: ['center', 'middle']})
         });
-        // lines ext
+          // lines ext
         dw.extend(mopt, {
-          'mr_1': route({fg: mopt['mr'].fg}),
-          'mr_2': route({fg: mopt['mr'].fg}),
-          'mr_1_label': label({anchor: ['end', 'middle']}),
-          'mr_2_label': label({anchor: ['start', 'middle']}),
+          'e1': label({anchor: ['end', 'middle']}),
+          'e2': label({anchor: ['start', 'middle']}),
           't2_ext': route_d(),
           't3_ext': route_d(),
           't7_ext': route_d()
         });
-        // interchanges
+          // interchanges
         dw.extend(mopt, {
           'interchange': interchange(),
           'interchange_d': interchange_d(),
           'interchange_dl': interchange_d({dash: [1,5]})
         });
-        // metro stations
+          // metro stations
         dw.extend(mopt, {
           's1': inst_l({labelcolor: mopt['r1'].fg, anchor: ['center', 'bottom']}),
           's1_1': inst({labelcolor: mopt['r1'].fg, anchor: ['start', 'top']}),
@@ -138,10 +136,10 @@
           's2_2': inst({labelcolor: mopt['r2'].fg}),
           's2_3': inst({labelcolor: mopt['r2'].fg, anchor: ['center', 'top']}),
           's2_4': inst_l({labelcolor: mopt['r2'].fg, anchor: ['end', 'top']}),
-          's3': inst_l({labelcolor: mopt['r3'].fg}),
-          's3_1': inst({labelcolor: mopt['r3'].fg}),
+          's3': inst_l({labelcolor: mopt['r3'].fg, anchor: ['start', 'middle']}),
+          's3_1': inst({labelcolor: mopt['r3'].fg, anchor: ['start', 'middle']}),
           's3_2': inst({labelcolor: mopt['r3'].fg, anchor: ['end', 'top']}),
-          's3_3': inst({labelcolor: mopt['r3'].fg, anchor: ['end']}),
+          's3_3': inst({labelcolor: mopt['r3'].fg, anchor: ['end', 'middle']}),
           's3_4': inst({labelcolor: mopt['r3'].fg, anchor: ['start', 'top']}),
           's4': inst_l({labelcolor: mopt['r4'].fg, anchor: ['start', 'bottom']}),
           's4_1': inst({labelcolor: mopt['r4'].fg}),
@@ -170,7 +168,7 @@
           's8_3': inst({labelcolor: mopt['r8'].fg, anchor: ['start', 'top']}),
           's8_4': inst({labelcolor: mopt['r8'].fg, anchor: ['end', 'bottom']}),
           's9': inst_l({labelcolor: mopt['r9'].fg, anchor: ['center', 'bottom']}),
-          's9_1': inst({labelcolor: mopt['r9'].fg, anchor: ['start', 'hanging']}),
+          's9_1': inst({labelcolor: mopt['r9'].fg, anchor: ['start', 'top']}),
           's9_2': inst({labelcolor: mopt['r9'].fg, anchor: ['center', 'bottom']}),
           's9_3': inst({labelcolor: mopt['r9'].fg, anchor: ['end', 'middle']}),
           's9_4': inst({labelcolor: mopt['r9'].fg, anchor: ['center', 'top']}),
@@ -185,14 +183,14 @@
           's11_2': inst({labelcolor: mopt['r11'].fg, anchor: ['center', 'bottom']}),
           's12_1': inst({labelcolor: mopt['r12'].fg}),
           's12_2': inst({labelcolor: mopt['r12'].fg, anchor: ['end', 'top']}),
-          'sMono': station({fg: mopt['monorail'].fg, width: 2, anchor: ['end', 'bottom']}),
-          'sMono_1': station({fg: mopt['monorail'].fg, width: 2, anchor: ['center', 'bottom']}),
-          'sMono_2': station({fg: mopt['monorail'].fg, width: 2, anchor: ['start', 'bottom']}),
-          'sMono_3': station({fg: mopt['monorail'].fg, width: 2, anchor: ['end', 'top']})
+          'sMono': station({fg: mopt['mono'].fg, width: 2, anchor: ['end', 'bottom']}),
+          'sMono_1': station({fg: mopt['mono'].fg, width: 2, anchor: ['center', 'bottom']}),
+          'sMono_2': station({fg: mopt['mono'].fg, width: 2, anchor: ['start', 'bottom']}),
+          'sMono_3': station({fg: mopt['mono'].fg, width: 2, anchor: ['end', 'top']})
         });
-        // rail stations
+          // rail stations
         dw.extend(mopt, {
-          'mr1': rst({fg: mopt['mr'].fg, anchor: ['center', 'top']}),
+          'r1': rst({fg: mopt['r'].fg, anchor: ['center', 'top']}),
           'a1': rst({fg: mopt['t1'].fg, anchor: ['end', 'middle']}),
           'a1_1': rst({fg: mopt['t1'].fg, anchor: ['center', 'bottom']}),
           'a1_2': rst({fg: mopt['t1'].fg, anchor: ['center', 'top']}),
@@ -283,7 +281,7 @@
           'a11_8': ost({anchor: ['start', 'bottom']})
         });
 
-    // lines
+      // lines
     for (var i=0; i<RLINES.length; i++) {
       var ftype = RLINES[i][0],
           abbr = RLINES[i][1],
@@ -333,8 +331,8 @@
           if (a[0] == 'start')    dx = 10;
           else if (a[0] == 'center') dx = -20;
           else if (a[0] == 'end') dx = -10;
-          if (a[1] == 'top') dy = 10;
-          else if (a[1] == 'middle') dy = 0;
+          if (a[1] == 'top') dy = 20;
+          else if (a[1] == 'middle') dy = 4;
           else if (a[1] == 'bottom') dy = -10;
         };
         var text = dw.append('text', {
@@ -358,11 +356,11 @@
         });
       }
     };
-    
-    // rail stations
+
+      // rail stations
     for (var i=0; i<RSTATIONS.length; i++)
       addstations(RSTATIONS[i][1]);
-    // metro stations
+      // metro stations
     addstations(MSTATIONS);
     addstations(RLABEL);
 
@@ -376,7 +374,7 @@
     scalebg: 'rgba(100,200,100,0.2)'
   });
   dw.scaleCarta(0.7);
-  // events
+    // events
   dw.extend(dw.root, {
     onmousemove: function(ev){
       dw.mousemove(ev);
