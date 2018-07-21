@@ -34,7 +34,7 @@
   }
 </script>
 <script type="text/javascript">
-  var BUILD_DATE='180401';
+  var BUILD_DATE='180721';
   var dw;
     // domap tooltip
   var el = document.createElement('div');
@@ -65,19 +65,19 @@
   }
   function draw() {
     var mopt = {};
-    var route = function(o){ return dw.extend({cls: 'Line', width: 6, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
+    var route = function(o){ return dw.extend({cls: 'Line', width: 8, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
         route_d = function(o){ return route(dw.extend({dash: [2,4]}, o||{})) },      
-        interchange = function(o){ return route(dw.extend({fg: '#ccc', join: 'round', cap: 'round', width: 8}, o||{})) },
-        interchange_d = function(o) { return interchange(dw.extend({fg: '#ffffff', width: 4}, o||{})) },
+        interchange = function(o){ return route(dw.extend({fg: '#ccc', join: 'round', cap: 'round', width: 12}, o||{})) },
+        interchange_d = function(o) { return interchange(dw.extend({fg: '#ffffff', width: 6}, o||{})) },
         river = function(o){ return route(dw.extend({fg: '#e2fcfc', join: 'round', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})) },
         aeroexpress = function(o){ return route(dw.extend({fg: '#dddddd', labelscale: 0}, o||{})) },
-        aeroexpress_d = function(o){ return route(dw.extend({fg: '#ffffff', labelscale: 0, width: 4, dash: [10,10]}, o||{})) },
+        aeroexpress_d = function(o){ return route(dw.extend({fg: '#ffffff', labelscale: 0, width: 6, dash: [10,10]}, o||{})) },
         label = function(o){ return dw.extend({cls: 'Label', labelscale: 1, anchor: ['start', 'top']}, o||{}) },
-        station = function(o){ return dw.extend({cls: 'Rect', bg: 'white', size: 5, width: 3, scale: 1, labelscale: 1}, o||{}) },
-        mck_station = function(o){ return station(dw.extend({fg: '#f76093', size: 4, labelcolor: 'gray'}, o)) },
-        mck_interchange_d = function(o) { return interchange(dw.extend({dash:[2,4], width: 3}, o||{})) },
+        station = function(o){ return dw.extend({cls: 'Rect', bg: 'white', size: 6, width: 5, scale: 1, labelscale: 1}, o||{}) },
+        mck_station = function(o){ return station(dw.extend({fg: '#f76093', size: 5, labelcolor: 'gray'}, o)) },
+        mck_interchange_d = function(o) { return interchange(dw.extend({dash:[2,4], width: 5}, o||{})) },
         inst = function(o){ return station(dw.extend({size: 4, labelcolor: o['fg'], bg: o['fg']}, o)) },
-        inst_d = function(o){ return inst(dw.extend({size: 2, width: 1}, o||{})) };
+        inst_d = function(o){ return inst(dw.extend({size: 3, width: 5}, o||{})) };
       // lines
     dw.extend(mopt, {
       'r1': route({fg: '#ed1b35'}),
@@ -94,8 +94,8 @@
       'rKOM': route_d({fg: '#554d26'}),
       'rKOZH': route_d({fg: '#de62be'}),
       'rMCK': route({fg: '#f76093'}),
-      'rMCK_d': route({fg: '#fff', width: 2}),
-      'rMono': route({fg: '#2c87c5', width: 2}),
+      'rMCK_d': route({fg: '#fff', width: 4}),
+      'rMono': route({fg: '#2c87c5', width: 4}),
       'rTPK': route({fg: '#79cdcd'})
     });
       // lines ext
@@ -152,7 +152,9 @@
       's1_3': inst({fg: mopt['r1'].fg, anchor: ['end', 'bottom']}),
       's1_4': inst({fg: mopt['r1'].fg, anchor: ['start', 'top']}),
       's1_5': station({fg: mopt['r1'].fg, anchor: ['end', 'middle']}),
-      's2': station({fg: mopt['r2'].fg}),
+      's1_6': station({fg: mopt['r1'].fg, anchor: ['start', 'top']}),
+      's1_7': station({fg: mopt['r1'].fg}),
+      's2': station({fg: mopt['r2'].fg, anchor: ['start', 'middle']}),
       's2_1': inst({fg: mopt['r2'].fg}),
       's2_2': inst({fg: mopt['r2'].fg, anchor: ['end', 'middle']}),
       's2_3': inst({fg: mopt['r2'].fg, anchor: ['start', 'bottom']}),
@@ -197,7 +199,7 @@
       's7_8': station({fg: mopt['r7'].fg, anchor: ['end', 'top']}),
       's7_9': station({fg: mopt['r7'].fg, anchor: ['start', 'middle']}),
       's8': station({fg: mopt['r8'].fg, anchor: ['start', 'middle']}),
-      's8_1': inst({fg: mopt['r8'].fg}),
+      's8_1': inst({fg: mopt['r8'].fg, anchor: ['start', 'middle']}),
       's8_2': inst({fg: mopt['r8'].fg, anchor: ['start', 'top']}),
       's8_3': inst({fg: mopt['r8'].fg, anchor: ['start', 'top']}),
       's8_4': inst({fg: mopt['r8'].fg, anchor: ['end', 'top']}),
@@ -323,7 +325,7 @@
               var line = document.getElementById('r'+mftype+pref[i]+','+'r'+mftype+suf[ii]);
               if(line){
                 lns.push( {target: line} );
-                lnsattr.push( {'stroke-width': 10} );
+                lnsattr.push( {'stroke-width': 14} );
               }
             }
           }
@@ -342,7 +344,7 @@
         else if (a[0] == 'end') dx = -10;
         if (a[1] == 'top') dy = 12;
         else if (a[1] == 'middle') dy = 4;
-        else if (a[1] == 'bottom') dy = -10;
+        else if (a[1] == 'bottom') dy = -8;
       };
       var text = dw.append('text', {
         x: pts[0] + dx, y: pts[1] + dy,
@@ -362,14 +364,14 @@
         if (a[0] == 'start')    dx = 10;
         else if (a[0] == 'center') dx = -40;
         else if (a[0] == 'end') dx = -10;
-        if (a[1] == 'top') dy = 10;
+        if (a[1] == 'top') dy = 12;
         else if (a[1] == 'middle') dy = 4;
-        else if (a[1] == 'bottom') dy = -10;
+        else if (a[1] == 'bottom') dy = -12;
       };
       var text = dw.append('text', {
         x: pts[0]+dx, y: pts[1]+dy,
         fill: mopt[ftype].labelcolor || '',
-        'font-family': 'sans-serif', 'font-size': '9px',
+        'font-family': 'sans-serif', 'font-size': '12px',
         'text-anchor': a ? a[0] : ''
       });
       if ('rotate' in mopt[ftype]){
@@ -382,10 +384,10 @@
       // version label
     var ver = dw.append(dw.root, 'text', {
       x: 10, y: dw.root.getAttribute('height')-5,
-      fill: 'lightgray',
-      'font-family': 'sans-serif', 'font-size': '9px'
+      fill: 'gray',
+      'font-family': 'sans-serif', 'font-size': '10px'
     });
-    ver.appendChild(document.createTextNode('ver '+BUILD_DATE));
+    ver.appendChild(document.createTextNode('v'+BUILD_DATE));
   };
     //
   dw = new dbCartaSvg({
