@@ -342,7 +342,7 @@
         if (a[0] == 'start')    dx = 10;
         else if (a[0] == 'center') dx = -40;
         else if (a[0] == 'end') dx = -10;
-        if (a[1] == 'top') dy = 12;
+        if (a[1] == 'top') dy = 14;
         else if (a[1] == 'middle') dy = 4;
         else if (a[1] == 'bottom') dy = -8;
       };
@@ -364,14 +364,14 @@
         if (a[0] == 'start')    dx = 10;
         else if (a[0] == 'center') dx = -40;
         else if (a[0] == 'end') dx = -10;
-        if (a[1] == 'top') dy = 12;
+        if (a[1] == 'top') dy = 14;
         else if (a[1] == 'middle') dy = 4;
-        else if (a[1] == 'bottom') dy = -12;
+        else if (a[1] == 'bottom') dy = -8;
       };
       var text = dw.append('text', {
-        x: pts[0]+dx, y: pts[1]+dy,
+        x: pts[0] + dx, y: pts[1] + dy,
         fill: mopt[ftype].labelcolor || '',
-        'font-family': 'sans-serif', 'font-size': '12px',
+        'font-family': 'sans-serif', 'font-size': dw.root.getAttribute('width')/125,
         'text-anchor': a ? a[0] : ''
       });
       if ('rotate' in mopt[ftype]){
@@ -385,7 +385,7 @@
     var ver = dw.append(dw.root, 'text', {
       x: 10, y: dw.root.getAttribute('height')-5,
       fill: 'gray',
-      'font-family': 'sans-serif', 'font-size': '10px'
+      'font-family': 'sans-serif', 'font-size': dw.root.getAttribute('width')/125,
     });
     ver.appendChild(document.createTextNode('v'+BUILD_DATE));
   };
