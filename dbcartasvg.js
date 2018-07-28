@@ -1,5 +1,5 @@
 /*
- * dbCartajs HTML5 SVG vector object map. Build 180401.
+ * dbCartajs HTML5 SVG vector object map. Build 180728.
  * It uses Proj4js transformations.
  *
  * Source at https://github.com/egaxegax/dbCartajs.git.
@@ -561,16 +561,9 @@ function dbCartaSvg(cfg) {
       if (this.cfg.sbar) this.cfg.sbar.setAttribute('fill', this.cfg.scalebg);
       img.src = data;
       img.onload = function() {
-        var canvas = document.createElement('canvas'),
-            ctx = canvas.getContext('2d');
-        attr(canvas, {
-          width: root.getAttribute('width'), 
-          height: root.getAttribute('height'),
-        });
-        ctx.drawImage(img, 0, 0);
         var a = document.createElement('a');
-        a.download = 'image.png';
-        a.href = canvas.toDataURL('image/png');
+        a.download = 'image.svg';
+        a.href = data;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
