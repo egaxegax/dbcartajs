@@ -289,7 +289,7 @@ var MLINES=[
   [135,-59,'Q'],[137,-61,'Q'],[137,-65,'Q'],
   [137,-82,'Q'],[137,-85,'Q'],[140,-88,'Q'],
   [162,-112,'Q'],[165,-115,'Q'],[165,-118,'Q'],
-  [165,-138]
+  [165,-140]
 ]
 ],
 ['rMCK','rMCK',[
@@ -301,12 +301,12 @@ var MLINES=[
 ]
 ],
 ['rMono','rMono',[
-  [-26,101],[43,101]
+  [-26,100],[43,100]
 ]
 ],
 ['rTPK','rTPK_1',[
-  [20,-135],
-  [60,-135,'Q'],[68,-135,'Q'],[68,-129,'Q']
+  [20,-136],
+  [60,-136,'Q'],[65,-136,'Q'],[68,-130,'Q']
 ]
 ],
 ['rTPK_ext','rTPK_2',[
@@ -610,11 +610,11 @@ var MLINES=[
 ]
 ],
 ['interchange','Proletarskaya-Krestyanskaya_Zastava',[
-  [80,-65],[84,-59.83]
+  [80,-65],[84,-61]
 ]
 ],
 ['interchange_d','Proletarskaya-Krestyanskaya_Zastava',[
-  [80,-65],[84,-59.83]
+  [80,-65],[84,-61]
 ]
 ],
 ['interchange','Tekstilshchiki',[
@@ -674,11 +674,11 @@ var MLINES=[
 ]
 ],
 ['interchange','Sevastopolskaya-Kakhovskaya',[
-  [16,-133],[20,-135]
+  [16,-133],[20,-136]
 ]
 ],
 ['interchange_d','Sevastopolskaya-Kakhovskaya',[
-  [16,-133],[20,-135]
+  [16,-133],[20,-136]
 ]
 ],
 ['interchange','Bulvar_Dmitriya_Donskogo-Ulitsa_Starokachalovskaya',[
@@ -902,17 +902,17 @@ var MSTATIONS=[
 ['s2_2','Dinamo',[[-56.7,67.3]],'Динамо',null,1],
 ['s2_1','Belorusskaya',[[-47,57.78]],'Белорусская',null,1],
 ['s2','Mayakovskaya',[[-31,38]],'Маяковская',null,1],
-['s2_2','Tverskaya',[[-29,24]],'Тверская',null,1],
+['s2_7','Tverskaya',[[-29,24]],'Тверская',null,1],
 ['s2_1','Teatralnaya',[[1,-6]],'Театральная',null,1],
 ['s2_2','Novokuznetskaya',[[23.10,-33.98]],'Новокузнецкая',null,1],
 ['s2_3','Paveletskaya',[[45,-58]],'Павелецкая',null,1],
 ['s2_4','Avtozavodskaya',[[68,-90]],'Автозаводская',null,1],
 ['s2_4','Tekhnopark',[[68,-104]],'Технопарк',null,1],
 ['s2_4','Kolomenskaya',[[68,-113]],'Коломенская',null,1],
-['s2_5','Kashirskaya',[[68,-129]],'Каширская',null,1],
-['s2_4','Kantemirovskaya',[[68,-137]],'Кантемировская',null,1],
-['s2_4','Tsaritsyno',[[68,-143]],'Царицыно',null,1],
-['s2_4','Orekhovo',[[70.5,-149.34]],'Орехово',null,1],
+['s2_3','Kashirskaya',[[68,-130]],'Каширская',null,1],
+['s2_4','Kantemirovskaya',[[68,-139]],'Кантемировская',null,1],
+['s2_4','Tsaritsyno',[[68,-145]],'Царицыно',null,1],
+['s2_4','Orekhovo',[[71.5,-150.5]],'Орехово',null,1],
 ['s2_4','Domodedovskaya',[[76,-155]],'Домодедовская',null,1],
 ['s2_2','Krasnogvardeyskaya',[[81,-160]],'Красногвардейская',null,1],
 ['s2_6','Alma-Atinskaya',[[95,-160]],'Алма-Атинская',null,1],
@@ -1006,7 +1006,7 @@ var MSTATIONS=[
 ['s7_1','Polezhaevskaya',[[-80,50.54]],'Полежаевская',null,1],
 ['s7_9','Begovaya',[[-72,42.7]],'Беговая',null,1],
 ['s7_9','Ulitsa_1905_Goda',[[-67,37.8]],'Улица 1905 года',null,1],
-['s7_2','Barrikadnaya',[[-60.34,31.34]],'Баррикадная',null,1],
+['s7_10','Barrikadnaya',[[-60.34,31.34]],'Баррикадная',null,1],
 ['s7_2','Pushkinskaya',[[-23.5,29]],'Пушкинская',null,1],
 ['s7_1','Kuznetsky_Most',[[11.5,20.5]],'Кузнецкий мост',null,1],
 ['s7_5','Kitay-Gorod',[[31,-16]],'',null,1],
@@ -1034,8 +1034,8 @@ var MSTATIONS=[
 ['s8','Lomonosobsky_Prospekt',[[-120,-35]],'Ломоносовский проспект',null,1],
 ['s8','Minskaya',[[-120,-25]],'Минская',null,1],
 ['s8_6','Park_Pobedy',[[-120,-16]],'',null,1],
-['s8_3','Delovoy_Tsentr',[[-104,11]],'Деловой центр',null,1],
-['s8_1','Kutuzovsky_Prospekt',[[-69.38,3.63]],'Дорогомиловская',null,1],
+['s8_2','Delovoy_Tsentr',[[-104,11]],'Деловой центр',null,1],
+['s8_3','Kutuzovsky_Prospekt',[[-69.38,3.63]],'Дорогомиловская',null,1],
 ['s8_4','Plyushchikha',[[-42,-22.55]],'Плющиха',null,1],
 ['s8_1','Volkhonka',[[-29.83,-34.29]],'Волхонка',null,1],
 ['s8_6','Tretyakovskaya',[[18.14,-39]],'',null,1],
@@ -1088,7 +1088,7 @@ var MSTATIONS=[
 ['s10_2','Sretensky_Bulvar',[[31,14.32]],'Сретенский бульвар',null,1],
 ['s10_2','Chkalovskaya',[[62.27,-16.53]],'Чкаловская',null,1],
 ['s10_2','Rimskaya',[[84,-44.92]],'Римская',null,1],
-['s10_2','Krestyanskaya_Zastava',[[84,-59.83]],'Крестьянская застава',null,1],
+['s10_2','Krestyanskaya_Zastava',[[84,-61]],'Крестьянская застава',null,1],
 ['s10','Dubrovka',[[84,-72]],'Дубровка',null,1],
 ['s10_5','Kozhukhovskaya',[[92,-83]],'Кожуховская',null,1],
 ['s10_2','Pechatniki',[[98.5,-89]],'Печатники',null,1],
@@ -1100,9 +1100,9 @@ var MSTATIONS=[
 ['s10_1','Shipilovskaya',[[84,-153]],'Шипиловская',null,1],
 ['s10_3','Zyablikovo',[[84,-163]],'Зябликово',null,1],
 //
-['s11_1','Kakhovskaya',[[20,-135]],'Каховская',null,1],
-['s11','Varshavskaya',[[42,-135]],'Варшавская',null,1],
-['s11_2','Kashirskaya',[[68,-129]],'',null,1],
+['s11_1','Kakhovskaya',[[20,-136]],'Каховская',null,1],
+['s11','Varshavskaya',[[42,-136]],'Варшавская',null,1],
+['s11_2','Kashirskaya',[[68,-130]],'',null,1],
 //
 ['s12_4','Bittsevsky_Park',[[-40,-168]],'Битцевский парк',null,1],
 ['s12_1','Lesoparkovaya',[[-28,-168]],'Лесопарковая',null,1],
@@ -1134,8 +1134,8 @@ var MSTATIONS=[
 ['sTPK_3','Nizhegorodskaya_Ulitsa',[[120,-44]],'Нижегородская улица',null,1],
 ['sTPK_3','Tekstilshchiki',[[108,-76]],'',null,1],
 ['sTPK','Yozhnoportovaya',[[94.6,-94]],'Южнопортовая',null,1],
-['sTPK_7','Nagatinsky_Zaton',[[78.5,-115]],'Кленовый бульвар',null,1],
-['sTPK_10','Zyuzino',[[-12,-133]],'Зюзино',null,1],
+['sTPK_7','Nagatinsky_Zaton',[[79,-114]],'Кленовый бульвар',null,1],
+['sTPK_15','Zyuzino',[[-12,-133]],'Зюзино',null,1],
 ['sTPK_13','Vorontsovskaya',[[-48,-133]],'Воронцовская',null,1],
 ['sTPK_1','Ulitsa_Hovatorov',[[-87,-113]],'Улица Новаторов',null,1],
 ['sTPK_3','Prospekt_Vernadskogo',[[-110,-100.95]],'',null,1],
@@ -1159,16 +1159,16 @@ var MSTATIONS=[
 ['sKOZH','Stakhanobskaya_Ulitsa',[[137,-68]],'Окская улица',null,1],
 ['sKOZH_1','Ferganskaya_Ulitsa',[[143.11,-91.39]],'Юго-восточная улица',null,1],
 ['sKOZH_2','Kosino',[[156.5,-106]],'Косино',null,1],
-['sKOZH_1','Saltykovskaya_Ulitsa',[[165,-123]],'Улица Дмитриевского',null,1],
+['sKOZH_1','Saltykovskaya_Ulitsa',[[165,-122]],'Улица Дмитриевского',null,1],
 ['sKOZH_1','Kosino-Ukhtomskaya',[[165,-131]],'Лухмановская',null,1],
-['sKOZH_1','Nekrasovka',[[165,-138]],'Некрасовка',null,1],
+['sKOZH_1','Nekrasovka',[[165,-140]],'Некрасовка',null,1],
 //
-['sMono','Timiryazevskaya',[[-26,101]],'',null,1],
-['sMono','Ulitsa_Milashenkova',[[-13,101]],'',null,1],
-['sMono','Teletsentr',[[1,101]],'',null,1],
-['sMono','Ulitsa_Akademika_Koroleva',[[17,101]],'',null,1],
-['sMono','Vystavochny_Tsentr',[[33,101]],'',null,1],
-['sMono_1','Ulitsa_Sergeya_Eyzenshteyna',[[43,101]],'',null,1],
+['sMono','Timiryazevskaya',[[-26,100]],'',null,1],
+['sMono','Ulitsa_Milashenkova',[[-13,100]],'',null,1],
+['sMono','Teletsentr',[[1,100]],'',null,1],
+['sMono','Ulitsa_Akademika_Koroleva',[[17,100]],'',null,1],
+['sMono','Vystavochny_Tsentr',[[33,100]],'',null,1],
+['sMono_1','Ulitsa_Sergeya_Eyzenshteyna',[[43,100]],'',null,1],
 //
 ['sMCK','Vladykino',[[-11,116.4]],'',null,1],
 ['sMCK','Okruzhnaya',[[-30,113]],'',null,1],
