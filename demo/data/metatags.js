@@ -8,6 +8,7 @@ var addMetaTags = function(text){
   meta.name = 'description';
   meta.content = text +
     'Карта-Навигатор с проекциями Proj4js. ' +
+    'HTML5 Canvas+SVG векторная карта. ' +
     'HTML5 Canvas+SVG vector map with some Proj4js projections. ' +
     'Pure javascript and serverless';
   document.getElementsByTagName('head')[0].appendChild(meta);
