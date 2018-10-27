@@ -25,7 +25,7 @@ Simply download and unpack an archive, open index.html from demo folder in any b
  * drag to move map;
  * use Ctrl+Left-Mouse-Button to draw zoom box;
  * use mouse wheel or right bar buttons to zoom;
- * touch support (move, zoom) on Tablet PC.
+ * touch support (move) on Tablet PC.
 
 ##  Screenshots
 
