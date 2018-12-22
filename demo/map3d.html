@@ -1354,7 +1354,7 @@ function initMap() {
             canvas.loadCarta([[ftype, i, [mcoords[0]]]], 1);
             // center sat.surface
             rotationMatrix.identity();
-            rotateXY(mcoords[0][0], 0);
+            rotateXY(mcoords[0][0]+90, 0);
           }
           // surface trace
           if (ftype == 'sattrace') {
@@ -1544,7 +1544,7 @@ function initMap() {
 
   var dw = new THREE.WebGLRenderer();
 
-  dw.setClearColor( 0xcccccc );
+  dw.setClearColor( 0xeeeeee );
 
   dw.domElement.addEventListener('mousedown', mousedown, false);
   dw.domElement.addEventListener('mousemove', mousemove, false);
@@ -1576,7 +1576,7 @@ function initMap() {
   mtab.appendChild(row);
 
   var col = document.createElement('td');
-  col.width = '15%';
+  col.width = '10%';
   col.style.whiteSpace = 'nowrap';
   var el = document.createElement('h2');
   el.appendChild(document.createTextNode('Атлас 3d'));
@@ -1586,7 +1586,7 @@ function initMap() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '25%';
+  col.width = '30%';
   var layerlist = el = document.createElement('select');
   el.id = 'layerlist';
   col.appendChild(el);
