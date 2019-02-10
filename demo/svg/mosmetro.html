@@ -1,15 +1,15 @@
 <!--
  Moscow Metro map. SVG version.
  View lines and stations with additional info.
- egax@bk.ru, 2015-18.
+ egax@bk.ru, 2015-18. r180908.
 -->
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-<title>Карта метро Москвы - HTML5 SVG vector map</title>
-<meta name="description" content="Карта метро Москвы со списком станций">
-<meta name="keywords" content="Карта метро Москвы, схема метро, мцк, mosmetro">
+<title>Карта метро Москвы - HTML5 SVG векторная карта</title>
+<meta name="description" content="Карта метро Москвы">
+<meta name="keywords" content="Карта метро Москвы, схема метро скачать, мцк, mosmetro">
 <link rel='shortcut icon' href='../data/img/fav.ico?1422400155' />
 <style type="text/css">html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
 <script src="../data/google_counter.js"></script>
@@ -34,7 +34,6 @@
   }
 </script>
 <script type="text/javascript">
-  var BUILD_DATE='180721';
   var dw;
     // domap tooltip
   var el = document.createElement('div');
@@ -220,9 +219,6 @@
       's10_3': inst({fg: mopt['r10'].fg, anchor: ['end', 'top']}),
       's10_4': inst_d({fg: mopt['r10'].fg}),
       's10_5': station({fg: mopt['r10'].fg,  anchor: ['end', 'top']}),
-      's11': station({fg: mopt['rTPK'].fg, anchor: ['start', 'bottom']}),
-      's11_1': inst({fg: mopt['rTPK'].fg, anchor: ['start', 'bottom']}),
-      's11_2': inst_d({fg: mopt['rTPK'].fg}),
       's12': station({fg: mopt['r12'].fg, anchor: ['center', 'bottom']}),
       's12_1': station({fg: mopt['r12'].fg, anchor: ['center', 'top']}),
       's12_2': station({fg: mopt['r12'].fg, anchor: ['start', 'top']}),
@@ -384,13 +380,6 @@
       }
       text.appendChild(document.createTextNode(label));
     };
-      // version label
-    var ver = dw.append(dw.root, 'text', {
-      x: 10, y: dw.root.getAttribute('height')-5,
-      fill: 'gray',
-      'font-family': 'sans-serif', 'font-size': dw.root.getAttribute('width')/125,
-    });
-    ver.appendChild(document.createTextNode('v'+BUILD_DATE));
   };
     //
   dw = new dbCartaSvg({
@@ -398,9 +387,9 @@
     height: document.getElementById('mcont').offsetHeight,
     sbarpos: 'left',
     bg: 'white',
-    scalebg: 'rgba(100,200,100,0.2)'
+    scalebg: 'rgba(100,200,100,0.1)'
   });
-  dw.scaleCarta(0.7);
+  dw.scaleCarta(0.8);
     // events
   dw.extend(dw.root, {
     onmousemove: function(ev){

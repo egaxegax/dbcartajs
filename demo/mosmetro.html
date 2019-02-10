@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-<title>Карта метро Москвы - HTML5 Canvas vector map</title>
+<title>Карта метро Москвы - HTML5 Canvas векторная карта</title>
 <meta name="description" content="Карта метро Москвы со списком станций">
 <meta name="keywords" content="Карта метро Москвы, схема метро, мцк, mosmetro">
 <link rel='shortcut icon' href='data/img/fav.ico?1422400155' />
@@ -137,7 +137,7 @@ function init() {
     height: col.offsetHeight,
     viewportx: 220,
     viewporty: 220,
-    scalebg: 'rgba(100,200,100,0.2)'
+    scalebg: 'rgba(100,200,100,0.1)'
   });
   dw.style.backgroundColor = 'white';
   // define new layers
@@ -359,7 +359,7 @@ function init() {
 //  dw.loadCarta(MLEGEND);
   dw.loadCarta(MLABEL);
   dw.loadCarta(MSTATIONS);
-  dw.scaleCarta(0.7);
+  dw.scaleCarta(0.8);
   dw.draw();
   
   // fill station list
