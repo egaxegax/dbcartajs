@@ -29,25 +29,7 @@ Simply download and unpack an archive, open index.html from demo folder in any b
 
 ##  Screenshots
 
-![ortho-ns.gif]( http://img-fotki.yandex.ru/get/9066/136640652.0/0_bf3ee_cde97104_orig)
-![ortho-ew.gif]( http://img-fotki.yandex.ru/get/9167/136640652.0/0_bf3ed_d4a4a2c3_orig)
-
-Mercator Projection:
-
-![merc.jpg](https://img-fotki.yandex.ru/get/5624/136640652.1/0_12331d_b190b78a_orig )
-
-Mollweide Projection:
-
-![moll.png](http://img-fotki.yandex.ru/get/9065/136640652.1/0_e6dd4_24ef9d71_orig )
-
-Starry Sky. Featured, copmlicated demo like Orbitron, Marble, Xephem but more lightweight.
-
-![starry.png](http://img-fotki.yandex.ru/get/9802/136640652.0/0_df04b_fbe77af7_XL.png )
-
-Moscow Rail Map:
-
-![mosrails.png](http://habrastorage.org/files/5aa/e52/1b3/5aae521b3a02452d8ab24e25ac7c1c4d.png )
-
-Image Viewer:
-
-![imgviewer.png](https://img-fotki.yandex.ru/get/9064/136640652.1/0_12331c_48691622_orig )
+![ortho1](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/ortho1.gif)
+![ortho2](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/ortho2.gif)
+![mosrails](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/mosrails.png)
+![starry](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/starry.png)
