@@ -66,15 +66,15 @@ function listDemos() {
       return document.createTextNode('Просмотр картинок с возможностью масштабирования.'); }],
     [['noncart.html'], ['Изображение по точкам'], function() {
       return document.createTextNode('Выводим слово dbcarta по буквам в координатах.'); }],
-    [['sample.html', 'svg/atlas.html'], ['Атлас', 'SVG версия'], function() {
-      return document.createTextNode('Демо с возможностью нанесения объектов с заданными координатами в выбранной проекции.'); }],
+    [['atlas.html', 'svg/atlas.html'], ['Атлас', 'SVG версия'], function() {
+      return document.createTextNode('Интерактивный атлас мира с возможностью нанесения объектов с заданными координатами в выбранной проекции.'); }],
     [['cities.html'], ["Города мира"], function() {
       return document.createTextNode('Список крупнейших городов мира с выводом на карте в проекции "Миллер".'); }],
     [['countries.html'], ["Страны мира"], function() {
       return document.createTextNode('Список стран мира с отображением в различных проекциях.'); }],
     [['usemap.html', 'svg/usemap.html'], ['Население мира', 'SVG версия'], function() {
       var sp = document.createElement('span');
-      sp.appendChild(document.createTextNode('Карта плотности населения мира по странам с возможностью наведения на них и выводом дополнительной информации по клику. ')); 
+      sp.appendChild(document.createTextNode('Интерактивная карта мира с данными по плотности населения мира.')); 
       sp.appendChild(document.createTextNode('Идея и стиль позаимствованы с примеров ')); 
       var a = document.createElement('a');
       a.href = 'http://www.highcharts.com/maps/demo';
