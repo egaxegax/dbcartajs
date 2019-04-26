@@ -29,7 +29,7 @@ Simply download and unpack an archive, open index.html from demo folder in any b
 
 ##  Screenshots
 
-![ortho1](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/ortho1.gif)
-![ortho2](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/ortho2.gif)
+![ortho1](https://camo.githubusercontent.com/f5f2390dc5c2da653b7ead7d69abc8f211dc22e9/687474703a2f2f696d672d666f746b692e79616e6465782e72752f6765742f393036362f3133363634303635322e302f305f62663365655f63646539373130345f6f726967)
+![ortho2](https://camo.githubusercontent.com/ac40d983c70b8c622b99ef9497cfd7f2b289ea8b/687474703a2f2f696d672d666f746b692e79616e6465782e72752f6765742f393136372f3133363634303635322e302f305f62663365645f64346134613263335f6f726967)
 ![mosrails](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/mosrails.png)
 ![starry](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/starry.png)
