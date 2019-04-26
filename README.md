@@ -31,5 +31,5 @@ Simply download and unpack an archive, open index.html from demo folder in any b
 
 ![ortho1](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/ortho1.gif)
 ![ortho2](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/ortho2.gif)
-![mosrails](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/mosrails.png)
-![starry](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/starry.png)
+![mosrails](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/mosrails.jpg)
+![starry](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/starry.jpg)
