@@ -13,6 +13,10 @@ It uses Proj4js transformations. Supported projections:
  * moll, Mollweide projection.
 
 Starry Sky demo include satellite-js module.<br>
+
+## Docs
+
+See source comments for usage info in [dbcarta.js](https://github.com/egaxegax/dbCartajs/blob/master/dbcarta.js) and [dbcartasvg.js](https://github.com/egaxegax/dbCartajs/blob/master/dbcartasvg.js) files.
 Demos at http://egaxegax.github.io/dbCartajs/demo/index.html.<br>
 Docs in wiki at https://github.com/egaxegax/dbCartajs/wiki.
 
