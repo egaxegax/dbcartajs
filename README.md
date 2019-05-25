@@ -14,10 +14,15 @@ It uses Proj4js transformations. Supported projections:
 
 Starry Sky demo include satellite-js module.<br>
 
+## Demos
+
+[Moscow Metro Карта метро Москвы 2018](http://egaxegax.github.io/dbCartajs/demo/svg/mosmetro.html)
+
+All demos at http://egaxegax.github.io/dbCartajs/demo/index.html.
+
 ## Docs
 
 See source comments for usage info in [dbcarta.js](https://github.com/egaxegax/dbCartajs/blob/master/dbcarta.js) and [dbcartasvg.js](https://github.com/egaxegax/dbCartajs/blob/master/dbcartasvg.js) files.<br>
-Demos at http://egaxegax.github.io/dbCartajs/demo/index.html.<br>
 Docs in wiki at https://github.com/egaxegax/dbCartajs/wiki.
 
 ## Usage
