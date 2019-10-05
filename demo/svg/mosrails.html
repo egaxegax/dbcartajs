@@ -174,7 +174,7 @@
           's9_4': inst({labelcolor: mopt['r9'].fg, anchor: ['center', 'top']}),
           's9_5': inst_l({labelcolor: mopt['r9'].fg, anchor: ['end', 'middle']}),
           's9_6': inst({labelcolor: mopt['r9'].fg, anchor: ['start', 'bottom']}),
-          's10': inst_l({labelcolor: mopt['r10'].fg,  anchor: ['end', 'hanging']}),
+          's10': inst_l({labelcolor: mopt['r10'].fg,  anchor: ['end', 'middle']}),
           's10_1': inst({labelcolor: mopt['r10'].fg}),
           's10_2': inst({labelcolor: mopt['r10'].fg, anchor: ['center', 'bottom']}),
           's10_3': inst({labelcolor: mopt['r10'].fg, anchor: ['end', 'top']}),
@@ -278,7 +278,8 @@
           'a11_5': ost({anchor: ['start', 'middle']}),
           'a11_6': ost({anchor: ['center', 'bottom']}),
           'a11_7': ost({anchor: ['center', 'top']}),
-          'a11_8': ost({anchor: ['start', 'bottom']})
+          'a11_8': ost({anchor: ['start', 'bottom']}),
+          'a11_9': ost({anchor: ['end', 'bottom']}),
         });
 
       // lines
@@ -331,7 +332,7 @@
           if (a[0] == 'start')    dx = 10;
           else if (a[0] == 'center') dx = -20;
           else if (a[0] == 'end') dx = -10;
-          if (a[1] == 'top') dy = 20;
+          if (a[1] == 'top') dy = 15;
           else if (a[1] == 'middle') dy = 4;
           else if (a[1] == 'bottom') dy = -10;
         };
