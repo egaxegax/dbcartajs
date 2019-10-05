@@ -178,12 +178,14 @@ function init() {
     's5_2': inst({labelcolor: dw.mopt['r5'].fg, anchor: ['start', 'top']}),
     's5_3': inst({labelcolor: dw.mopt['r5'].fg, anchor: ['start', 'bottom']}),
     's5_4': inst({labelcolor: dw.mopt['r5'].fg, anchor: ['end', 'middle']}),
+    's5_5': inst({labelcolor: dw.mopt['r5'].fg, anchor: ['end', 'top']}),
     's6': inst_l({labelcolor: dw.mopt['r6'].fg, anchor: ['center', 'bottom']}),
     's6_1': inst({labelcolor: dw.mopt['r6'].fg}),
     's6_2': inst({labelcolor: dw.mopt['r6'].fg, anchor: ['end']}),
     's6_3': inst({labelcolor: dw.mopt['r6'].fg, anchor: ['center', 'top']}),
     's6_4': inst_l({labelcolor: dw.mopt['r6'].fg, anchor: ['center', 'top']}),
     's6_5': inst({labelcolor: dw.mopt['r6'].fg, anchor: ['start', 'middle']}),
+    's6_6': inst({labelcolor: dw.mopt['r6'].fg, anchor: ['end', 'bottom']}),
     's7': inst_l({labelcolor: dw.mopt['r7'].fg}),
     's7_1': inst({labelcolor: dw.mopt['r7'].fg, anchor: ['end', 'middle']}),
     's7_2': inst({labelcolor: dw.mopt['r7'].fg, anchor: ['start', 'middle']}),
@@ -203,7 +205,7 @@ function init() {
     's9_4': inst({labelcolor: dw.mopt['r9'].fg, anchor: ['center', 'top']}),
     's9_5': inst_l({labelcolor: dw.mopt['r9'].fg, anchor: ['end', 'middle']}),
     's9_6': inst({labelcolor: dw.mopt['r9'].fg, anchor: ['start', 'bottom']}),
-    's10': inst_l({labelcolor: dw.mopt['r10'].fg,  anchor: ['end', 'hanging']}),
+    's10': inst_l({labelcolor: dw.mopt['r10'].fg,  anchor: ['end', 'middle']}),
     's10_1': inst({labelcolor: dw.mopt['r10'].fg}),
     's10_2': inst({labelcolor: dw.mopt['r10'].fg, anchor: ['center', 'bottom']}),
     's10_3': inst({labelcolor: dw.mopt['r10'].fg, anchor: ['end', 'top']}),
@@ -307,7 +309,8 @@ function init() {
     'a11_5': ost({anchor: ['start', 'middle']}),
     'a11_6': ost({anchor: ['center', 'bottom']}),
     'a11_7': ost({anchor: ['center', 'top']}),
-    'a11_8': ost({anchor: ['start', 'bottom']})
+    'a11_8': ost({anchor: ['start', 'bottom']}),
+    'a11_9': ost({anchor: ['end', 'bottom']})
   });
   // curr.object
   dw.clfunc.onmousemove = function(dw, sd, dd, ev) {
