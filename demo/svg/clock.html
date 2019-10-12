@@ -49,9 +49,9 @@
     var s, r, f, el;
     var w = dw.vp.getAttribute('width'), h = dw.vp.getAttribute('height');
     for(var i=0; i<360; i+=6){
-      if (i%6==0 ) { r = 1; s = 'lightgray'; f = s; };
-      if (i%30==0 ) { r = 2; s = 'black'; f = s; };
-      if (i%90==0 ) { r = 5; s = 'gold'; f = s; };
+      if (i%6==0 ) { r = 2; s = 'lightgray'; f = s; };
+      if (i%30==0 ) { r = 4; s = 'black'; f = s; };
+      if (i%90==0 ) { r = 8; s = 'gold'; f = s; };
       childs.push( dw.append('circle', {
         stroke: s, fill: f, r: r,
         cx: w/2*wr + h/3 * Math.sin(i * Math.PI/180), cy: h/2*hr - h/3 * Math.cos(i * Math.PI/180)

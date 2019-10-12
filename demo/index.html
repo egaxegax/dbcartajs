@@ -119,12 +119,13 @@ function listDemos() {
 }
 function init() {
   document.body.style.backgroundColor = '#fff';
+  document.body.style.fontSize = 'larger';
   var el = document.createElement('h2');
   el.style.textAlign = 'center';
   el.style.backgroundColor = '#d2e0f0';
   el.style.width = '75%';
-  el.style.margin = '0.6em auto';
-  el.appendChild(document.createTextNode('dbCartajs - HTML5 Canvas+SVG векторная карта с проекциями'));
+  el.style.margin = '0.3em auto';
+  el.appendChild(document.createTextNode('HTML5 Canvas+SVG векторная карта с проекциями'));
   document.body.appendChild(el);
 
   // anim table
@@ -221,7 +222,7 @@ function init() {
     for(var j in mdemos[i][0]){
       var li = document.createElement('li');
       li.style.display = 'inline';
-      li.style.paddingRight = '20px';
+      li.style.paddingRight = '40px';
       var a = document.createElement('a');
       a.href = mdemos[i][0][j];
       a.appendChild(document.createTextNode(mdemos[i][1][j]));
@@ -239,11 +240,9 @@ function init() {
   var el = document.createElement('p');
   el.style.textAlign = 'center';
   el.style.fontSize = 'smaller';
-  el.style.color = '#adadad';
   var el2 = document.createElement('a');
   el2.style.textAlign = 'center';
   el2.style.textDecoration = 'none';
-  el2.style.color = 'inherit';
   el2.href = 'http://egaxegax.appspot.com/';
   el2.target = '_blank';
   el2.appendChild(document.createTextNode('egaxegax'));
