@@ -2,7 +2,7 @@ dbCartajs
 ===========
 
 HTML5 Canvas+SVG vector map and image viewer. Pure JavaScript and serverless.
-It uses Proj4js transformations. Supported projections:
+It uses Proj4js transformations.
 
  * espg:4326 - longlat;
  * epsg:3875 - Mercator projection;
