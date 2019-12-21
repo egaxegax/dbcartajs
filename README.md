@@ -20,7 +20,7 @@ Starry Sky demo include satellite-js module.<br>
 
 [Moscow Rail Map. Карта ж/д транспорта Москвы и МО 2018](http://egaxegax.github.io/dbcartajs/demos/svg/mosrails.html)
 
-All demos at http://egaxegax.github.io/dbcartajs/demos/index.html.
+All [demos](http://egaxegax.github.io/dbcartajs/demos/index.html).
 
 ## Docs
 
