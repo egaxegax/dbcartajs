@@ -31,6 +31,6 @@ var addMetaTags = function(text){
   //
   var meta = document.createElement('meta');
   meta.name = 'yandex-verification';
-  meta.content = '494e5b88af1227b8';
+  meta.content = '8141b78724fac803';
   document.getElementsByTagName('head')[0].appendChild(meta);
 };
