@@ -199,6 +199,7 @@ function init() {
   col.width = '10%';
   col.align = 'center';
   col.id = 'tcoords';
+  col.style.fontSize = 'smaller';
   row.appendChild(col);
 
   var row = document.createElement('tr');
@@ -234,7 +235,7 @@ function init() {
   dw.clfunc.onmousemove = function(dw, sd, dd, ev) {
     var tcoords = document.getElementById('tcoords');
     tcoords.innerHTML = ' X: Y:';
-    if (dd) tcoords.innerHTML = ' X: ' + dd[0].toFixed(2) + ' Y: ' + dd[1].toFixed(2);
+    if (dd) tcoords.innerHTML = 'x: ' + dd[0].toFixed(2) + ' y: ' + dd[1].toFixed(2);
     infobox(ev);
     dw.paintCoords(dd);
   }
