@@ -119,7 +119,7 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '15%';
+  col.width = '20%';
   col.align = 'center';
   var el = document.createElement('input');
   el.type = 'text';
@@ -134,10 +134,9 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '15%';
+  col.width = '20%';
   col.align = 'center';
-  col.appendChild(document.createTextNode('Проекции '));
-  var projlist = el = document.createElement('select');
+    var projlist = el = document.createElement('select');
   el.id = 'projlist';
   col.appendChild(el);
   row.appendChild(col);
@@ -166,7 +165,7 @@ function init() {
   el.style.color = '#333333';
   el.style.font = '12px Verdana';
   el.style.border = '2px solid rgba(19,64,117,0.5)';
-  el.style.borderRadius = '4px';
+//  el.style.borderRadius = '4px';
   el.style.backgroundColor = 'rgba(250,250,250,0.9)';
   el.style.position = 'absolute';
   el.style.zIndex = '10000';
@@ -180,8 +179,8 @@ function init() {
     scalebg: 'rgba(19,64,117,0.2)'
   });
   dw.style.backgroundColor = 'white';
-  dw.style.border = '1px solid rgb(39,75,109)';
-  dw.style.borderRadius = '7px';
+  dw.style.border = '1px solid lightgray';
+//  dw.style.borderRadius = '7px';
   // callbacks
   dw.extend(dw.clfunc, {
     onmousemove: function(dw, sd, dd, ev) {

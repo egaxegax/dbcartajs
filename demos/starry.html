@@ -480,7 +480,7 @@ function init() {
   col.appendChild(el);
   var el = document.createElement('button');
   el.onclick = rotate;
-  el.appendChild(document.createTextNode('Rot'));
+  el.appendChild(document.createTextNode('R'));
   col.appendChild(el);
   row.appendChild(col);
 
@@ -521,7 +521,7 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '15%';
+  col.width = '5%';
   col.align = 'center';
   var el = document.createElement('div');
   el.id = 'tcoord';
@@ -625,7 +625,7 @@ function init() {
     if (dw.isTurnable()) {
       if (scoords = calcSpheric(sd, getSelTime())) {
         // in radians
-        tcoord.innerHTML = 'ra: ' + scoords[0].toFixed(4) + ' dec: ' + scoords[1].toFixed(4);
+        tcoord.innerHTML = 'ra: ' + scoords[0].toFixed(2) + '<br>de: ' + scoords[1].toFixed(2);
         // in hms, dms
 //        var ra = MUtil.deg2hms(scoords[0] * 180/Math.PI).join(':'),
 //            dec scoords= MUtil.deg2dms(scoords[1] * 180/Math.PI).join(':');
