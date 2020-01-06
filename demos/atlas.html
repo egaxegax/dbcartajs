@@ -126,7 +126,7 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '20%';
+  col.width = '10%';
   col.align = 'center';
   var el = document.createElement('input');
   el.type = 'text';
@@ -136,16 +136,16 @@ function init() {
   col.appendChild(el);
   var el = document.createElement('button');
   el.onclick = scale;
-  el.appendChild(document.createTextNode('scale'));
+  el.appendChild(document.createTextNode('S'));
   col.appendChild(el);
   var el = document.createElement('button');
   el.onclick = rotate;
-  el.appendChild(document.createTextNode('rotate'));
+  el.appendChild(document.createTextNode('R'));
   col.appendChild(el);
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '20%';
+  col.width = '10%';
   col.align = 'center';
   var projlist = el = document.createElement('select');
   el.id = 'projlist';
@@ -153,7 +153,7 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '30%';
+  col.width = '40%';
   col.align = 'center';
   el = document.createElement('select');
   el.id = 'ftype';
@@ -176,7 +176,7 @@ function init() {
   col.appendChild(el);
   el = document.createElement('button');
   el.onclick = draw;
-  el.appendChild(document.createTextNode('draw'));
+  el.appendChild(document.createTextNode('D'));
   col.appendChild(el);
   row.appendChild(col);
 
