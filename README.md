@@ -1,4 +1,4 @@
-dbCartajs
+dbcartajs
 ===========
 
 HTML5 Canvas+SVG vector map and image viewer. Pure JavaScript and serverless.
