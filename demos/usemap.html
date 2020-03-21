@@ -1,7 +1,7 @@
 <!--
  Population density by country.
  View countries under mouse cursor.
- egax@bk.ru, 2013-15.
+ egax@bk.ru, 2013-20.
 -->
 <!DOCTYPE html>
 <html>
@@ -33,7 +33,7 @@ function proj() {
 function densityColor(cntryname) {
   var ds = INFOCNT[cntryname] ? INFOCNT[cntryname][0] : 0;
   return (
-    (ds < 3) ? 'rgb(243,245,248)' :
+    (ds < 3) ? 'rgb(233,235,238)' :
     (ds < 10) ? 'rgb(208,217,227)' :
     (ds < 30) ? 'rgb(162,179,200)' :
     (ds < 100) ? 'rgb(137,159,186)' :
@@ -175,12 +175,12 @@ function init() {
   dw = new dbCarta({
     id: 'mcol', 
     height: col.offsetHeight,
-    mapbg: 'rgb(255,127,0)',
+    mapbg: 'rgb(255,127,0)', // map bgcolor
+    mapfg: 'white',
     scalebg: 'rgba(19,64,117,0.2)'
   });
   dw.style.backgroundColor = 'white';
   dw.style.border = '1px solid lightgray';
-//  dw.style.borderRadius = '7px';
   // callbacks
   dw.extend(dw.clfunc, {
     onmousemove: function(dw, sd, dd, ev) {
@@ -210,7 +210,7 @@ function init() {
         mcoords = mpart[2];
     var dclr = densityColor(mcntryname);
     // add new layers
-    if (!dw.mopt[dclr]) dw.mopt[dclr] = {cls: 'Polygon', fg: 'silver', bg: dclr};
+    if (!dw.mopt[dclr]) dw.mopt[dclr] = {cls: 'Polygon', fg: 'transparent', bg: dclr};
     dw.loadCarta([[dclr, mabbr, mcoords, mcntryname, undefined, true]]);
   };
   delete COUNTRIES;

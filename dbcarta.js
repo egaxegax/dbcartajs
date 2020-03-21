@@ -1,10 +1,10 @@
-/*
- * dbCartajs HTML5 Canvas vector object map. Build 171224.
- * It uses Proj4js transformations.
- *
- * Source at https://github.com/egaxegax/dbCartajs.git.
- * egax@bk.ru, 2013-18.
- */
+//
+// dbcartajs. HTML5 Canvas vector map and image viewer. Build 200321
+// It uses Proj4js transformations
+//
+// Source at https://github.com/egaxegax/dbCartajs.git
+// egax@bk.ru, 2013-20
+//
 function dbCarta(cfg) {
   cfg = cfg||{};
   var dw = document.createElement('canvas'),
@@ -27,18 +27,16 @@ function dbCarta(cfg) {
     return dst;
   };
   dw.extend({
-    /**
-     * Config.
-     * cfg {
-     *   pid: parent id
-     *   width, height: canvas size
-     *   draggable: move map by cursor
-     *   viewportx, viewporty: offset limits for centerCarta in degrees
-     *   scalebg: bgcolor for paintBar
-     *   rbar: show right bar?
-     *   mapbg: bgcolor for doMap
-     * }
-     */
+    // Config
+    // cfg {
+    //   pid: parent id
+    //   width, height: canvas size
+    //   draggable: move map by cursor
+    //   viewportx, viewporty: offset limits for centerCarta in degrees
+    //   scalebg: bgcolor for paintBar
+    //   rbar: show right bar?
+    //   mapbg: bgcolor for doMap
+    // }
     cfg: {
       draggable: cfg.draggable == undefined ? true : cfg.draggable,
       viewportx: cfg.viewportx || 180.0,
@@ -48,24 +46,22 @@ function dbCarta(cfg) {
       mapbg: cfg.mapbg || 'rgba(80,90,100,0.5)',
       mapfg: cfg.mapfg
     },
-    /**
-     * Base Layers.
-     * Options {
-     *   cls: type {Image|Polygon|Line|Dot|Rect|Label}
-     *   fg: : color (stroke)
-     *   bg: background color (fill)
-     *   dash: dash pattern [1,2]
-     *   join: lineJoin
-     *   cap: lineCap
-     *   width: lineWidth
-     *   size: arc radii or rect size
-     *   scale: scalable size [0|1]
-     *   labelcolor
-     *   labelscale: text scalable [0|1]
-     *   anchor: text pos [textAlign, textBaseline]
-     *   rotate: text rotate angle
-     * }
-     */
+    // Base Layers
+    // Options {
+    //   cls: type {Image|Polygon|Line|Dot|Rect|Label}
+    //   fg: : color (stroke)
+    //   bg: background color (fill)
+    //   dash: dash pattern [1,2]
+    //   join: lineJoin
+    //   cap: lineCap
+    //   width: lineWidth
+    //   size: arc radii or rect size
+    //   scale: scalable size [0|1]
+    //   labelcolor
+    //   labelscale: text scalable [0|1]
+    //   anchor: text pos [textAlign, textBaseline]
+    //   rotate: text rotate angle
+    // }
     mopt: {
       '.Image':     {cls: 'Image'},
       '.ZoomBox':   {cls: 'Polygon', fg: 'rgb(50,150,255)', bg: 'rgba(100,140,180,0.2)'},
@@ -81,12 +77,7 @@ function dbCarta(cfg) {
       'Line':       {cls: 'Line', fg: 'rgb(0,130,200)'},
       'DashLine':   {cls: 'Line', fg: 'rgba(0,0,0,0.2)', dash: [1,2]}
     },
-    /**
-     * Vars store.
-     * User defines {
-     *   bgimg - bg image for drag (mflood ref)
-     * }
-     */
+    // Vars store
     m: {
       delta: dw.width / 360.0,
       halfX: dw.width / 2.0,
@@ -99,15 +90,13 @@ function dbCarta(cfg) {
       touches: []
       // marea tmap pmap bgimg mimg
     },
-    /**
-     * Stores
-     */
+    // Keys store
     clfunc: {}, // user callbacks
     mflood: {}, // obj draw
     marea: {},  // area info {ftype, ftag, pts, desc} for doMap
-    /*
-     * Proj4 defs
-     */
+    //
+    // Proj4 projects ids defs
+    //
     projlist: function(){
       if ('Proj4js' in window){
         return {
@@ -124,13 +113,11 @@ function dbCarta(cfg) {
     }(),
     projload: {},
     project: 0,
-    /**
-     * Context 2d
-     */
+    // Canvas context 2d
     ctx: dw.getContext('2d'),
-    /**
-    * Convert pixels to points.
-    */
+    //
+    // Convert pixels to points
+    //
     canvasXY: function(ev) {
       var cw = this.offsetWidth,
           pw = this.width,
@@ -150,18 +137,18 @@ function dbCarta(cfg) {
       return [ pts[0] / cw * pw,
                pts[1] / ch * ph ];
     },
-    /**
-    * Init dash support.
-    */
+    //
+    // Init dash support
+    //
     setDashLine: function(dashlist) {
       if ('setLineDash' in this.ctx)
         this.ctx.setLineDash(dashlist);
       else if ('mozDash' in this.ctx)
         this.ctx.mozDash = dashlist;
     },
-    /**
-    * Return meridians info for loadCarta.
-    */
+    //
+    // Return meridians info for loadCarta
+    //
     createMeridians: function () {
       var lonlat = [];
       var x = -180,
@@ -193,9 +180,9 @@ function dbCarta(cfg) {
       return lonlat;
     },
     // ----------------------------------
-    /**
-    * Draw obj from mflood on Canvas.
-    */
+    //
+    // Draw obj from mflood on Canvas
+    //
     draw: function(dontclear) {
       if (!dontclear) this.clearCarta();
       this.paintBound();
@@ -235,9 +222,9 @@ function dbCarta(cfg) {
       this.m.doreload = false;
       if (this.cfg.rbar) this.paintBar();
     },
-    /**
-     * Rotate map on ANGLE in degrees.
-     */
+    //
+    // Rotate map on ANGLE in degrees
+    //
     rotateCarta: function(angle) {
       var centerof = this.centerOf();
       this.ctx.translate(centerof[0] - this.m.offset[0], centerof[1] - this.m.offset[1]);
@@ -245,10 +232,10 @@ function dbCarta(cfg) {
       this.ctx.translate(-centerof[0] + this.m.offset[0], -centerof[1] + this.m.offset[1]);
       this.m.rotate += angle;
     },
-    /**
-    * Change map scale to SCALE.
-    * Use twice to fix bug with labels: scaleCarta(1)->scaleCarta(SCALE)
-    */
+    //
+    // Change map scale to SCALE
+    // Use twice to fix bug with labels: scaleCarta(1)->scaleCarta(SCALE)
+    //
     scaleCarta: function(scale) {
       var centerof = this.centerOf();
       var ratio = scale/this.m.scale;
@@ -261,9 +248,9 @@ function dbCarta(cfg) {
       this.m.scaleoff = [ cx, cy ];
       this.m.scale = scale;
     },
-    /**
-    * Center map by points CX,CY. Use DOSCALE for mouse points.
-    */
+    //
+    // Center map by points CX,CY. Use DOSCALE for mouse points
+    //
     centerCarta: function(cx, cy, doscale) {
       var centerof = this.centerOf();
       var offx = centerof[0] - cx,
@@ -289,19 +276,19 @@ function dbCarta(cfg) {
       this.ctx.clearRect(0, 0, this.width, this.height);
       this.ctx.restore();
     },
-    /**
-    * Add obj. info from DATA to mflood store.
-    * DATA [[
-    *   0 - ftype
-    *   1 - ftag
-    *   2 - coords [[x0,y0],[x1,y1],...]
-    * Optional:  
-    *   3 - label
-    *   4 - centerof [x,y]
-    *   5 - ismap 0|1
-    *   6 - img (href | base64)
-    * ],...]
-    */
+    //
+    // Add obj. info from DATA to mflood store.
+    // DATA [[
+    //   0 - ftype
+    //   1 - ftag
+    //   2 - coords [[x0,y0],[x1,y1],...]
+    // Optional:  
+    //   3 - label
+    //   4 - centerof [x,y]
+    //   5 - ismap 0|1
+    //   6 - img (href | base64)
+    // ],...]
+    //
     loadCarta: function(data, dopaint) {
       for (var i=0; i<data.length; i++) {
         var d = data[i],
@@ -334,9 +321,9 @@ function dbCarta(cfg) {
         this.mflood[fkey] = m;
       }
     },
-    /**
-    * Refill obj in mflood new points from coords.
-    */
+    //
+    // Refill obj in mflood new points from coords
+    //
     reload: function(m) {
       if (m['ftype'] == '.Image' && m['coords'] && this.chkPts(m['coords'][0]) && this.chkPts(m['coords'][1])) {
         m['pts'] = [this.toPoints(m['coords'][0]), this.toPoints(m['coords'][1])];
@@ -346,10 +333,10 @@ function dbCarta(cfg) {
       }
       return m;
     },
-    /**
-    * Find obj under mouse cursor like html MAP-AREA.
-    * Use ONMOUSEMOVE callback in your script to show info.
-    */
+    //
+    // Find obj under mouse cursor like html MAP-AREA
+    // Use ONMOUSEMOVE callback in your script to show info
+    //
     doMap: function(pts) {
       if (Number(new Date()) - this.m.tmap < 100) // not so quickly
         return;
@@ -415,9 +402,9 @@ function dbCarta(cfg) {
       }
       this.m.pmap = fkey;
     },
-    /**
-     * Get snapshot or bg image for redraw.
-     */
+    //
+    // Get snapshot or bg image for redraw
+    //
     doMapImg: function() {
       if (this.m.bgimg) {
         this.m.mimg = this.m.bgimg.img; // bg img from mflood
@@ -426,9 +413,9 @@ function dbCarta(cfg) {
         this.m.mimg.src = this.toDataURL();
       }
     },
-    /**
-    * Draw Sphere radii bounds.
-    */
+    //
+    // Draw Sphere radii bounds
+    //
     paintBound: function() {
       var centerof = this.centerOf();
       var rx, ry, proj = this.initProj();
@@ -455,9 +442,9 @@ function dbCarta(cfg) {
         this.ctx.fill();
       }
     },
-    /**
-    * Draw curr. coords in right-bottom corner of map.
-    */
+    //
+    // Draw curr. coords in right-bottom corner of map
+    //
     paintCoords: function(coords) {
       var cw = this.width,
           ch = this.height;
@@ -474,9 +461,9 @@ function dbCarta(cfg) {
       }
       this.ctx.restore();
     },
-    /**
-    * Draw right bar with scale buttons.
-    */
+    //
+    // Draw right bar with scale buttons
+    //
     paintBar: function() {
       var sz = this.sizeOf(),
           cw = sz[2],
@@ -519,18 +506,18 @@ function dbCarta(cfg) {
       }
       this.ctx.restore();
     },
-    /**
-    * Draw obj with COORDS (see paintCartaPts).
-    */
+    //
+    // Draw obj with COORDS (see paintCartaPts)
+    //
     paintCarta: function(coords, ftype, ftext, centerof) {
       var m = this.reload( {'coords': coords, 'centerof': centerof} );
       this.paintCartaPts(m['pts'], ftype, ftext, m['centerofpts']);
       return m;
     },
-    /**
-    * Draw obj with POINTS, FTYPE (see mflood) and centre with FTEXT in CENTEROFPTS (see paintCarta).
-    * Check points if bezierCurve as "[[1,1,'Q'],[1,2,'Q'],[2,3,'Q'],...]".
-    */
+    //
+    // Draw obj with POINTS, FTYPE (see mflood) and centre with FTEXT in CENTEROFPTS (see paintCarta)
+    // Check points if bezierCurve as "[[1,1,'Q'],[1,2,'Q'],[2,3,'Q'],...]"
+    //
     paintCartaPts: function(pts, ftype, ftext, centerofpts) {
       if (!(ftype in this.mopt))
         return;
@@ -616,9 +603,9 @@ function dbCarta(cfg) {
         }
       }
     },
-    /**
-    * Draw image IMG if loaded with sizes in PTS.
-    */
+    //
+    // Draw image IMG if loaded with sizes in PTS
+    //
     paintImage: function(img, pts) {
       if (this.chkImg(img) && pts) {
         if (this.chkPts(pts[0]) && this.chkPts(pts[1])) { // scalable
@@ -637,9 +624,9 @@ function dbCarta(cfg) {
       return [ (rect[0] + rect[2]) / 2.0,
                (rect[1] + rect[3]) / 2.0 ];
     },
-    /**
-    * Map visible borders in degrees.
-    */
+    //
+    // Map visible borders in degrees
+    //
     viewsizeOf: function() {
       var rect = this.sizeOf();
       var left = this.fromPoints([rect[0], rect[1]], false),
@@ -650,18 +637,18 @@ function dbCarta(cfg) {
           mright = right[0], mbottom = rightproj[1];
       return [mleft, mtop, mright, mbottom];
     },
-    /**
-    * Map visible centre in degrees.
-    */
+    //
+    // Map visible centre in degrees
+    //
     viewcenterOf: function() {
       var rect = this.viewsizeOf();
       return [ (rect[0] + rect[2]) / 2.0,
                (rect[1] + rect[3]) / 2.0 ];
     },
     // - checks ------------------------
-    /**
-     * Check click on right bar and do action.
-     */
+    //
+    // Check click on right bar and do action
+    //
     chkBar: function(pts, doaction) {
       if (!this.cfg.rbar) return;
       var sz = this.sizeOf(),
@@ -694,10 +681,10 @@ function dbCarta(cfg) {
         }
       }
     },
-    /**
-     * Check click into zoom box.
-     * Return coords of rect if not DOACTION or zoom in else.
-     */
+    //
+    // Check click inside zoom box
+    // Return coords of rect if not DOACTION or zoom in else
+    //
     chkZoomBox: function(pts, doaction) {
       if ('.ZoomBox' in this.mflood) {
         var mpts = this.mflood['.ZoomBox']['pts'];
@@ -730,9 +717,9 @@ function dbCarta(cfg) {
       return (pts && !isNaN(pts[0]) && !isNaN(pts[1]));
     },
     // - transforms ------------------------
-    /**
-    * Change project to NEW_PROJECT and center by visible centre.
-    */
+    //
+    // Change project to NEW_PROJECT and center by visible centre
+    //
     changeProject: function(new_project) {
       // curr. centerof
       var centerof = this.centerOf();
@@ -753,10 +740,10 @@ function dbCarta(cfg) {
         this.centerCarta(centerof[0] + this.m.offset[0], centerof[1] + this.m.offset[1]);
       }
     },
-    /**
-    * Change project. to PROJECT with DEFS (see Proj4js proj. definitions).
-    * If no args return current projection info (Proj4js.Proj obj.).
-    */
+    //
+    // Change project. to PROJECT with DEFS (see Proj4js proj. definitions)
+    // If no args return current projection info (Proj4js.Proj obj.)
+    //
     initProj: function(project, defs) {
       if ('Proj4js' in window) {
         if (project !== undefined) {
@@ -796,10 +783,10 @@ function dbCarta(cfg) {
       if (m[2]) pts.push(m[2]); // bezier flag
       return pts;
     },
-    /**
-     * Convert points to degrees.
-     * Use projection transform. DOTRANSFORM [0|1] and matrix transform. DONTSCALE [0|1].
-     */
+    //
+    // Convert points to degrees
+    // Use projection transform. DOTRANSFORM [0|1] and matrix transform. DONTSCALE [0|1]
+    //
     fromPoints: function(pts, dotransform, dontscale) {
       if (dontscale) { // dont use matrix transformations
         var coords = [ (pts[0] - this.m.halfX) / this.m.delta,
@@ -813,9 +800,9 @@ function dbCarta(cfg) {
       }
       return coords;
     },
-    /**
-     * Return spherical arc between CRD1 and CRD2 in degrees.
-     */
+    //
+    // Return spherical arc between COORD1 and COORD2 in degrees
+    //
     distance: function(coord1, coord2) {
       var x = coord1[0] * Math.PI/180.0,
           y = coord1[1] * Math.PI/180.0,
@@ -823,9 +810,9 @@ function dbCarta(cfg) {
           y1 = coord2[1] * Math.PI/180.0;
       return Math.acos(Math.cos(y) * Math.cos(y1) * Math.cos(x - x1) + Math.sin(y) * Math.sin(y1)) * 180.0/Math.PI;
     },
-    /**
-    * Interpolate (and convert to points if DOPOINTS) coords with STEP in degrees.
-    */
+    //
+    // Interpolate (and convert to points if DOPOINTS) coords with STEP in degrees
+    //
     interpolateCoords: function(coords, dopoints, step) {
       var i, pts, interpol_pts = [];
       for (var j in coords) {
@@ -855,9 +842,9 @@ function dbCarta(cfg) {
       }
       return interpol_pts;
     },
-    /**
-     * Reproject COORDS from SOURCE to DEST proj4 string definition.
-     */
+    //
+    // Reproject COORDS from SOURCE to DEST proj4 string definition
+    //
     transformCoords: function(sourcestr, deststr, coords) {
       if ('Proj4js' in window) {
         var sourceproj = this.projload[sourcestr],
@@ -880,9 +867,9 @@ function dbCarta(cfg) {
       } else
         return coords;
     },
-    /**
-    * Return new COORDS rotated around Z-axis with ANGLE relative to CENTEROF.
-    */
+    //
+    // Return new COORDS rotated around Z-axis with ANGLE relative to CENTEROF
+    //
     rotateCoords: function(coords, angle, centerof) {
       var roll = angle * Math.PI/180,
           x = coords[0], y = coords[1], cx = centerof[0], cy = centerof[1],

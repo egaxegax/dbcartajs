@@ -1,7 +1,7 @@
 <!--
  Population density by country. SVG version.
  View countries under mouse cursor.
- egax@bk.ru, 2015.
+ egax@bk.ru, 2015-20.
 -->
 <!DOCTYPE html>
 <html>
@@ -66,7 +66,7 @@
   function densityColor(cntryname) {
     var ds = INFOCNT[cntryname] ? INFOCNT[cntryname][0] : 0;
     return (
-      (ds < 3) ? 'rgb(243,245,248)' :
+      (ds < 3) ? 'rgb(233,235,238)' :
       (ds < 10) ? 'rgb(208,217,227)' :
       (ds < 30) ? 'rgb(162,179,200)' :
       (ds < 100) ? 'rgb(137,159,186)' :
@@ -80,14 +80,12 @@
           mpart = COUNTRIES[i],
           mabbr = mpart[1],
           mcoords = mpart[2];
-      var dclr = densityColor(mcntryname);
-      var pts = dw.interpolateCoords(mcoords, true, 10);
       // add new layers
       var cntry = dw.append('polygon', {
         class: mcntryname,
-        points: pts.join(' '),
-        fill: dclr,
-        stroke: 'silver'
+        points: dw.interpolateCoords(mcoords, true, 10).join(' '),
+        fill: densityColor(mcntryname),
+        stroke: 'transparent'
       });
       dw.extend(cntry, {
         onmousemove: function(ev){
