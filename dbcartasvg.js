@@ -65,7 +65,7 @@ function dbCartaSvg(cfg) {
     extend: extend,
     attr: attr,
     append: append,
-    // Config.
+    // Config
     // cfg {
     //   pid: parent id
     //   width, height: map size
