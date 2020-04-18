@@ -1,19 +1,19 @@
-/**
- * from dymaxion.obj
- * 
- * var vrt=[], faces=[],vos=[];
- * for(var i in geometry.vertices)
- *   vrt.push([geometry.vertices[i].x, geometry.vertices[i].y, geometry.vertices[i].z]);
- * for(var i in geometry.faces)
- *   faces.push([geometry.faces[i].a, geometry.faces[i].b, geometry.faces[i].c]);
- * for(var i in vertexOnSphere)
- *   vos.push([vertexOnSphere[i].x, vertexOnSphere[i].y, vertexOnSphere[i].z]);
- * console.log('ratio=', ratio);
- * var ss='';
- * for(var i in vos) //vrt, faces
- * ss += vos[i].join()+ '],\n[';
- * console.log(ss);
- */
+//
+// from dymaxion.obj
+// 
+// var vrt=[], faces=[],vos=[];
+// for(var i in geometry.vertices)
+//   vrt.push([geometry.vertices[i].x, geometry.vertices[i].y, geometry.vertices[i].z]);
+// for(var i in geometry.faces)
+//   faces.push([geometry.faces[i].a, geometry.faces[i].b, geometry.faces[i].c]);
+// for(var i in vertexOnSphere)
+//   vos.push([vertexOnSphere[i].x, vertexOnSphere[i].y, vertexOnSphere[i].z]);
+// console.log('ratio=', ratio);
+// var ss='';
+// for(var i in vos) //vrt, faces
+// ss += vos[i].join()+ '],\n[';
+// console.log(ss);
+//
 var GDYMAXION={
 ratio: 0.48031410493777466,
 vertices: [

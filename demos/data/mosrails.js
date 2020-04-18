@@ -1,9 +1,9 @@
-/**
- * List with coords of Moscow Underground and Commuter Rail lines and stations.
- *  [[ftype, ftag, coords, label, centerof, ismap],...]
- * Three points with coords and 'Q' literal implements to bezierCurveTo (...) method.
- * egax@bk.ru, 2013-15.
- */
+//
+// List with coords of Moscow Underground and Commuter Rail lines and stations.
+//  [[ftype, ftag, coords, label, centerof, ismap],...]
+// Three points with coords and 'Q' literal implements to bezierCurveTo (...) method.
+// egax@bk.ru, 2013-15.
+//
 var RLINES=[
 // MKAD
 ['mkad','mkad',[

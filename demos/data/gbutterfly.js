@@ -1,18 +1,18 @@
-/**
- * from butterfly.obj
- * 
- * var vrt=[], faces=[],vos=[];
- * for(var i in geometry.vertices)
- *   vrt.push([geometry.vertices[i].x, geometry.vertices[i].y, geometry.vertices[i].z]);
- * for(var i in geometry.faces)
- *   faces.push([geometry.faces[i].a, geometry.faces[i].b, geometry.faces[i].c]);
- * for(var i in vertexOnSphere)
- *   vos.push([vertexOnSphere[i].x, vertexOnSphere[i].y, vertexOnSphere[i].z]);
- * console.log('ratio=', ratio);
- * console.log('vertices=', vrt);
- * console.log('faces=', faces);
- * console.log('vertexOnSphere=', vos);
- */
+//
+// from butterfly.obj
+// 
+// var vrt=[], faces=[],vos=[];
+// for(var i in geometry.vertices)
+//   vrt.push([geometry.vertices[i].x, geometry.vertices[i].y, geometry.vertices[i].z]);
+// for(var i in geometry.faces)
+//   faces.push([geometry.faces[i].a, geometry.faces[i].b, geometry.faces[i].c]);
+// for(var i in vertexOnSphere)
+//   vos.push([vertexOnSphere[i].x, vertexOnSphere[i].y, vertexOnSphere[i].z]);
+// console.log('ratio=', ratio);
+// console.log('vertices=', vrt);
+// console.log('faces=', faces);
+// console.log('vertexOnSphere=', vos);
+//
 var GBUTTERFLY={
 ratio: 0.7085611166121563,
 vertices: [

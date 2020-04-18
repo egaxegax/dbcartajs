@@ -1,13 +1,13 @@
-/**
- * Moscow Metro lines and stations info.
- *  INFOMST    {fkeystation:[opening_date,depth]}
- *  INFOMLINES {fkeyline:[label]}
- * Source https://ru.wikipedia.org/wiki/Список_станций_Московского_метрополитена
- */
+//
+// Moscow Metro lines and stations info.
+//  INFOMST    {fkeystation:[opening_date,depth]}
+//  INFOMLINES {fkeyline:[label]}
+// Source https://ru.wikipedia.org/wiki/Список_станций_Московского_метрополитена
+//
 var INFOMST={
-'s1_Ulitsa_Podbelskogo':['1 августа 1990','−8 м'],
-'s1_Cherkizovskaya':['1 августа 1990','−9 м'],
-'s1_Preobrazhenskaya_Ploshchad':['31 декабря 1965','−8 м'],
+'s1_Bulvar_Rokossovskogo':['1 августа 1990','−8 м'],
+'s1_7_Cherkizovskaya':['1 августа 1990','−9 м'],
+'s1_6_Preobrazhenskaya_Ploshchad':['31 декабря 1965','−8 м'],
 's1_1_Sokolniki':['15 мая 1935','−9 м'],
 's1_Krasnoselskaya':['15 мая 1935','−8 м'],
 's1_1_Komsomolskaya':['15 мая 1935','−8 м'],
@@ -31,7 +31,7 @@ var INFOMST={
 's2_Vodny_Stadion':['31 октября 1964','−6 м'],
 's2_Voykovskaya':['31 октября 1964','−7 м'],
 's2_Sokol':['11 сентября 1938','−9,6 м'],
-'s2_4_Aeroport':['11 сентября 1938','−8,6 м'],
+'s2_Aeroport':['11 сентября 1938','−8,6 м'],
 's2_2_Dinamo':['11 сентября 1938','−39,6 м'],
 's2_Belorusskaya':['11 сентября 1938','−33,1 м'],
 's2_Mayakovskaya':['11 сентября 1938','−33,1 м'],
@@ -42,7 +42,7 @@ var INFOMST={
 's2_4_Avtozavodskaya':['1 января 1943','−11 м'],
 's2_4_Tekhnopark':['28 декабря 2015','0 м'],
 's2_4_Kolomenskaya':['11 августа 1969','−9 м'],
-'s2_5_Kashirskaya':['11 августа 1969','−7 м'],
+'s2_3_Kashirskaya':['11 августа 1969','−7 м'],
 's2_4_Kantemirovskaya':['30 декабря 1984','−8 м'],
 's2_4_Tsaritsyno':['30 декабря 1984','−8 м'],
 's2_4_Orekhovo':['30 декабря 1984','−9 м'],
@@ -198,8 +198,8 @@ var INFOMST={
 's10_1_Borisovo':['2 декабря 2011','−9 м'],
 's10_1_Shipilovskaya':['2 декабря 2011','−9 м'],
 's10_3_Zyablikovo':['2 декабря 2011','−14,3 м'],
-'s11_1_Kakhovskaya':['11 августа 1969','−8 м'],
-'s11_Varshavskaya':['11 августа 1969','−9 м'],
+'sTPK_4_Kakhovskaya':['11 августа 1969','−8 м'],
+'sTPK_10_Varshavskaya':['11 августа 1969','−9 м'],
 's11_2_Kashirskaya':['11 августа 1969','−7 м'],
 's12_4_Bittsevsky_Park':['27 февраля 2014',''],
 's12_3_Lesoparkovaya':['27 февраля 2014',''],
@@ -236,6 +236,6 @@ var INFOMLINES={
 'rKOM':['Линия в Коммунарку (коричневая)'],
 'rKOZH':['Кожуховская линия (розовая)'],
 'rMono':['Московский монорельс'],
-'rMCK':['Московское Центральное кольцо'],
+'rMCK':['Московское центральное кольцо (МЦК)'],
 'rTPK':['Третий пересадочный контур (бирюзовая)']
 };

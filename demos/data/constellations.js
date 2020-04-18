@@ -1,7 +1,7 @@
-/**
- * Stars constellation's lines and labels.
- * From astrokot.ru.
- */
+//
+// Stars constellation's lines and labels.
+// From astrokot.ru.
+//
 var CLNS=[
 [0.304210888622612,0.621337213709981],[0.539306738866248,0.738274273593601],
 [0.0363901149040818,0.506145483078356],[0.170169602069447,0.537561409614253],

@@ -1,7 +1,7 @@
-/**
- * NORAD TLE satellite's data from http://celestrak.com.
- *  [[label,[line1,line2]],...]
- */
+//
+// NORAD TLE satellite's data from http://celestrak.com.
+//  [[label,[line1,line2]],...]
+//
 var TLEDATA = {
 ISS: [ // https://celestrak.com/NORAD/elements/stations.txt [20150106]
   ['ISS (ZARYA)',

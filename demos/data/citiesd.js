@@ -1,7 +1,7 @@
-/**
- * List with coords of world cities.
- *  {cntryname:[[label, coords],...],...}
- */
+//
+// List with coords of world cities.
+//  {cntryname:[[label, coords],...],...}
+//
 var CITIES={
 "Afghanistan":[
   ["Asadabad",[[71.15,34.866]]],

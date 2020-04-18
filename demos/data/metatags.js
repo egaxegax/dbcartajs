@@ -1,6 +1,6 @@
-/**
- * Add META tags (description, keywords, author) to page.
- */
+//
+// Add META tags (description, keywords, author) to page.
+//
 var addMetaTags = function(text){
   // 
   if (text) text += ', ';

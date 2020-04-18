@@ -92,8 +92,7 @@
       'r12': route({fg: '#acbfe1'}),
       'rKOM': route_d({fg: '#554d26'}),
       'rKOZH': route_d({fg: '#de62be'}),
-      'rMCK': route({fg: '#f76093'}),
-      'rMCK_d': route({fg: '#fff', width: 4}),
+      'rMCK': route({fg: '#f76093', width: 2}),
       'rMono': route({fg: '#2c87c5', width: 4}),
       'rTPK': route({fg: '#79cdcd'})
     });
@@ -126,7 +125,7 @@
       'Nagatino_poyma': river({width: 6}),
       'grebnoy_canal': river({width: 3}),
       'moskva_river': river({width: 15}),
-      'moskva_river_label': river({rotate: 45, anchor: ['start', 'top']})
+      'moskva_river_label': river({rotate: 48, anchor: ['start', 'top']})
     });
       // rails
     dw.extend(mopt, {
@@ -216,7 +215,7 @@
       's10': station({fg: mopt['r10'].fg,  anchor: ['end', 'middle']}),
       's10_1': station({fg: mopt['r10'].fg, anchor: ['start', 'middle']}),
       's10_2': inst({fg: mopt['r10'].fg, anchor: ['start', 'middle']}),
-      's10_3': inst({fg: mopt['r10'].fg, anchor: ['end', 'top']}),
+      's10_3': inst({fg: mopt['r10'].fg, anchor: ['center', 'top']}),
       's10_4': inst_d({fg: mopt['r10'].fg}),
       's10_5': station({fg: mopt['r10'].fg,  anchor: ['end', 'top']}),
       's12': station({fg: mopt['r12'].fg, anchor: ['center', 'bottom']}),
@@ -341,7 +340,7 @@
         if (a[0] == 'start')    dx = 10;
         else if (a[0] == 'center') dx = -40;
         else if (a[0] == 'end') dx = -10;
-        if (a[1] == 'top') dy = 18;
+        if (a[1] == 'top') dy = 14;
         else if (a[1] == 'middle') dy = 4;
         else if (a[1] == 'bottom') dy = -8;
       };

@@ -1,7 +1,7 @@
-/**
- * Array with some info on countries.
- *  {cntryname:[density,...]}
- */
+//
+// Array with some info on countries.
+//  {cntryname:[density,...]}
+//
 var INFOCNT={
   "Afghanistan":[53],
   "Albania":[117],

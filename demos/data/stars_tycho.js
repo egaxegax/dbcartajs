@@ -1,7 +1,7 @@
-/**
- * Stars catalog TYCHO.
- *  [ra,dec,pmra,pmdec,etalon?,npp,mag,label]
- */
+//
+// Stars catalog TYCHO.
+//  [ra,dec,pmra,pmdec,etalon?,npp,mag,label]
+//
 var STARS=[
 [5.94575840312816,-0.818290153667037,131.2,-3.2,1,5,2.299,'Bet Gru'],
 [3.2775777278681,-0.996802332606234,27.9,-264.3,1,6,1.832,'Gam Cru'],

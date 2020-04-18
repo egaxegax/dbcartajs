@@ -1,6 +1,6 @@
-/**
-* Image data urls.
-*/
+//
+// Image data urls.
+//
 var IMGMAP={
 'wrld_small': 'data/img/wrld-small.jpg',
 'wrld_small_merc': 'data/img/wrld-small-merc.jpg',
