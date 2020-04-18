@@ -2,7 +2,7 @@
 // dbcartajs. HTML5 Canvas vector map and image viewer. Build 200321
 // It uses Proj4js transformations
 //
-// Source at https://github.com/egaxegax/dbCartajs.git
+// Source at https://github.com/egaxegax/dbcartajs.git
 // egax@bk.ru, 2013-20
 //
 function dbCarta(cfg) {

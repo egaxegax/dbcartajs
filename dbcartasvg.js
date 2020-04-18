@@ -2,7 +2,7 @@
 // dbcartajs. HTML5 SVG vector map and image viewer. Build 200321
 // It uses Proj4js transformations
 //
-// Source at https://github.com/egaxegax/dbCartajs.git
+// Source at https://github.com/egaxegax/dbcartajs.git
 // egax@bk.ru, 2015-20
 //
 var SVG_NS = 'http://www.w3.org/2000/svg';
