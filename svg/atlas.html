@@ -10,19 +10,16 @@
 <title>Атлас - HTML5 SVG векторная карта</title>
 <link rel='shortcut icon' href='../data/img/fav.ico?1422400155' />
 <style type="text/css">html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
-<script src="../data/google_counter.js"></script>
-<script src="../data/metatags.js"></script>
 </head>
 <body>
-<script src="../../proj4js-combined.js"></script>
-<script src="../../dbcartasvg.js"></script>
-<script src="../data/continents.js"></script>
-<script src="../data/imgmap.js"></script>
+<script src="../js/proj4js-combined.js"></script>
+<script src="../js/dbcartasvg.js"></script>
+<script src="../js/data/continents.js"></script>
+<script src="../js/data/imgmap.js"></script>
 <table><tr><td id="mcont"></td></tr></table>
 <script type='text/javascript'>
   var allmaps = [];
   function initmaps(){
-    addMetaTags('Атлас, atlas');
     for(var i in allmaps){
       allmaps[i]();
     }

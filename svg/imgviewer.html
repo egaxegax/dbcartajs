@@ -1,28 +1,28 @@
 <!--
- Image Canvas viewer.
- egax@bk.ru, 2015-17.
+ Image SVG viewer.
+ egax@bk.ru, 2016-17.
 -->
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-<title>Просмотровщик картинок - HTML5 Canvas векторная карта</title>
+<title>Просмотровщик картинок - HTML5 SVG векторная карта</title>
 <meta name="description" content="Просмотровщик картинок ">
-<meta name="keywords" content="image viewer, canvas">
-<link rel='shortcut icon' href='data/img/fav.ico?1422400155' />
+<meta name="keywords" content="image viewer, svg">
+<link rel='shortcut icon' href='../data/img/fav.ico?1422400155' />
 <style type="text/css">html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
 <style type="text/css">img{border:2px transparent solid} img:hover{border:2px red solid}</style>
-<script src="data/google_counter.js"></script>
-<script src="data/metatags.js"></script>
 </head>
 <body>
-<script src="../dbcarta.js"></script>
+<script src="../js/dbcartasvg.js"></script>
 <script>
-function setka(coords, n) {
+var childs = [], childs1 = [];
+function setka(coords) {
   var left = coords[0][0],
       right = coords[1][0],
       top = coords[0][1],
       bottom = coords[1][1];
+  var n = 3;
   var lonlat = [];
   var xstep = (right - left)/n,
       ystep = (top - bottom)/n;
@@ -34,7 +34,7 @@ function setka(coords, n) {
       lon.push([x, y]);
       y += ystep;
     }
-    lonlat.push( ['.Latitude', lonlat.length, lon] );
+    lonlat.push( lon );
     x += xstep;
   }
   var y = bottom;
@@ -45,10 +45,23 @@ function setka(coords, n) {
       lat.push([x, y]);
       x += xstep;
     }
-    lonlat.push( ['.Latitude', lonlat.length, lat] );
+    lonlat.push( lat );
     y += ystep;
   }
-  return lonlat;
+  for (var i=0; i<childs1.length; i++)
+    dw.vp.removeChild(childs1[i]);
+  childs1 = [];
+  for (var i=0; i<lonlat.length; i++){
+    var pts = dw.interpolateCoords(lonlat[i], true, 10);
+    var path = ('M ' + pts[0] + ' L ' + pts).replace(/,/g, ' ');
+    var o = dw.append('path', {
+      fill: 'transparent',
+      stroke: '#fff',
+      'stroke-dasharray': '4',
+      d: path
+    });
+    childs1.push( o );
+  }
 }
 function init() {
   var mtab = document.createElement('table');
@@ -72,10 +85,7 @@ function init() {
   var el = document.createElement('button');
   el.appendChild(document.createTextNode("Сетка"));
   el.onclick = function(o) {
-    var mimg = dw.mflood['.Image_wrld'];
-    if (mimg)
-      dw.loadCarta( setka(mimg['coords'], 3) );
-    dw.draw();
+    if (im) setka([[-90*im.width/im.height,90],[90*im.width/im.height,-90]]);
   };
   col.appendChild(el);
   row.appendChild(col);
@@ -104,16 +114,16 @@ function init() {
 
   // urls img
   var imgurls = [
-    // google appspot.com
-    'http://lh4.ggpht.com/5VuzQYNHzN_HgUDdCVnnL0JlRV34NA-ZY9LJq32WpMnq-YOe7nC0gZ8seBEn45tjUQfewSAaq632FbYKo_A',
-    'http://lh3.ggpht.com/jYrGCi0FD5EOaGaourdjhWIwqUTYzQ66NJmb-dOHrSh0Uw1rpv1Qm5eW5DCVSzyGpZlRu1qwXM0RQtUA1-g',
-    'http://lh5.ggpht.com/Mbb_vJ9fWs5Hp-BUItjEvgA3d0wdrd2OLJhL9u8MfDbWQnZba9msNR8gmd6tHvyjYUSHbcObRsx9zIgeZSs',
-    'http://lh4.ggpht.com/Vjcwowzd6fHMnDwOQqqa5Pil0xzXlaNGXJuka4RjYa-Pnz-_RrUsNfeFgbNmO5Vf7qadJUphQ4jpCdFpzT0B',
     // mail.ru
-    'https://content-24.foto.my.mail.ru/community/mir/_groupsphoto/b-17373.jpg',
-    'https://content-17.foto.my.mail.ru/community/mir/_groupsphoto/b-17378.jpg',
-    'https://content.foto.my.mail.ru/community/mir/_groupsphoto/i-17417.jpg',
-    'https://content.foto.my.mail.ru/community/mir/_groupsphoto/h-17424.jpg',
+    'https://content-10.foto.my.mail.ru/community/gid_puteshestvii/_groupsphoto/b-25434.jpg',
+    'https://content-23.foto.my.mail.ru/community/gid_puteshestvii/_groupsphoto/b-40.jpg',
+    'https://content-18.foto.my.mail.ru/community/gid_puteshestvii/_groupsphoto/b-51.jpg',
+    'https://content-10.foto.my.mail.ru/community/mir/_groupsphoto/b-395.jpg',
+    'https://content-1.foto.my.mail.ru/community/mir/_groupsphoto/b-17462.jpg',
+    'https://content-7.foto.my.mail.ru/community/mir/_groupsphoto/b-17460.jpg',
+    'https://content.foto.my.mail.ru/community/mir/_groupsphoto/h-17416.jpg',
+    'https://content.foto.my.mail.ru/community/mir/_groupsphoto/h-17412.jpg',
+    'https://content-9.foto.my.mail.ru/community/mir/_groupsphoto/b-17363.jpg',
     // windows walls
     'file:///C:/Windows/Web/Wallpaper/Theme1/img1.jpg',
     'file:///C:/Windows/Web/Wallpaper/Theme1/img2.jpg',
@@ -127,8 +137,6 @@ function init() {
     el2.style.display = 'block';
     el2.width = 100;
     el2.src = imgurls[k];
-    if (imgurls[k].search('ggpht.com')==0)
-      el2.src += '=s320'; // google image size change for appspot.com
     el2.onclick = function(){
       im.src = this.src;
     };
@@ -137,25 +145,37 @@ function init() {
     };
   }
 
-  dw = new dbCarta({id:'mcol'});
-  dw.extend(dw.mopt, {'.Latitude': {fg: 'white', width: .25}});
-  // worldmap img
+  dw = new dbCartaSvg({
+    id:'mcol',
+    bg: 'transparent',
+    sbarpos: 'left'
+  });
+  // img
   var im = new Image();
   im.src = imgurls[0]; // default img
   im.onload = function() {
-    var ratio = im.width/im.height;
-    dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-90*ratio,90],[90*ratio,-90]], 6:this}]);
-    dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
-    // clear setka
-    for (var tag in dw.mflood){
-      if (tag.split('_')[0] == '.Latitude') 
-        delete dw.mflood[tag];
-    }
-    dw.draw();
+    for (var i=0; i<childs.length; i++)
+      dw.vp.removeChild(childs[i]);
+    childs = [];
+    var ratio = this.width/this.height;
+    var crds = [[-90*ratio,90],[90*ratio,-90]],
+        pts = [dw.toPoints(crds[1]), dw.toPoints(crds[0])];
+    var img = dw.append('image', {
+      width:  pts[0][0]-pts[1][0],
+      height: pts[0][1]-pts[1][1],
+      x: pts[1][0],
+      y: pts[1][1],
+      preserveAspectRatio:'none'
+    });
+    img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', this.src);
+    dw.attr(img, {
+      title: "Image",
+      cursor: 'pointer'
+    });
+    childs.push(img);    
   }
 };
 
-addMetaTags("Просмотровщик картинок, image viewer");
 init();
 
 </script>

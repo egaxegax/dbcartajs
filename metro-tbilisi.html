@@ -5,10 +5,8 @@
 <title>Карта метро Тбилиси - HTML5 Canvas векторная карта</title>
 <meta name="description" content="Схема метро Тбилиси">
 <meta name="keywords" content="Карта метро, Схема метро Тбилиси">
-<link rel='shortcut icon' href='data/img/fav.ico?1422400155' />
-<script type="text/javascript" src="../dbcarta.js"></script>
-<script src="data/google_counter.js"></script>
-<script src="data/metatags.js"></script>
+<link rel='shortcut icon' href='img/fav.ico?1422400155' />
+<script type="text/javascript" src="js/dbcarta.js"></script>
 </head>
 <body>
 <select id="tbilisimetro-stationlist"><option value="">Выберите...</option></select>
@@ -16,8 +14,7 @@
 <script type='text/javascript'>
   var allmaps = [];
   function initmaps(){
-    addMetaTags();
-    for(var i in allmaps){
+        for(var i in allmaps){
       allmaps[i]();
     }
   }
