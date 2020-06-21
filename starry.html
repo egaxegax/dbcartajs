@@ -469,9 +469,11 @@ function init() {
   };
   col.appendChild(el);
   col.appendChild(document.createTextNode('Фон'));
+  col.style.whiteSpace = 'nowrap';
   row.appendChild(col);
 
   var col = document.createElement('td');
+  col.style.whiteSpace = 'nowrap';
   var el = document.createElement('input');
   el.type = 'text';
   el.size= '1';
