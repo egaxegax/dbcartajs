@@ -1,5 +1,5 @@
 //
-// dbcartajs. HTML5 SVG vector map and image viewer. Build 200321
+// dbcartajs. HTML5 SVG vector map and image viewer. Build 200621
 // It uses Proj4js transformations
 //
 // Source at https://github.com/egaxegax/dbcartajs.git
@@ -567,8 +567,8 @@ function dbCartaSvg(cfg) {
     mousemove: function(ev) {
       var spts = this.canvasXY(ev),
           pts = this.rotateCoords(spts, this.m.rotate, this.centerOf());
-      if (this.m.mpts && this.cfg.draggable) {
-        this.centerCarta(pts, true);
+      if (this.m.mpts && this.cfg.draggable && !this.isTurnable()) {
+        this.centerCarta(pts);
       }
       if (this.m.pmap) {
         if (this.m.pmap.i === 0) {
@@ -581,19 +581,17 @@ function dbCartaSvg(cfg) {
       }
     },
     mousedown: function(ev) {
-      if (ev.preventDefault) {
-        ev.preventDefault();
-      }
+      if (ev.preventDefault) ev.preventDefault(); // skip events
       var spts = this.canvasXY(ev),
           pts = this.rotateCoords(spts, this.m.rotate, this.centerOf());
-      if (this.m.mbar = this.chkBar(spts)) { // if bar
-        return;
-      } else if (this.isTurnable()) { // proj.center for spherical turn
+      if (this.m.mbar = this.chkBar(spts)) return; // if bar
+      if (this.isTurnable()) { // proj.center for spherical turn
         var dst = this.fromPoints(pts, true);
-        if (dst) {
+        if(dst){
           var proj = this.initProj();
-          this.initProj(' +h=' + proj.h + ' +lon_0=' + dst[0] + ' +lat_0=' + dst[1]);
+          this.m.mcenterof = [ proj.long0 * 180/Math.PI, proj.lat0 * 180/Math.PI, proj.h ];
         }
+        this.m.mpts = pts;
       } else { // for drag
         this.m.mpts = [
           pts[0]/this.m.scale - this.m.offset[0],
@@ -605,9 +603,20 @@ function dbCartaSvg(cfg) {
           pts = this.rotateCoords(spts, this.m.rotate, this.centerOf());
       if (this.m.mbar) { // bar
         this.chkBar(spts, true);
+      } else { //drag
+        var centerof = this.centerOf();
+        var mpts = [
+          centerof[0] - pts[0] + this.m.mpts[0],
+          centerof[1] - pts[1] + this.m.mpts[1] ];
+        if (this.m.mcenterof && this.isTurnable()) {
+          var dst = this.fromPoints(mpts, false, this.isTurnable());
+          this.initProj(' +h=' + this.m.mcenterof[2] + ' +lon_0=' + (this.m.mcenterof[0] + dst[0]) + ' +lat_0=' + (this.m.mcenterof[1] + dst[1]));
+          if ('draw' in window) draw();
+        }
       }
       with (this.m) {
         delete mpts;
+        delete mcenterof;
       }
     }
   });

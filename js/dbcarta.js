@@ -1,5 +1,5 @@
 //
-// dbcartajs. HTML5 Canvas vector map and image viewer. Build 200321
+// dbcartajs. HTML5 Canvas vector map and image viewer. Build 200621
 // It uses Proj4js transformations
 //
 // Source at https://github.com/egaxegax/dbcartajs.git
@@ -935,12 +935,11 @@ function dbCarta(cfg) {
     mousedown: function(ev) {
       var spts = this.canvasXY(ev),
           pts = this.rotateCoords(spts, this.m.rotate, this.centerOf());
-      if (this.m.mbar = this.chkBar(spts)) // if bar
-        return;
+      if (this.m.mbar = this.chkBar(spts)) return; // if bar
       this.m.mpts = pts;
       if (this.isTurnable()) { // proj.center for spherical turn
         var proj = this.initProj();
-        this.m.mcenterof = [ proj.long0 * 180/Math.PI, proj.lat0 * 180/Math.PI ];
+        this.m.mcenterof = [ proj.long0 * 180/Math.PI, proj.lat0 * 180/Math.PI, proj.h ];
       } else {
         this.m.mzoom = ev.ctrlKey;
         this.doMapImg();
@@ -969,8 +968,7 @@ function dbCarta(cfg) {
           centerof[1] - pts[1] + this.m.mpts[1] ];
         if (this.isTurnable()) {
           var dst = this.fromPoints(mpts);
-          var proj = this.initProj();
-          this.initProj(' +h=' + proj.h + ' +lon_0=' + (this.m.mcenterof[0] + dst[0]) + ' +lat_0=' + (this.m.mcenterof[1] + dst[1]));
+          this.initProj(' +h=' + this.m.mcenterof[2] + ' +lon_0=' + (this.m.mcenterof[0] + dst[0]) + ' +lat_0=' + (this.m.mcenterof[1] + dst[1]));
         } else {
           this.centerCarta(mpts[0], mpts[1], true);
         }
