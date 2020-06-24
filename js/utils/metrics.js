@@ -12,3 +12,14 @@ trackLinks:true,
 accurateTrackBounce:true
 });
 // /Yandex.Metrika counter
+// Global site tag (gtag.js) - Google Analytics
+let script = document.createElement('script');
+script.type = 'text/javascript';
+script.src  = 'https://www.googletagmanager.com/gtag/js?id=UA-25857345-4';
+document.head.appendChild(script);
+// ---------
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'UA-25857345-4');
+// /Google Analytics
