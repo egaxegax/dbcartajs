@@ -15,7 +15,7 @@
 <script src="js/proj4js-combined.js"></script>
 <script src="js/dbcarta.js"></script>
 <script src="js/data/continents.js"></script>
-<script>
+<script type='text/javascript'>
 function listDemos() {
   return [
     [['mosmetro.html', 'svg/mosmetro.html', 'svg/mosmetro-file.html'], ['Карта метро Москвы', 'SVG версия', 'HTML+SVG файл'], function() {
@@ -230,6 +230,46 @@ function init() {
     dl.appendChild(div);
   }
 
+  // footer
+  var footer = document.createElement('div');
+  document.body.appendChild(footer);
+  var mtab = document.createElement('table');
+  mtab.width = '100%';
+  footer.appendChild(mtab);
+  var tb = document.createElement('tbody');
+  mtab.appendChild(tb);
+  var row = document.createElement('tr');
+  tb.appendChild(row);
+
+  var col = document.createElement('td');
+  col.align = 'right';
+  col.width = '49%';
+
+  // --Yandex.Metrika informer--
+  var el = document.createElement('a');
+  el.href = 'https://metrika.yandex.ru/stat/?id=65044687&amp;from=informer';
+  el.target = '_blank';
+  el.rel = 'nofollow';
+  el.innerHTML = '<img src="https://informer.yandex.ru/informer/65044687/3_1_FFFFFFFF_EFEFEFFF_0_pageviews" style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" class="ym-advanced-informer" data-cid="65044687" data-lang="ru" />';
+  // --/Yandex.Metrika informer--
+  col.appendChild(el);
+  row.appendChild(col);
+
+  var col = document.createElement('td');
+  col.align = 'center';
+  col.width = '2%';
+  row.appendChild(col);
+
+  var col = document.createElement('td');
+  col.align = 'left';
+  col.width = '49%';
+  var el = document.createElement('a');
+  el.href = 'https://github.com/egaxegax';
+  col.appendChild(document.createTextNode(' 2013-2020 '));
+  el.appendChild(document.createTextNode('egaxegax'));
+  col.appendChild(el);
+  row.appendChild(col);
+
   // add anim
   var cx = Math.random() * 360,
       cy = Math.random() * 180;
@@ -250,15 +290,5 @@ function init() {
 
 init();
 </script>
-<table width="100%" cellpadding="5"><tr>
-<td width="49%"></td>
-<td>
-<!-- Yandex.Metrika informer -->
-<a href="https://metrika.yandex.ru/stat/?id=65044687&amp;from=informer" target="_blank" rel="nofollow"><img src="https://informer.yandex.ru/informer/65044687/3_1_FFFFFFFF_EFEFEFFF_0_pageviews" style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" class="ym-advanced-informer" data-cid="65044687" data-lang="ru" /></a>
-<!-- /Yandex.Metrika informer -->
-</td>
-<td style="font-size: smaller;"><a href="https://github.com/egaxegax">egaxegax</a>, 2013-2020</td>
-<td width="49%"></td>
-</tr></table>
 </body>
 </html>

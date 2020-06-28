@@ -1,8 +1,8 @@
-/**
- * Starry Sky and Solar System Bodies.
- * Source: Marble, libnova, k-map.
- * egax@bk.ru, 2013-14.
- */
+//
+// Starry Sky and Solar System Bodies.
+// Source: Marble, libnova, k-map.
+// egax@bk.ru, 2013-14.
+//
 var MUtil = {
   /**
   * Angle in range 0..360
