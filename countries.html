@@ -9,7 +9,7 @@
 <title>Страны мира / Canvas векторная карта</title>
 <link rel='shortcut icon' href='img/fav.ico?1422400155' />
 <style type="text/css">html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
-<style type="text/css">dd{cursor:default; border:2px transparent solid} dd:hover{border:2px red solid}</style>
+<style type="text/css">dd{cursor:default;margin:0;border:2px transparent solid} dd:hover{background:#ade;}</style>
 <script src="js/utils/metrics.js"></script>
 </head>
 <body>
@@ -178,8 +178,7 @@ function init() {
   //fill list
   for (var cntryname in COUNTRIES) {
     var el = document.createElement('dt');
-    el.style.fontStyle = 'italic';
-    el.style.fontWeight = 'bolder';
+    el.style.backgroundColor = '#eee';
     el.appendChild(document.createTextNode(cntryname));
     cntrylist.appendChild(el);
     for (var mpart in COUNTRIES[cntryname]) {
