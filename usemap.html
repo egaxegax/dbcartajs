@@ -1,7 +1,7 @@
 <!--
  Population density by country.
  View countries under mouse cursor.
- egax@bk.ru, 2013-20.
+ egax@bk.ru, 2013.
 -->
 <!DOCTYPE html>
 <html>
@@ -128,6 +128,7 @@ function init() {
   col.appendChild(el);
   var el = document.createElement('button')
   el.title = 'Rotate';
+  el.style.padding = 0;
   el.onclick = rotate;
   el.appendChild(document.createTextNode('Q'));
   col.appendChild(el);

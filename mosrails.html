@@ -1,7 +1,7 @@
 <!--
  Moscow Rail Roads map.
  View lines and stations with additional info.
- egax@bk.ru, 2013-19.
+ egax@bk.ru, 2013.
 -->
 <!DOCTYPE html>
 <html>
@@ -24,6 +24,8 @@ function findstation(){
   if (opt) {
     var centerofpts = dw.mflood[opt.value]['pts'];
     dw.centerCarta(centerofpts[0][0] + dw.m.offset[0], centerofpts[0][1] + dw.m.offset[1]);
+    dw.scaleCarta(1);
+    dw.scaleCarta(parseInt(opt.value.length/10 + 0.5));
     dw.draw();
     drawcrosshair();
   }

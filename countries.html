@@ -1,12 +1,14 @@
 <!--
  World's countrires and flags.
- egax@bk.ru, 2013-15.
+ egax@bk.ru, 2013.
 -->
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <title>Страны мира / Canvas векторная карта</title>
+<meta name="description" content="Страны мира в разных проекциях">
+<meta name="keywords" content="Страны мира в разных проекциях, countries, maps">
 <link rel='shortcut icon' href='img/fav.ico?1422400155' />
 <style type="text/css">html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
 <style type="text/css">dd{cursor:default;margin:0;border:2px transparent solid} dd:hover{background:#ade;}</style>
@@ -29,10 +31,10 @@ function draw(opt) {
     m.coords = COUNTRIES[m.cntryname][m.mpart][1];
     m.abbr2 = COUNTRIES[m.cntryname][m.mpart][2].toLowerCase();
     m.centerof = COUNTRIES[m.cntryname][m.mpart][3];
-    dw.loadCarta([['Area', m.abbr + m.mpart, m.coords, m.cntryname, m.centerof, true]]);
-    dw2.loadCarta([['Area', m.abbr + m.mpart, m.coords, m.cntryname, m.centerof, true]]);
-    dw3.loadCarta([['Area', m.abbr + m.mpart, m.coords, m.cntryname, m.centerof, true]]);
-    dw4.loadCarta([['Area', m.abbr + m.mpart, m.coords, m.cntryname, m.centerof, true]]);
+    dw1.loadCarta([['Area', m.abbr + m.mpart, m.coords, undefined, undefined, true]]);
+    dw2.loadCarta([['Area', m.abbr + m.mpart, m.coords, undefined, undefined, true]]);
+    dw3.loadCarta([['Area', m.abbr + m.mpart, m.coords, undefined, undefined, true]]);
+    dw4.loadCarta([['Area', m.abbr + m.mpart, m.coords, undefined, undefined, true]]);
     if (FLAGSB64[m.abbr2]) {
       var mflg = {};
       mflg[m.abbr2] = new Image();
@@ -40,7 +42,7 @@ function draw(opt) {
       mflg[m.abbr2].src = FLAGSB64[m.abbr2];
       mflg[m.abbr2].onload = function() {
         var m = this.m;
-        dw.loadCarta([{0:'.Image', 1: m.abbr + m.mpart, 2:[m.centerof], 6:this}], 1);
+        dw1.loadCarta([{0:'.Image', 1: m.abbr + m.mpart, 2:[m.centerof], 6:this}], 1);
         dw2.loadCarta([{0:'.Image', 1: m.abbr + m.mpart, 2:[m.centerof], 6:this}], 1);
         dw3.loadCarta([{0:'.Image', 1: m.abbr + m.mpart, 2:[m.centerof], 6:this}], 1);
         dw4.loadCarta([{0:'.Image', 1: m.abbr + m.mpart, 2:[m.centerof], 6:this}], 1);
@@ -49,16 +51,25 @@ function draw(opt) {
   }
   // draw on centre
   if (m.centerof) {
-    var pts = dw.toPoints(m.centerof, true);
-    dw.centerCarta(pts[0] + dw.m.offset[0], pts[1] + dw.m.offset[1]);
+    var pts = dw1.toPoints(m.centerof, true);
+    dw1.centerCarta(pts[0] + dw1.m.offset[0], pts[1] + dw1.m.offset[1]);
     dw2.initProj(' +lon_0=' + m.centerof[0] + ' +lat_0=' + m.centerof[1]);
     dw3.centerCarta(pts[0] + dw3.m.offset[0], pts[1] + dw3.m.offset[1]);
     dw4.centerCarta(pts[0] + dw4.m.offset[0], pts[1] + dw4.m.offset[1]);
   }
-  dw.draw();
+  dw1.draw();
   dw2.draw();
   dw3.draw();
   dw4.draw();
+  // add labels without saving to mflood store
+  dw1.reload(m);
+  dw1.paintCartaPts(m.centerofpts, 'Area', m.cntryname, m.centerofpts);
+  dw2.reload(m);
+  dw2.paintCartaPts(m.centerofpts, 'Area', m.cntryname, m.centerofpts);
+  dw3.reload(m);
+  dw3.paintCartaPts(m.centerofpts, 'Area', m.cntryname, m.centerofpts);
+  dw4.reload(m);
+  dw4.paintCartaPts(m.centerofpts, 'Area', m.cntryname, m.centerofpts);
 }
 function refresh() {
   window.location.reload(false);
@@ -89,6 +100,13 @@ function init() {
   var row = document.createElement('tr');
   mtab.appendChild(row);
 
+  var col = document.createElement('td');
+  col.id = 'canvasmap1';
+  col.width = '40%';
+  col.style.padding = '0';
+  col.style.verticalAlign = 'top';
+  row.appendChild(col);
+
   var dcol = document.createElement('td');
   dcol.rowSpan = '2';
   dcol.width = '15%';
@@ -98,15 +116,11 @@ function init() {
   el.style.margin = '0';
   el.style.padding = '0';
   el.style.fontSize = 'smaller';
+  el.style.backgroundColor = 'white';
+  el.style.textAlign = 'center';
   dcol.appendChild(el);
   row.appendChild(dcol);
 
-  var col = document.createElement('td');
-  col.id = 'canvasmap';
-  col.width = '40%';
-//  col.style.padding = '0';
-  col.style.verticalAlign = 'top';
-  row.appendChild(col);
   var col = document.createElement('td');
   col.id = 'canvasmap2';
   col.width = '40%';
@@ -120,13 +134,13 @@ function init() {
   var col = document.createElement('td');
   col.id = 'canvasmap3';
   col.width = '40%';
-//  col.style.padding = '0';
+  col.style.padding = '0';
   col.style.verticalAlign = 'top';
   row.appendChild(col);
   var col = document.createElement('td');
   col.id = 'canvasmap4';
   col.width = '40%';
-//  col.style.padding = '0';
+  col.style.padding = '0';
   col.style.verticalAlign = 'top';
   row.appendChild(col);
   document.body.appendChild(mtab);
@@ -134,35 +148,35 @@ function init() {
   cntrylist.style.height = dcol.offsetHeight + 'px';
   cntrylist.style.overflow = 'auto';
 
-  dw = new dbCarta({id:'canvasmap', height: dcol.offsetHeight/2.0*0.98});
-  dw.extend(dw.mopt, {
-    'Area': {fg: 'yellow', bg: 'transparent', labelcolor: 'white'}
-  });
-  dw.cfg.mapbg = undefined; // no draw map area
+  var bgcntry = 'rgb(' + parseInt(Math.random()*255) + ',' + parseInt(Math.random()*255) + ',' + parseInt(Math.random()*255) + ')';
+
+  dw1 = new dbCarta({id:'canvasmap1', height: dcol.offsetHeight/2.0*0.98});
+  dw1.extend(dw1.mopt['Area'], { fg: 'yellow', bg: bgcntry, labelcolor: 'white'} );
+  dw1.cfg.mapbg = undefined; // no draw map area
   // worldmap image
   var im = new Image();
   im.src = IMGMAP['wrld_small'];
   im.onload = function() {
-    dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-180,90],[180,-90]], 6:this}]);
-    dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
-    dw.loadCarta(dw.createMeridians());
-    dw.draw();
+    dw1.loadCarta([{0:'.Image', 1:'wrld', 2:[[-180,90],[180,-90]], 6:this}]);
+    dw1.m.bgimg = dw1.mflood['.Image_wrld']; // mark as bg
+    dw1.loadCarta(dw1.createMeridians());
+    dw1.draw();
   };
   dw2 = new dbCarta({id:'canvasmap2', height: dcol.offsetHeight/2.0*0.98});
+  dw2.extend(dw2.mopt['Area'], { fg: 'yellow', bg: bgcntry, labelcolor: 'white'} );
   dw2.changeProject(203);
   dw2.scaleCarta(1.5);
   dw2.loadCarta(CONTINENTS);
   dw2.loadCarta(dw2.createMeridians());
   dw2.draw();
   dw3 = new dbCarta({id:'canvasmap3', height: dcol.offsetHeight/2.0*0.98});
+  dw3.extend(dw3.mopt['Area'], { fg: 'yellow', bg: bgcntry, labelcolor: 'white'} );
   dw3.changeProject(204);
   dw3.loadCarta(CONTINENTS);
   dw3.loadCarta(dw3.createMeridians());
   dw3.draw();
   dw4 = new dbCarta({id:'canvasmap4', height: dcol.offsetHeight/2.0*0.98});
-  dw4.extend(dw4.mopt, {
-    'Area': {fg: 'yellow', bg: 'transparent', labelcolor: 'white'}
-  });
+  dw4.extend(dw4.mopt['Area'], { fg: 'yellow', bg: bgcntry, labelcolor: 'white'} );
   dw4.changeProject(102);
   // worldmap image
   var im4 = new Image();
@@ -202,7 +216,7 @@ function init() {
     mcoord.innerHTML = label;
     ev.target.paintCoords(dst);
   }
-  dw.clfunc.onmousemove = function(dw, src, dst, ev){ clfunc(dw, src, dst, ev); };
+  dw1.clfunc.onmousemove = function(dw, src, dst, ev){ clfunc(dw, src, dst, ev); };
   dw2.clfunc.onmousemove = function(dw, src, dst, ev){ clfunc(dw, src, dst, ev); };
   dw3.clfunc.onmousemove = function(dw, src, dst, ev){ clfunc(dw, src, dst, ev); };
   dw4.clfunc.onmousemove = function(dw, src, dst, ev){ clfunc(dw, src, dst, ev); };
