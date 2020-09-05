@@ -2,297 +2,200 @@
 <html>
 <head>
 <title>dbcartajs / Canvas+SVG векторная карта</title>
-<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
 <meta name="description" content="Карта-Навигатор с проекциями Proj4js. Отрисовка векторных данных. Вывод изображений. Управление, масштабирование карты. HTML5 Canvas+SVG vector map with some Proj4js projections. Pure javascript and serverless">
 <meta name="keywords" content="карта, проекция, html5, canvas, svg, 2d, vector, proj4js, projection, javascript, dbcartajs, map">
 <meta name="author" content="Grigoriy Eremin, Григорий Еремин, egax@bk.ru">
-<meta name="google-site-verification" content="eWwGSnvveM7GniusD-nYN2KXBDPtXBHmhKRezn_TBg8" />
-<meta name="yandex-verification" content="bf07f0af8e739c66" />
-<link rel='shortcut icon' href='img/fav.ico?1422400155' />
-<style type="text/css">body{font-family:tahoma,verdana,arial;font-size:16px;}</style>
+<meta name="google-site-verification" content="eWwGSnvveM7GniusD-nYN2KXBDPtXBHmhKRezn_TBg8">
+<meta name="yandex-verification" content="bf07f0af8e739c66">
+<link rel="shortcut icon" href="img/fav.ico?1422400155">
+<style type="text/css">
+  body { background:#fff; margin:0; font-family:tahoma,verdana,arial; font-size:16px; }
+  .hspace { padding: 0 12px; }
+  .stripe { background-color: rgb(210, 224, 240); }
+  dd { margin: 1%; padding: 0.5em; }
+  dt ul { padding: 0px; margin: 0px; }
+  dt li { display: inline; padding-right: 40px; }
+</style>
 <script src="js/utils/metrics.js"></script>
 </head>
 <body>
 <script src="js/proj4js-combined.js"></script>
 <script src="js/dbcarta.js"></script>
 <script src="js/data/continents.js"></script>
-<script type='text/javascript'>
-function listDemos() {
-  return [
-    [['mosmetro.html', 'svg/mosmetro.html', 'svg/mosmetro-file.html'], ['Карта метро Москвы', 'SVG версия', 'HTML+SVG файл'], function() {
-      var sp = document.createElement('span');
-      var a = document.createElement('a');
-      a.href = 'http://upload.wikimedia.org/wikipedia/commons/f/f3/Moscow_metro_map_ru_sb.svg';
-      a.appendChild(document.createTextNode('SVG-карты'));
-      sp.appendChild(document.createTextNode('Схема метро Москвы с выбором станций. Первоначально переделена из '));
-      sp.appendChild(a);
-      var a = document.createElement('a');
-      a.href = 'http://habrahabr.ru/post/193778';
-      a.appendChild(document.createTextNode('Карта метро Москвы на Canvas'));
-      sp.appendChild(document.createTextNode(' на Wikipedia. Добавлены линии МЦК и ТПК. Также добавлен вывод информации о станции при наведении. ' +
-                                             'Пунктирные линии строящихся станций отображаются только в Firefox (поддержка метода setDashLine в Canvas). Подробности в статье на Хабре "'));
-      sp.appendChild(a);
-      sp.appendChild(document.createTextNode('".'));
-      return sp; }],
-    [['mosrails.html', 'svg/mosrails.html'], ['Карта ж/д Москвы и МО', 'SVG версия'], function() {
-      return document.createTextNode('Ещё одна карта на тему железных дорог. Схема пригородного ж/д транспорта Москвы и МО. ' + 
-                                     'Оригинал этой карты можно видеть на стенах тамбуров подмосковных электричек под названием ' + 
-                                     'Moscow Underground and Commuter Rail Map. Подробности на Хабре.'); }],
-    [['http://dbcartajs.blogspot.ru/2014/01/spbmetro.html#cont-spbmetro',
-      'http://dbcartajs.blogspot.ru/2014/02/metro-novosibirsk.html#cont-nsbmetro',
-      'http://dbcartajs.blogspot.ru/2014/02/metro-kiev.html#cont-kievmetro',
-      'http://dbcartajs.blogspot.ru/2014/02/metro-tbilisi.html#cont-tbilisimetro'], [
-      'Санкт-Петербург', 'Новосибирск', 'Киев', 'Тбилиси'], function() {
-      return document.createTextNode('Подборка прочих карт со схемами метро наиболее крупных городов России и СНГ из блога проекта. ' + 
-                                     'Небольшие схемы по сравнению с московской. В целом вообще по протяженности и количеству станций с московским метро ' + 
-                                     'могут сравниться только метро Нью-Йорка и Лондона.'); }],
-    [['starry.html'], ['Звездное небо'], function() {
-      var sp = document.createElement('span');
-      var a = document.createElement('a');
-      a.href = 'http://habrahabr.ru/post/189692';
-      a.appendChild(document.createTextNode('Звездное небо на Canvas'));
-      sp.appendChild(document.createTextNode('Глобус на фоне звездного неба как в Orbitron, Marble, Xephem c эфемеридами космических аппаратов. ' + 
-                                             'Подробно написано в статье на Хабре "'));
-      sp.appendChild(a);
-      sp.appendChild(document.createTextNode('".'));
-      return sp; }],
-    [['merc.html'], ['Маршруты'], function() {
-      return document.createTextNode('На карте в проекции "Меркатор" изображены несколько стран со столицами. Города соединены маршрутными линиями.'); }],
-    [['imgviewer.html', 'svg/imgviewer.html'], ['Просмотровщик картинок', 'SVG версия'], function() {
-      return document.createTextNode('Просмотр картинок с возможностью масштабирования.'); }],
-    [['noncart.html'], ['Изображение по точкам'], function() {
-      return document.createTextNode('Выводим слово dbcarta по буквам в координатах.'); }],
-    [['atlas.html', 'svg/atlas.html'], ['Атлас', 'SVG версия'], function() {
-      return document.createTextNode('Интерактивный атлас мира с возможностью нанесения объектов с заданными координатами в выбранной проекции.'); }],
-    [['cities.html'], ["Города мира"], function() {
-      return document.createTextNode('Список крупнейших городов мира с выводом и центрированием на карте.'); }],
-    [['countries.html'], ["Страны мира"], function() {
-      return document.createTextNode('Список стран мира с отображением в различных проекциях.'); }],
-    [['usemap.html', 'svg/usemap.html'], ['Население мира', 'SVG версия'], function() {
-      var sp = document.createElement('span');
-      sp.appendChild(document.createTextNode('Интерактивная карта мира с данными по плотности населения мира. ')); 
-      sp.appendChild(document.createTextNode('Идея и стиль позаимствованы с примеров ')); 
-      var a = document.createElement('a');
-      a.href = 'http://www.highcharts.com/maps/demo';
-      a.appendChild(document.createTextNode('highmaps'));
-      sp.appendChild(a);
-      sp.appendChild(document.createTextNode(' из проекта '));
-      var a = document.createElement('a');
-      a.href = 'http://www.highcharts.com';
-      a.appendChild(document.createTextNode('highcharts.com'));
-      sp.appendChild(a);
-      return sp; }],
-    [['svg/clock.html'], ['Часы'], function() {
-      return document.createTextNode('Механические часы показывают местное и всемирное время.'); }],
-    [['sky3d.html'], ['Звездное небо 3D'], function() {
-      var sp = document.createElement('span');
-      var a = document.createElement('a');
-      a.href = 'http://habrahabr.ru/post/247571';
-      a.appendChild(document.createTextNode('Звездное небо 3D'));
-      sp.appendChild(document.createTextNode('Переделанный вариант "Звездного неба" с канваса 2d на отрисовку через WebGL с использованием скриптов three.js. ' + 
-                                             'Вращайте, перемещайте левой и правой кнопками мыши объекты Солнечной Системы. ' + 
-                                             'Подробно написано в статье на Хабре "'));
-      sp.appendChild(a);
-      sp.appendChild(document.createTextNode('". '));
-      sp.appendChild(document.createTextNode('Идея и стиль позаимствованы с примеров на ')); 
-      var a = document.createElement('a');
-      a.href = 'http://www.apoapsys.com';
-      a.appendChild(document.createTextNode('apoapsys.com'));
-      sp.appendChild(a);
-      return sp; }],
-    [['map3d.html'], ['Проекции 3D'], function() {
-      var sp = document.createElement('span');
-      var a = document.createElement('a');
-      a.href = 'http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/';
-      a.appendChild(document.createTextNode('Spinnable World Maps'));
-      sp.appendChild(document.createTextNode('Отрисовка картинки плоской карты, сформированной в канвасе 2d, в различных проекциях ' + 
-                                             'с использованием шейдеров на движке WebGL и формул пересчета координат, написанных на javascript. ' + 
-                                             'Идея и коды позаимствованы с сайта "'));
-      sp.appendChild(a);
-      sp.appendChild(document.createTextNode('". '));
-      return sp; }]
-  ];
-}
-function init() {
-  document.body.style.backgroundColor = '#fff';
-  document.body.style.margin = 0;
-  var el = document.createElement('h2');
-  el.style.textAlign = 'center';
-  el.style.backgroundColor = '#d2e0f0';
-  el.style.width = '75%';
-  el.style.padding = '5px';
-  el.style.margin = '0 auto 0.5em auto';
-  el.style.fontSize = '150%';
-  el.style.fontWeight = 'normal';
-  el.appendChild(document.createTextNode('HTML5 Canvas+SVG векторная карта с проекциями'));
-  document.body.appendChild(el);
 
-  // anim table
-  var mtab = document.createElement('table');
-  mtab.width = '100%';
-  var tb = document.createElement('tbody');
-  mtab.appendChild(tb);
-  var row = document.createElement('tr');
-  tb.appendChild(row);
+<h2 style="text-align: center; background-color: rgb(210, 224, 240); width: 960px; padding: 5px; margin: 0px auto 0.5em; font-size: 150%; font-weight: normal">
+  HTML5 Canvas+SVG векторная карта с проекциями
+</h2>
 
-  var col = document.createElement('td');
-  col.width = '20%';
-  row.appendChild(col);
+<table width="100%"><tr>
+  <td width="20%"></td>
+  <td id="demo1" width="30%" align="right"></td>
+  <td id="demo2" width="30%" align="left"></td>
+  <td width="20%"></td></tr>
+</table>
 
-  var col = document.createElement('td');
-  col.id = 'demo1';
-  col.width = '30%';
-  col.align = 'right';
-  row.appendChild(col);
+<p style="text-align: center;">
+  It uses HTML5 Canvas 2D or SVG renderer. Draw, color, move, zoom images and objects.
+</p>
 
-  var col = document.createElement('td');
-  col.id = 'demo2';
-  col.width = '30%';
-  col.align = 'left';
-  row.appendChild(col);
+<p style="text-align: center;">
+  Карта-Навигатор с проекциями. Использует HTML5 Canvas 2D или SVG обработчик.
+</p>
 
-  var col = document.createElement('td');
-  col.width = '20%';
-  row.appendChild(col);
-  document.body.appendChild(mtab);
+<table width="960px" align="center">
+<tr>
+  <td width="60%">
+    Больше карт в блоге <a href="https://dbcartajs.blogspot.ru" target="_blank">dbcartajs.blogspot.ru</a>
+  </td>
+  <td style="border: 1px solid rgb(173, 173, 173);" align="center">
+    <a href="https://github.com/egaxegax/dbcartajs" target="_blank">Source Code</a>
+  </td></tr>
+<tr>
+  <td colspan="2">
+    <dl>
+      <dt><ul>
+        <li><a href="mosmetro.html">Карта метро Москвы</a></li>
+        <li><a href="svg/mosmetro.html">SVG версия</a></li>
+        <li><a href="svg/mosmetro-file.html">HTML+SVG файл</a></li></ul>
+      </dt>
+      <dd class="stripe">
+        Схема метро Москвы с выбором станций. Первоначально переделена из <a href="http://upload.wikimedia.org/wikipedia/commons/f/f3/Moscow_metro_map_ru_sb.svg">SVG-карты</a>
+        на Wikipedia. Добавлены линии МЦК и ТПК. Также добавлен вывод информации о станции при наведении. Пунктирные линии строящихся станций отображаются только в Firefox (поддержка метода setDashLine в Canvas).
+        Подробности в статье на Хабре "<a href="http://habrahabr.ru/post/193778">Карта метро Москвы на Canvas</a>".
+      </dd>
+      <dt><ul>
+        <li><a href="mosrails.html">Карта ж/д Москвы и МО</a></li>
+        <li><a href="svg/mosrails.html">SVG версия</a></li></ul>
+      </dt>
+      <dd>
+        Ещё одна карта на тему железных дорог. Схема пригородного ж/д транспорта Москвы и МО. 
+        Оригинал этой карты можно видеть на стенах тамбуров подмосковных электричек под названием Moscow Underground and Commuter Rail Map. 
+        Подробности на Хабре.
+      </dd>
+      <dt><ul>
+        <li><a href="http://dbcartajs.blogspot.ru/2014/01/spbmetro.html#cont-spbmetro">Санкт-Петербург</a></li>
+        <li><a href="http://dbcartajs.blogspot.ru/2014/02/metro-novosibirsk.html#cont-nsbmetro">Новосибирск</a></li>
+        <li><a href="http://dbcartajs.blogspot.ru/2014/02/metro-kiev.html#cont-kievmetro">Киев</a></li>
+        <li><a href="http://dbcartajs.blogspot.ru/2014/02/metro-tbilisi.html#cont-tbilisimetro">Тбилиси</a></li></ul>
+      </dt>
+      <dd class="stripe">
+        Подборка прочих карт со схемами метро наиболее крупных городов России и СНГ из блога проекта. Небольшие схемы по сравнению с московской. 
+        В целом вообще по протяженности и количеству станций с московским метро могут сравниться только метро Нью-Йорка и Лондона.
+      </dd>
+      <dt><ul>
+        <li><a href="starry.html">Звездное небо</a></li></ul>
+      </dt>
+      <dd>
+        Глобус на фоне звездного неба как в Orbitron, Marble, Xephem c эфемеридами космических аппаратов. 
+        Подробно написано в статье на Хабре "<a href="http://habrahabr.ru/post/189692">Звездное небо на Canvas</a>".
+      </dd>
+      <dt><ul>
+        <li><a href="merc.html">Маршруты</a></li></ul>
+      </dt>
+      <dd class="stripe">
+        На карте в проекции "Меркатор" изображены несколько стран со столицами. Города соединены маршрутными линиями.
+      </dd>
+      <dt><ul>
+        <li><a href="imgviewer.html">Просмотровщик картинок</a></li>
+        <li><a href="svg/imgviewer.html">SVG версия</a></li></ul>
+      </dt>
+      <dd>
+        Просмотр картинок с возможностью масштабирования.
+      </dd>
+      <dt><ul>
+        <li><a href="noncart.html">Изображение по точкам</a></li></ul>
+      </dt>
+      <dd class="stripe">
+        Выводим слово dbcarta по буквам в координатах.
+      </dd>
+      <dt><ul>
+        <li><a href="atlas.html">Атлас</a></li>
+        <li><a href="svg/atlas.html">SVG версия</a></li></ul>
+      </dt>
+      <dd>
+        Интерактивный атлас мира с возможностью нанесения объектов с заданными координатами в выбранной проекции.
+      </dd>
+      <dt><ul>
+        <li><a href="cities.html">Города мира</a></li></ul>
+      </dt>
+      <dd class="stripe">
+        Список крупнейших городов мира с выводом и центрированием на карте.
+      </dd>
+      <dt><ul>
+        <li><a href="countries.html">Страны мира</a></li></ul>
+      </dt>
+      <dd>
+        Список стран мира с отображением в различных проекциях.
+      </dd>
+      <dt><ul>
+        <li><a href="usemap.html">Население мира</a></li>
+        <li><a href="svg/usemap.html">SVG версия</a></li></ul>
+      </dt>
+      <dd class="stripe">
+        Интерактивная карта мира с данными по плотности населения мира. Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
+        из проекта <a href="http://www.highcharts.com">highcharts.com</a>
+      </dd>
+      <dt><ul>
+        <li><a href="svg/clock.html">Часы</a></li></ul>
+      </dt>
+      <dd>
+        Механические часы показывают местное и всемирное время.
+      </dd>
+      <dt><ul>
+        <li><a href="sky3d.html">Звездное небо 3D</a></li></ul>
+      </dt>
+      <dd class="stripe">
+        Переделанный вариант "Звездного неба" с канваса 2d на отрисовку через WebGL с использованием скриптов three.js. 
+        Вращайте, перемещайте левой и правой кнопками мыши объекты Солнечной Системы. 
+        Подробно написано в статье на Хабре "<a href="http://habrahabr.ru/post/247571">Звездное небо 3D</a>". 
+        Идея и стиль позаимствованы с примеров на <a href="http://www.apoapsys.com">apoapsys.com</a>
+      </dd>
+      <dt><ul>
+        <li><a href="map3d.html">Проекции 3D</a></li></ul>
+      </dt>
+      <dd>
+        Отрисовка картинки плоской карты, сформированной в канвасе 2d, в различных проекциях с использованием шейдеров на движке WebGL и формул пересчета координат, 
+        написанных на javascript. Идея и коды позаимствованы с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
+      </dd>
+    </dl>
+  </td>
+</tr>
+</table>
 
-  var el = document.createElement('p');
-  el.style.textAlign = 'center';
-  el.appendChild(document.createTextNode('It uses HTML5 Canvas 2D or SVG renderer. Draw, color, move, zoom images and objects.'));
-  document.body.appendChild(el);
-  
-  var el = document.createElement('p');
-  el.style.textAlign = 'center';
-  el.appendChild(document.createTextNode('Карта-Навигатор с проекциями. Использует HTML5 Canvas 2D или SVG обработчик.'));
-  document.body.appendChild(el);
-  
-  // demos table
-  var mtab = document.createElement('table');
-  mtab.align = 'center';
-  mtab.width = '60%';
-  //mtab.border = '1';
-  var tb = document.createElement('tbody');
-  mtab.appendChild(tb);
-  var row = document.createElement('tr');
-  tb.appendChild(row);
+<table width="100%">
+<tr>
+  <td width="49%"></td>
+  <td id="livecounter" class="hspace">
+    <a href="//www.liveinternet.ru/click" target="_blank"><img id="licntADF8" width="88" height="31" style="border:0" title="LiveInternet: показано число просмотров за 24 часа, посетителей за 24 часа и за сегодня" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7" alt=""/></a>
+  </td>
+  <td id="yacounter" class="hspace">
+    <a href="https://metrika.yandex.ru/stat/?id=65044687&amp;from=informer" target="_blank" rel="nofollow"><img src="https://informer.yandex.ru/informer/65044687/3_1_FFFFFFFF_EFEFEFFF_0_pageviews" style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" class="ym-advanced-informer" data-cid="65044687" data-lang="ru" /></a>
+  </td>
+  <td width="49%" align="left">
+    <a href="https://github.com/egaxegax"> egaxegax </a> © 2013-2020
+  </td>
+</tr>
+</table>
 
-  var col = document.createElement('td');
-  col.width = '60%';
-  col.appendChild(document.createTextNode('Больше карт в блоге '));
-  var el2 = document.createElement('a');
-  el2.href = 'https://dbcartajs.blogspot.ru';
-  el2.target = '_blank';
-  el2.appendChild(document.createTextNode('dbcartajs.blogspot.ru'));
-  col.appendChild(el2);
-  row.appendChild(col);
-  
-  // github source
-  var col = document.createElement('td');
-  col.align = 'center';
-  col.style.border = '1px solid #adadad';
-  var el = document.createElement('a');
-  el.href = 'https://github.com/egaxegax/dbcartajs';
-  el.target = '_blank';
-  el.appendChild(document.createTextNode('Source Code'));
-  col.appendChild(el);
-  row.appendChild(col);
-  document.body.appendChild(mtab);
-
-  var row = document.createElement('tr');
-  tb.appendChild(row);
-  var col = document.createElement('td');
-  col.colSpan = '2';
-  var dl = document.createElement('dl');
-  col.appendChild(dl);
-  row.appendChild(col);
-  for(var i in (mdemos=listDemos())){
-    var div = document.createElement('div');
-    div.style.margin = '0 0';
-    div.style.padding = '0.5em';
-    if (i%2 == 0) div.style.backgroundColor = '#d2e0f0';
-    var dt = document.createElement('dt');
-    var dd = document.createElement('dd');
-    var ul = document.createElement('ul');
-    dd.style.margin = '1%';
-    ul.style.padding = 0;
-    ul.style.margin = 0;
-    for(var j in mdemos[i][0]){
-      var li = document.createElement('li');
-      li.style.display = 'inline';
-      li.style.paddingRight = '40px';
-      var a = document.createElement('a');
-      a.href = mdemos[i][0][j];
-      a.appendChild(document.createTextNode(mdemos[i][1][j]));
-      li.appendChild(a);
-      ul.appendChild(li);
-    }
-    dt.appendChild(ul);
-    dd.appendChild(mdemos[i][2]());
-    div.appendChild(dt);
-    div.appendChild(dd);
-    dl.appendChild(div);
-  }
-
-  // footer
-  var footer = document.createElement('div');
-  document.body.appendChild(footer);
-  var mtab = document.createElement('table');
-  mtab.width = '100%';
-  footer.appendChild(mtab);
-  var tb = document.createElement('tbody');
-  mtab.appendChild(tb);
-  var row = document.createElement('tr');
-  tb.appendChild(row);
-
-  var col = document.createElement('td');
-  col.align = 'right';
-  col.width = '49%';
-
-  // --Yandex.Metrika informer--
-  var el = document.createElement('a');
-  el.href = 'https://metrika.yandex.ru/stat/?id=65044687&amp;from=informer';
-  el.target = '_blank';
-  el.rel = 'nofollow';
-  el.innerHTML = '<img src="https://informer.yandex.ru/informer/65044687/3_1_FFFFFFFF_EFEFEFFF_0_pageviews" style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" class="ym-advanced-informer" data-cid="65044687" data-lang="ru" />';
-  // --/Yandex.Metrika informer--
-  col.appendChild(el);
-  row.appendChild(col);
-
-  var col = document.createElement('td');
-  col.align = 'center';
-  col.width = '2%';
-  row.appendChild(col);
-
-  var col = document.createElement('td');
-  col.align = 'left';
-  col.width = '49%';
-  col.style.fontSize = 'smaller';
-  var el = document.createElement('a');
-  el.href = 'https://github.com/egaxegax';
-  col.appendChild(document.createTextNode(' 2013-2020 '));
-  el.appendChild(document.createTextNode('egaxegax'));
-  col.appendChild(el);
-  row.appendChild(col);
-
+<script type="text/javascript">
   // add anim
   var cx = Math.random() * 360,
       cy = Math.random() * 180;
-  dbcarta1 = new dbCarta({id: 'demo1', rbar: false});
-  dbcarta1.initProj(203, ' +lon_0=' + cx + ' +lat_0=' + cy);
-  dbcarta1.loadCarta(CONTINENTS);
-  dbcarta1.loadCarta(dbcarta1.createMeridians());
-  dbcarta1.scaleCarta(1.4);
-  dbcarta1.draw();
-  dbcarta2 = new dbCarta({id: 'demo2', rbar: false});
-  dbcarta2.initProj(202, ' +lon_0=' + (180-cx) + ' +lat_0=' + (-cy/2.0));
-  dbcarta2.loadCarta(CONTINENTS);
-  dbcarta2.loadCarta(dbcarta2.createMeridians());
-  dbcarta2.scaleCarta(1.6);
+  dw1 = new dbCarta({id: 'demo1', rbar: false});
+  dw1.initProj(203, ' +lon_0=' + cx + ' +lat_0=' + cy);
+  dw1.loadCarta(CONTINENTS);
+  dw1.loadCarta(dw1.createMeridians());
+  dw1.scaleCarta(1.4);
+  dw1.draw();
+  dw2 = new dbCarta({id: 'demo2', rbar: false});
+  dw2.initProj(202, ' +lon_0=' + (180-cx) + ' +lat_0=' + (-cy/2.0));
+  dw2.loadCarta(CONTINENTS);
+  dw2.loadCarta(dw2.createMeridians());
+  dw2.scaleCarta(1.6);
   delete CONTINENTS;
-  dbcarta2.draw();
-}; 
+  dw2.draw();
 
-init();
 </script>
 </body>
 </html>
