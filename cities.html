@@ -71,7 +71,7 @@ function init() {
   el.id = 'citylist';
   el.style.margin = '0';
   el.style.padding = '0';
-  el.style.fontSize = 'smaller';
+  el.style.fontSize = 'larger';
   el.style.fontFamily = 'Arial';
   el.style.backgroundColor = 'white';
   col.appendChild(el);
@@ -100,7 +100,7 @@ function init() {
   };
   for (var cntryname in CITIES) {
     var el = document.createElement('dt');
-    el.style.backgroundColor = '#eee';
+    el.style.backgroundColor = '#ddd';
     el.appendChild(document.createTextNode(cntryname));
     citylist.appendChild(el);
     for (var mpart in CITIES[cntryname]) {

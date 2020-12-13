@@ -105,7 +105,7 @@ function initMap() {
     // labels
     var mtext = cam.length().toFixed(2);
     var tcoord = document.getElementById('tcoord');
-    tcoord.innerHTML = mtext;
+    tcoord.innerHTML = mtext+' km';
     dw.render(scene, camera);
   };
 
@@ -635,7 +635,7 @@ function initMap() {
   col.align = 'center';
   var el = document.createElement('div');
   el.id = 'tcoord';
-  el.style.fontSize = 'smaller';
+  el.style.fontSize = 'larger';
   col.appendChild(el);
   row.appendChild(col);
 

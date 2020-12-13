@@ -115,7 +115,7 @@ function init() {
   el.id = 'cntrylist';
   el.style.margin = '0';
   el.style.padding = '0';
-  el.style.fontSize = 'smaller';
+  el.style.fontSize = 'larger';
   el.style.fontFamily = 'Arial';
   el.style.backgroundColor = 'white';
   el.style.textAlign = 'center';
@@ -193,7 +193,7 @@ function init() {
   //fill list
   for (var cntryname in COUNTRIES) {
     var el = document.createElement('dt');
-    el.style.backgroundColor = '#eee';
+    el.style.backgroundColor = '#ddd';
     el.appendChild(document.createTextNode(cntryname));
     cntrylist.appendChild(el);
     for (var mpart in COUNTRIES[cntryname]) {
