@@ -21,7 +21,7 @@ Starry Sky demo include satellite-js module.<br>
 * [Moscow Rail Map](https://egaxegax.github.io/dbcartajs/mosrails.html). [*SVG verion*](https://egaxegax.github.io/dbcartajs/svg/mosrails.html)
 * [Starry Sky 3d](https://egaxegax.github.io/dbcartajs/starry.html)
 * [Image Viewer](https://egaxegax.github.io/dbcartajs/imgviewer.html). [*SVG version*](https://egaxegax.github.io/dbcartajs/imgviewer.html)
-* [World Atlas]([Image Viewer]https://egaxegax.github.io/dbcartajs/atlas.html). [*SVG version*](https://egaxegax.github.io/dbcartajs/svg/atlas.html)
+* [World Atlas](https://egaxegax.github.io/dbcartajs/atlas.html). [*SVG version*](https://egaxegax.github.io/dbcartajs/svg/atlas.html)
 * [World Population](https://egaxegax.github.io/dbcartajs/usemap.html). [*SVG version*](https://egaxegax.github.io/dbcartajs/svg/usemap.html)
 * [Clock](https://egaxegax.github.io/dbcartajs/svg/clock.html)
 * [Starry Sky 3d](https://egaxegax.github.io/dbcartajs/sky3d.html)
