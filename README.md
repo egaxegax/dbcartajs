@@ -1,4 +1,4 @@
-![logo](https://raw.githubusercontent.com/egaxegax/dbcartajs/master/img/fav.svg) 
+![logo](https://raw.githubusercontent.com/egaxegax/dbcartajs/master/img/fav.svg)
 dbcartajs
 ===========
 
@@ -17,11 +17,23 @@ Starry Sky demo include satellite-js module.<br>
 
 ## Demos
 
-[Moscow Metro. Карта метро Москвы 2018](https://egaxegax.github.io/dbcartajs/svg/mosmetro.html)
+[Moscow Metro Map 2018](https://egaxegax.github.io/dbcartajs/mosmetro.html) [*SVG version*](https://egaxegax.github.io/dbcartajs/svg/mosmetro.html)
 
-[Moscow Rail Map. Карта ж/д транспорта Москвы и МО 2018](https://egaxegax.github.io/dbcartajs/svg/mosrails.html)
+[Moscow Rail Map 2018](https://egaxegax.github.io/dbcartajs/mosrails.html) [*SVG verion*](https://egaxegax.github.io/dbcartajs/svg/mosrails.html)
 
-[All demos. Все примеры](https://egaxegax.github.io/dbcartajs/index.html)
+[Starry Sky 3d](https://egaxegax.github.io/dbcartajs/starry.html)
+
+[Image Viewer](https://egaxegax.github.io/dbcartajs/imgviewer.html) [*SVG version*](https://egaxegax.github.io/dbcartajs/imgviewer.html)
+
+[World Atlas]([Image Viewer]https://egaxegax.github.io/dbcartajs/atlas.html) [*SVG version*][Image Viewer](https://egaxegax.github.io/dbcartajs/svg/atlas.html)
+
+[World Population](https://egaxegax.github.io/dbcartajs/usemap.html) [*SVG version*](https://egaxegax.github.io/dbcartajs/svg/usemap.html)
+
+[Clock](https://egaxegax.github.io/dbcartajs/svg/clock.html)
+
+[Starry Sky 3d](https://egaxegax.github.io/dbcartajs/sky3d.html)
+
+[Projection 3d](https://egaxegax.github.io/dbcartajs/map3d.html)
 
 ## Docs
 
