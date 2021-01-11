@@ -29,7 +29,7 @@ Starry Sky demo include satellite-js module.<br>
 
 ## Docs
 
-See source comments for usage info in *dbcarta.js* and *dbcartasvg.js* files. Docs in [wiki pages](https://github.com/egaxegax/dbcartajs/wiki).
+See source comments for usage info in *dbcarta.js* and *dbcartasvg.js* files. Doc in [wiki pages](https://github.com/egaxegax/dbcartajs/wiki).
 
 ## Usage
 
