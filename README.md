@@ -1,3 +1,4 @@
+![logo](https://raw.githubusercontent.com/egaxegax/dbcartajs/master/img/fav.svg) 
 dbcartajs
 ===========
 
@@ -38,9 +39,3 @@ Download and unpack an archive, open index.html from demos folder in any browser
  * use mouse wheel or right bar buttons to zoom;
  * touch support (move) on Tablet PC.
 
-##  Screenshots
-
-![ortho1](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/ortho1.gif)
-![ortho2](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/ortho2.gif)
-![mosrails](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/mosrails.jpg)
-![starry](https://raw.githubusercontent.com/egaxegax/FotoSite/master/dbcartajs/starry.jpg)
