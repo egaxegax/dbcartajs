@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>dbcartajs / Canvas+SVG векторная карта</title>
+<title>dbcartajs / Canvas+SVG vector map and image viewer</title>
 <meta http-equiv="content-type" content="text/html;charset=utf-8">
 <meta name="description" content="Карта-Навигатор с проекциями Proj4js. Отрисовка векторных данных. Вывод изображений. Управление, масштабирование карты. HTML5 Canvas+SVG vector map with some Proj4js projections. Pure javascript and serverless">
 <meta name="keywords" content="карта, проекция, html5, canvas, svg, 2d, vector, proj4js, projection, javascript, dbcartajs, map">
@@ -13,9 +13,11 @@
   body { background:#fff; margin:0; font-family:tahoma,verdana,arial; font-size:16px; }
   .hspace { padding: 0 12px; }
   .stripe { background-color: rgb(210,224,240); }
+  .col1 { width:30%; }
+  .col2 { width:20%; }
   dd { margin: 1%; padding: 0.5em; }
-  dt ul { padding: 0px; margin: 0px; }
-  dt li { display: inline; padding-right: 40px; }
+  dt ul { display: table; width:100%; }
+  dt li { display: table-cell; text-align:left; }
 </style>
 <script src="js/utils/metrics.js"></script>
 </head>
@@ -25,7 +27,7 @@
 <script src="js/data/continents.js"></script>
 
 <h2 style="text-align: center; background-color: rgb(210,224,240); width: 960px; padding: 5px; margin: 4px auto 8px; font-size: 150%; font-weight: normal">
-  HTML5 Canvas+SVG vector map with projections
+  HTML5 Canvas+SVG vector map with projections and image viewer
 </h2>
 
 <table width="100%"><tr>
@@ -35,28 +37,22 @@
   <td width="20%"></td></tr>
 </table>
 
-<p style="font-size: larger; text-align: center;">
-  It uses HTML5 Canvas 2D or SVG renderer. Draw, color, move, zoom images and objects.
-</p>
-
-<p style="font-size: larger; text-align: center;">
-  Карта-Навигатор с проекциями. Использует HTML5 Canvas 2D или SVG обработчик.
-</p>
+<br>
 
 <table width="960px" align="center" style="font-size: larger">
 <tr>
-  <td width="60%">
+  <td width="50%" align="center" style="border: 1px solid lightgray; padding:10px">
     Больше карт в блоге <a href="https://dbcartajs.blogspot.ru" target="_blank">dbcartajs.blogspot.ru</a>
   </td>
-  <td style="border: 1px solid rgb(173,173,173);" align="center">
+  <td style="border: 1px solid lightgray; padding:10px" align="center">
     <a href="https://github.com/egaxegax/dbcartajs" target="_blank">Source Code</a>
   </td></tr>
 <tr>
   <td colspan="2">
     <dl>
       <dt><ul>
-        <li><a href="mosmetro.html">Moscow Metro Map</a></li>
-        <li><a href="svg/mosmetro.html">SVG</a></li>
+        <li class="col1"><a href="mosmetro.html">Moscow Metro Map</a></li>
+        <li class="col2"><a href="svg/mosmetro.html">SVG</a></li>
         <li><a href="svg/mosmetro-file.html">HTML+SVG</a></li></ul>
       </dt>
       <dd class="stripe">
@@ -65,18 +61,18 @@
         Подробности в статье на Хабре "<a href="http://habrahabr.ru/post/193778">Карта метро Москвы на Canvas</a>".
       </dd>
       <dt><ul>
-        <li><a href="mosrails.html">Moscow Railroad Map</a></li>
+        <li class="col1"><a href="mosrails.html">Moscow Railroad Map</a></li>
         <li><a href="svg/mosrails.html">SVG</a></li></ul>
       </dt>
-      <dd>
+      <dd class="stripe">
         Ещё одна карта на тему железных дорог. Схема пригородного ж/д транспорта Москвы и МО в 2015 году. 
         Оригинал этой карты можно видеть на стенах тамбуров подмосковных электричек под названием Moscow Underground and Commuter Rail Map. 
         Подробности на Хабре.
       </dd>
       <dt><ul>
-        <li><a href="http://dbcartajs.blogspot.ru/2014/01/spbmetro.html#cont-spbmetro">Saint-Petersburg</a></li>
-        <li><a href="http://dbcartajs.blogspot.ru/2014/02/metro-novosibirsk.html#cont-nsbmetro">Novosibirsk</a></li>
-        <li><a href="http://dbcartajs.blogspot.ru/2014/02/metro-kiev.html#cont-kievmetro">Kiev</a></li>
+        <li class="col1"><a href="http://dbcartajs.blogspot.ru/2014/01/spbmetro.html#cont-spbmetro">Saint-Petersburg</a></li>
+        <li class="col2"><a href="http://dbcartajs.blogspot.ru/2014/02/metro-novosibirsk.html#cont-nsbmetro">Novosibirsk</a></li>
+        <li class="col2"><a href="http://dbcartajs.blogspot.ru/2014/02/metro-kiev.html#cont-kievmetro">Kiev</a></li>
         <li><a href="http://dbcartajs.blogspot.ru/2014/02/metro-tbilisi.html#cont-tbilisimetro">Tbilisi</a></li></ul>
       </dt>
       <dd class="stripe">
@@ -86,7 +82,7 @@
       <dt><ul>
         <li><a href="starry.html">Starry Sky</a></li></ul>
       </dt>
-      <dd>
+      <dd class="stripe">
         Глобус на фоне звездного неба как в Orbitron, Marble, Xephem c эфемеридами космических аппаратов. 
         Подробно написано в статье на Хабре "<a href="http://habrahabr.ru/post/189692">Звездное небо на Canvas</a>".
       </dd>
@@ -97,10 +93,10 @@
         На карте в проекции "Меркатор" изображены несколько стран со столицами. Города соединены маршрутными линиями.
       </dd>
       <dt><ul>
-        <li><a href="imgviewer.html">Image Viewer</a></li>
+        <li class="col1"><a href="imgviewer.html">Image Viewer</a></li>
         <li><a href="svg/imgviewer.html">SVG</a></li></ul>
       </dt>
-      <dd>
+      <dd class="stripe">
         Просмотр картинок с возможностью масштабирования.
       </dd>
       <dt><ul>
@@ -110,10 +106,10 @@
         Выводим слово dbcarta по буквам в координатах.
       </dd>
       <dt><ul>
-        <li><a href="atlas.html">Atlas</a></li>
+        <li class="col1"><a href="atlas.html">Atlas</a></li>
         <li><a href="svg/atlas.html">SVG</a></li></ul>
       </dt>
-      <dd>
+      <dd class="stripe">
         Интерактивный атлас мира с возможностью нанесения объектов с заданными координатами в выбранной проекции.
       </dd>
       <dt><ul>
@@ -125,11 +121,11 @@
       <dt><ul>
         <li><a href="countries.html">World's Countries</a></li></ul>
       </dt>
-      <dd>
+      <dd class="stripe">
         Список стран мира с отображением в различных проекциях.
       </dd>
       <dt><ul>
-        <li><a href="usemap.html">World's Population</a></li>
+        <li class="col1"><a href="usemap.html">World's Population</a></li>
         <li><a href="svg/usemap.html">SVG</a></li></ul>
       </dt>
       <dd class="stripe">
@@ -139,7 +135,7 @@
       <dt><ul>
         <li><a href="svg/clock.html">Clock</a></li></ul>
       </dt>
-      <dd>
+      <dd class="stripe">
         Механические часы показывают местное и всемирное время.
       </dd>
       <dt><ul>
@@ -154,7 +150,7 @@
       <dt><ul>
         <li><a href="map3d.html">Projections 3D</a></li></ul>
       </dt>
-      <dd>
+      <dd class="stripe">
         Отрисовка картинки плоской карты, сформированной в канвасе 2d, в различных проекциях с использованием шейдеров на движке WebGL и формул пересчета координат, 
         написанных на javascript. Идея и коды позаимствованы с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
       </dd>
@@ -182,13 +178,13 @@
   // add anim
   var cx = Math.random() * 360,
       cy = Math.random() * 180;
-  dw1 = new dbCarta({id: 'demo1', rbar: false});
+  dw1 = new dbCarta({id:'demo1', rbar:false, bg:'transparent'});
   dw1.initProj(203, ' +lon_0=' + cx + ' +lat_0=' + cy);
   dw1.loadCarta(CONTINENTS);
   dw1.loadCarta(dw1.createMeridians());
   dw1.scaleCarta(1.4);
   dw1.draw();
-  dw2 = new dbCarta({id: 'demo2', rbar: false});
+  dw2 = new dbCarta({id:'demo2', rbar:false, bg:'transparent'});
   dw2.initProj(202, ' +lon_0=' + (180-cx) + ' +lat_0=' + (-cy/2.0));
   dw2.loadCarta(CONTINENTS);
   dw2.loadCarta(dw2.createMeridians());
