@@ -1,0 +1,107 @@
+<!--
+ Roller ball animation.
+ egax@bk.ru, 2021.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<title>Анимация / SVG векторная карта</title>
+<meta name="description" content="Анимация с катящимся шаром">
+<meta name="keywords" content="svg animate, roller ball">
+<link rel="icon" href="../img/fav.svg" type="image/svg+xml" />
+<style type="text/css">html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
+<style>.pointer { cursor: pointer; }</style>
+</head>
+<body>
+<table><tr><td id="mcont"></td></tr></table>
+<script src="../js/dbcartasvg.js"></script>
+<script type='text/javascript'>
+var el = document.createElement('div');
+el.id = 'tool';
+el.className = 'pointer';
+el.style.textAlign = 'center';
+el.style.padding = '15px';
+el.style.color = '#333333';
+el.style.font = '1em arial';
+el.style.border = '2px solid rgba(19,64,117,0.5)';
+el.style.borderRadius = '4px';
+el.style.backgroundColor = 'rgba(250,250,250,0.9)';
+el.style.position = 'absolute';
+el.style.zIndex = '10000';
+el.style.display = 'none';
+document.body.appendChild(el);
+ //
+function infobox(s) {
+  var mtip = document.getElementById('tool');
+  mtip.innerHTML = s;
+  mtip.style.display = 'block';
+  mtip.style.left = window.innerWidth/2+'px';
+  mtip.style.top = window.innerHeight/2+'px';
+  setTimeout( function(){ mtip.style.display = 'none'; }, 2000 );
+}
+ //
+function draw(){
+  dw.append('circle', {
+    id:'ball', fill:'#c94f46', stroke: 'rgba(164,164,164,0.6)',
+    cx: dw.toPoints([-170,5])[0], cy: dw.toPoints([-170,5])[1], 
+    r: Math.sqrt(Math.pow(dw.toPoints([-170,0])[0]-dw.toPoints([-160,10])[0],2)+Math.pow(dw.toPoints([-160,0])[1]-dw.toPoints([-110,0])[1],2))
+  });
+  dw.append('path', {
+    id:'door1', class:'pointer', stroke:'#ce922a', 'stroke-width':6, fill:'transparent',
+    d: ('M ' + dw.interpolateCoords([[150,122],[170,119],[170,77],[150,80],[150,123]], true)).replace(/,/g, ' '),
+    onclick:'doorClick()'
+  });
+  dw.append('path', {
+    id:'door2', class:'pointer', stroke:'#ce922a', 'stroke-width':6, fill:'transparent',
+    d: ('M ' + dw.interpolateCoords([[150,34],[170,31],[170,-11],[150,-8],[150,35]], true)).replace(/,/g, ' '),
+    onclick:'doorClick()'
+  });
+  dw.append('path', {
+    id:'door3', class:'pointer', stroke:'#ce922a', 'stroke-width':6, fill:'transparent',
+    d: ('M ' + dw.interpolateCoords([[150,-58],[170,-61],[170,-103],[150,-100],[150,-57]], true)).replace(/,/g, ' '),
+    onclick:'doorClick()'
+  });
+  dw.append('path', {
+    id:'path1', stroke:'#c8c8c8', 'stroke-width':7, fill:'none',
+    d: ('M ' + dw.interpolateCoords([[-180,-8,'T'],[-150,-8],[-70,40,'T'],[150,80]], true)).replace(/,/g, ' ')
+  });
+  dw.append('path', {
+    id:'path2', stroke:'#c8c8c8', 'stroke-width':7, fill:'none',
+    d: ('M ' + dw.interpolateCoords([[-180,-8,'T'],[-130,-8],[-60,-8,'T'],[0,-30],[40,-8,'T'],[150,-8]], true)).replace(/,/g, ' ')
+  });
+  dw.append('path', {
+    id:'path3', stroke:'#c8c8c8', 'stroke-width':7, fill:'none',
+    d: ('M ' + dw.interpolateCoords([[-180,-8],[-150,-8],[-150,-20],[-130,-20],[-130,-40],[-110,-40],[-110,-60],[-90,-60],[-90,-80],[-70,-80],[-70,-100],[150,-100]], true)).replace(/,/g, ' ')
+  });
+  dw.append(
+    dw.append(dw.root.getElementById('ball'), 'animateMotion', { rotate:'auto', dur:'3s', onend:'infobox("Выход 1")', begin:'door1.click', fill:'freeze' }), 'mpath', {})
+      .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#path1');
+  dw.append(
+    dw.append(dw.root.getElementById('ball'), 'animateMotion', { rotate:'auto', dur:'3s', onend:'infobox("Выход 2")', begin:'door2.click', fill:'freeze' }), 'mpath', {})
+      .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#path2');
+  dw.append(
+    dw.append(dw.root.getElementById('ball'), 'animateMotion', { dur:'3s', onend:'infobox("Выход 3")', begin:'door3.click', fill:'freeze' }), 'mpath', {})
+      .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#path3');
+   //
+  dw.extend(dw.root.getElementById('door1'), { onmousemove: function(e){ dw.doMap(e, { 'stroke-width': 10 }); }});
+  dw.extend(dw.root.getElementById('door2'), { onmousemove: function(e){ dw.doMap(e, { 'stroke-width': 10 }); }});
+  dw.extend(dw.root.getElementById('door3'), { onmousemove: function(e){ dw.doMap(e, { 'stroke-width': 10 }); }});
+}
+ //
+function doorClick(){
+  dw.attr(dw.root.getElementById('ball'), {transform: 'translate(0,'+(-dw.toPoints([0,-6])[1])+')'});
+}
+ //
+var dw = new dbCartaSvg({
+  id: 'mcont',
+  bg: 'none',
+  sbar:0,
+  height: document.getElementById('mcont').offsetHeight
+});
+dw.scaleCarta(0.6);
+draw();
+infobox('Выберите дверь');
+</script>
+</body>
+</html>

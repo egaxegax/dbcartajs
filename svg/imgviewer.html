@@ -1,6 +1,6 @@
 <!--
  Image SVG viewer.
- egax@bk.ru, 2016.
+ egax@bk.ru, 2016. r210410.
 -->
 <!DOCTYPE html>
 <html>
@@ -17,7 +17,7 @@
 <body>
 <script src="../js/dbcartasvg.js"></script>
 <script>
-var childs = [], childs1 = [];
+var childs =[], childs1 =[];
 function setka(coords) {
   var left = coords[0][0],
       right = coords[1][0],
@@ -28,10 +28,10 @@ function setka(coords) {
   var xstep = (right - left)/n,
       ystep = (top - bottom)/n;
   var x = left;
-  for (var i=0; i<=n; i++) {
+  for(var i=0; i<=n; i++) {
     var lon = [];
     var y = bottom;
-    for (var j=0; j<=n; j++) {
+    for(var j=0; j<=n; j++) {
       lon.push([x, y]);
       y += ystep;
     }
@@ -39,20 +39,20 @@ function setka(coords) {
     x += xstep;
   }
   var y = bottom;
-  for (var i=0; i<=n; i++) {
+  for(var i=0; i<=n; i++) {
     var lat = [];
     var x = left;
-    for (var j=0; j<=n; j++) {
+    for(var j=0; j<=n; j++) {
       lat.push([x, y]);
       x += xstep;
     }
     lonlat.push( lat );
     y += ystep;
   }
-  for (var i=0; i<childs1.length; i++)
+  for(var i=0; i<childs1.length; i++)
     dw.vp.removeChild(childs1[i]);
   childs1 = [];
-  for (var i=0; i<lonlat.length; i++){
+  for(var i=0; i<lonlat.length; i++){
     var pts = dw.interpolateCoords(lonlat[i], true, 10);
     var path = ('M ' + pts[0] + ' L ' + pts).replace(/,/g, ' ');
     var o = dw.append('path', {
@@ -86,7 +86,7 @@ function init() {
   var el = document.createElement('button');
   el.appendChild(document.createTextNode("Сетка"));
   el.onclick = function(o) {
-    if (im) setka([[-90*im.width/im.height,90],[90*im.width/im.height,-90]]);
+    if(im) setka([[-90*im.width/im.height,90],[90*im.width/im.height,-90]]);
   };
   col.appendChild(el);
   row.appendChild(col);
@@ -133,7 +133,7 @@ function init() {
   ];
   
   // fill list
-  for (var k in imgurls) {
+  for(var k in imgurls) {
     var el2 = document.createElement('img');
     el2.style.display = 'block';
     el2.width = 100;
@@ -151,11 +151,11 @@ function init() {
     bg: 'transparent',
     sbarpos: 'left'
   });
-  // img
+
   var im = new Image();
   im.src = imgurls[0]; // default img
   im.onload = function() {
-    for (var i=0; i<childs.length; i++)
+    for(var i=0; i<childs.length; i++)
       dw.vp.removeChild(childs[i]);
     childs = [];
     var ratio = this.width/this.height;

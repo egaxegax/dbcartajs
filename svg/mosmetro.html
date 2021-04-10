@@ -25,7 +25,7 @@ var el = document.createElement('div');
 el.id = 'maptooltip';
 el.style.padding = '5px';
 el.style.color = '#333333';
-el.style.font = '12px sans-serif';
+el.style.font = '1em arial';
 el.style.border = '2px solid rgba(19,64,117,0.5)';
 el.style.borderRadius = '4px';
 el.style.backgroundColor = 'rgba(250,250,250,0.9)';
@@ -38,11 +38,11 @@ document.body.appendChild(el);
 function infobox(ev) {
   var mtip = document.getElementById('maptooltip'),
       text = ev.target.getAttribute('class');
-  if (dw.m.pmap && text) {
+  if(dw.m.pmap && text) {
     mtip.innerHTML = text;
     mtip.style.display = 'block';
     mtip.style.left = ev.clientX + window.pageXOffset + 'px';
-    mtip.style.top = ev.clientY + window.pageYOffset - mtip.offsetHeight * 1.2 + 'px';
+    mtip.style.top = ev.clientY + window.pageYOffset - mtip.offsetHeight*1.2 + 'px';
   } else {
     mtip.style.display = 'none';
   }
@@ -239,26 +239,27 @@ function draw() {
     'sMCK_4':  mck_station({anchor: ['start', 'bottom']})
   });
     // lines
-  for (var i=0; i<MLINES.length; i++) {
+  for(var i=0; i<MLINES.length; i++) {
     var ftype = MLINES[i][0],
         abbr = MLINES[i][1],
+        lineid = ftype + '_' + abbr,
         coords = MLINES[i][2];
     var pts = dw.interpolateCoords(coords, true),
         mpts = [], n = 0;
-    for (var j=0; j<pts.length; j++) {
-      if (pts[j][2] == 'Q') { // bezier check
+    for(var j=0; j<pts.length; j++) {
+      if(pts[j][2] == 'Q') { // bezier check
         n++;
-        if (j > 0 && n == 1) mpts.push( 'L' );
-        else if (n == 2) mpts.push( 'Q' );
-        else if (n > 2) n = 0;
-      } else if (j > 0) {
+        if(j > 0 && n == 1) mpts.push( 'L' );
+        else if(n == 2) mpts.push( 'Q' );
+        else if(n > 2) n = 0;
+      } else if(j > 0) {
         mpts.push( 'L' );
       }
       mpts.push(pts[j][0], pts[j][1]);
     }
     var path = ('M ' + mpts).replace(/,/g, ' ');
     dw.append('path', {
-      id:[ftype, abbr].join(),
+      id: lineid,
       fill: 'transparent',
       stroke: mopt[ftype].fg,
       'stroke-dasharray': mopt[ftype].dash,
@@ -269,7 +270,7 @@ function draw() {
     });
   };
     // stations
-  for (var i=0; i<MSTATIONS.length; i++) {
+  for(var i=0; i<MSTATIONS.length; i++) {
     var ftype = MSTATIONS[i][0],
         abbr = MSTATIONS[i][1],
         coords = MSTATIONS[i][2][0],
@@ -280,9 +281,9 @@ function draw() {
     var pts = dw.toPoints(coords, true),
         a, dx = 10, dy = 0;
       // station info
-    if (INFOMST[skey]) 
+    if(INFOMST[skey]) 
       mtip += '<br><br>' + 'Открыта: ' + INFOMST[skey].join('<br>' + 'Глубина: ');
-    if (INFOMLINES[rkey]) 
+    if(INFOMLINES[rkey]) 
       mtip += '<br><br>' + INFOMLINES[rkey];
     var station = dw.append('circle', {
       class: mtip,
@@ -300,10 +301,10 @@ function draw() {
           // find lines by type
         var mftype = this.getAttribute('myclass').split('_')[0].slice(1);
         var lns = [], lnsattr = [];
-        var pref = ['', '_ext'], suf = ['', '_1', '_2'];
-        for (var i=0; i<pref.length; i++) {
-          for (var ii=0; ii<suf.length; ii++) {
-            var line = document.getElementById('r'+mftype+pref[i]+','+'r'+mftype+suf[ii]);
+        var pref = ['', '_ext'], suf = ['','_1','_2','_3'];
+        for(var i=0; i<pref.length; i++) {
+          for(var ii=0; ii<suf.length; ii++) {
+            var line = document.getElementById('r'+mftype+pref[i]+'_'+'r'+mftype+suf[ii]);
             if(line){
               lns.push( {target: line} );
               lnsattr.push( {'stroke-width': 14} );
@@ -318,14 +319,14 @@ function draw() {
         );
       }
     });
-    if (!label) continue;
-    if (a = mopt[ftype].anchor) {
-      if (a[0] == 'start')    dx = 10;
-      else if (a[0] == 'center') dx = -40;
-      else if (a[0] == 'end') dx = -10;
-      if (a[1] == 'top') dy = 14;
-      else if (a[1] == 'middle') dy = 4;
-      else if (a[1] == 'bottom') dy = -8;
+    if(!label) continue;
+    if(a = mopt[ftype].anchor) {
+      if(a[0] == 'start')    dx = 10;
+      else if(a[0] == 'center') dx = -40;
+      else if(a[0] == 'end') dx = -10;
+      if(a[1] == 'top') dy = 14;
+      else if(a[1] == 'middle') dy = 4;
+      else if(a[1] == 'bottom') dy = -8;
     };
     var text = dw.append('text', {
       x: pts[0] + dx, y: pts[1] + dy,
@@ -336,18 +337,18 @@ function draw() {
     text.appendChild(document.createTextNode(label));
   };
     // labels (MLABEL)
-  for (var i=0; i<MLABEL.length; i++) {
+  for(var i=0; i<MLABEL.length; i++) {
     var ftype = MLABEL[i][0],
         label = MLABEL[i][3],
         coords = MLABEL[i][4];
     var pts = dw.toPoints(coords, true);
-    if (a = mopt[ftype].anchor) {
-      if (a[0] == 'start')    dx = 10;
-      else if (a[0] == 'center') dx = -40;
-      else if (a[0] == 'end') dx = -10;
-      if (a[1] == 'top') dy = 14;
-      else if (a[1] == 'middle') dy = 4;
-      else if (a[1] == 'bottom') dy = -8;
+    if(a = mopt[ftype].anchor) {
+      if(a[0] == 'start')    dx = 10;
+      else if(a[0] == 'center') dx = -40;
+      else if(a[0] == 'end') dx = -10;
+      if(a[1] == 'top') dy = 14;
+      else if(a[1] == 'middle') dy = 4;
+      else if(a[1] == 'bottom') dy = -8;
     };
     var text = dw.append('text', {
       x: pts[0] + dx, y: pts[1] + dy,
@@ -355,7 +356,7 @@ function draw() {
       'font-family': 'sans-serif', 'font-size': dw.root.getAttribute('width')/125,
       'text-anchor': a ? a[0] : ''
     });
-    if ('rotate' in mopt[ftype]){
+    if('rotate' in mopt[ftype]){
       dw.attr(text, {
         transform: 'rotate(' + mopt[ftype].rotate + ',' + pts[0] + ',' + pts[1] + ')'
       });

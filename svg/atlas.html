@@ -1,7 +1,7 @@
 <!--
  Atlas demo. SVG version.
  Draw background images in diff. projections.
- egax@bk.ru, 2015.
+ egax@bk.ru, 2015. r210410.
 -->
 <!DOCTYPE html>
 <html>
@@ -18,189 +18,178 @@
 <script src="../js/data/continents.js"></script>
 <script src="../js/data/imgmap.js"></script>
 <table><tr><td id="mcont"></td></tr></table>
-<script type='text/javascript'>
-  var allmaps = [];
-  function initmaps(){
-    for(var i in allmaps){
-      allmaps[i]();
-    }
-  }
-  if(window.addEventListener) {
-    window.addEventListener('load', initmaps, false);
-  } else {
-    window.attachEvent('onload', initmaps);
-  }
-</script>
 <script type="text/javascript">
-  var dw;
-  var childs = [];
+var dw;
+var childs = [];
 
-  function draw() {
-    for (var i=0; i<childs.length; i++) {
-      dw.vp.removeChild(childs[i]);
-    }
-    childs = [];
-
-    if (dw.isSpherical()) {
-      // globus boundary
-      var o = dw.paintBound();
-      if (o) childs.push( o );
-      // conts
-      for (var i=0; i<CONTINENTS.length; i++) {
-        var mcoords = CONTINENTS[i][2];
-        var pts = dw.interpolateCoords(mcoords, true, 10);
-        // add new layers
-        var land = dw.append('polygon', {
-          points: pts.join(' '),
-          fill: 'silver',
-          stroke: 'silver'
-        });
-        childs.push( land );
-      };
-    };
-    // bg image
-    var crds, src;
-    if (dw.project == 0){
-      src = 'wrld_small';
-      crds = [[-180,90],[180,-90]];
-    } else if (dw.project == 101) {
-      src = 'wrld_small_merc';
-      crds = [[-179.99,168],[179.99,-168]];
-    } else if (dw.project == 102) {
-      src = 'wrld_small_mill';
-      crds = [[-179.99,132],[179.99,-132]];
-    } else if (dw.project == 204) {
-      src = 'wrld_small_moll';
-      crds = [[-162,81],[162,-81]];
-    };
-
-    if (src) { // if img exists load it
-      var pts = [dw.toPoints(crds[1]), dw.toPoints(crds[0])];
-      var img = dw.append('image', {
-        width:  pts[0][0]-pts[1][0],
-        height: pts[0][1]-pts[1][1],
-        x: pts[1][0],
-        y: pts[1][1],
-        preserveAspectRatio:'none'
-      });
-
-      img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../' + IMGMAP[src]);
-      childs.push( img );
-    }
-
-    // meridians
-    var merids = dw.createMeridians();
-    for (var i=0; i<merids.length; i++) {
-      var pts = dw.interpolateCoords(merids[i], true, 10),
-          path = ('M ' + pts[0] + ' L ' + pts).replace(/,/g, ' ');
-      var o = dw.append('path', {
-        fill: 'transparent',
-        stroke: 'rgba(164,164,164,0.6)',
-        'stroke-dasharray': '4',
-        d: path
-      });
-      childs.push( o );
-    }
-    //cities
-    var cities = [
-      [[-73.905,40.708], 'Нью-Йорк'],
-      [[-118.25,34], 'Лос-Анджелес'],
-      [[-0.178,51.488], 'Лондон'],
-      [[37.7,55.75], 'Москва'],
-      [[116.388,39.906], 'Пекин'],
-      [[145.075,-37.853], 'Мельбурн'],
-      [[-43.455,-22.722], 'Рио-де-Жанейро'],
-      [[15.285,-4.285], 'Браззавиль'] ];
-    for (var i=0; i<cities.length; i++){
-      var pts = dw.toPoints(cities[i][0], true);
-      if (!dw.chkPts(pts)) continue;
-      var city = dw.append('circle', {
-        class: cities[i][1],
-        cx: pts[0], cy: pts[1], r: 3, fill: 'rgb(240,220,0)'
-      });
-      var label = dw.append('text', {
-        x: pts[0], y: pts[1], dx: 4, dy: 3, fill: 'rgb(255,155,128)', 
-        'font-family': 'sans-serif', 'font-size': '10px'
-      });
-      label.appendChild(document.createTextNode(city.getAttribute('class')));
-      childs.push( label );
-      dw.extend(city, {
-        onmousemove: function(ev){
-          dw.doMap(ev, {
-            fill: 'rgb(255,127,0)',
-          });
-        }
-      });
-      childs.push( city );
-    }
-  };
-  
-  // change proj.
-  function chProj(ev){
-    dw.initProj(ev.target.name, '+lon_0=0 +lat_0=0'); //set proj
-    draw();
+function draw() {
+  for(var i=0; i<childs.length; i++) {
+    dw.vp.removeChild(childs[i]);
   }
-  
-  var mcont = document.getElementById('mcont');
-  var dx = (mcont.offsetWidth*0.98 - 50) + 'px';
+  childs = [];
 
-  var el = document.createElement('input');
-  mcont.appendChild(el);
-  el.type = 'button';
-  el.name = '203';
-  el.value = 'ortho';
-  el.style.position = 'fixed';
-  el.style.top = '5%';
-  el.style.left = dx;
-  el.onclick = chProj;
+  if(dw.isSpherical()) {
+    // globus boundary
+    var o = dw.paintBound();
+    if(o) childs.push( o );
+    // conts
+    for(var i=0; i<CONTINENTS.length; i++) {
+      var mcoords = CONTINENTS[i][2];
+      var pts = dw.interpolateCoords(mcoords, true, 10);
+      // add new layers
+      var land = dw.append('polygon', {
+        points: pts.join(' '),
+        fill: 'silver',
+        stroke: 'silver'
+      });
+      childs.push( land );
+    };
+  };
+  // bg image
+  var crds, src;
+  if(dw.project == 0){
+    src = 'wrld_small';
+    crds = [[-180,90],[180,-90]];
+  } else if(dw.project == 101) {
+    src = 'wrld_small_merc';
+    crds = [[-179.99,168],[179.99,-168]];
+  } else if(dw.project == 102) {
+    src = 'wrld_small_mill';
+    crds = [[-179.99,132],[179.99,-132]];
+  } else if(dw.project == 204) {
+    src = 'wrld_small_moll';
+    crds = [[-162,81],[162,-81]];
+  };
+  if(src) { // if img exists load it
+    var pts = [dw.toPoints(crds[1]), dw.toPoints(crds[0])];
+    var img = dw.append('image', {
+      width:  pts[0][0]-pts[1][0],
+      height: pts[0][1]-pts[1][1],
+      x: pts[1][0],
+      y: pts[1][1],
+      preserveAspectRatio:'none'
+    });
 
-  var el = document.createElement('input');
-  mcont.appendChild(el);
-  el.type = 'button';
-  el.name = '101';
-  el.value = 'merc';
-  el.style.position = 'fixed';
-  el.style.top = '15%';
-  el.style.left = dx;
-  el.onclick = chProj;
+    img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../' + IMGMAP[src]);
+    childs.push( img );
+  }
+  // meridians
+  var merids = dw.createMeridians();
+  for(var i=0; i<merids.length; i++) {
+    var pts = dw.interpolateCoords(merids[i], true, 10),
+        path = ('M ' + pts[0] + ' L ' + pts).replace(/,/g, ' ');
+    var o = dw.append('path', {
+      fill: 'transparent',
+      stroke: 'rgba(164,164,164,0.6)',
+      'stroke-dasharray': '4',
+      d: path
+    });
+    childs.push( o );
+  }
+  //cities
+  var cities = [
+    [[-73.905,40.708], 'Нью-Йорк'],
+    [[-118.25,34], 'Лос-Анджелес'],
+    [[-0.178,51.488], 'Лондон'],
+    [[37.7,55.75], 'Москва'],
+    [[116.388,39.906], 'Пекин'],
+    [[145.075,-37.853], 'Мельбурн'],
+    [[-43.455,-22.722], 'Рио-де-Жанейро'],
+    [[15.285,-4.285], 'Браззавиль'] ];
+  for(var i=0; i<cities.length; i++){
+    var pts = dw.toPoints(cities[i][0], true);
+    if(!dw.chkPts(pts)) continue;
+    var city = dw.append('circle', {
+      class: cities[i][1],
+      cx: pts[0], cy: pts[1], r: 3, fill: 'rgb(240,220,0)'
+    });
+    var label = dw.append('text', {
+      x: pts[0], y: pts[1], dx: 4, dy: 3, fill: 'rgb(255,155,128)', 
+      'font-family': 'sans-serif', 'font-size': '10px'
+    });
+    label.appendChild(document.createTextNode(city.getAttribute('class')));
+    childs.push( label );
+    dw.extend(city, {
+      onmousemove: function(ev){
+        dw.doMap(ev, {
+          fill: 'rgb(255,127,0)',
+        });
+      }
+    });
+    childs.push( city );
+  }
+};
 
-  var el = document.createElement('input');
-  mcont.appendChild(el);
-  el.type = 'button';
-  el.name = '102';
-  el.value = 'mill';
-  el.style.position = 'fixed';
-  el.style.top = '25%';
-  el.style.left = dx;
-  el.onclick = chProj;
+// change proj.
+function chProj(ev){
+  dw.initProj(ev.target.name, '+lon_0=0 +lat_0=0'); //set proj
+  draw();
+}
 
-  var el = document.createElement('input');
-  mcont.appendChild(el);
-  el.type = 'button';
-  el.name = '0';
-  el.value = 'lonlat';
-  el.style.position = 'fixed';
-  el.style.top = '35%';
-  el.style.left = dx;
-  el.onclick = chProj;
+var mcont = document.getElementById('mcont');
+var dx = (mcont.offsetWidth*0.95-50) + 'px';
 
-  var el = document.createElement('input');
-  mcont.appendChild(el);
-  el.type = 'button';
-  el.name = '204';
-  el.value = 'moll';
-  el.style.position = 'fixed';
-  el.style.top = '45%';
-  el.style.left = dx;
-  el.onclick = chProj;
-  
-  dw = new dbCartaSvg({
-    id: 'mcont',
-    height: document.getElementById('mcont').offsetHeight,
-    sbarpos: 'left'
-  });
-  dw.initProj(102, '+lon_0=0 +lat_0=0'); //miller proj
-  allmaps.push(draw);
+var el = document.createElement('input');
+mcont.appendChild(el);
+el.type = 'button';
+el.name = '203';
+el.value = 'ortho';
+el.style.position = 'fixed';
+el.style.top = '30%';
+el.style.left = dx;
+el.onclick = chProj;
+
+var el = document.createElement('input');
+mcont.appendChild(el);
+el.type = 'button';
+el.name = '101';
+el.value = 'merc';
+el.style.position = 'fixed';
+el.style.top = '40%';
+el.style.left = dx;
+el.onclick = chProj;
+
+var el = document.createElement('input');
+mcont.appendChild(el);
+el.type = 'button';
+el.name = '102';
+el.value = 'mill';
+el.style.position = 'fixed';
+el.style.top = '50%';
+el.style.left = dx;
+el.onclick = chProj;
+
+var el = document.createElement('input');
+mcont.appendChild(el);
+el.type = 'button';
+el.name = '0';
+el.value = 'lonlat';
+el.style.position = 'fixed';
+el.style.top = '60%';
+el.style.left = dx;
+el.onclick = chProj;
+
+var el = document.createElement('input');
+mcont.appendChild(el);
+el.type = 'button';
+el.name = '204';
+el.value = 'moll';
+el.style.position = 'fixed';
+el.style.top = '70%';
+el.style.left = dx;
+el.onclick = chProj;
+
+dw = new dbCartaSvg({
+  id: 'mcont',
+  height: document.getElementById('mcont').offsetHeight,
+  sbarpos: 'left'
+});
+dw.initProj(102, '+lon_0=0 +lat_0=0'); //miller proj
+
+if(window.addEventListener)
+  window.addEventListener('load', draw, false); 
+else
+  window.attachEvent('onload', draw);
 </script>
 </body>
 </html>
