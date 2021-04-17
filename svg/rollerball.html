@@ -17,23 +17,25 @@
 <table><tr><td id="mcont"></td></tr></table>
 <script src="../js/dbcartasvg.js"></script>
 <script type='text/javascript'>
-var el = document.createElement('div');
-el.id = 'tool';
-el.className = 'pointer';
-el.style.textAlign = 'center';
-el.style.padding = '15px';
-el.style.color = '#333333';
-el.style.font = '1em arial';
-el.style.border = '2px solid rgba(19,64,117,0.5)';
-el.style.borderRadius = '4px';
-el.style.backgroundColor = 'rgba(250,250,250,0.9)';
-el.style.position = 'absolute';
-el.style.zIndex = '10000';
-el.style.display = 'none';
-document.body.appendChild(el);
  //
 function infobox(s) {
   var mtip = document.getElementById('tool');
+  if(!mtip){
+    var mtip = document.createElement('div');
+    mtip.id = 'tool';
+    mtip.className = 'pointer';
+    mtip.style.textAlign = 'center';
+    mtip.style.padding = '15px';
+    mtip.style.color = '#333333';
+    mtip.style.font = '1em arial';
+    mtip.style.border = '2px solid rgba(19,64,117,0.5)';
+    mtip.style.borderRadius = '4px';
+    mtip.style.backgroundColor = 'rgba(250,250,250,0.9)';
+    mtip.style.position = 'absolute';
+    mtip.style.zIndex = '10000';
+    mtip.style.display = 'none';
+    document.body.appendChild(mtip);    
+  }
   mtip.innerHTML = s;
   mtip.style.display = 'block';
   mtip.style.left = window.innerWidth/2+'px';
@@ -90,13 +92,11 @@ function draw(){
 }
  //
 function doorClick(){
-  dw.attr(dw.root.getElementById('ball'), {transform: 'translate(0,'+(-dw.toPoints([0,-6])[1])+')'});
+  dw.attr(dw.root.getElementById('ball'), {transform: 'translate(-'+dw.toPoints([-180,-8]).join(',-')+')'});
 }
  //
 var dw = new dbCartaSvg({
-  id: 'mcont',
-  bg: 'none',
-  sbar:0,
+  id:'mcont', bg:'none', sbar:0,
   height: document.getElementById('mcont').offsetHeight
 });
 dw.scaleCarta(0.6);

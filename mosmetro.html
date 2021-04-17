@@ -57,7 +57,7 @@ function infobox(ev, label) {
     mtip.innerHTML = label;
     mtip.style.display = 'block';
     mtip.style.left = ev.clientX + window.pageXOffset + 'px';
-    mtip.style.top = ev.clientY + window.pageYOffset - mtip.offsetHeight * 1.2 + 'px';
+    mtip.style.top = ev.clientY + window.pageYOffset - mtip.offsetHeight*1.2 + 'px';
   } else {
     mtip.style.display = 'none';
   }
@@ -125,7 +125,7 @@ function init() {
   el.id = 'maptooltip';
   el.style.padding = '5px';
   el.style.color = '#333333';
-  el.style.font = '12px sans-serif';
+  el.style.font = '1em arial';
   el.style.border = '2px solid rgba(19,64,117,0.5)';
   el.style.borderRadius = '4px';
   el.style.backgroundColor = 'rgba(250,250,250,0.9)';
@@ -346,7 +346,7 @@ function init() {
         mtip = label; // tooltip
         if (INFOMST[dw.m.pmap]) {
           var st = INFOMST[dw.m.pmap];
-          mtip = '<b>' + label + '</b>' + '<br>' + 'Открыта: ' + st[0] + '<br>' + 'Глубина: ' + st[1];
+          mtip = '<b>'+ label +'</b>'+'<br>'+'Открыта: '+ st[0] +'<br>'+'Глубина: '+ st[1];
         }
       }
       mcoord.innerHTML = label; // text

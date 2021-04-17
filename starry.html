@@ -105,7 +105,7 @@ function infobox(ev) {
     mtip.innerHTML = dw.marea[dw.m.pmap]['desc'] || dw.marea[dw.m.pmap]['label'] || dw.marea[dw.m.pmap]['ftag'];
     mtip.style.display = 'block';
     mtip.style.left = ev.clientX + window.pageXOffset + 'px';
-    mtip.style.top = ev.clientY + window.pageYOffset - mtip.offsetHeight * 1.2 + 'px';
+    mtip.style.top = ev.clientY + window.pageYOffset - mtip.offsetHeight*1.2 + 'px';
   } else {
     mtip.style.display = 'none';
   }
