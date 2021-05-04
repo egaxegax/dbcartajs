@@ -403,11 +403,11 @@ function calcRoutes(fromid, toid){
 //      console.log(cc);
       var pts = DC.interpolateCoords(cc, true),
           path = ('M ' + pts).replace(/,/g, ' ');
-      var p = DC.append('path', { class: 'selpath', d: path, stroke:'white', fill: 'none', 'stroke-linecap': 'round', 'stroke-width': 4 });
+      var p = DC.append('path', { class: 'selpath', d: path, stroke:'white', fill: 'none', 'stroke-dasharray': [4,8], 'stroke-linecap': 'round', 'stroke-width': 4 });
       DC.append(p, 'animate', { attributeName: 'stroke-width', values: '1;4;1', dur: '1s', repeatCount: 'indefinite' });
     }
     var p = DC.attr(DC.root.getElementById(makeid(sts[i])), { class: 'selected', 'stroke-width': 4, r: 8, transform: 'scale(1)' });
-    DC.append(p, 'animate', { attributeName: 'r', values: '6;10;6', dur: '1s', repeatCount: 'indefinite' });
+    DC.append(p, 'animate', { attributeName: 'r', values: '4;6;4', dur: '1s', repeatCount: 'indefinite' });
   });
 }
   //
