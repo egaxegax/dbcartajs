@@ -272,8 +272,9 @@ function draw() {
           }
         }
         DC.attr(ev.target, {class: 'selected', fill: 'gold', r:6, 'stroke-width': 2});
-        if((sel = DC.root.querySelectorAll('.selected')).length == 2)
+        if((sel = DC.root.querySelectorAll('.selected')).length == 2){
           calcRoutes(sel[0].getAttribute('id'), sel[1].getAttribute('id'));
+        }
       },
       onmousemove: function(ev){
         var scale = 2;
@@ -371,8 +372,8 @@ function calcRoutes(fromid, toid){
   if(document.getElementById('chr5').innerHTML.indexOf('+')>-1) inches = inches.concat(inch_r5);
   if(document.getElementById('chr14').innerHTML.indexOf('+')>-1) inches = inches.concat(inch_mck);
   if(document.getElementById('chrExt').innerHTML.indexOf('+')>-1) inches = inches.concat(inch_ext);
-  console.log(inches.length);
-  BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
+//  console.log(inches.length);
+  var ss=BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
 //    console.log(st);
     if(i < sts.length-1){
       var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;

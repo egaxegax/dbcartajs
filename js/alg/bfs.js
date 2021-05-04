@@ -57,16 +57,16 @@ function buildpath(m, tree, to){
 // to - destionation index of m
 function BFS(m, inst, from, to){
   var tree = [];
-  var visited = new Set;
+  var visited = [];
   var q = [];
   q.push(from);
   while(q.length){
     var subroot = q.shift();
-    visited.add(subroot.toString());
+    visited.push(subroot.toString());
     if(subroot.toString() == to.toString()) return buildpath(m, tree, to);
     var child = childs(m, inst, subroot);
     for(var i in child){
-      if(!visited.has(child[i].toString())){
+      if(visited.indexOf(child[i].toString()) == -1){
         tree[child[i]] = subroot;
         if(child[i] == to) q.unshift(child[i]);
         else q.push(child[i]);
