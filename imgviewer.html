@@ -136,7 +136,10 @@ function init() {
     };
   }
 
-  dw = new dbCarta({id:'mcol'});
+  var dw = new dbCarta({
+    id:'mcol',
+    height: document.getElementById('mcol').offsetHeight
+  });
   dw.extend(dw.mopt, {'.Latitude': {fg: 'white', width: .25}});
   // worldmap img
   var im = new Image();
