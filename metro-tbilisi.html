@@ -13,7 +13,7 @@
 <body>
 <table><tr><td id="mcont">
 <select id="stationlist" style="position:fixed; top:10px; left:10px">
-<option value="">Выберите...</option></select>
+<option disabled selected>Выберите...</option></select>
 </td></tr></table>
 <script type="text/javascript">
 function draw(){
@@ -119,19 +119,16 @@ function draw(){
   dw.loadCarta(MSTATIONS);
   dw.scaleCarta(1.25);
   dw.draw();
+  //
+  MSTATIONS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1});
+  MSTATIONS.map(function(a){
+    if (!a[3]) return;
+    var el = document.createElement('option');
+    el.value = a[0] + '_' + a[1];
+    el.appendChild(document.createTextNode(a[3]));
+    document.getElementById('stationlist').appendChild(el);    
+  })
   // station list
-  document.getElementById('stationlist').onmousedown = function(){
-    if(this.length < MSTATIONS.length){
-      MSTATIONS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1});
-      for(var i in MSTATIONS){
-        if (!MSTATIONS[i][3]) continue;
-        var el = document.createElement('option');
-        el.value = MSTATIONS[i][0] + '_' + MSTATIONS[i][1];
-        el.appendChild(document.createTextNode(MSTATIONS[i][3]));
-        stationlist.appendChild(el);
-      }
-    }
-  };
   document.getElementById('stationlist').onchange = function(){
     if(this.options[this.selectedIndex]){
       var centerofpts = dw.mflood[this.value]['pts'];
