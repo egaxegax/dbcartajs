@@ -41,115 +41,103 @@ dt li { display: table-cell; text-align:left; }
 <br>
 
 <table width="960px" align="center" style="font-size: larger">
-<tr>
-  <td width="50%" align="center" style="border: 1px solid lightgray; padding:10px">
+<tr class="stripe">
+  <td width="50%" align="center" style="padding:10px">
     Больше карт в блоге <a href="https://dbcartajs.blogspot.ru" target="_blank">dbcartajs.blogspot.ru</a>
   </td>
-  <td style="border: 1px solid lightgray; padding:10px" align="center">
+  <td align="center"  style="padding:10px">
     <a href="https://github.com/egaxegax/dbcartajs" target="_blank">Source Code</a>
   </td></tr>
 <tr>
-  <td colspan="2">
-    <dl>
-      <dt><ul>
-        <li class="col1">Moscow Metro</li>
-        <li class="col2"><a href="svg/mosmetro.html">SVG</a></li>
-        <li><a href="mosmetro.html">Canvas</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        Схема метро Москвы в 2021 году со строящимися линиями и станциями и МЦК. 
-        В <a href="svg/mosmetro.html">SVG-версии</a> карты добавил возможность расчета кратчайшего пути между станциями по алгоритму BFS. 
-      </dd>
-      <dt><ul>
-        <li class="col1">Moscow Railroad</li>
-        <li class="col2"><a href="svg/mosrails.html">SVG</a></li>
-        <li><a href="mosrails.html">Canvas</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        Схема пригородного ж/д транспорта Москвы и МО в 2015 году. 
-        Оригинал этой карты можно видеть на стенах тамбуров подмосковных электричек под названием <i>Moscow Underground and Commuter Rail Map</i>. 
-      </dd>
-      <dt><ul>
-        <li><a href="metro-tbilisi.html">Tbilisi Metro</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        Карта метро города Тбилиси (Грузия) в 2015 году.
-      </dd>
-      <dt><ul>
-        <li class="col1">Image Viewer</li>
-        <li class="col2"><a href="svg/imgviewer.html">SVG</a></li>
-        <li><a href="imgviewer.html">Canvas</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        Просмотр картинок с возможностью масштабирования.
-      </dd>
-      <dt><ul>
-        <li class="col1">Atlas</li>
-        <li class="col2"><a href="svg/atlas.html">SVG</a></li>
-        <li><a href="atlas.html">Canvas</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        Интерактивный атлас мира с возможностью нанесения объектов с заданными координатами в выбранной проекции.
-      </dd>
-      <dt><ul>
-        <li class="col1">World's Population</li>
-        <li class="col2"><a href="svg/usemap.html">SVG</a></li>
-        <li><a href="usemap.html">Canvas</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        Интерактивная карта мира с данными по плотности населения мира. Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
-        из проекта <a href="http://www.highcharts.com">highcharts.com</a>
-      </dd>
-      <dt><ul>
-        <li class="col1">Wall Clock</li>
-        <li><a href="svg/clock.html">SVG</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        Механические часы показывают местное и всемирное время.
-      </dd>
-      <dt><ul>
-        <li class="col1">Roller Ball</li>
-        <li><a href="svg/rollerball.html">SVG</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        Использование svg-анимации с эффектом движения.
-      </dd>
-      <dt><ul>
-        <li><a href="merc.html">Routes</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        На карте в проекции "Меркатор" изображены несколько стран со столицами. Города соединены маршрутными линиями.
-      </dd>
-      <dt><ul>
-        <li class="col1"><a href="cities.html">World's Cities</a></li>
-        <li><a href="countries.html">World's Countries</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        Списки крупнейших городов мира с выводом и центрированием на карте и стран мира с отображением в различных проекциях.
-      </dd>
-      <dt><ul>
-        <li><a href="starry.html">Starry Sky</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        Глобус на фоне звездного неба как в Orbitron, Marble, Xephem c эфемеридами космических аппаратов. 
-      </dd>
-      <dt><ul>
-        <li><a href="map3d.html">Atlas 3D</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        Отрисовка картинки плоской карты, сформированной в канвасе 2d, в различных проекциях с использованием шейдеров на движке WebGL и формул пересчета координат, 
-        написанных на javascript. Идея и коды позаимствованы с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
-      </dd>
-      <dt><ul>
-        <li><a href="sky3d.html">Sky 3D</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        Переделанный вариант "Звездного неба" с канваса 2d на отрисовку через WebGL с использованием скриптов three.js. 
-        Вращайте, перемещайте левой и правой кнопками мыши объекты Солнечной Системы. 
-        Идея и стиль позаимствованы из примеров с <a href="http://www.apoapsys.com">apoapsys.com</a>
-      </dd>
-    </dl>
-  </td>
+  <td colspan="2"><dl>
+    <dt><ul>
+      <li class="col1">Moscow Metro</li>
+      <li class="col2"><a href="svg/mosmetro.html">SVG</a></li>
+      <li><a href="mosmetro.html">Canvas</a></li></ul>
+    </dt>
+    <dt><ul>
+      <li class="col1">Moscow Railroad</li>
+      <li class="col2"><a href="svg/mosrails.html">SVG</a></li>
+      <li><a href="mosrails.html">Canvas</a></li></ul>
+    </dt>
+    <dt><ul>
+      <li class="col1">Tbilisi Metro</li>
+      <li class="col2"></li>
+      <li><a href="metro-tbilisi.html">Canvas</a></li></ul>
+    </dt>
+    <dd class="stripe">
+      Интерактивные схемы метро Москвы в 2021 году со строящимися линиями и станциями и МЦК и
+      пригородного ж/д транспорта Москвы и МО в 2015 году.
+      В <a href="svg/mosmetro.html">SVG-версии</a> карты метро можно рассчитать кратчайший пути между станциями по алгоритму BFS. 
+    </dd>
+    <dt><ul>
+      <li class="col1">Image Viewer</li>
+      <li class="col2"><a href="svg/imgviewer.html">SVG</a></li>
+      <li><a href="imgviewer.html">Canvas</a></li></ul>
+    </dt>
+    <dd class="stripe">
+      Просмотр картинок с возможностью масштабирования.
+    </dd>
+    <dt><ul>
+      <li class="col1">Wall Clock</li>
+      <li><a href="svg/clock.html">SVG</a></li></ul>
+    </dt>
+    <dt><ul>
+      <li class="col1">Roller Ball</li>
+      <li><a href="svg/rollerball.html">SVG</a></li></ul>
+    </dt>
+    <dd class="stripe">
+      Примеры использования градиента и svg-анимации с эффектом движения.
+    </dd>
+    <dt><ul>
+      <li class="col1">Atlas</li>
+      <li class="col2"><a href="svg/atlas.html">SVG</a></li>
+      <li><a href="atlas.html">Canvas</a></li></ul>
+    </dt>
+    <dt><ul>
+      <li class="col1">Population</li>
+      <li class="col2"><a href="svg/usemap.html">SVG</a></li>
+      <li><a href="usemap.html">Canvas</a></li></ul>
+    </dt>
+    <dt><ul>
+      <li class="col1">Cities</li>
+      <li class="col2"></li>
+      <li><a href="cities.html">Canvas</a></li></ul>
+    </dt>
+    <dt><ul>
+      <li class="col1">Countries</li>
+      <li class="col2"></li>
+      <li><a href="countries.html">Canvas</a></li></ul>
+    </dt>
+    <dt><ul>
+      <li class="col1">Routes</li>
+      <li class="col2"></li>
+      <li><a href="merc.html">Canvas</a></li></ul>
+    </dt>
+    <dd class="stripe">
+      Интерактивные карты мира со списками городов и стран в различных проекциях. 
+      Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
+    </dd>
+    <dt><ul>
+      <li class="col1">Atlas 3D</li>
+      <li class="col2"></li>
+      <li><a href="map3d.html">Canvas</a></li></ul>
+    </dt>
+    <dt><ul>
+      <li class="col1">Starry Sky</li>
+      <li class="col2"></li>
+      <li><a href="starry.html">Canvas</a></li></ul>
+    </dt>
+    <dt><ul>
+      <li class="col1">Sky 3D</li>
+      <li class="col2"></li>
+      <li><a href="sky3d.html">Canvas</a></li></ul>
+    </dt>
+    <dd class="stripe">
+      Отрисовка картинки в канвасе 3d с пересчетом проекции отображения через шейдеры WebGL на основе примеров с с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
+      Звездное небо в канвасе 2d и 3d с использованием скриптов <a href="https://github.com/mrdoob/three.js">three.js</a>.
+    </dd>
+  </dl></td>
 </tr>
 </table>
 
@@ -172,20 +160,19 @@ dt li { display: table-cell; text-align:left; }
   // add anim
   var cx = Math.random() * 360,
       cy = Math.random() * 180;
-  dw1 = new dbCarta({id:'demo1', rbar:false, bg:'transparent'});
+  var dw1 = new dbCarta({id:'demo1', width:250, rbar:false, bg:'transparent'});
   dw1.initProj(203, ' +lon_0=' + cx + ' +lat_0=' + cy);
   dw1.loadCarta(CONTINENTS);
-  dw1.loadCarta(dw1.createMeridians());
+  dw1.loadCarta(dw1.createMeridians().map(function(a){ return a.slice(0,4); }));
   dw1.scaleCarta(1.4);
   dw1.draw();
-  dw2 = new dbCarta({id:'demo2', rbar:false, bg:'transparent'});
+  var dw2 = new dbCarta({id:'demo2', width:250, rbar:false, bg:'transparent'});
   dw2.initProj(202, ' +lon_0=' + (180-cx) + ' +lat_0=' + (-cy/2.0));
   dw2.loadCarta(CONTINENTS);
-  dw2.loadCarta(dw2.createMeridians());
+  dw2.loadCarta(dw2.createMeridians().map(function(a){ return a.slice(0,4); }));
   dw2.scaleCarta(1.6);
   delete CONTINENTS;
   dw2.draw();
-
 </script>
 </body>
 </html>

@@ -19,7 +19,7 @@
 <select 
   onchange="var o=this.options[this.selectedIndex]; o.innerHTML = (o.innerHTML.indexOf('+')>-1 ? '[--]' : '[+]')+' '+o.innerHTML.trim().slice(4); this.selectedIndex = 0;" 
   style="position:fixed; top:10px; right:10px">
-<option disabled selected>Пересадки в пути...</option>
+<option disabled selected>Рассчитывать пути...</option>
 <option id="chr">   [+] Между ветками</option>
 <option id="chr5">  [+] Кольцевые</option>
 <option id="chrExt">[--] Строящиеся</option>
