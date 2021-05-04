@@ -1,6 +1,6 @@
 <!--
  Wall clock.
- egax@bk.ru, 2018. r210410.
+ egax@bk.ru, 2018. r210504.
 -->
 <!DOCTYPE html>
 <html>
@@ -17,7 +17,7 @@
 <script src="../js/dbcartasvg.js"></script>
 <script type='text/javascript'>
 function cls(){
-  for(var i=0; i<childs.length; i++) dw.vp.removeChild(childs[i]); 
+  for(var i=0; i<childs.length; i++) DC.vp.removeChild(childs[i]); 
   childs =[];
 }
 function timerfunc(){
@@ -29,24 +29,24 @@ function timerfunc(){
   draw( 3/2, 1, hh, mm, ss, 'MSK' );
 }
 function draw( wr, hr, HH, MM, SS, label ){
-  var w = dw.vp.getAttribute('width'), h = dw.vp.getAttribute('height');
-  var el, gradient = dw.append('radialGradient', {id: 'gradcolor'});
-  dw.append(gradient, 'stop', {offset: '0%', 'stop-color': 'rgb(255,255,255)'});
-  dw.append(gradient, 'stop', {offset: '150%', 'stop-color': 'rgb(55,200,0)'});
+  var w = DC.vp.getAttribute('width'), h = DC.vp.getAttribute('height');
+  var el, gradient = DC.append('radialGradient', {id: 'gradcolor'});
+  DC.append(gradient, 'stop', {offset: '0%', 'stop-color': 'rgb(255,255,255)'});
+  DC.append(gradient, 'stop', {offset: '150%', 'stop-color': 'rgb(55,200,0)'});
   childs.push( gradient );
     // center
-  childs.push( dw.append('circle', {
+  childs.push( DC.append('circle', {
     cx: w/2*wr, cy: h/2*hr, r: h/3-10, fill: 'url(#gradcolor)'
   }) );
-  childs.push( dw.append('circle', {
+  childs.push( DC.append('circle', {
     cx: w/2*wr, cy: h/2*hr, r: 3, fill: 'gray'
   }) );
-  childs.push( el = dw.append('text', {
+  childs.push( el = DC.append('text', {
     x: w/2*wr, y: h/2*hr,
-    'font-family': 'sans-serif', 'font-size': dw.root.getAttribute('width')/100,
+    'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/100,
   }) );
   el.appendChild(document.createTextNode(label));
-  dw.attr(el, {
+  DC.attr(el, {
     x: w/2*wr - (el.getBoundingClientRect().right - el.getBoundingClientRect().left)/2,
     y: h/2*hr + (el.getBoundingClientRect().bottom - el.getBoundingClientRect().top),
   });
@@ -56,34 +56,34 @@ function draw( wr, hr, HH, MM, SS, label ){
     if(i%6==0 ) { r = 2; s = 'lightgray'; f = s; };
     if(i%30==0 ) { r = 4; s = 'black'; f = s; };
     if(i%90==0 ) { r = 8; s = 'gold'; f = s; };
-    childs.push( dw.append('circle', {
+    childs.push( DC.append('circle', {
       stroke: s, fill: f, r: r,
       cx: w/2*wr + h/3 * Math.sin(i * Math.PI/180), cy: h/2*hr - h/3 * Math.cos(i * Math.PI/180)
     }) );
   };
     // hours
-  childs.push( dw.append('path', {
+  childs.push( DC.append('path', {
     stroke: 'rgb(180,180,180)', fill: 'rgb(200,200,200)',
     d: 'M ' + w/2*wr + ' ' + h/2*hr  + ' Q' + (w/2*wr + h/6 * Math.sin((HH * 30 + MM / 2 + 12) * Math.PI/180)) + ' ' + (h/2*hr - h/6 * Math.cos((HH * 30 + MM / 2 + 12) * Math.PI/180)) +
        ' ' + (w/2*wr + (h/4 - 12) * Math.sin((HH * 30 + MM / 2) * Math.PI/180)) + ' ' + (h/2*hr - (h/4 - 12) * Math.cos((HH * 30 + MM / 2) * Math.PI/180)) +
        ' Q' + (w/2*wr + h/6 * Math.sin((HH * 30 + MM / 2 - 12) * Math.PI/180)) + ' ' + (h/2*hr - h/6 * Math.cos((HH * 30 + MM / 2 - 12) * Math.PI/180)) + ' ' + w/2*wr + ' ' + h/2*hr
   }) );
     // minutes
-  childs.push( dw.append('path', {
+  childs.push( DC.append('path', {
     stroke: 'rgb(180,180,180)', fill: 'rgb(200,200,200)',
     d: 'M ' + w/2*wr + ' ' + h/2*hr + ' Q' + (w/2*wr + h/5 * Math.sin((MM * 6 + 20) * Math.PI/180)) + ' ' + (h/2*hr - h/5 * Math.cos((MM * 6 + 20) * Math.PI/180)) +
        ' ' + (w/2*wr + (h/3 - 10) * Math.sin(MM * 6 * Math.PI/180)) + ' ' + (h/2*hr - (h/3 - 10) * Math.cos(MM * 6 * Math.PI/180)) +
        ' Q' + (w/2*wr + h/5 * Math.sin((MM * 6 - 20) * Math.PI/180)) + ' ' + (h/2*hr - h/5 * Math.cos((MM * 6 - 20) * Math.PI/180)) + '  ' + w/2*wr + ' ' + h/2*hr
   }) );
     // seconds
-  childs.push( dw.append('path', {
+  childs.push( DC.append('path', {
     stroke: 'black',
     d: 'M ' + w/2*wr + ' ' + h/2*hr + ' L ' + (w/2*wr + h/3.3 * Math.sin(SS * 6 * Math.PI/180)) + ' ' + (h/2*hr - h/3.3 * Math.cos(SS * 6 * Math.PI/180))
   }) );
 }
   //
 var childs = [];
-var dw = new dbCartaSvg({
+var DC = new dbCartaSvg({
   id: 'mcont',
   height: document.getElementById('mcont').offsetHeight,
   sbar: 0,

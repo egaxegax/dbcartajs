@@ -44,62 +44,60 @@ function infobox(s) {
 }
  //
 function draw(){
-  dw.append('circle', {
-    id:'ball', fill:'#c94f46', stroke: 'rgba(164,164,164,0.6)',
-    cx: dw.toPoints([-170,5])[0], cy: dw.toPoints([-170,5])[1], 
-    r: Math.sqrt(Math.pow(dw.toPoints([-170,0])[0]-dw.toPoints([-160,10])[0],2)+Math.pow(dw.toPoints([-160,0])[1]-dw.toPoints([-110,0])[1],2))
+  DC.append('circle', {
+    id:'ball', fill:'#c94f46', cx: DC.toPoints([-170,7])[0], cy: DC.toPoints([-170,7])[1], r: 40
   });
-  dw.append('path', {
+  DC.append('path', {
     id:'door1', class:'pointer', stroke:'#ce922a', 'stroke-width':6, fill:'transparent',
-    d: ('M ' + dw.interpolateCoords([[150,122],[170,119],[170,77],[150,80],[150,123]], true)).replace(/,/g, ' '),
+    d: ('M ' + DC.interpolateCoords([[150,122],[170,119],[170,77],[150,80,'z']], true)).replace(/,/g, ' '),
     onclick:'doorClick()'
   });
-  dw.append('path', {
+  DC.append('path', {
     id:'door2', class:'pointer', stroke:'#ce922a', 'stroke-width':6, fill:'transparent',
-    d: ('M ' + dw.interpolateCoords([[150,34],[170,31],[170,-11],[150,-8],[150,35]], true)).replace(/,/g, ' '),
+    d: ('M ' + DC.interpolateCoords([[150,34],[170,31],[170,-11],[150,-8,'z']], true)).replace(/,/g, ' '),
     onclick:'doorClick()'
   });
-  dw.append('path', {
+  DC.append('path', {
     id:'door3', class:'pointer', stroke:'#ce922a', 'stroke-width':6, fill:'transparent',
-    d: ('M ' + dw.interpolateCoords([[150,-58],[170,-61],[170,-103],[150,-100],[150,-57]], true)).replace(/,/g, ' '),
+    d: ('M ' + DC.interpolateCoords([[150,-58],[170,-61],[170,-103],[150,-100,'z']], true)).replace(/,/g, ' '),
     onclick:'doorClick()'
   });
-  dw.append('path', {
-    id:'path1', stroke:'#c8c8c8', 'stroke-width':7, fill:'none',
-    d: ('M ' + dw.interpolateCoords([[-180,-8,'T'],[-150,-8],[-70,40,'T'],[150,80]], true)).replace(/,/g, ' ')
+  DC.append('path', {
+    id:'path1', stroke:'#aaa', 'stroke-width':7, fill:'none',
+    d: ('M ' + DC.interpolateCoords([[-180,-8,'T'],[-150,-8],[-70,40,'T'],[150,80]], true)).replace(/,/g, ' ')
   });
-  dw.append('path', {
-    id:'path2', stroke:'#c8c8c8', 'stroke-width':7, fill:'none',
-    d: ('M ' + dw.interpolateCoords([[-180,-8,'T'],[-130,-8],[-60,-8,'T'],[0,-30],[40,-8,'T'],[150,-8]], true)).replace(/,/g, ' ')
+  DC.append('path', {
+    id:'path2', stroke:'#aaa', 'stroke-width':7, fill:'none',
+    d: ('M ' + DC.interpolateCoords([[-180,-8,'T'],[-130,-8],[-60,-8,'T'],[0,-30],[40,-8,'T'],[150,-8]], true)).replace(/,/g, ' ')
   });
-  dw.append('path', {
-    id:'path3', stroke:'#c8c8c8', 'stroke-width':7, fill:'none',
-    d: ('M ' + dw.interpolateCoords([[-180,-8],[-150,-8],[-150,-20],[-130,-20],[-130,-40],[-110,-40],[-110,-60],[-90,-60],[-90,-80],[-70,-80],[-70,-100],[150,-100]], true)).replace(/,/g, ' ')
+  DC.append('path', {
+    id:'path3', stroke:'#aaa', 'stroke-width':7, fill:'none',
+    d: ('M ' + DC.interpolateCoords([[-180,-8],[-150,-8],[-150,-20],[-130,-20],[-130,-40],[-110,-40],[-110,-60],[-90,-60],[-90,-80],[-70,-80],[-70,-100],[150,-100]], true)).replace(/,/g, ' ')
   });
-  dw.append(
-    dw.append(dw.root.getElementById('ball'), 'animateMotion', { rotate:'auto', dur:'3s', onend:'infobox("Выход 1")', begin:'door1.click', fill:'freeze' }), 'mpath', {})
+  DC.append(
+    DC.append(DC.root.getElementById('ball'), 'animateMotion', { rotate:'auto', dur:'3s', onend:'infobox("Выход 1")', begin:'door1.click', fill:'freeze' }), 'mpath', {})
       .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#path1');
-  dw.append(
-    dw.append(dw.root.getElementById('ball'), 'animateMotion', { rotate:'auto', dur:'3s', onend:'infobox("Выход 2")', begin:'door2.click', fill:'freeze' }), 'mpath', {})
+  DC.append(
+    DC.append(DC.root.getElementById('ball'), 'animateMotion', { rotate:'auto', dur:'3s', onend:'infobox("Выход 2")', begin:'door2.click', fill:'freeze' }), 'mpath', {})
       .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#path2');
-  dw.append(
-    dw.append(dw.root.getElementById('ball'), 'animateMotion', { dur:'3s', onend:'infobox("Выход 3")', begin:'door3.click', fill:'freeze' }), 'mpath', {})
+  DC.append(
+    DC.append(DC.root.getElementById('ball'), 'animateMotion', { dur:'3s', onend:'infobox("Выход 3")', begin:'door3.click', fill:'freeze' }), 'mpath', {})
       .setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#path3');
    //
-  dw.extend(dw.root.getElementById('door1'), { onmousemove: function(e){ dw.doMap(e, { 'stroke-width': 10 }); }});
-  dw.extend(dw.root.getElementById('door2'), { onmousemove: function(e){ dw.doMap(e, { 'stroke-width': 10 }); }});
-  dw.extend(dw.root.getElementById('door3'), { onmousemove: function(e){ dw.doMap(e, { 'stroke-width': 10 }); }});
+  DC.extend(DC.root.getElementById('door1'), { onmousemove: function(e){ DC.doMap(e, { 'stroke-width': 10 }); }});
+  DC.extend(DC.root.getElementById('door2'), { onmousemove: function(e){ DC.doMap(e, { 'stroke-width': 10 }); }});
+  DC.extend(DC.root.getElementById('door3'), { onmousemove: function(e){ DC.doMap(e, { 'stroke-width': 10 }); }});
 }
  //
 function doorClick(){
-  dw.attr(dw.root.getElementById('ball'), {transform: 'translate(-'+dw.toPoints([-180,-8]).join(',-')+')'});
+  DC.attr(DC.root.getElementById('ball'), {transform: 'translate(-'+DC.toPoints([-180,-8]).join(',-')+')'});
 }
  //
-var dw = new dbCartaSvg({
+var DC = new dbCartaSvg({
   id:'mcont', bg:'none', sbar:0,
   height: document.getElementById('mcont').offsetHeight
 });
-dw.scaleCarta(0.6);
+DC.scaleCarta(0.6);
 draw();
 infobox('Выберите дверь');
 </script>

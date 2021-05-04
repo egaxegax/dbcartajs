@@ -1,7 +1,7 @@
 <!--
  Population density by country. SVG version.
  View countries under mouse cursor.
- egax@bk.ru, 2015. r210410.
+ egax@bk.ru, 2015. r210504.
 -->
 <!DOCTYPE html>
 <html>
@@ -20,7 +20,6 @@
 <script src="../js/dbcartasvg.js"></script>
 <table><tr><td id="mcont"></td></tr></table>
 <script type="text/javascript">
-var dw;
 // tooltip under cursor
 function infobox(ev) {
   var mtip = document.getElementById('maptooltip');
@@ -39,7 +38,7 @@ function infobox(ev) {
     mtip.onmousemove = function(){ this.innerHTML = ''; };
     document.body.appendChild(mtip);
   }
-  if(dw.m.pmap) {
+  if(DC.m.pmap) {
     mtip.innerHTML = ev.target.getAttribute('class');
     mtip.style.display = 'block';
     mtip.style.left = ev.clientX + window.pageXOffset + 'px';
@@ -67,15 +66,15 @@ function draw() {
         mabbr = mpart[1],
         mcoords = mpart[2];
     // add new layers
-    var cntry = dw.append('polygon', {
+    var cntry = DC.append('polygon', {
       class: mcntryname,
-      points: dw.interpolateCoords(mcoords, true, 10).join(' '),
+      points: DC.interpolateCoords(mcoords, true, 10).join(' '),
       fill: densityColor(mcntryname),
       stroke: 'transparent'
     });
-    dw.extend(cntry, {
+    DC.extend(cntry, {
       onmousemove: function(ev){
-        dw.doMap(ev, {
+        DC.doMap(ev, {
           fill: 'rgb(255,127,0)',
           stroke: 'yellow'
         });
@@ -92,15 +91,15 @@ function draw() {
     });
   };
 };
-dw = new dbCartaSvg({
+var DC = new dbCartaSvg({
   id: 'mcont',
   bg: 'white',
   sbarpos: 'left'
 });
 // events
-dw.extend(dw.root, {
+DC.extend(DC.root, {
   onmousemove: function(ev){
-    dw.mousemove(ev);
+    DC.mousemove(ev);
     infobox(ev); // show/hide tooltip
   }
 });

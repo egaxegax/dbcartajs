@@ -1,9 +1,8 @@
 //
-// dbcartajs. HTML5 Canvas vector map and image viewer. Build 200621
-// It uses Proj4js transformations
+// HTML5 Canvas vector map and image viewer with Proj4js transformations.
 //
-// Source at https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013-20
+// https://github.com/egaxegax/dbcartajs.git
+// egax@bk.ru, 2013. b210424.
 //
 function dbCarta(cfg) {
   cfg = cfg||{};
@@ -562,7 +561,7 @@ function dbCarta(cfg) {
         for (var i=0; i<pts.length; i++) {
           if (!mpts.length && this.chkPts(pts[i]))
             this.ctx.lineTo(pts[i][0], pts[i][1]);
-          if (pts[i][2] == 'Q') {
+          if (pts[i][2] != undefined) {
             mpts.push(pts[i]);
             if (mpts.length == 3) {
               this.ctx.bezierCurveTo(mpts[0][0], mpts[0][1], mpts[1][0], mpts[1][1], mpts[2][0], mpts[2][1]);
@@ -780,7 +779,7 @@ function dbCarta(cfg) {
       }
       var pts = [ coords[0] * this.m.delta + this.m.halfX,
                  -coords[1] * this.m.delta + this.m.halfY ];
-      if (m[2]) pts.push(m[2]); // bezier flag
+      if (m[2] != undefined) pts.push(m[2]); // bezier curve flag
       return pts;
     },
     //

@@ -10,14 +10,15 @@
 <meta name="yandex-verification" content="bf07f0af8e739c66">
 <link rel="icon" href="img/fav.svg" type="image/svg+xml" />
 <style type="text/css">
-  body { background:#fff; margin:0; font-family:tahoma,verdana,arial; font-size:16px; }
-  .hspace { padding: 0 12px; }
-  .stripe { background-color: rgb(210,224,240); }
-  .col1 { width:30%; }
-  .col2 { width:20%; }
-  dd { margin: 1%; padding: 0.5em; }
-  dt ul { display: table; width:100%; }
-  dt li { display: table-cell; text-align:left; }
+body { background:#fff; margin:0; font-family:tahoma,verdana,arial; font-size:16px; }
+a, a:active, a:focus { color:#4d3ca0; outline:none; }
+dd { margin: 1%; padding: 0.5em; }
+dt ul { display: table; width:100%; }
+dt li { display: table-cell; text-align:left; }
+.hspace { padding: 0 12px; }
+.stripe { background-color: rgb(210,224,240); }
+.col1 { width:30%; }
+.col2 { width:20%; }
 </style>
 <script src="js/utils/metrics.js"></script>
 </head>
@@ -27,7 +28,7 @@
 <script src="js/data/continents.js"></script>
 
 <h2 style="text-align: center; background-color: rgb(210,224,240); width: 960px; padding: 5px; margin: 4px auto 8px; font-size: 150%; font-weight: normal">
-  Canvas+SVG vector map with projections and image viewer library
+  Canvas+SVG vector map and image viewer library
 </h2>
 
 <table width="100%"><tr>
@@ -51,47 +52,67 @@
   <td colspan="2">
     <dl>
       <dt><ul>
-        <li class="col1"><a href="mosmetro.html">Moscow Metro</a></li>
+        <li class="col1">Moscow Metro</li>
         <li class="col2"><a href="svg/mosmetro.html">SVG</a></li>
-        <li><a href="svg/mosmetro-file.html">HTML+SVG</a></li></ul>
+        <li><a href="mosmetro.html">Canvas</a></li></ul>
       </dt>
       <dd class="stripe">
-        Схема метро Москвы с выбором станций в 2020 году. Первоначально переделена из <a href="http://upload.wikimedia.org/wikipedia/commons/f/f3/Moscow_metro_map_ru_sb.svg">SVG-карты</a>
-        на Wikipedia. Добавлены линии МЦК и ТПК. Также добавлен вывод информации о станции при наведении. Пунктирные линии строящихся станций отображаются только в Firefox (поддержка метода setDashLine в Canvas).
-        Подробности в статье на Хабре "<a href="http://habrahabr.ru/post/193778">Карта метро Москвы на Canvas</a>".
+        Схема метро Москвы в 2021 году со строящимися линиями и станциями и МЦК. 
+        В <a href="svg/mosmetro.html">SVG-версии</a> карты добавил возможность расчета кратчайшего пути между станциями по алгоритму BFS. 
       </dd>
       <dt><ul>
-        <li class="col1"><a href="mosrails.html">Moscow Railroad</a></li>
-        <li><a href="svg/mosrails.html">SVG</a></li></ul>
+        <li class="col1">Moscow Railroad</li>
+        <li class="col2"><a href="svg/mosrails.html">SVG</a></li>
+        <li><a href="mosrails.html">Canvas</a></li></ul>
       </dt>
       <dd class="stripe">
-        Ещё одна карта на тему железных дорог. Схема пригородного ж/д транспорта Москвы и МО в 2015 году. 
-        Оригинал этой карты можно видеть на стенах тамбуров подмосковных электричек под названием Moscow Underground and Commuter Rail Map. 
-        Подробности на Хабре.
+        Схема пригородного ж/д транспорта Москвы и МО в 2015 году. 
+        Оригинал этой карты можно видеть на стенах тамбуров подмосковных электричек под названием <i>Moscow Underground and Commuter Rail Map</i>. 
       </dd>
       <dt><ul>
-        <li class="col1"><a href="http://dbcartajs.blogspot.ru/2014/01/spbmetro.html#cont-spbmetro">Saint-Petersburg</a></li>
-        <li class="col2"><a href="http://dbcartajs.blogspot.ru/2014/02/metro-novosibirsk.html#cont-nsbmetro">Novosibirsk</a></li>
-        <li class="col2"><a href="http://dbcartajs.blogspot.ru/2014/02/metro-kiev.html#cont-kievmetro">Kiev</a></li>
-        <li><a href="http://dbcartajs.blogspot.ru/2014/02/metro-tbilisi.html#cont-tbilisimetro">Tbilisi</a></li></ul>
+        <li><a href="metro-tbilisi.html">Tbilisi Metro</a></li></ul>
       </dt>
       <dd class="stripe">
-        Подборка прочих карт со схемами метро наиболее крупных городов России и СНГ за 2015 год. Небольшие схемы по сравнению с московской. 
-        В целом вообще по протяженности и количеству станций с московским метро могут сравниться только метро Нью-Йорка и Лондона.
+        Карта метро города Тбилиси (Грузия) в 2015 году.
       </dd>
       <dt><ul>
-        <li class="col1"><a href="imgviewer.html">Image Viewer</a></li>
-        <li><a href="svg/imgviewer.html">SVG</a></li></ul>
+        <li class="col1">Image Viewer</li>
+        <li class="col2"><a href="svg/imgviewer.html">SVG</a></li>
+        <li><a href="imgviewer.html">Canvas</a></li></ul>
       </dt>
       <dd class="stripe">
         Просмотр картинок с возможностью масштабирования.
       </dd>
       <dt><ul>
-        <li class="col1"><a href="atlas.html">Atlas</a></li>
-        <li><a href="svg/atlas.html">SVG</a></li></ul>
+        <li class="col1">Atlas</li>
+        <li class="col2"><a href="svg/atlas.html">SVG</a></li>
+        <li><a href="atlas.html">Canvas</a></li></ul>
       </dt>
       <dd class="stripe">
         Интерактивный атлас мира с возможностью нанесения объектов с заданными координатами в выбранной проекции.
+      </dd>
+      <dt><ul>
+        <li class="col1">World's Population</li>
+        <li class="col2"><a href="svg/usemap.html">SVG</a></li>
+        <li><a href="usemap.html">Canvas</a></li></ul>
+      </dt>
+      <dd class="stripe">
+        Интерактивная карта мира с данными по плотности населения мира. Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
+        из проекта <a href="http://www.highcharts.com">highcharts.com</a>
+      </dd>
+      <dt><ul>
+        <li class="col1">Wall Clock</li>
+        <li><a href="svg/clock.html">SVG</a></li></ul>
+      </dt>
+      <dd class="stripe">
+        Механические часы показывают местное и всемирное время.
+      </dd>
+      <dt><ul>
+        <li class="col1">Roller Ball</li>
+        <li><a href="svg/rollerball.html">SVG</a></li></ul>
+      </dt>
+      <dd class="stripe">
+        Использование svg-анимации с эффектом движения.
       </dd>
       <dt><ul>
         <li><a href="merc.html">Routes</a></li></ul>
@@ -107,33 +128,10 @@
         Списки крупнейших городов мира с выводом и центрированием на карте и стран мира с отображением в различных проекциях.
       </dd>
       <dt><ul>
-        <li class="col1"><a href="usemap.html">World's Population</a></li>
-        <li><a href="svg/usemap.html">SVG</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        Интерактивная карта мира с данными по плотности населения мира. Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
-        из проекта <a href="http://www.highcharts.com">highcharts.com</a>
-      </dd>
-      <dt><ul>
         <li><a href="starry.html">Starry Sky</a></li></ul>
       </dt>
       <dd class="stripe">
         Глобус на фоне звездного неба как в Orbitron, Marble, Xephem c эфемеридами космических аппаратов. 
-        Подробнее написано в статье на Хабре "<a href="http://habrahabr.ru/post/189692">Звездное небо на Canvas</a>".
-      </dd>
-      <dt><ul>
-        <li class="col1">Clock</li>
-        <li><a href="svg/clock.html">SVG</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        Механические часы показывают местное и всемирное время.
-      </dd>
-      <dt><ul>
-        <li class="col1">Roller Ball</li>
-        <li><a href="svg/rollerball.html">SVG</a></li></ul>
-      </dt>
-      <dd class="stripe">
-        Использование svg-анимации с эффектом движения.
       </dd>
       <dt><ul>
         <li><a href="map3d.html">Atlas 3D</a></li></ul>
@@ -148,7 +146,6 @@
       <dd class="stripe">
         Переделанный вариант "Звездного неба" с канваса 2d на отрисовку через WebGL с использованием скриптов three.js. 
         Вращайте, перемещайте левой и правой кнопками мыши объекты Солнечной Системы. 
-        Подробно написано в статье на Хабре "<a href="http://habrahabr.ru/post/247571">Звездное небо 3D</a>". 
         Идея и стиль позаимствованы из примеров с <a href="http://www.apoapsys.com">apoapsys.com</a>
       </dd>
     </dl>

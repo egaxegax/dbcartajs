@@ -5,28 +5,18 @@
 <title>Карта метро Тбилиси / Canvas векторная карта</title>
 <meta name="description" content="Схема метро Тбилиси">
 <meta name="keywords" content="Карта метро, Схема метро Тбилиси">
-<link rel="icon" href="img/fav.svg" type="image/svg+xml" />
+<link rel="icon" href="img/fav.svg" type="image/svg+xml">
+<style type="text/css">html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
 <script type="text/javascript" src="js/dbcarta.js"></script>
 <script src="js/utils/metrics.js"></script>
 </head>
 <body>
-<select id="tbilisimetro-stationlist"><option value="">Выберите...</option></select>
-<div id="cont-tbilisimetro"></div>
-<script type='text/javascript'>
-  var allmaps = [];
-  function initmaps(){
-        for(var i in allmaps){
-      allmaps[i]();
-    }
-  }
-  if(window.addEventListener) {
-    window.addEventListener('load', initmaps, false);
-  } else {
-    window.attachEvent('onload', initmaps);
-  }
-</script>
+<table><tr><td id="mcont">
+<select id="stationlist" style="position:fixed; top:10px; left:10px">
+<option value="">Выберите...</option></select>
+</td></tr></table>
 <script type="text/javascript">
-allmaps.push(function(){
+function draw(){
   var MLINES = [
     ['r1', '1', [
         [32,60],[20,50],[14,37],[7,21],
@@ -95,12 +85,11 @@ allmaps.push(function(){
   ];
   // -------------------------------------------
   var dw = new dbCarta({
-    id: 'cont-tbilisimetro',
-    height: 600,
+    id: 'mcont',
+    height: document.getElementById('mcont').offsetHeight,
     scalebg: 'rgba(200,100,50,0.2)'
   });
   dw.style.backgroundColor = 'white';
-  dw.style.border = '1px dashed lightgray';
   // define new layers
   var route = function(o){ return dw.extend({cls: 'Line', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
       station = function(o){ return dw.extend({cls: 'Dot', size: 8, width: 6, bg: dw.style.backgroundColor, labelscale: 1}, o||{}) },
@@ -108,58 +97,33 @@ allmaps.push(function(){
       bluest = function(o){ return station(dw.extend({fg: 'rgb(25,74,103)'}, o||{})) };
   // lines
   dw.extend(dw.mopt, {
-    'r1': route({fg: 'rgb(236,66,45)'}),
-    'r2': route({fg: 'rgb(180,215,233)'})
+    r1: route({fg: 'rgb(236,66,45)'}),
+    r2: route({fg: 'rgb(180,215,233)'})
   });
   // stations
   dw.extend(dw.mopt, {
-    's1': redst({anchor: ['end', 'middle']}),
-    's1_1': redst({anchor: ['start', 'middle']}),
-    's1_2': redst({anchor: ['center', 'bottom']}),
-    's1_3': redst({anchor: ['center', 'top']}),
-    's1_4': redst({anchor: ['start', 'top']}),
-    's1_5': redst({anchor: ['start', 'bottom']}),
-    's1s': redst({bg: redst().fg, size: 5, width: 1}),
-    's2': bluest({anchor: ['start', 'top']}),
-    's2_1': bluest({anchor: ['center', 'top']}),
-    's2_2': bluest({anchor: ['end', 'bottom']}),
-    's2_3': bluest({anchor: ['center', 'bottom']}),
-    's2s': bluest({bg: bluest().fg, size: 5, width: 1})
+    s1: redst({anchor: ['end', 'middle']}),
+    s1_1: redst({anchor: ['start', 'middle']}),
+    s1_2: redst({anchor: ['center', 'bottom']}),
+    s1_3: redst({anchor: ['center', 'top']}),
+    s1_4: redst({anchor: ['start', 'top']}),
+    s1_5: redst({anchor: ['start', 'bottom']}),
+    s1s: redst({bg: redst().fg, size: 5, width: 1}),
+    s2: bluest({anchor: ['start', 'top']}),
+    s2_1: bluest({anchor: ['center', 'top']}),
+    s2_2: bluest({anchor: ['end', 'bottom']}),
+    s2_3: bluest({anchor: ['center', 'bottom']}),
+    s2s: bluest({bg: bluest().fg, size: 5, width: 1})
   });
   dw.loadCarta(MLINES);
   dw.loadCarta(MSTATIONS);
   dw.scaleCarta(1.25);
   dw.draw();
   // station list
-  var findstation = function(ev){
-    var stationlist = ev.target,
-        opt = stationlist.options[stationlist.selectedIndex];
-    if (opt) {
-      var centerofpts = dw.mflood[opt.value]['pts'];
-      dw.centerCarta(centerofpts[0][0] + dw.m.offset[0], centerofpts[0][1] + dw.m.offset[1]);
-      dw.draw();
-      drawcrosshair();
-    }
-  };
-  var drawcrosshair = function(){
-    var ctx = dw.getContext('2d');
-    ctx.save();
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.beginPath();
-    ctx.moveTo(dw.width/2.0, 0);
-    ctx.lineTo(dw.width/2.0, dw.height);
-    ctx.moveTo(0, dw.height/2.0);
-    ctx.lineTo(dw.width, dw.height/2.0);
-    ctx.lineWidth = 15;
-    ctx.strokeStyle = 'rgba(100,100,200,0.2)';
-    ctx.stroke();
-    ctx.restore();
-  }
-  var fillstation = function(ev){
-    var stationlist = ev.target;
-    if (stationlist.length < MSTATIONS.length){
+  document.getElementById('stationlist').onmousedown = function(){
+    if(this.length < MSTATIONS.length){
       MSTATIONS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1});
-      for (var i in MSTATIONS) {
+      for(var i in MSTATIONS){
         if (!MSTATIONS[i][3]) continue;
         var el = document.createElement('option');
         el.value = MSTATIONS[i][0] + '_' + MSTATIONS[i][1];
@@ -167,11 +131,33 @@ allmaps.push(function(){
         stationlist.appendChild(el);
       }
     }
-  }
-  var stationlist = document.getElementById('tbilisimetro-stationlist');
-  stationlist.onmousedown = fillstation;
-  stationlist.onchange = findstation;
-});
+  };
+  document.getElementById('stationlist').onchange = function(){
+    if(this.options[this.selectedIndex]){
+      var centerofpts = dw.mflood[this.value]['pts'];
+      dw.centerCarta(centerofpts[0][0] + dw.m.offset[0], centerofpts[0][1] + dw.m.offset[1]);
+      dw.draw();
+       // drawcrosshair
+      var ctx = dw.getContext('2d');
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.beginPath();
+      ctx.moveTo(dw.width/2.0, 0);
+      ctx.lineTo(dw.width/2.0, dw.height);
+      ctx.moveTo(0, dw.height/2.0);
+      ctx.lineTo(dw.width, dw.height/2.0);
+      ctx.lineWidth = 15;
+      ctx.strokeStyle = 'rgba(100,100,200,0.2)';
+      ctx.stroke();
+      ctx.restore();
+    }
+  };
+};
+if(window.addEventListener) {
+  window.addEventListener('load', draw, false);
+} else {
+  window.attachEvent('onload', draw);
+}
 </script>
 </body>
 </html>

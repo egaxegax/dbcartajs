@@ -137,15 +137,15 @@ function init() {
   col.appendChild(el);
   var el = document.createElement('button');
   el.title = 'Scale';
-  el.style.padding = 0;
+  el.style.padding = '0 10px';
   el.onclick = scale;
   el.appendChild(document.createTextNode('S'));
   col.appendChild(el);
   var el = document.createElement('button');
   el.title = 'Rotate';
-  el.style.padding = 0;
+  el.style.padding = '0 10px';
   el.onclick = rotate;
-  el.appendChild(document.createTextNode('Q'));
+  el.appendChild(document.createTextNode('R'));
   col.appendChild(el);
   row.appendChild(col);
 
@@ -180,7 +180,7 @@ function init() {
   el.id = 'getcoords';
   col.appendChild(el);
   el = document.createElement('button');
-  el.style.padding = 0;
+  el.style.padding = '0 10px';
   el.onclick = draw;
   el.appendChild(document.createTextNode('D'));
   col.appendChild(el);
@@ -202,10 +202,8 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '10%';
-  col.align = 'center';
+  col.align = 'right';
   col.id = 'tcoords';
-  col.style.fontSize = 'larger';
   row.appendChild(col);
 
   var row = document.createElement('tr');
@@ -240,8 +238,8 @@ function init() {
   // curr. coords
   dw.clfunc.onmousemove = function(dw, sd, dd, ev) {
     var tcoords = document.getElementById('tcoords');
-    tcoords.innerHTML = ' X: Y:';
-    if (dd) tcoords.innerHTML = 'x: ' + dd[0].toFixed(2) + ' y: ' + dd[1].toFixed(2);
+    tcoords.innerHTML = ' X Y ';
+    if (dd) tcoords.innerHTML = 'X ' + dd[0].toFixed(2) + ' Y ' + dd[1].toFixed(2);
     infobox(ev);
     dw.paintCoords(dd);
   }
