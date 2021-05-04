@@ -32,9 +32,9 @@ function childs(m, inst, root){
   var avails = [ root - 1, root + 1 ].concat(stItsi);
   var valids = avails.filter(function(cell){ return (cell >= 0 && cell < m.length); });
   var vertexes = valids.filter(function(cell){
-      console.log(root, cell, makeid(m[root]), makeid(m[cell]), String(m[cell][2]), String(m[root][2]),
-      maketip(m[cell]) == maketip(m[root]), String(m[cell][2]) == String(m[root][2]),
-      its.filter(function(a){ return a.indexOf(String(m[cell][2]))>-1 && a.indexOf(String(m[root][2]))>-1; }).length, its);
+//      console.log(root, cell, makeid(m[root]), makeid(m[cell]), String(m[cell][2]), String(m[root][2]),
+//      maketip(m[cell]) == maketip(m[root]), String(m[cell][2]) == String(m[root][2]),
+//      its.filter(function(a){ return a.indexOf(String(m[cell][2]))>-1 && a.indexOf(String(m[root][2]))>-1; }).length, its);
       return (maketip(m[cell]) == maketip(m[root])) || 
              String(m[cell][2]) == String(m[root][2]) ||
              (its.filter(function(a){ return a.indexOf(String(m[cell][2]))>-1 && a.indexOf(String(m[root][2]))>-1; }).length)
