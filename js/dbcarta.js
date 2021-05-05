@@ -530,7 +530,7 @@ function dbCarta(cfg) {
           mtrotate = m['rotate'] || 0,
           mtalign = m['anchor'] && m['anchor'][0] || 'start',
           mtbaseline = m['anchor'] && m['anchor'][1] || 'alphabetic',
-          mtfont = (m['labelscale'] ? parseInt(this.width/125) : 10) + "px sans-serif";
+          mtfont = (m['labelscale'] ? parseInt(this.width/120) : 10) + "px sans-serif";
       this.ctx.lineWidth = mwidth;
       this.ctx.lineJoin = mjoin;
       this.ctx.lineCap = mcap;
