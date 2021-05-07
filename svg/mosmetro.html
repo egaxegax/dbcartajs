@@ -37,8 +37,8 @@ function draw() {
   function route_ext(o){ return route(DC.extend({width: 5, dash: [6,4]}, o||{})); };
   function inch(o)     { return route(DC.extend({fg: '#ccc', join: 'round', cap: 'round', width: 12}, o||{})); };
   function inch_d(o)   { return inch(DC.extend({fg: '#fff', width: 8}, o||{})); };
-  function inch_ext(o) { return inch(DC.extend({width: 4, dash: [4,2]}, o||{})); };
-  function inch_ed(o)  { return inch_d(DC.extend({width: 2, dash: [2,4]}, o||{})); };
+  function inch_ext(o) { return inch(DC.extend({width: 12, fg:'white'}, o||{})); };
+  function inch_ed(o)  { return inch_d(DC.extend({width: 3, dash:[2,4], fg: '#ccc'}, o||{})); };
   function river(o)    { return route(DC.extend({fg: '#e2fcfc', join: 'round', cap: 'round', labelcolor: '#5555ff'}, o||{})); };
   function aero(o)     { return route(DC.extend({fg: '#ddd'}, o||{})); };
   function aero_d(o)   { return route(DC.extend({fg: '#fff', width: 4, dash: [10,10]}, o||{})); };

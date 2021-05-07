@@ -2,7 +2,7 @@
 // HTML5 SVG vector map and image viewer with Proj4js transformations.
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2015. b200621.
+// egax@bk.ru, 2015. b210506.
 //
 var SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -635,7 +635,7 @@ function dbCartaSvg(cfg) {
     },
     touchmove: function(ev) {
       var touches = ev.changedTouches;
-      if (self.m.touches.length < 2) {
+      if (self.m.touches.length == 1) {
         ev.preventDefault();
         self.mousemove(touches[touches.length - 1]);
       }
@@ -656,11 +656,13 @@ function dbCartaSvg(cfg) {
             self.m.touches.splice(j, 1);
         }
       }
-      if (!self.m.touches.length)
+      if (self.m.touches.length)
+        self.m.touches = [];
+      else
         self.mouseup(touches[touches.length - 1]);
     },
     onmousemove: function(ev) {
-      self.mousemove(ev);
+      if (!self.m.dotouch) self.mousemove(ev);
     },
     onmousedown: function(ev) {
       if (!self.m.dotouch) self.mousedown(ev);

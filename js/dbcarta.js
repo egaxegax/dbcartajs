@@ -2,7 +2,7 @@
 // HTML5 Canvas vector map and image viewer with Proj4js transformations.
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013. b210424.
+// egax@bk.ru, 2013. b210506.
 //
 function dbCarta(cfg) {
   cfg = cfg||{};
@@ -1004,7 +1004,7 @@ function dbCarta(cfg) {
     },
     touchmove: function(ev) {
       var touches = ev.changedTouches;
-      if (this.m.touches.length < 2) {
+      if (this.m.touches.length == 1) {
         ev.preventDefault();
         this.mousemove(touches[touches.length - 1]);
       }
@@ -1025,7 +1025,9 @@ function dbCarta(cfg) {
             this.m.touches.splice(j, 1);
         }
       }
-      if (!this.m.touches.length)
+      if (this.m.touches.length)
+        this.m.touches = [];
+      else
         this.mouseup(touches[touches.length - 1]);
     },
     onmousemove: function(ev) {
