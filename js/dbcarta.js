@@ -1031,7 +1031,7 @@ function dbCarta(cfg) {
         this.mouseup(touches[touches.length - 1]);
     },
     onmousemove: function(ev) {
-      this.mousemove(ev);
+      if (!this.m.dotouch) this.mousemove(ev);
     },
     onmousedown: function(ev) {
       if (!this.m.dotouch) this.mousedown(ev);
