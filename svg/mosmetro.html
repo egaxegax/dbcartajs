@@ -352,7 +352,8 @@ function draw() {
     text.appendChild(document.createTextNode(t));    
   });
 };
-function calcRoutes(fromid, toid){ 
+  //
+function calcRoutes(fromid, toid){
    // interchanges coords string list [['1,2'],['1,1']]
   var inch = makecrds(MLINES.filter(function(a){ return a[0]=='inch'; }));
   var inch_ext = makecrds(MLINES.filter(function(a){ return a[0]=='inch_ext'; }));
@@ -373,7 +374,7 @@ function calcRoutes(fromid, toid){
   if(document.getElementById('chr14').innerHTML.indexOf('+')>-1) inches = inches.concat(inch_mck);
   if(document.getElementById('chrExt').innerHTML.indexOf('+')>-1) inches = inches.concat(inch_ext);
 //  console.log(inches.length);
-  var ss=BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
+  BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
 //    console.log(st);
     if(i < sts.length-1){
       var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;
