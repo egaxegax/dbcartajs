@@ -16,14 +16,15 @@
 </head>
 <body>
 <table><tr><td id="mcont">
-<select 
+<select id="chinches"
   onchange="var o=this.options[this.selectedIndex]; o.innerHTML = (o.innerHTML.indexOf('+')>-1 ? '[--]' : '[+]')+' '+o.innerHTML.trim().slice(4); this.selectedIndex = 0;" 
   style="position:fixed; top:10px; right:10px">
 <option disabled selected>Рассчитывать пути...</option>
-<option id="chr">   [+] Между ветками</option>
-<option id="chr5">  [+] Кольцевые</option>
-<option id="chrExt">[--] Строящиеся</option>
-<option id="chr14"> [--] МЦК</option>
+<option id="inch_r">  [+] Между ветками</option>
+<option id="inch_r5"> [+] Кольцевые</option>
+<option id="inch_mck">[--] МЦК</option>
+<option id="inch_mn"> [--] Монорельс</option>
+<option id="inch_ext">[--] Строящиеся</option>
 </select>
 </td></tr></table>
 <script src="../js/dbcartasvg.js"></script>
@@ -46,6 +47,7 @@ function draw() {
   function station(o)  { return DC.extend({bg: 'white', size: 5, width: 1, scale: 1}, o||{}); };
   function st_mck(o)   { return station(DC.extend({fg: '#f76093', size: 4, labelcolor: 'gray'}, o)); };
   function inch_mck(o) { return inch(DC.extend({dash:[2,4], width: 3}, o||{})); };
+  function inch_mn(o)  { return inch_mck(DC.extend({dash:[1,2], fg: 'black', width: 1}, o||{})); };
   function inst_mck(o) { return st_mck(DC.extend({size: 4, labelcolor: o['fg'], width: 1, bg: o['fg']}, o)); };
   function inst(o)     { return station(DC.extend({size: 4, labelcolor: o['fg'], width: 1, bg: o['fg']}, o)); };
   function inst_d(o)   { return inst(DC.extend({size: 2, width: 2}, o||{})); };
@@ -84,6 +86,7 @@ function draw() {
     inch_ext:  inch_ext(),
     inch_ext_d:inch_ed(),
     inch_mck:  inch_mck(),
+    inch_mn:   inch_mn(),
     moskvar:   river({width: 15}),
     moskvac:   river({width: 5}),
     strogino:  river({width: 5}),
@@ -207,7 +210,6 @@ function draw() {
     s12_5:     inst({fg: mopt['r12'].fg, anchor: ['start', 'top']}),
     s13:       inst({fg: mopt['r13'].fg, size: 2, anchor: ['middle', 'top']}),
     s13_1:     inst({fg: mopt['r13'].fg, size: 2, anchor: ['start', 'middle']}),
-    s13_2:     inst({fg: mopt['r13'].fg, size: 2, anchor: ['middle', 'top']}),
     s14:       st_mck({anchor: ['start', 'middle']}),
     s14_1:     st_mck({anchor: ['start', 'top']}),
     s14_2:     st_mck({anchor: ['end', 'middle']}),
@@ -355,25 +357,29 @@ function draw() {
 };
   //
 function calcRoutes(fromid, toid){
-   // interchanges coords string list [['1,2'],['1,1']]
-  var inch = makecrds(MLINES.filter(function(a){ return a[0]=='inch'; }));
-  var inch_ext = makecrds(MLINES.filter(function(a){ return a[0]=='inch_ext'; }));
-  var inch_mck = makecrds(MLINES.filter( function(a){ return a[0]=='inch_mck'; } ));
-   // filter radial stations
-  var st5 = makecrds(MSTATIONS.filter(function(a){ return maketip(a)=='s5'; }));
-  var inch_r5 = inch.filter( function(a){ // interchanges radial
-    return a.filter( function(b){
-      return st5.filter( function(c){
-        return c.indexOf(String(b))>-1; }).length; }).length; });
-  var inch_r = inch.filter( function(a){ // interchanges not radial
-    return a.filter( function(b){
-      return st5.filter( function(c){
-        return c.indexOf(String(b))>-1; }).length; }).length==0; });
   var inches= [];
-  if(document.getElementById('chr').innerHTML.indexOf('+')>-1) inches = inches.concat(inch_r);
-  if(document.getElementById('chr5').innerHTML.indexOf('+')>-1) inches = inches.concat(inch_r5);
-  if(document.getElementById('chr14').innerHTML.indexOf('+')>-1) inches = inches.concat(inch_mck);
-  if(document.getElementById('chrExt').innerHTML.indexOf('+')>-1) inches = inches.concat(inch_ext);
+  for(var i=0; i<document.getElementById('chinches').options.length; i++){
+    var o = document.getElementById('chinches').options[i];
+    if(o.innerHTML.indexOf('+')>-1){
+      if(o.id == 'inch_r5'){      // interchanges radial
+        inches = inches.concat(makecrds(MLINES.filter(
+          function(a){ return a[0]=='inch'; })).filter(
+            function(b){ return b.filter( 
+              function(c){ return makecrds(MSTATIONS.filter(
+                function(d){ return maketip(d)=='s5'; } )).filter(
+                  function(e){ return e.indexOf(String(c))>-1; }).length; }).length; }));
+      }else if(o.id == 'inch_r'){ // interchanges not radial
+        inches = inches.concat(makecrds(MLINES.filter(
+          function(a){ return a[0]=='inch'; })).filter(
+            function(b){ return b.filter(
+              function(c){ return makecrds(MSTATIONS.filter(
+                function(d){ return maketip(d)=='s5'; })).filter(
+                  function(e){ return e.indexOf(String(c))>-1; }).length; }).length==0; }));
+      }else{
+        inches = inches.concat(makecrds(MLINES.filter(function(a){ return a[0]==o.id; })));
+      }
+    }
+  }
 //  console.log(inches.length);
   BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
 //    console.log(st);
