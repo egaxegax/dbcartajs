@@ -205,8 +205,9 @@ function draw() {
     s12_3:     station({fg: mopt['r12'].fg, anchor: ['end', 'middle']}),
     s12_4:     inst({fg: mopt['r12'].fg, anchor: ['middle', 'bottom']}),
     s12_5:     inst({fg: mopt['r12'].fg, anchor: ['start', 'top']}),
-    s13:       inst({fg: mopt['r13'].fg, size: 1, anchor: ['start', 'top']}),
-    s13_1:     inst({fg: mopt['r13'].fg, size: 1, anchor: ['start', 'middle']}),
+    s13:       inst({fg: mopt['r13'].fg, size: 2, anchor: ['middle', 'top']}),
+    s13_1:     inst({fg: mopt['r13'].fg, size: 2, anchor: ['start', 'middle']}),
+    s13_2:     inst({fg: mopt['r13'].fg, size: 2, anchor: ['middle', 'top']}),
     s14:       st_mck({anchor: ['start', 'middle']}),
     s14_1:     st_mck({anchor: ['start', 'top']}),
     s14_2:     st_mck({anchor: ['end', 'middle']}),
@@ -312,7 +313,7 @@ function draw() {
     var a, dx = 10, dy = 0;
     if(a = mopt[stype].anchor) {
       if(a[0] == 'start')    dx = 10;
-      else if(a[0] == 'middle') dx = -5;
+      else if(a[0] == 'center') dx = -5;
       else if(a[0] == 'end') dx = -10;
       if(a[1] == 'top') dy = 14;
       else if(a[1] == 'middle') dy = 4;
@@ -333,7 +334,7 @@ function draw() {
     var pts = DC.toPoints(coords, true);
     if(a = mopt[ftype].anchor) {
       if(a[0] == 'start') dx = 10;
-      else if(a[0] == 'middle') dx = -5;
+      else if(a[0] == 'center') dx = -5;
       else if(a[0] == 'end') dx = -10;
       if(a[1] == 'top') dy = 14;
       else if(a[1] == 'middle') dy = 4;
