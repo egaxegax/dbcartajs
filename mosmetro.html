@@ -119,13 +119,14 @@ function init(){
   function inch_d(o)   { return inch(dw.extend({fg: '#fff', width: 5}, o||{})) };
   function inch_ext(o) { return inch(dw.extend({width: 4, dash: [4,2]}, o||{})); };
   function inch_ed(o)  { return inch_d(dw.extend({width: 2, dash: [2,4]}, o||{})); };
-  function river(o)    { return route(dw.extend({fg: '#e2fcfc', join: 'round', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})) };
+  function river(o)    { return route(dw.extend({fg: '#daebf4', join: 'round', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})) };
   function aero(o)     { return route(dw.extend({fg: '#ddd', labelscale: 0}, o||{})) };
   function aero_d(o)   { return route(dw.extend({fg: '#fff', labelscale: 0, width: 4, dash: [10,10]}, o||{})) };
-  function label(o)    { return dw.extend({cls: 'Label', labelscale: 1, anchor: ['start', 'top']}, o||{}) };
+  function label(o)    { return dw.extend({cls: 'Label', labelcolor:'#aaa', labelscale: 1, anchor: ['start', 'top']}, o||{}) };
   function station(o)  { return dw.extend({cls: 'Rect', bg: 'white', size: 5, width: 3, scale: 1, labelscale: 1}, o||{}) };
   function st_mck(o)   { return station(dw.extend({fg: '#f76093', size: 4, labelcolor: 'gray'}, o)) };
   function inst_mck(o) { return st_mck(dw.extend({size: 4, labelcolor: o['fg'], width: 1, bg: o['fg']}, o)); };
+  function inch_mn(o)  { return inch_mck(dw.extend({dash:[1,2], fg: 'black', width: 1}, o||{})); };
   function inch_mck(o) { return inch(dw.extend({dash:[2,4], width: 3}, o||{})); };
   function inst(o)     { return station(dw.extend({size: 3, labelcolor: o['fg'], bg: o['fg']}, o)) };
   function inst_d(o)   { return inst(dw.extend({size: 2, width: 1}, o||{})) };
@@ -164,6 +165,8 @@ function init(){
     inch_ext:  inch_ext(),
     inch_ext_d:inch_ed(),
     inch_mck:  inch_mck(),
+    inch_mn:   inch_mn(),
+    mkad:      label({fg: '#c8c8ff',  anchor: ['center', 'middle']}),
     moskvar:   river({width: 15}),
     moskvac:   river({width: 5}),
     strogino:  river({width: 5}),
@@ -286,8 +289,8 @@ function init(){
     s12:       station({fg: dw.mopt['r12'].fg, anchor: ['center', 'bottom']}),
     s12_1:     station({fg: dw.mopt['r12'].fg, anchor: ['center', 'top']}),
     s12_2:     station({fg: dw.mopt['r12'].fg, anchor: ['start', 'top']}),
-    s12_3:     station({fg: dw.mopt['r12'].fg, anchor: ['end', 'middle']}),
-    s12_4:     inst({fg: dw.mopt['r12'].fg, anchor: ['center', 'bottom']}),
+    s12_3:     inst({fg: dw.mopt['r12'].fg}),
+    s12_4:     station({fg: dw.mopt['r12'].fg, anchor: ['end', 'top']}),
     s12_5:     inst({fg: dw.mopt['r12'].fg, anchor: ['start', 'top']}),
     s13:       inst({fg: dw.mopt['r13'].fg, size: 2, anchor: ['center', 'top']}),
     s13_1:     inst({fg: dw.mopt['r13'].fg, size: 2, anchor: ['start', 'middle']}),

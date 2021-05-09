@@ -40,7 +40,7 @@ function draw() {
   function inch_d(o)   { return inch(DC.extend({fg: '#fff', width: 8}, o||{})); };
   function inch_ext(o) { return inch(DC.extend({width: 12, fg:'white'}, o||{})); };
   function inch_ed(o)  { return inch_d(DC.extend({width: 3, dash:[2,4], fg: '#ccc'}, o||{})); };
-  function river(o)    { return route(DC.extend({fg: '#e2fcfc', join: 'round', cap: 'round', labelcolor: '#5555ff'}, o||{})); };
+  function river(o)    { return route(DC.extend({fg: '#daebf4', join: 'round', cap: 'round', labelcolor: '#5555ff'}, o||{})); };
   function aero(o)     { return route(DC.extend({fg: '#ddd'}, o||{})); };
   function aero_d(o)   { return route(DC.extend({fg: '#fff', width: 4, dash: [10,10]}, o||{})); };
   function label(o)    { return DC.extend({labelcolor: '#aaa', anchor: ['start', 'top']}, o||{}); };
@@ -87,6 +87,7 @@ function draw() {
     inch_ext_d:inch_ed(),
     inch_mck:  inch_mck(),
     inch_mn:   inch_mn(),
+    mkad:      label({fg: '#c8c8ff',  anchor: ['center', 'middle']}),
     moskvar:   river({width: 15}),
     moskvac:   river({width: 5}),
     strogino:  river({width: 5}),
@@ -205,8 +206,8 @@ function draw() {
     s12:       station({fg: mopt['r12'].fg, anchor: ['middle', 'bottom']}),
     s12_1:     station({fg: mopt['r12'].fg, anchor: ['middle', 'top']}),
     s12_2:     station({fg: mopt['r12'].fg, anchor: ['start', 'top']}),
-    s12_3:     station({fg: mopt['r12'].fg, anchor: ['end', 'middle']}),
-    s12_4:     inst({fg: mopt['r12'].fg, anchor: ['middle', 'bottom']}),
+    s12_3:     inst({fg: mopt['r12'].fg}),
+    s12_4:     station({fg: mopt['r12'].fg, anchor: ['end', 'top']}),
     s12_5:     inst({fg: mopt['r12'].fg, anchor: ['start', 'top']}),
     s13:       inst({fg: mopt['r13'].fg, size: 2, anchor: ['middle', 'top']}),
     s13_1:     inst({fg: mopt['r13'].fg, size: 2, anchor: ['start', 'middle']}),
@@ -235,7 +236,7 @@ function draw() {
         path = ('M ' + pts).replace(/,/g, ' ');
     DC.append('path', {
       id: ftype + '_' + abbr,
-      fill: 'none', stroke: mopt[ftype].fg,
+      fill: mopt[ftype].bg || 'none', stroke: mopt[ftype].fg,
       'stroke-dasharray': mopt[ftype].dash,
       'stroke-linejoin': mopt[ftype].join,
       'stroke-linecap': mopt[ftype].cap,
@@ -315,11 +316,11 @@ function draw() {
     var a, dx = 10, dy = 0;
     if(a = mopt[stype].anchor) {
       if(a[0] == 'start')    dx = 10;
-      else if(a[0] == 'center') dx = -5;
+      else if(a[0] == 'middle') dx = -5;
       else if(a[0] == 'end') dx = -10;
-      if(a[1] == 'top') dy = 14;
+      if(a[1] == 'top') dy = 18;
       else if(a[1] == 'middle') dy = 4;
-      else if(a[1] == 'bottom') dy = -7;
+      else if(a[1] == 'bottom') dy = -8;
     };
     var text = DC.append('text', {
       id: 't'+ ftype +'_'+ abbr,
@@ -382,7 +383,7 @@ function calcRoutes(fromid, toid){
   }
 //  console.log(inches.length);
   BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
-//    console.log(st);
+    console.log(st);
     if(i < sts.length-1){
       var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;
       MLINES.map(function(b){
@@ -393,6 +394,7 @@ function calcRoutes(fromid, toid){
             rr = Math.sqrt(Math.pow(d[0]-e[0],2)+Math.pow(d[1]-e[1],2));
             if((r0 <= rr) && (r1 <= rr)){
               if(!inarray(cc,c)) cc.push(c);
+              console.log(c, d, e, r0, r1, rr);
             }
           })
         }
