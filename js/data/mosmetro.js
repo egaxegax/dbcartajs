@@ -2,7 +2,7 @@
 // List coords in degrees of Moscow Metro lines and stations
 //  [[ftype, ftag, coords, label, centerof, ismap],...]
 // 'Q' and 'L' literals implements the bezierCurveTo (...) method
-// egax@bk.ru, 2013. r210508.
+// egax@bk.ru, 2013-21.
 //
 var MLINES=[
 ['mkad',      'mkad',   [[-83,148,'Q'],[-85,148,''],[-87,146,'L'],[-175,53,'Q'],[-177,51,''],[-177,49,'L'],[-177,-2,'Q'],[-177,-4,''],[-175,-6,'L'],[-129,-55,'Q'],[-127,-57,''],[-127,-59,'L'],[-127,-107,'Q'],[-127,-109,''],[-125,-111,'L'],
