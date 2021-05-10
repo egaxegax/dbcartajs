@@ -267,23 +267,30 @@
 <script src="../js/dbcartasvg.js"></script>
 <script>
 
-var DC = new dbCartaSvg({
-  id: 'mcont',
-  height: document.getElementById('mcont').offsetHeight,
-  bg: 'none',
-  sbarpos: 'right', scalebg:'rgba(150,200,255,0.2)'
-});
-var tiger = document.getElementById('tiger');
- // create new image
-DC.vp.style.cursor = 'pointer';
-DC.vp.innerHTML = tiger.innerHTML;
- // center map minus tiger width/2 height/2
-var cn = DC.centerOf();
-DC.centerCarta([ cn[0]-tiger.getAttribute('width')/2, cn[1]-tiger.getAttribute('height')/2 ]);
- // scale map to fit height
-DC.scaleCarta( DC.root.getAttribute('height') / tiger.getAttribute('height') );
- // remove old image
-document.body.removeChild(tiger);
+function draw(){
+  var DC = new dbCartaSvg({
+    id: 'mcont',
+    height: document.getElementById('mcont').offsetHeight,
+    bg: 'none',
+    sbarpos: 'right', scalebg:'rgba(150,200,255,0.2)'
+  });
+   var tiger = document.getElementById('tiger');
+   // create new image
+  DC.vp.style.cursor = 'pointer';
+  DC.vp.innerHTML = tiger.innerHTML;
+   // center map minus tiger width/2 height/2
+  var cn = DC.centerOf();
+  DC.centerCarta([ cn[0]-tiger.getAttribute('width')/2, cn[1]-tiger.getAttribute('height')/2 ]);
+   // scale map to fit height
+  DC.scaleCarta( DC.root.getAttribute('height') / tiger.getAttribute('height') );
+   // remove old image
+  document.body.removeChild(tiger);
+}
+
+if(window.addEventListener)
+  window.addEventListener('load', draw, false); 
+else
+  window.attachEvent('onload', draw)
 
 </script>
 </body>
