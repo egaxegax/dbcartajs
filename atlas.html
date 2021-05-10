@@ -90,7 +90,7 @@ function draw() {
     coords = eval(document.getElementById('getcoords').value); coords.length; } 
   catch (e) { 
      alert('Invalid coords!\nUse:\n[[1,2],[3,4],..]'); return; }
-  dw.loadCarta([[ document.getElementById('ftype').value, Math.random(), coords, 'MyTest', coords[0], true ]]);
+  dw.loadCarta([[ document.getElementById('ftype').value, Math.random(), coords, 'MyPoints', coords[0], true ]]);
   // center pov
   var pov = coords[0],
       pts = dw.toPoints(pov, true);
