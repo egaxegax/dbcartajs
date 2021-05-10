@@ -1,8 +1,8 @@
 //
-// HTML5 SVG vector map and image viewer with Proj4js transformations.
+// HTML5 SVG vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2015. b210506.
+// egax@bk.ru, 2015. b210510.
 //
 var SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -43,7 +43,7 @@ function dbCartaSvg(cfg) {
   el = document.getElementById(cfg.id);
   cont = document.createElement('div'); // container
   if (el) el.appendChild(cont);
-  // root node
+  // <svg> root node
   root = append(cont, 'svg', {
     width: cfg.width ? cfg.width : el.offsetWidth,
     height: cfg.height ? cfg.height : el.offsetWidth / 2.0,
@@ -51,7 +51,7 @@ function dbCartaSvg(cfg) {
     xlmns: SVG_NS
   });
   root.style.backgroundColor = cfg.bg||'rgb(186,196,205)';
-  // child
+  // <g> for child nodes
   vp = append(root, 'g', {
     width: root.getAttribute('width'),
     height: root.getAttribute('height')
@@ -190,8 +190,8 @@ function dbCartaSvg(cfg) {
       var centerof = this.centerOf();
       var cx = centerof[0]/scale - centerof[0],
           cy = centerof[1]/scale - centerof[1];
-      var offx = pts[0]/scale - this.m.mpts[0],
-          offy = pts[1]/scale - this.m.mpts[1];
+      var offx = pts[0]/scale - (this.m.mpts ? this.m.mpts[0] : 0),
+          offy = pts[1]/scale - (this.m.mpts ? this.m.mpts[1] : 0);
       var fx = offx + cx,
           fy = offy + cy;
       attr(vp, {
@@ -360,7 +360,7 @@ function dbCartaSvg(cfg) {
         if (zoom == 1) {
 //          var centerof = this.centerOf();
 //          this.centerCarta(centerof[0] + this.m.offset[0] - this.m.scaleoff[0], 
-//                           centerof[1] + this.m.offset[1] - this.m.scaleoff[1], true);
+//                           centerof[1] + this.m.offset[1] - this.m.scaleoff[1]);
         }
       }
     },

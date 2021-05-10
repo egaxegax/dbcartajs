@@ -1,5 +1,5 @@
 //
-// HTML5 Canvas vector map and image viewer with Proj4js transformations.
+// HTML5 Canvas vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
 // egax@bk.ru, 2013. b210506.
