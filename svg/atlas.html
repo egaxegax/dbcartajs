@@ -1,5 +1,5 @@
 <!--
- Atlas demo. SVG version.
+ Atlas. SVG version.
  Draw background images in diff. projections.
  egax@bk.ru, 2015-21.
 -->
@@ -17,172 +17,199 @@
 <script src="../js/dbcartasvg.js"></script>
 <script src="../js/data/continents.js"></script>
 <script src="../js/data/imgmap.js"></script>
+<script src="../js/alg/starry.js"></script>
 <table><tr><td id="mcont"></td></tr></table>
 <script type="text/javascript">
 var childs = [];
 
-function draw() {
-  for(var i=0; i<childs.length; i++) {
-    DC.vp.removeChild(childs[i]);
-  }
-  childs = [];
-
-  if(DC.isSpherical()) {
-    // globus boundary
+function draw(ev) {
+  if(ev) DC.initProj(ev.target.name, '+lon_0=0 +lat_0=0'); //set proj
+   // clear all
+  childs = childs.filter(function(child){ DC.vp.removeChild(child); });
+   // globus boundary
+  if(DC.isSpherical()){
     var o = DC.paintBound();
     if(o) childs.push( o );
-    // conts
-    for(var i=0; i<CONTINENTS.length; i++) {
-      var mcoords = CONTINENTS[i][2];
-      var pts = DC.interpolateCoords(mcoords, true, 10);
-      // add new layers
-      var land = DC.append('polygon', {
-        points: pts.join(' '),
+     // conts
+    CONTINENTS.map(function(cont){
+      childs.push( DC.append('polygon', {
+        points: DC.interpolateCoords(cont[2], true, 10).join(' '),
         fill: 'silver',
         stroke: 'silver'
-      });
-      childs.push( land );
-    };
-  };
-  // bg image
+      }) );
+    });
+  }
+   // bg image
   var crds, src;
-  if(DC.project == 0){
-    src = 'wrld_small';
-    crds = [[-180,90],[180,-90]];
-  } else if(DC.project == 101) {
-    src = 'wrld_small_merc';
-    crds = [[-179.99,168],[179.99,-168]];
-  } else if(DC.project == 102) {
-    src = 'wrld_small_mill';
-    crds = [[-179.99,132],[179.99,-132]];
-  } else if(DC.project == 204) {
-    src = 'wrld_small_moll';
-    crds = [[-162,81],[162,-81]];
-  };
-  if(src) { // if img exists load it
+  switch(String(DC.project)){
+    case '0'  : src = 'wrld_small';      crds = [[-180,90],[180,-90]]; break;
+    case '101': src = 'wrld_small_merc'; crds = [[-179.99,168],[179.99,-168]]; break;
+    case '102': src = 'wrld_small_mill'; crds = [[-179.99,132],[179.99,-132]]; break;
+    case '204': src = 'wrld_small_moll'; crds = [[-162,81],[162,-81]]; break;
+  }
+  if(src){ // if img exists load it
     var pts = [DC.toPoints(crds[1]), DC.toPoints(crds[0])];
     var img = DC.append('image', {
-      width:  pts[0][0]-pts[1][0],
-      height: pts[0][1]-pts[1][1],
-      x: pts[1][0],
-      y: pts[1][1],
+      width:  pts[0][0]-pts[1][0], height: pts[0][1]-pts[1][1], x: pts[1][0], y: pts[1][1],
       preserveAspectRatio:'none'
     });
-
     img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../' + IMGMAP[src]);
     childs.push( img );
   }
-  // meridians
-  var merids = DC.createMeridians();
-  for(var i=0; i<merids.length; i++) {
-    var pts = DC.interpolateCoords(merids[i], true, 10),
+   // meridians
+  DC.createMeridians().map(function(lonlat){
+    var pts = DC.interpolateCoords(lonlat, true, 10),
         path = ('M ' + pts[0] + ' L ' + pts).replace(/,/g, ' ');
-    var o = DC.append('path', {
-      fill: 'transparent',
-      stroke: 'rgba(164,164,164,0.6)',
-      'stroke-dasharray': '4',
-      d: path
-    });
-    childs.push( o );
-  }
-  //cities
-  var cities = [
-    [[-73.905,40.708], 'Нью-Йорк'],
-    [[-118.25,34], 'Лос-Анджелес'],
-    [[-0.178,51.488], 'Лондон'],
-    [[37.7,55.75], 'Москва'],
-    [[116.388,39.906], 'Пекин'],
-    [[145.075,-37.853], 'Мельбурн'],
-    [[-43.455,-22.722], 'Рио-де-Жанейро'],
-    [[15.285,-4.285], 'Браззавиль'] ];
-  for(var i=0; i<cities.length; i++){
-    var pts = DC.toPoints(cities[i][0], true);
-    if(!DC.chkPts(pts)) continue;
-    var city = DC.append('circle', {
-      class: cities[i][1],
-      cx: pts[0], cy: pts[1], r: 3, fill: 'rgb(240,220,0)'
-    });
+    childs.push( DC.append('path', {
+      fill: 'transparent', stroke: '#aaa', 'stroke-dasharray': '4', d: path
+    }));    
+  });
+    //cities
+  [[[-73.905,40.708], 'Нью-Йорк'],
+   [[-118.25,34],     'Лос-Анджелес'],
+   [[-0.178,51.488],  'Лондон'],
+   [[37.7,55.75],     'Москва'],
+   [[116.388,39.906], 'Пекин'],
+   [[145.075,-37.853],'Мельбурн'],
+   [[-43.455,-22.722],'Рио-де-Жанейро'],
+   [[15.285,-4.285],  'Браззавиль']
+  ].map(function(city){
+    var pts = DC.toPoints(city[0], true);
+    if(!DC.chkPts(pts)) return;
     var label = DC.append('text', {
       x: pts[0], y: pts[1], dx: 4, dy: 3, fill: 'rgb(255,155,128)', 
       'font-family': 'sans-serif', 'font-size': '10px'
     });
-    label.appendChild(document.createTextNode(city.getAttribute('class')));
+    label.appendChild(document.createTextNode(city[1]));
     childs.push( label );
-    DC.extend(city, {
-      onmousemove: function(ev){
-        DC.doMap(ev, {
-          fill: 'rgb(255,127,0)',
-        });
-      }
-    });
-    childs.push( city );
-  }
+    childs.push( DC.extend(DC.append('circle', {
+      class: city[1], cx: pts[0], cy: pts[1], r: 3, fill: 'rgb(240,220,0)'
+    }), {
+      onmousemove: function(ev){ DC.doMap(ev, { fill: 'rgb(255,127,0)' }); }
+    }));
+  });
 };
 
-// change proj.
-function chProj(ev){
-  DC.initProj(ev.target.name, '+lon_0=0 +lat_0=0'); //set proj
-  draw();
+// change to perspective view without using proj4
+function TransferCoords(){
+  DC.initProj(0, '+lon_0=0 +lat_0=0'); //lonlat proj.
+   //
+  childs = childs.filter(function(child){ DC.vp.removeChild(child); });
+   // conts
+  CONTINENTS.map(function(cont){
+    childs.push( DC.append('polygon', {
+      points: cont[2].map(function(c){ return DC.toPoints(MGeo.transferPoint(c, [[180,90],[-180,-90]], [[-180,-90],[-80,90],[80,90],[180,-90]] )); }).join(' '),
+      fill: 'rgb(135,159,103)',
+      stroke: 'rgb(135,159,103)'
+    }) );
+  });
+   // meridians
+  DC.createMeridians().map(function(lonlat){
+    var pts = lonlat.map(function(c){ return DC.toPoints(MGeo.transferPoint(c, [[180,90],[-180,-90]], [[-180,-90],[-80,90],[80,90],[180,-90]] )); }),
+        path = ('M ' + pts[0] + ' L ' + pts).replace(/,/g, ' ');
+    childs.push( DC.append('path', {
+      fill: 'transparent', stroke: '#aaa', 'stroke-dasharray': '4', d: path
+    }));
+  });
+   //cities
+  [[[-73.905,40.708], 'Нью-Йорк'],
+   [[-118.25,34],     'Лос-Анджелес'],
+   [[-0.178,51.488],  'Лондон'],
+   [[37.7,55.75],     'Москва'],
+   [[116.388,39.906], 'Пекин'],
+   [[145.075,-37.853],'Мельбурн'],
+   [[-43.455,-22.722],'Рио-де-Жанейро'],
+   [[15.285,-4.285],  'Браззавиль']
+  ].map(function(city){
+    var pts = DC.toPoints(MGeo.transferPoint(city[0], [[180,90],[-180,-90]], [[-180,-90],[-80,90],[80,90],[180,-90]] ));
+    if(!DC.chkPts(pts)) return;
+    var label = DC.append('text', {
+      x: pts[0], y: pts[1], dx: 4, dy: 3, fill: 'rgb(255,155,128)', 
+      'font-family': 'sans-serif', 'font-size': '10px'
+    });
+    label.appendChild(document.createTextNode(city[1]));
+    childs.push( label );
+    childs.push( DC.extend(DC.append('circle', {
+      class: city[1], cx: pts[0], cy: pts[1], r: 3, fill: 'rgb(240,220,0)'
+    }), {
+      onmousemove: function(ev){ DC.doMap(ev, { fill: 'rgb(255,127,0)' }); }
+    }));
+  });
 }
 
 var mcont = document.getElementById('mcont');
-
 var el = document.createElement('input');
 mcont.appendChild(el);
 el.type = 'button';
 el.name = '203';
 el.value = 'ortho';
+el.style.backgroundColor = 'gold';
 el.style.position = 'fixed';
 el.style.top = '30%';
 el.style.right = '1%';
-el.onclick = chProj;
+el.onclick = draw;
 
 var el = document.createElement('input');
 mcont.appendChild(el);
 el.type = 'button';
 el.name = '101';
 el.value = 'merc';
+el.style.backgroundColor = 'gold';
 el.style.position = 'fixed';
-el.style.top = '40%';
+el.style.top = '38%';
 el.style.right = '1%';
-el.onclick = chProj;
+el.onclick = draw;
 
 var el = document.createElement('input');
 mcont.appendChild(el);
 el.type = 'button';
 el.name = '102';
 el.value = 'miller';
+el.style.backgroundColor = 'gold';
 el.style.position = 'fixed';
-el.style.top = '50%';
+el.style.top = '46%';
 el.style.right = '1%';
-el.onclick = chProj;
+el.onclick = draw;
 
 var el = document.createElement('input');
 mcont.appendChild(el);
 el.type = 'button';
 el.name = '0';
 el.value = 'lonlat';
+el.style.backgroundColor = 'gold';
 el.style.position = 'fixed';
-el.style.top = '60%';
+el.style.top = '54%';
 el.style.right = '1%';
-el.onclick = chProj;
+el.onclick = draw;
 
 var el = document.createElement('input');
 mcont.appendChild(el);
 el.type = 'button';
 el.name = '204';
 el.value = 'moll';
+el.style.backgroundColor = 'gold';
+el.style.position = 'fixed';
+el.style.top = '62%';
+el.style.right = '1%';
+el.onclick = draw;
+
+var el = document.createElement('input');
+mcont.appendChild(el);
+el.type = 'button';
+el.name = 'lonlat';
+el.value = 'perspective';
+el.style.backgroundColor = 'lightblue';
 el.style.position = 'fixed';
 el.style.top = '70%';
 el.style.right = '1%';
-el.onclick = chProj;
+el.onclick = TransferCoords;
 
 var DC = new dbCartaSvg({
   id: 'mcont',
   height: document.getElementById('mcont').offsetHeight,
+  bg:'white',
   sbarpos: 'left', scalebg: 'rgba(255,255,255,0.1)'
 });
-DC.initProj(102, '+lon_0=0 +lat_0=0'); //miller proj
 
 if(window.addEventListener)
   window.addEventListener('load', draw, false); 

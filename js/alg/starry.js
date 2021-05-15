@@ -306,6 +306,70 @@ var MGeo = {
         x1 = pt2[0] * Math.PI/180.0,
         y1 = pt2[1] * Math.PI/180.0;
     return Math.acos(Math.cos(y) * Math.cos(y1) * Math.cos(x - x1) + Math.sin(y) * Math.sin(y1));
+  },
+  // https://stackoverflow.com/questions/12919398/perspective-transform-of-svg-paths-four-corner-distort
+  // 
+  // Parameters:
+  //  x = x coordinate of point in original figure
+  //  y = y coordinate of point in original figure
+  // 
+  // src = array of corner coordinates of original four-sided figure
+  // e.g. [[180,90],[-180,-90]]
+  // 
+  // dst = corner coordinates of dst (perspective distorted) figure
+  // e.g. [[-180,-90],[-80,90],[80,90],[180,-90]]
+  //
+  transferPoint: function(pt, src, dst){
+    var EPS = 0.0001; // to avoid dividing by zero
+
+    if (dst[0][0]==dst[1][0]) dst[1][0]+=EPS;
+    if (dst[0][0]==dst[3][0]) dst[3][0]+=EPS;
+    if (dst[1][0]==dst[2][0]) dst[2][0]+=EPS;
+    if (dst[3][0]==dst[2][0]) dst[2][0]+=EPS;
+
+    var d12 = (dst[1][1]-dst[2][1]) / (dst[1][0]-dst[2][0]);
+    var d03 = (dst[0][1]-dst[3][1]) / (dst[0][0]-dst[3][0]);
+    var d01 = (dst[0][1]-dst[1][1]) / (dst[0][0]-dst[1][0]);
+    var d32 = (dst[3][1]-dst[2][1]) / (dst[3][0]-dst[2][0]);
+
+    if (d12==d03) d03+=EPS;
+    if (d01==d32) d32+=EPS;
+
+    var x0 = (d12*dst[1][0] - d03*dst[0][0] + dst[0][1] - dst[1][1]) / (d12-d03);
+    var y0 = d12*(x0 - dst[1][0]) + dst[1][1];
+    var x1 = (d01*dst[1][0] - d32*dst[2][0] + dst[2][1] - dst[1][1]) / (d01-d32);
+    var y1 = d01*(x1 - dst[1][0]) + dst[1][1];
+
+    if (x0==x1) x1+=EPS;
+
+    var xy01 = (y0-y1) / (x0-x1);
+
+    if (xy01==d01) d01+=EPS;
+    if (xy01==d12) d12+=EPS;
+
+    var x2 = (xy01*dst[3][0] - d01*dst[0][0] + dst[0][1] - dst[3][1]) / (xy01-d01);
+    var y2 = xy01*(x2 - dst[3][0]) + dst[3][1];
+    var x3 = (xy01*dst[3][0] - d12*dst[1][0] + dst[1][1] - dst[3][1]) / (xy01-d12);
+    var y3 = xy01*(x3 - dst[3][0]) + dst[3][1];
+    var r3 = (src[1][1]-pt[1]) / (src[1][1]-src[0][1]);
+    var r2 = (pt[0]-src[0][0]) / (src[1][0]-src[0][0]);
+    var x4 = (x2-dst[3][0])*r2 + dst[3][0];
+    var y4 = (y2-dst[3][1])*r2 + dst[3][1];
+    var x5 = (x3-dst[3][0])*r3 + dst[3][0];
+    var y5 = (y3-dst[3][1])*r3 + dst[3][1];
+
+    if (x1==x4) x4+=EPS;
+    if (x0==x5) x5+=EPS;
+
+    var k14 = (y1-y4) / (x1-x4);
+    var k05 = (y0-y5) / (x0-x5);
+
+    if (k14==k05) k05+=EPS;
+
+    var rx = (k14*x1 - k05*x0 + y0 - y1) / (k14-k05);
+    var ry = k14*(rx - x4) + y4;
+
+    return [rx, ry].concat(pt.slice(2)); // +Q,L,z flags
   }
 };
 var Qn = {
