@@ -150,14 +150,14 @@ dt li { display: table-cell; text-align:left; }
 
 <table width="100%">
 <tr>
-  <td width="49%"></td>
-  <td id="livecounter" class="hspace">
+  <td id="livecounter" width="15%" align="right">
     <a href="//www.liveinternet.ru/click" target="_blank"><img id="licntADF8" width="31" height="31" style="border:0" title="LiveInternet: показано число просмотров за 24 часа, посетителей за 24 часа и за сегодня" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7" alt=""/></a>
   </td>
-  <td id="yacounter" class="hspace">
+  <td id="yacounter" width="20%" align="right">
     <a href="https://metrika.yandex.ru/stat/?id=65044687&amp;from=informer" target="_blank" rel="nofollow"><img src="https://informer.yandex.ru/informer/65044687/3_1_FFFFFFFF_EFEFEFFF_0_pageviews" style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" class="ym-advanced-informer" data-cid="65044687" data-lang="ru" /></a>
   </td>
-  <td width="49%" align="left">
+  <td align="center"> </td>
+  <td width="35%" align="left">
     <a href="https://github.com/egaxegax"> egaxegax </a> © 2013-2021
   </td>
 </tr>
@@ -168,12 +168,14 @@ dt li { display: table-cell; text-align:left; }
   var cx = Math.random() * 360,
       cy = Math.random() * 180;
   var dw1 = new dbCarta({id:'demo1', width:250, rbar:false, bg:'transparent'});
+  dw1.mopt['.Mainland'] = {cls: 'Polygon', fg: 'silver', bg: 'silver'};
   dw1.initProj(203, ' +lon_0=' + cx + ' +lat_0=' + cy);
   dw1.loadCarta(CONTINENTS);
   dw1.loadCarta(dw1.createMeridians().map(function(a){ return a.slice(0,4); }));
   dw1.scaleCarta(1.4);
   dw1.draw();
   var dw2 = new dbCarta({id:'demo2', width:250, rbar:false, bg:'transparent'});
+  dw2.mopt['.Mainland'] = {cls: 'Polygon', fg: 'silver', bg: 'silver'};
   dw2.initProj(202, ' +lon_0=' + (180-cx) + ' +lat_0=' + (-cy/2.0));
   dw2.loadCarta(CONTINENTS);
   dw2.loadCarta(dw2.createMeridians().map(function(a){ return a.slice(0,4); }));
