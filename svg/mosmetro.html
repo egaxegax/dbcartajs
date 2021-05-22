@@ -41,8 +41,8 @@ function draw() {
   function inch_ext(o) { return inch(DC.extend({width: 12, fg:'white'}, o||{})); };
   function inch_ed(o)  { return inch_d(DC.extend({width: 3, dash:[2,4], fg: '#ccc'}, o||{})); };
   function river(o)    { return route(DC.extend({fg: '#daebf4', join: 'round', cap: 'round', labelcolor: '#5555ff'}, o||{})); };
-  function rail(o)     { return route(DC.extend({fg: '#ddd'}, o||{})); };
-  function rail_d(o)   { return route(DC.extend({fg: '#fff', width: 4, dash: [10,10]}, o||{})); };
+  function rail(o)     { return route(DC.extend({width: 2, fg: '#ccc'}, o||{})); };
+  function rail_d(o)   { return rail(DC.extend({fg: '#fff', dash: [10,10]}, o||{})); };
   function label(o)    { return DC.extend({labelcolor: '#aaa', anchor: ['start', 'top']}, o||{}); };
   function station(o)  { return DC.extend({bg: 'white', size: 5, width: 1, scale: 1}, o||{}); };
   function st_mck(o)   { return station(DC.extend({fg: '#f76093', size: 4, labelcolor: 'gray'}, o)); };
@@ -101,6 +101,10 @@ function draw() {
     yauza_t:   river({rotate: 45, anchor: ['start', 'top']}),
     t:         rail(),
     t_d:       rail_d(),
+    d1:        rail({width:2, fg: '#fa842f'}),
+    d1_d:      rail_d({width:2}),
+    d1_t:      label({anchor: ['start', 'middle']}),
+    d1_d_t:    label({anchor: ['start', 'middle']}),
     d2:        rail({width:2, fg: '#29c0d3'}),
     d2_d:      rail_d({width:2}),
     d2_t:      label({anchor: ['start', 'middle']}),
