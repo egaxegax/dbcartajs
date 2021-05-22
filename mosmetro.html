@@ -120,8 +120,8 @@ function init(){
   function inch_ext(o) { return inch(dw.extend({width: 4, dash: [4,2]}, o||{})); };
   function inch_ed(o)  { return inch_d(dw.extend({width: 2, dash: [2,4]}, o||{})); };
   function river(o)    { return route(dw.extend({fg: '#daebf4', join: 'round', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})) };
-  function rail(o)     { return route(dw.extend({fg: '#ddd', labelscale: 0}, o||{})) };
-  function rail_d(o)   { return route(dw.extend({fg: '#fff', labelscale: 0, width: 4, dash: [10,10]}, o||{})) };
+  function rail(o)     { return route(dw.extend({fg: '#ddd', width: 2, labelscale: 0}, o||{})) };
+  function rail_d(o)   { return rail(dw.extend({fg: '#fff', dash: [10,10]}, o||{})) };
   function label(o)    { return dw.extend({cls: 'Label', labelcolor:'#aaa', labelscale: 1, anchor: ['start', 'top']}, o||{}) };
   function station(o)  { return dw.extend({cls: 'Rect', bg: 'white', size: 5, width: 3, scale: 1, labelscale: 1}, o||{}) };
   function st_mck(o)   { return station(dw.extend({fg: '#f76093', size: 4, labelcolor: 'gray'}, o)) };
@@ -180,8 +180,12 @@ function init(){
     yauza_t:   river({rotate: 45, anchor: ['start', 'top']}),
     t:         rail(),
     t_d:       rail_d(),
-    d2:        rail({width:2, fg: '#29c0d3'}),
-    d2_d:      rail_d({width:2}),
+    d1:        rail({fg: '#fa842f'}),
+    d1_d:      rail_d(),
+    d1_t:      label({anchor: ['start', 'middle']}),
+    d1_d_t:    label({anchor: ['start', 'middle']}),
+    d2:        rail({fg: '#29c0d3'}),
+    d2_d:      rail_d(),
     d2_t:      label({anchor: ['start', 'middle']}),
     d2_d_t:    label({anchor: ['start', 'middle']}),
     svo_t:     label({anchor: ['end', 'middle']}),
@@ -190,6 +194,7 @@ function init(){
     vko_d_t:   label({anchor: ['center', 'top']}),
     dme_t:     label({anchor: ['start', 'middle']}),
     dme_d_t:   label({anchor: ['center', 'top']})
+    
   });
    // stations
   dw.extend(dw.mopt, {
