@@ -46,6 +46,7 @@ function draw() {
   function label(o)    { return DC.extend({labelcolor: '#aaa', anchor: ['start', 'top']}, o||{}); };
   function station(o)  { return DC.extend({bg: 'white', size: 5, width: 1, scale: 1}, o||{}); };
   function st_mck(o)   { return station(DC.extend({fg: '#f76093', size: 4, labelcolor: 'gray'}, o)); };
+  function st_mcd(o)   { return station(DC.extend({size: 2, labelcolor: 'gray'}, o)); };
   function inch_mck(o) { return inch(DC.extend({dash:[2,4], width: 3}, o||{})); };
   function inch_mn(o)  { return inch_mck(DC.extend({dash:[1,2], fg: 'black', width: 1}, o||{})); };
   function inst_mck(o) { return st_mck(DC.extend({size: 4, labelcolor: o['fg'], width: 1, bg: o['fg']}, o)); };
@@ -101,14 +102,10 @@ function draw() {
     yauza_t:   river({rotate: 45, anchor: ['start', 'top']}),
     t:         rail(),
     t_d:       rail_d(),
-    d1:        rail({fg: '#fa842f'}),
-    d1_d:      rail_d(),
-    d1_t:      label({anchor: ['start', 'middle']}),
-    d1_d_t:    label({anchor: ['start', 'middle']}),
-    d2:        rail({fg: '#29c0d3'}),
-    d2_d:      rail_d(),
-    d2_t:      label({anchor: ['start', 'middle']}),
-    d2_d_t:    label({anchor: ['start', 'middle']}),
+    rd1:       rail({fg: '#fa842f'}),
+    rd1_d:     rail_d(),
+    rd2:       rail({fg: '#29c0d3'}),
+    rd2_d:     rail_d(),
     svo_t:     label({anchor: ['end', 'middle']}),
     svo_d_t:   label({anchor: ['end', 'top']}),
     vko_t:     label({anchor: ['start', 'middle']}),
@@ -236,7 +233,9 @@ function draw() {
     s15_3:     inst_d({fg: mopt['r15'].fg, anchor: ['start', 'middle']}),
     s16:       station({fg: mopt['r16'].fg, anchor: ['start', 'middle']}),
     s16_1:     inst({fg: mopt['r16'].fg, anchor: ['start', 'top']}),
-    s16_2:     inst_d({fg: mopt['r16'].fg, anchor: ['start', 'top']})
+    s16_2:     inst_d({fg: mopt['r16'].fg, anchor: ['start', 'top']}),
+    sd1:       st_mcd({fg: mopt['rd1'].fg, anchor: ['start', 'middle']}),
+    sd2:       st_mcd({fg: mopt['rd2'].fg, anchor: ['start', 'middle']})
   });
    // lines
   MLINES.map(function(line){
