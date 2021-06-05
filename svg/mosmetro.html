@@ -17,14 +17,15 @@
 <body>
 <table><tr><td id="mcont">
 <select id="chinches"
-  onchange="var o=this.options[this.selectedIndex]; o.innerHTML = (o.innerHTML.indexOf('+')>-1 ? '[--]' : '[+]')+' '+o.innerHTML.trim().slice(4); this.selectedIndex = 0;" 
+  onchange="var o=this.options[this.selectedIndex]; o.innerHTML = (o.innerHTML.indexOf('+')>-1 ? '[-]' : '[+]')+' '+o.innerHTML.trim().slice(4); this.selectedIndex = 0;" 
   style="position:fixed; top:10px; right:10px">
 <option disabled selected>Рассчитывать пути...</option>
 <option id="inch_r">  [+] Между ветками</option>
 <option id="inch_r5"> [+] Кольцевые</option>
-<option id="inch_mck">[--] МЦК</option>
-<option id="inch_mn"> [--] Монорельс</option>
-<option id="inch_ext">[--] Строящиеся</option>
+<option id="inch_mck">[-] МЦК</option>
+<option id="inch_mn"> [-] Монорельс</option>
+<option id="inch_mcd">[-] МЦД</option>
+<option id="inch_ext">[-] Строящиеся</option>
 </select>
 </td></tr></table>
 <script src="../js/dbcartasvg.js"></script>
@@ -46,10 +47,12 @@ function draw() {
   function label(o)    { return DC.extend({labelcolor: '#aaa', anchor: ['start', 'top']}, o||{}); };
   function station(o)  { return DC.extend({bg: 'white', size: 5, width: 1, scale: 1}, o||{}); };
   function st_mck(o)   { return station(DC.extend({fg: '#f76093', size: 4, labelcolor: 'gray'}, o)); };
-  function st_mcd(o)   { return station(DC.extend({size: 2, labelcolor: 'gray'}, o)); };
+  function st_mcd(o)   { return station(DC.extend({size: 2, labelcolor: 'rgb(180,180,180)'}, o)); };
   function inch_mck(o) { return inch(DC.extend({dash:[2,4], width: 3}, o||{})); };
-  function inch_mn(o)  { return inch_mck(DC.extend({dash:[1,2], fg: 'black', width: 1}, o||{})); };
-  function inst_mck(o) { return st_mck(DC.extend({size: 4, labelcolor: o['fg'], width: 1, bg: o['fg']}, o)); };
+  function inch_mn(o)  { return inch(DC.extend({dash:[1,2], fg: 'black', width: 1}, o||{})); };
+  function inch_mcd(o) { return inch(DC.extend({dash:[1,3], fg: '#777', width: 1}, o||{})); };
+  function inst_mck(o) { return st_mck(DC.extend({size: 4, labelcolor: o['fg'], bg: o['fg']}, o)); };
+  function inst_mcd(o) { return st_mcd(DC.extend({size: 2, labelcolor: o['fg'], bg: o['fg']}, o)); };
   function inst(o)     { return station(DC.extend({size: 4, labelcolor: o['fg'], width: 1, bg: o['fg']}, o)); };
   function inst_d(o)   { return inst(DC.extend({size: 2, width: 2}, o||{})); };
    // lines
@@ -89,6 +92,7 @@ function draw() {
     inch_ext_d:inch_ed(),
     inch_mck:  inch_mck(),
     inch_mn:   inch_mn(),
+    inch_mcd:  inch_mcd(),
     mkad:      label({fg: '#c8c8ff',  anchor: ['center', 'middle']}),
     moskvar:   river({width: 15}),
     moskvac:   river({width: 5}),
@@ -235,7 +239,8 @@ function draw() {
     s16_1:     inst({fg: mopt['r16'].fg, anchor: ['start', 'top']}),
     s16_2:     inst_d({fg: mopt['r16'].fg, anchor: ['start', 'top']}),
     sd1:       st_mcd({fg: mopt['rd1'].fg, anchor: ['start', 'middle']}),
-    sd2:       st_mcd({fg: mopt['rd2'].fg, anchor: ['start', 'middle']})
+    sd2:       st_mcd({fg: mopt['rd2'].fg, anchor: ['start', 'middle']}),
+    sd2_1:     inst_mcd({fg: mopt['rd2'].fg})
   });
    // lines
   MLINES.map(function(line){
@@ -400,12 +405,14 @@ function calcRoutes(fromid, toid){
             r0 = Math.sqrt(Math.pow(d[0]-c[0],2)+Math.pow(d[1]-c[1],2));
             r1 = Math.sqrt(Math.pow(e[0]-c[0],2)+Math.pow(e[1]-c[1],2));
             rr = Math.sqrt(Math.pow(d[0]-e[0],2)+Math.pow(d[1]-e[1],2));
+            console.log(c,d,e,r0,r1,rr);
             if((r0 <= rr) && (r1 <= rr)){
               if(!inarray(cc,c)) cc.push(c);
             }
           })
         }
       });
+//      console.log(cc);
       if(cc.length<3) cc = cc.map(function(a){ return a.slice(0,2); }); //remove Q flag bezier without L
       if(cc.length && //rotate first with last if indirect
          (Math.sqrt(Math.pow(d[0]-cc[0][0],2)+Math.pow(d[1]-cc[0][1],2)))>=
@@ -417,9 +424,9 @@ function calcRoutes(fromid, toid){
         if(!inarray(cc,d)) cc.unshift(d);
         if(!inarray(cc,e)) cc.push(e);
       }
-//      console.log(cc);
       var pts = DC.interpolateCoords(cc, true),
           path = ('M ' + pts).replace(/,/g, ' ');
+      DC.append('path', { class: 'selpath', d: path, stroke:'black', fill: 'none', 'stroke-linecap': 'round', 'stroke-width': 1 });
       var p = DC.append('path', { class: 'selpath', d: path, stroke:'white', fill: 'none', 'stroke-dasharray': [4,8], 'stroke-linecap': 'round', 'stroke-width': 4 });
       DC.append(p, 'animate', { attributeName: 'stroke-width', values: '1;4;1', dur: '1s', repeatCount: 'indefinite' });
     }
