@@ -2,7 +2,7 @@
 // HTML5 SVG vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2015. b210510.
+// egax@bk.ru, 2015. b210620.
 //
 var SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -181,6 +181,7 @@ function dbCartaSvg(cfg) {
         transform: 'rotate(' + this.m.rotate + ' ' + centerof[0] + ' ' + centerof[1] + ') scale(' + scale + ') translate(' + offx + ',' + offy + ')'
       });
       this.m.scale = scale;
+      if('clscale' in window) clscale();
     },
     //
     // Center map by points PTS
