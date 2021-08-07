@@ -93,7 +93,7 @@ function draw() {
     inch_mck:  inch_mck(),
     inch_mn:   inch_mn(),
     inch_mcd:  inch_mcd(),
-    mkad:      label({fg: '#c8c8ff',  anchor: ['center', 'middle']}),
+    mkad:      label({fg: '#c8c8ff',  bg: '#fff', anchor: ['center', 'middle']}),
     moskvar:   river({width: 15}),
     moskvac:   river({width: 5}),
     strogino:  river({width: 5}),
@@ -439,7 +439,7 @@ var DC = new dbCartaSvg({
   id: 'mcont',
   height: document.getElementById('mcont').offsetHeight,
   sbarpos: 'right',
-  bg: 'white',
+  bg: 'rgb(250,255,250)',
   scalebg: 'rgba(100,100,100,0.1)'
 });
 DC.scaleCarta(0.8);
