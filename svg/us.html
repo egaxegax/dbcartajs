@@ -1,23 +1,20 @@
 <!--
- Population density by country. SVG version.
- View countries under mouse cursor.
- egax@bk.ru, 2015-21.
+ USA states boundries.
+ egax@bk.ru, 2021.
 -->
 <!DOCTYPE html>
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-<title>Население мира / SVG векторная карта</title>
-<meta name="description" content="Карта плотности населения мира в векторе">
-<meta name="keywords" content="карта плотности населения, population, svg">
+<title>Население США по штатам / SVG векторная карта</title>
+<meta name="description" content="Население США по штатам в векторе">
+<meta name="keywords" content="штаты, сша, usa, svg">
 <link rel="icon" href="../img/fav.svg" type="image/svg+xml" />
 <style type="text/css">html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
 <script src="/static/js/metrics.js"></script>
 </head>
 <body>
-<script src="../js/data/countries.js"></script>
-<script src="../js/data/countries_info.js"></script>
-<script src="../js/data/citiesd.js"></script>
+<script src="../js/data/us.js"></script>
 <script src="../js/proj4js-combined.js"></script>
 <script src="../js/dbcartasvg.js"></script>
 <table><tr><td id="mcont"></td></tr></table>
@@ -50,54 +47,62 @@ function infobox(ev) {
   }
 }
 // density color by country
-function densityColor(cntryname) {
-  var ds = INFOCNT[cntryname] ? INFOCNT[cntryname][0] : 0;
+function densityColor(ind) {
+  var ds = parseInt(USS[ind][4].replace(/,/g,''))/1000000.0;
   return (
-    (ds < 3) ? 'rgb(233,235,238)' :
-    (ds < 10) ? 'rgb(208,217,227)' :
-    (ds < 30) ? 'rgb(162,179,200)' :
-    (ds < 100) ? 'rgb(137,159,186)' :
-    (ds < 300) ? 'rgb(113,140,172)' :
-    (ds < 1000) ? 'rgb(66,102,145)' : 'rgb(19,64,117)');
+    (ds < 1) ? 'rgb(220,225,230)' :
+    (ds < 2) ? 'rgb(203,205,208)' :
+    (ds < 3) ? 'rgb(188,197,207)' :
+    (ds < 5) ? 'rgb(142,159,180)' :
+    (ds < 7) ? 'rgb(117,139,166)' :
+    (ds < 10) ? 'rgb(93,120,152)' :
+    (ds < 20) ? 'rgb(46,82,125)' : 'rgb(0,44,97)');
 };
 function draw() {
-  // countries
-  for(var i=0; i<COUNTRIES.length; i++) {
-    var mpart = COUNTRIES[i],
+  DC.initProj(203, '+lon_0=-100 +lat_0=40'); //ortho proj
+   // states
+  for(var i=0; i<USS.length; i++) {
+    var mpart = USS[i],
+        mcntryname = mpart[0],
         mabbr = mpart[1],
-        mcoords = mpart[2],
-        mcntryname = mpart[3];
+        mcoords = mpart[2];
     // add new layers
     var cntry = DC.append('polygon', {
-      class: mcntryname,
-      points: DC.interpolateCoords(mcoords, true, 10).join(' '),
-      fill: densityColor(mcntryname),
+      class: '<b>'+USS[i][5]+'</b> '+USS[i][4]+'<br>'+'<i>'+USS[i][0]+'</i>',
+      points: DC.interpolateCoords(mcoords, true).join(' '),
+      fill: densityColor(i),
       stroke: 'transparent'
     });
+    if(mpart[3]){
+      var cnt = DC.toPoints(mpart[3],1);
+      var label = DC.append('text', {
+        x: cnt[0], y: cnt[1], fill: 'orange', 
+        'font-family': 'sans-serif', 'font-size': '2pt'
+      });
+      label.appendChild(document.createTextNode(mabbr));
+    }
+    if(mcntryname == 'Alaska'){
+      DC.attr(cntry, {transform:'translate('+DC.toPoints([-134.5,50]).join(',')+') scale(0.7,0.7)'});
+    } else if(mcntryname == 'Hawaii'){
+      DC.attr(cntry, {transform:'translate('+DC.toPoints([-155,83]).join(',')+')'});
+    }
     DC.extend(cntry, {
       onmousemove: function(ev){
         DC.doMap(ev, {
-          fill: 'rgb(255,127,0)',
-          stroke: 'yellow'
+          fill: 'yellow',
+          transform:''
         });
-        var mcntryname = this.getAttribute('class');
-        var label = mcntryname;
-        if(label.search('<b>') == -1)
-          label = '<b>'+ label +'</b>';
-        if(CITIES[mcntryname]) // cities count
-          label += '<br>Крупных городов: ' + CITIES[mcntryname].length;
-        if(INFOCNT[mcntryname]) // density
-          label += '<br>Плотность населения: ' + INFOCNT[mcntryname][0];
-        this.setAttribute('class', label);
       }
     });
   };
+  DC.initProj(0, '+lon_0=0 +lat_0=0'); //set lonlat
 };
 var DC = new dbCartaSvg({
   id: 'mcont',
   bg: 'white',
   sbarpos: 'left'
 });
+DC.scaleCarta(6);
 // events
 DC.extend(DC.root, {
   onmousemove: function(ev){
