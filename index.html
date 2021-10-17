@@ -17,8 +17,9 @@ dt ul { display: table; width:100%; }
 dt li { display: table-cell; text-align:left; }
 .hspace { padding: 0 12px; }
 .stripe { background-color: rgb(210,224,240); }
-.col1 { width:30%; }
-.col2 { width:20%; }
+.col1 { width:40%; }
+.col2 { width:25%; }
+.col3 { width:15%; }
 </style>
 <script src="/static/js/metrics.js"></script>
 </head>
@@ -49,18 +50,21 @@ dt li { display: table-cell; text-align:left; }
 <tr>
   <td colspan="2"><dl>
     <dt><ul>
-      <li class="col1">Moscow Metro</li>
-      <li class="col2"><a href="svg/mosmetro.html">SVG</a></li>
+      <li class="col1">Схема Метро Москвы</li>
+      <li class="col2"><i>Moscow Metro</i></li>
+      <li class="col3"><a href="svg/mosmetro.html">SVG</a></li>
       <li><a href="mosmetro.html">Canvas</a></li></ul>
     </dt>
     <dt><ul>
-      <li class="col1">Moscow Railroad</li>
-      <li class="col2"><a href="svg/mosrails.html">SVG</a></li>
+      <li class="col1">Схема железных дорог Москвы и МО</li>
+      <li class="col2"><i>Moscow Railroad </i></li>
+      <li class="col3"><a href="svg/mosrails.html">SVG</a></li>
       <li><a href="mosrails.html">Canvas</a></li></ul>
     </dt>
     <dt><ul>
-      <li class="col1">Tbilisi Metro</li>
-      <li class="col2"></li>
+      <li class="col1">Схема метро Тбилиси (Грузия)</li>
+      <li class="col2"><i>Tbilisi Metro</i></li>
+      <li class="col3"></li>
       <li><a href="metro-tbilisi.html">Canvas</a></li></ul>
     </dt>
     <dd class="stripe">
@@ -69,59 +73,69 @@ dt li { display: table-cell; text-align:left; }
       В <a href="svg/mosmetro.html">SVG-версии</a> карты метро можно рассчитать кратчайший пути между станциями по алгоритму BFS по клику. 
     </dd>
     <dt><ul>
-      <li class="col1">Image Viewer</li>
-      <li class="col2"><a href="svg/imgviewer.html">SVG</a></li>
+      <li class="col1">Просмотровщик картинок</li>
+      <li class="col2"><i>Image Viewer</i></li>
+      <li class="col3"><a href="svg/imgviewer.html">SVG</a></li>
       <li><a href="imgviewer.html">Canvas</a></li></ul>
     </dt>
     <dt><ul>
-      <li class="col1">Pan Zoom</li>
-      <li class="col2"><a href="svg/panzoom.html">SVG</a></li>
+      <li class="col1">Анимация масштаба в SVG</li>
+      <li class="col2"><i>Pan Zoom</i></li>
+      <li class="col3"><a href="svg/panzoom.html">SVG</a></li>
       <li></li></ul>
     </dt>
     <dd class="stripe">
       Просмотр <i>jpeg</i>  и <i>svg</i> картинок с возможностью масштабирования.
     </dd>
     <dt><ul>
-      <li class="col1">Wall Clock</li>
-      <li class="col2"><a href="svg/clock.html">SVG</a></li>
+      <li class="col1">Настенные часы</li>
+      <li class="col2"><i>Wall Clock</i></li>
+      <li class="col3"><a href="svg/clock.html">SVG</a></li>
       <li></li></ul>
     </dt>
     <dt><ul>
-      <li class="col1">Roller Ball</li>
-      <li class="col2"><a href="svg/rollerball.html">SVG</a></li>
+      <li class="col1">Анимация движения в SVG</li>
+      <li class="col2"><i>Roller Ball</i></li>
+      <li class="col3"><a href="svg/rollerball.html">SVG</a></li>
       <li></li></ul>
     </dt>
     <dd class="stripe">
       Примеры использования градиента и svg-анимации с эффектом движения.
     </dd>
     <dt><ul>
-      <li class="col1">Atlas</li>
-      <li class="col2"><a href="svg/atlas.html">SVG</a></li>
+      <li class="col1">Атлас мира</li>
+      <li class="col2"><i>Atlas</i></li>
+      <li class="col3"><a href="svg/atlas.html">SVG</a></li>
       <li><a href="atlas.html">Canvas</a></li></ul>
     </dt>
     <dt><ul>
-      <li class="col1">Population</li>
-      <li class="col2"><a href="svg/usemap.html">SVG</a></li>
+      <li class="col1">Население мира</li>
+      <li class="col2"><i>Population</i></li>
+      <li class="col3"><a href="svg/usemap.html">SVG</a></li>
       <li><a href="usemap.html">Canvas</a></li></ul>
     </dt>
     <dt><ul>
-      <li class="col1">Population USA</li>
-      <li class="col2"><a href="svg/us.html">SVG</a></li>
+      <li class="col1">Население США</li>
+      <li class="col2"><i>Population USA</i></li>
+      <li class="col3"><a href="svg/us.html">SVG</a></li>
       <li></li></ul>
     </dt>
     <dt><ul>
-      <li class="col1">Cities</li>
-      <li class="col2"></li>
+      <li class="col1">Города мира</li>
+      <li class="col2"><i>Cities</i></li>
+      <li class="col3"></li>
       <li><a href="cities.html">Canvas</a></li></ul>
     </dt>
     <dt><ul>
-      <li class="col1">Countries</li>
-      <li class="col2"></li>
+      <li class="col1">Страны мира</li>
+      <li class="col2"><i>Countries</i></li>
+      <li class="col3"></li>
       <li><a href="countries.html">Canvas</a></li></ul>
     </dt>
     <dt><ul>
-      <li class="col1">Routes</li>
-      <li class="col2"></li>
+      <li class="col1">Маршруты на карте</li>
+      <li class="col2"><i>Routes</i></li>
+      <li class="col3"></li>
       <li><a href="merc.html">Canvas</a></li></ul>
     </dt>
     <dd class="stripe">
@@ -129,18 +143,21 @@ dt li { display: table-cell; text-align:left; }
       Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
     </dd>
     <dt><ul>
-      <li class="col1">Atlas 3D</li>
-      <li class="col2"></li>
+      <li class="col1">Атлас 3D</li>
+      <li class="col2"><i>Atlas 3D</i></li>
+      <li class="col3"></li>
       <li><a href="map3d.html">Canvas</a></li></ul>
     </dt>
     <dt><ul>
-      <li class="col1">Starry Sky</li>
-      <li class="col2"></li>
+      <li class="col1">Звездное небо</li>
+      <li class="col2"><i>Starry Sky </i></li>
+      <li class="col3"></li>
       <li><a href="starry.html">Canvas</a></li></ul>
     </dt>
     <dt><ul>
-      <li class="col1">Sky 3D</li>
-      <li class="col2"></li>
+      <li class="col1">Звездное небо 3D</li>
+      <li class="col2"><i>Sky 3D</i></li>
+      <li class="col3"></li>
       <li><a href="sky3d.html">Canvas</a></li></ul>
     </dt>
     <dd class="stripe">
