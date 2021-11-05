@@ -28,7 +28,7 @@ dt li { display: table-cell; text-align:left; }
 <script src="js/dbcarta.js"></script>
 <script src="js/data/continents.js"></script>
 
-<h2 style="text-align: center; background-color: rgb(210,224,240); width: 960px; padding: 5px; margin: 4px auto 8px; font-size: 150%; font-weight: normal">
+<h2 style="text-align: center; width: 960px; padding: 5px; margin: 4px auto 8px; font-size: 150%; font-weight: normal">
   Canvas+SVG vector map and image viewer library
 </h2>
 
@@ -40,15 +40,13 @@ dt li { display: table-cell; text-align:left; }
 </table>
 
 <table width="960px" align="center" style="font-size: larger">
-<tr class="stripe">
-  <td width="50%" align="center" style="padding:10px">
-    Больше карт в блоге <a href="https://dbcartajs.blogspot.ru" target="_blank">dbcartajs.blogspot.ru</a>
-  </td>
-  <td align="center"  style="padding:10px">
-    <a href="https://github.com/egaxegax/dbcartajs" target="_blank">Source Code</a>
-  </td></tr>
 <tr>
   <td colspan="2"><dl>
+    <dd class="stripe">
+      Интерактивные схемы метро Москвы в <i>2021</i> году со строящимися линиями и станциями и МЦК и
+      пригородного ж/д транспорта Москвы и МО в <i>2015</i> году.
+      В <i>svg</i>-версии <a href="svg/mosmetro.html">карты метро</a> по клику можно рассчитать кратчайший пути между станциями по алгоритму <i>BFS</i>. 
+    </dd>
     <dt><ul>
       <li class="col1">Схема Метро Москвы</li>
       <li class="col2"><i>Moscow Metro</i></li>
@@ -68,9 +66,7 @@ dt li { display: table-cell; text-align:left; }
       <li><a href="metro-tbilisi.html">Canvas</a></li></ul>
     </dt>
     <dd class="stripe">
-      Интерактивные схемы метро Москвы в 2021 году со строящимися линиями и станциями и МЦК и
-      пригородного ж/д транспорта Москвы и МО в 2015 году.
-      В <a href="svg/mosmetro.html">SVG-версии</a> карты метро можно рассчитать кратчайший пути между станциями по алгоритму BFS по клику. 
+      Просмотр <i>jpeg</i>  и <i>svg</i> картинок с возможностью масштабирования.
     </dd>
     <dt><ul>
       <li class="col1">Просмотровщик картинок</li>
@@ -85,7 +81,7 @@ dt li { display: table-cell; text-align:left; }
       <li></li></ul>
     </dt>
     <dd class="stripe">
-      Просмотр <i>jpeg</i>  и <i>svg</i> картинок с возможностью масштабирования.
+      Примеры использования градиента и <i>svg</i>-анимации с эффектом движения.
     </dd>
     <dt><ul>
       <li class="col1">Настенные часы</li>
@@ -100,7 +96,8 @@ dt li { display: table-cell; text-align:left; }
       <li></li></ul>
     </dt>
     <dd class="stripe">
-      Примеры использования градиента и svg-анимации с эффектом движения.
+      Интерактивные карты мира со списками городов и стран в различных проекциях. 
+      Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
     </dd>
     <dt><ul>
       <li class="col1">Атлас мира</li>
@@ -139,8 +136,8 @@ dt li { display: table-cell; text-align:left; }
       <li><a href="merc.html">Canvas</a></li></ul>
     </dt>
     <dd class="stripe">
-      Интерактивные карты мира со списками городов и стран в различных проекциях. 
-      Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
+      Отрисовка картинки в канвасе <i>3d</i> с пересчетом проекции отображения через шейдеры <i>WebGL</i> на основе примеров с с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
+      Звездное небо в канвасе <i>2d</i> и <i>3d</i> с использованием скриптов <a href="https://github.com/mrdoob/three.js">three.js</a>.
     </dd>
     <dt><ul>
       <li class="col1">Атлас 3D</li>
@@ -160,25 +157,29 @@ dt li { display: table-cell; text-align:left; }
       <li class="col3"></li>
       <li><a href="sky3d.html">Canvas</a></li></ul>
     </dt>
-    <dd class="stripe">
-      Отрисовка картинки в канвасе 3d с пересчетом проекции отображения через шейдеры WebGL на основе примеров с с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
-      Звездное небо в канвасе 2d и 3d с использованием скриптов <a href="https://github.com/mrdoob/three.js">three.js</a>.
-    </dd>
   </dl></td>
+</tr>
+<tr class="stripe">
+  <td width="50%" align="center" style="padding:10px">
+    Больше карт в блоге <a href="https://dbcartajs.blogspot.ru" target="_blank">dbcartajs.blogspot.ru</a>
+  </td>
+  <td align="center"  style="padding:10px">
+    <a href="https://github.com/egaxegax/dbcartajs" target="_blank">Source Code</a>
+  </td>
 </tr>
 </table>
 
-<table width="100%">
+<table width="960px" align="center">
 <tr>
   <td id="livecounter" width="15%" align="right">
     <a href="//www.liveinternet.ru/click" target="_blank"><img id="licntADF8" width="31" height="31" style="border:0" title="LiveInternet: показано число просмотров за 24 часа, посетителей за 24 часа и за сегодня" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAEALAAAAAABAAEAAAIBTAA7" alt=""/></a>
   </td>
-  <td id="yacounter" width="20%" align="right">
+  <td id="yacounter" width="20%" align="left">
     <a href="https://metrika.yandex.ru/stat/?id=65044687&amp;from=informer" target="_blank" rel="nofollow"><img src="https://informer.yandex.ru/informer/65044687/3_1_FFFFFFFF_EFEFEFFF_0_pageviews" style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" class="ym-advanced-informer" data-cid="65044687" data-lang="ru" /></a>
   </td>
-  <td align="center"> </td>
-  <td width="35%" align="left">
-    <a href="https://github.com/egaxegax"> egaxegax </a> © 2013-2021
+  <td align="center"> <a href="https://github.com/egaxegax"> egaxegax </a> </td>
+  <td width="35%" align="center">
+    © 2013-2021
   </td>
 </tr>
 </table>
