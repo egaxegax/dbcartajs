@@ -9,17 +9,11 @@
 <meta name="google-site-verification" content="eWwGSnvveM7GniusD-nYN2KXBDPtXBHmhKRezn_TBg8">
 <meta name="yandex-verification" content="bf07f0af8e739c66">
 <link rel="icon" href="img/fav.svg" type="image/svg+xml" />
-<style type="text/css">
+<style>
 body { background:#fff; margin:0; font-family:tahoma,verdana,arial; font-size:16px; }
 a, a:active, a:focus { color:#4d3ca0; outline:none; }
-dd { margin: 1%; padding: 0.5em; }
-dt ul { display: table; width:100%; }
-dt li { display: table-cell; text-align:left; }
-.hspace { padding: 0 12px; }
-.stripe { background-color: rgb(210,224,240); }
-.col1 { width:40%; }
-.col2 { width:25%; }
-.col3 { width:15%; }
+.disabled { color:transparent; }
+.stripe { padding:10px; background-color: rgb(210,224,240); }
 </style>
 <script src="/static/js/metrics.js"></script>
 </head>
@@ -28,146 +22,176 @@ dt li { display: table-cell; text-align:left; }
 <script src="js/dbcarta.js"></script>
 <script src="js/data/continents.js"></script>
 
-<h2 style="text-align: center; width: 960px; padding: 5px; margin: 4px auto 8px; font-size: 150%; font-weight: normal">
-  Canvas+SVG vector map and image viewer library
-</h2>
-
-<table width="100%"><tr>
-  <td width="20%"></td>
-  <td id="demo1" width="30%" align="right"></td>
-  <td id="demo2" width="30%" align="left"></td>
-  <td width="20%"></td></tr>
-</table>
-
-<table width="960px" align="center" style="font-size: larger">
+<table border=0 cellpadding="5" align="center" style="width:960px; font-size: larger">
 <tr>
-  <td colspan="2"><dl>
-    <dd class="stripe">
-      Интерактивные схемы метро Москвы в <i>2021</i> году со строящимися линиями и станциями и МЦК и
-      пригородного ж/д транспорта Москвы и МО в <i>2015</i> году.
-      В <i>svg</i>-версии <a href="svg/mosmetro.html">карты метро</a> по клику можно рассчитать кратчайший пути между станциями по алгоритму <i>BFS</i>. 
-    </dd>
-    <dt><ul>
-      <li class="col1">Схема Метро Москвы</li>
-      <li class="col2"><i>Moscow Metro</i></li>
-      <li class="col3"><a href="svg/mosmetro.html">SVG</a></li>
-      <li><a href="mosmetro.html">Canvas</a></li></ul>
-    </dt>
-    <dt><ul>
-      <li class="col1">Схема железных дорог Москвы и МО</li>
-      <li class="col2"><i>Moscow Railroad </i></li>
-      <li class="col3"><a href="svg/mosrails.html">SVG</a></li>
-      <li><a href="mosrails.html">Canvas</a></li></ul>
-    </dt>
-    <dt><ul>
-      <li class="col1">Схема метро Тбилиси (Грузия)</li>
-      <li class="col2"><i>Tbilisi Metro</i></li>
-      <li class="col3"></li>
-      <li><a href="metro-tbilisi.html">Canvas</a></li></ul>
-    </dt>
-    <dd class="stripe">
-      Просмотр <i>jpeg</i>  и <i>svg</i> картинок с возможностью масштабирования.
-    </dd>
-    <dt><ul>
-      <li class="col1">Просмотровщик картинок</li>
-      <li class="col2"><i>Image Viewer</i></li>
-      <li class="col3"><a href="svg/imgviewer.html">SVG</a></li>
-      <li><a href="imgviewer.html">Canvas</a></li></ul>
-    </dt>
-    <dt><ul>
-      <li class="col1">Анимация масштаба в SVG</li>
-      <li class="col2"><i>Pan Zoom</i></li>
-      <li class="col3"><a href="svg/panzoom.html">SVG</a></li>
-      <li></li></ul>
-    </dt>
-    <dd class="stripe">
-      Примеры использования градиента и <i>svg</i>-анимации с эффектом движения.
-    </dd>
-    <dt><ul>
-      <li class="col1">Настенные часы</li>
-      <li class="col2"><i>Wall Clock</i></li>
-      <li class="col3"><a href="svg/clock.html">SVG</a></li>
-      <li></li></ul>
-    </dt>
-    <dt><ul>
-      <li class="col1">Анимация движения в SVG</li>
-      <li class="col2"><i>Roller Ball</i></li>
-      <li class="col3"><a href="svg/rollerball.html">SVG</a></li>
-      <li></li></ul>
-    </dt>
-    <dd class="stripe">
-      Интерактивные карты мира со списками городов и стран в различных проекциях. 
-      Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
-    </dd>
-    <dt><ul>
-      <li class="col1">Атлас мира</li>
-      <li class="col2"><i>Atlas</i></li>
-      <li class="col3"><a href="svg/atlas.html">SVG</a></li>
-      <li><a href="atlas.html">Canvas</a></li></ul>
-    </dt>
-    <dt><ul>
-      <li class="col1">Население мира</li>
-      <li class="col2"><i>Population</i></li>
-      <li class="col3"><a href="svg/usemap.html">SVG</a></li>
-      <li><a href="usemap.html">Canvas</a></li></ul>
-    </dt>
-    <dt><ul>
-      <li class="col1">Население США</li>
-      <li class="col2"><i>Population USA</i></li>
-      <li class="col3"><a href="svg/us.html">SVG</a></li>
-      <li></li></ul>
-    </dt>
-    <dt><ul>
-      <li class="col1">Города мира</li>
-      <li class="col2"><i>Cities</i></li>
-      <li class="col3"></li>
-      <li><a href="cities.html">Canvas</a></li></ul>
-    </dt>
-    <dt><ul>
-      <li class="col1">Страны мира</li>
-      <li class="col2"><i>Countries</i></li>
-      <li class="col3"></li>
-      <li><a href="countries.html">Canvas</a></li></ul>
-    </dt>
-    <dt><ul>
-      <li class="col1">Маршруты на карте</li>
-      <li class="col2"><i>Routes</i></li>
-      <li class="col3"></li>
-      <li><a href="merc.html">Canvas</a></li></ul>
-    </dt>
-    <dd class="stripe">
-      Отрисовка картинки в канвасе <i>3d</i> с пересчетом проекции отображения через шейдеры <i>WebGL</i> на основе примеров с с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
-      Звездное небо в канвасе <i>2d</i> и <i>3d</i> с использованием скриптов <a href="https://github.com/mrdoob/three.js">three.js</a>.
-    </dd>
-    <dt><ul>
-      <li class="col1">Атлас 3D</li>
-      <li class="col2"><i>Atlas 3D</i></li>
-      <li class="col3"></li>
-      <li><a href="map3d.html">Canvas</a></li></ul>
-    </dt>
-    <dt><ul>
-      <li class="col1">Звездное небо</li>
-      <li class="col2"><i>Starry Sky </i></li>
-      <li class="col3"></li>
-      <li><a href="starry.html">Canvas</a></li></ul>
-    </dt>
-    <dt><ul>
-      <li class="col1">Звездное небо 3D</li>
-      <li class="col2"><i>Sky 3D</i></li>
-      <li class="col3"></li>
-      <li><a href="sky3d.html">Canvas</a></li></ul>
-    </dt>
-  </dl></td>
+  <td id="demo1" align="right" width="50%"></td>
+  <td id="demo2" colspan="2"></td>
+</tr>
+<tr>
+  <td colspan="10" style="text-align: center; padding: 10px 0; font-size: 120%; font-weight: normal">
+    Canvas+SVG vector map and image viewer library  
+  </td>
+</tr>
+<tr>
+  <td colspan="10" class="stripe">
+    Интерактивные схемы метро Москвы в <i>2021</i> году со строящимися линиями и станциями и МЦК и
+    пригородного ж/д транспорта Москвы и МО в <i>2015</i> году.
+    В <i>svg</i>-версии <a href="svg/mosmetro.html">карты метро</a> по клику можно рассчитать кратчайший пути между станциями по алгоритму <i>BFS</i>. 
+  </td>
+</tr>
+<tr>
+  <td> &emsp; Схема Метро Москвы</td>
+  <td><i>Moscow Metro</i></td>
+  <td>
+    <a href="svg/mosmetro.html">SVG</a> &emsp; &emsp; 
+    <a href="mosmetro.html">Canvas</a>
+  </td>
+</tr>
+<tr>
+  <td> &emsp; Схема железных дорог Москвы и МО</td>
+  <td><i>Moscow Railroad </i></td>
+  <td>
+    <a href="svg/mosrails.html">SVG</a> &emsp; &emsp; 
+    <a href="mosrails.html">Canvas</a>
+  </td>
+</tr>
+<tr>
+  <td> &emsp; Схема метро Тбилиси (Грузия)</td>
+  <td><i>Tbilisi Metro</i></td>
+  <td>
+    <a class="disabled">SVG</a> &emsp; &emsp; 
+    <a href="metro-tbilisi.html">Canvas</a>
+  </td>
+</tr>
+<tr>
+  <td colspan="10" class="stripe">
+    Просмотр <i>jpeg</i>  и <i>svg</i> картинок с возможностью масштабирования.
+  </td>
+</tr>
+<tr>
+  <td> &emsp; Просмотровщик картинок</td>
+  <td><i>Image Viewer</i></td>
+  <td>
+    <a href="svg/imgviewer.html">SVG</a> &emsp; &emsp; 
+    <a href="imgviewer.html">Canvas</a>
+  </td>
+</tr>
+<tr>
+  <td> &emsp; Анимация масштаба в SVG</td>
+  <td><i>Pan Zoom</i></td>
+  <td>
+    <a href="svg/panzoom.html">SVG</a>
+  </td>
+</tr>
+<tr>
+  <td colspan="10" class="stripe">
+    Примеры использования градиента и <i>svg</i>-анимации с эффектом движения.
+  </td>
+<tr>
+  <td> &emsp; Настенные часы</td>
+  <td><i>Wall Clock</i></td>
+  <td>
+    <a href="svg/clock.html">SVG</a> &emsp; &emsp; 
+  </td>
+<tr>
+  <td> &emsp; Анимация движения в SVG</td>
+  <td><i>Roller Ball</i></td>
+  <td>
+    <a href="svg/rollerball.html">SVG</a> &emsp; &emsp; 
+  </td>
+<tr>
+  <td colspan="10" class="stripe">
+    Интерактивные карты мира со списками городов и стран в различных проекциях. 
+    Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
+  </td>
+</tr>
+<tr>
+  <td> &emsp; Атлас мира</td>
+  <td><i>Atlas</i></td>
+  <td>
+    <a href="svg/atlas.html">SVG</a> &emsp; &emsp; 
+    <a href="atlas.html">Canvas</a>
+  </td>
+</tr>
+<tr>
+  <td> &emsp; Население мира</td>
+  <td><i>Population</i></td>
+  <td>
+    <a href="svg/usemap.html">SVG</a> &emsp; &emsp; 
+    <a href="usemap.html">Canvas</a>
+  </td>
+</tr>
+<tr>
+  <td> &emsp; Население США</td>
+  <td><i>Population USA</i></td>
+  <td>
+    <a href="svg/us.html">SVG</a> &emsp; &emsp; 
+  </td>
+<tr>
+  <td> &emsp; Города мира</td>
+  <td><i>Cities</i></td>
+  <td>
+    <a class="disabled">SVG</a> &emsp; &emsp; 
+    <a href="cities.html">Canvas</a>
+  </td>
+</tr>
+<tr>
+  <td> &emsp; Страны мира</td>
+  <td><i>Countries</i></td>
+  <td>
+    <a class="disabled">SVG</a> &emsp; &emsp; 
+    <a href="countries.html">Canvas</a>
+  </td>
+</tr>
+<tr>
+  <td> &emsp; Маршруты на карте</td>
+  <td><i>Routes</i></td>
+  <td>
+    <a class="disabled">SVG</a> &emsp; &emsp; 
+    <a href="merc.html">Canvas</a>
+  </td>
+</tr>
+<tr>
+  <td colspan="10" class="stripe">
+    Отрисовка картинки в канвасе <i>3d</i> с пересчетом проекции отображения через шейдеры <i>WebGL</i> на основе примеров с с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
+    Звездное небо в канвасе <i>2d</i> и <i>3d</i> с использованием скриптов <a href="https://github.com/mrdoob/three.js">three.js</a>.
+  </td>
+</tr>
+<tr>
+  <td> &emsp; Атлас 3D</td>
+  <td><i>Atlas 3D</i></td>
+  <td>
+    <a class="disabled">SVG</a> &emsp; &emsp; 
+    <a href="map3d.html">Canvas</a>
+  </td>
+</tr>
+<tr>
+  <td> &emsp; Звездное небо</td>
+  <td><i>Starry Sky </i></td>
+  <td>
+    <a class="disabled">SVG</a> &emsp; &emsp; 
+    <a href="starry.html">Canvas</a>
+  </td>
+</tr>
+<tr>
+  <td> &emsp; Звездное небо 3D</td>
+  <td><i>Sky 3D</i></td>
+  <td>
+    <a class="disabled">SVG</a> &emsp; &emsp; 
+    <a href="sky3d.html">Canvas</a>
+  </td>
 </tr>
 <tr class="stripe">
-  <td width="50%" align="center" style="padding:10px">
+  <td width="50%" align="center">
     Больше карт в блоге <a href="https://dbcartajs.blogspot.ru" target="_blank">dbcartajs.blogspot.ru</a>
   </td>
-  <td align="center"  style="padding:10px">
+  <td align="center" colspan="3">
     <a href="https://github.com/egaxegax/dbcartajs" target="_blank">Source Code</a>
   </td>
 </tr>
 </table>
+
+<br>
 
 <table width="960px" align="center">
 <tr>
@@ -177,7 +201,7 @@ dt li { display: table-cell; text-align:left; }
   <td id="yacounter" width="20%" align="left">
     <a href="https://metrika.yandex.ru/stat/?id=65044687&amp;from=informer" target="_blank" rel="nofollow"><img src="https://informer.yandex.ru/informer/65044687/3_1_FFFFFFFF_EFEFEFFF_0_pageviews" style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" class="ym-advanced-informer" data-cid="65044687" data-lang="ru" /></a>
   </td>
-  <td align="center"> <a href="https://github.com/egaxegax"> egaxegax </a> </td>
+  <td align="center"> <a href="https://egaxegax.github.io"> egaxegax </a> </td>
   <td width="35%" align="center">
     © 2013-2021
   </td>
