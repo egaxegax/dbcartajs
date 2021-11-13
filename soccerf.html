@@ -4,12 +4,12 @@
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <title>Футбольное поле / Canvas векторная карта</title>
 <link rel="icon" href="img/fav.svg" type="image/svg+xml" />
-<script type="text/javascript" src="js/dbcarta.js"></script>
+<script src="js/dbcarta.js"></script>
 <script src="/static/js/metrics.js"></script>
 </head>
 <body>
 <div id="cont-soccf"></div>
-<script type='text/javascript'>
+<script>
   var allmaps = [];
   function initmaps(){
     for(var i in allmaps){
@@ -22,7 +22,7 @@
     window.attachEvent('onload', initmaps);
   }
 </script>
-<script type="text/javascript">
+<script>
 allmaps.push(function(){
   // полосы
   var MPS = [
