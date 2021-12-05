@@ -112,27 +112,27 @@ function init(){
     scalebg: 'rgba(100,200,100,0.1)'
   });
   dw.style.backgroundColor = 'rgb(250,255,250)';
-    // define new layers
-  function route(o)    { return dw.extend({cls: 'Line', width: 6, anchor: ['start', 'middle'], labelscale: 1}, o||{}) };
-  function route_ext(o){ return route(dw.extend({width: 4, dash: [2,4]}, o||{})) };
-  function inch(o)     { return route(dw.extend({fg: '#ccc', join: 'round', cap: 'round', width: 8}, o||{})) };
-  function inch_d(o)   { return inch(dw.extend({fg: '#fff', width: 5}, o||{})) };
+   // define new layers
+  function route(o)    { return dw.extend({cls: 'Line', width: 6, anchor: ['start', 'middle'], labelscale: 1}, o||{}); };
+  function route_ext(o){ return route(dw.extend({width: 4, dash: [2,4]}, o||{})); };
+  function inch(o)     { return route(dw.extend({fg: '#ccc', join: 'round', cap: 'round', width: 8}, o||{})); };
+  function inch_d(o)   { return inch(dw.extend({fg: '#fff', width: 5}, o||{})); };
   function inch_ext(o) { return inch(dw.extend({width: 4, dash: [4,2]}, o||{})); };
   function inch_ed(o)  { return inch_d(dw.extend({width: 2, dash: [2,4]}, o||{})); };
-  function river(o)    { return route(dw.extend({fg: '#daebf4', join: 'round', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})) };
-  function rail(o)     { return route(dw.extend({fg: '#ddd', width: 2, labelscale: 0}, o||{})) };
-  function rail_d(o)   { return rail(dw.extend({fg: '#fff', dash: [10,10]}, o||{})) };
-  function label(o)    { return dw.extend({cls: 'Polygon', labelcolor:'#aaa', labelscale: 1, anchor: ['start', 'top']}, o||{}) };
-  function station(o)  { return dw.extend({cls: 'Rect', bg: 'white', size: 5, width: 3, scale: 1, labelscale: 1}, o||{}) };
-  function st_mck(o)   { return station(dw.extend({fg: '#f76093', size: 4, labelcolor: 'gray'}, o)) };
+  function river(o)    { return route(dw.extend({fg: '#daebf4', join: 'round', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})); };
+  function rail(o)     { return route(dw.extend({fg: '#ddd', width: 2, labelscale: 0}, o||{})); };
+  function rail_d(o)   { return rail(dw.extend({fg: '#fff', dash: [10,10]}, o||{})); };
+  function label(o)    { return dw.extend({cls: 'Polygon', labelcolor:'#aaa', labelscale: 1, anchor: ['start', 'top']}, o||{}); };
+  function station(o)  { return dw.extend({cls: 'Rect', bg: 'white', size: 5, width: 3, scale: 1, labelscale: 1}, o||{}); };
+  function st_mck(o)   { return station(dw.extend({fg: '#f76093', size: 4, labelcolor: 'gray'}, o)); };
   function st_mcd(o)   { return station(dw.extend({size: 2, labelcolor: 'rgb(180,180,180)'}, o)); };
   function inch_mck(o) { return inch(dw.extend({dash:[2,4], width: 3}, o||{})); };
   function inch_mn(o)  { return inch(dw.extend({dash:[1,2], fg: 'black', width: 1}, o||{})); };
   function inch_mcd(o) { return inch(dw.extend({dash:[1,3], fg: '#777', width: 1}, o||{})); };
   function inst_mck(o) { return st_mck(dw.extend({size: 4, labelcolor: o['fg'], bg: o['fg']}, o)); };
   function inst_mcd(o) { return st_mcd(dw.extend({size: 2, labelcolor: o['fg'], bg: o['fg']}, o)); };
-  function inst(o)     { return station(dw.extend({size: 3, labelcolor: o['fg'], bg: o['fg']}, o)) };
-  function inst_d(o)   { return inst(dw.extend({size: 2, width: 1}, o||{})) };
+  function inst(o)     { return station(dw.extend({size: 3, labelcolor: o['fg'], bg: o['fg']}, o)); };
+  function inst_d(o)   { return inst(dw.extend({size: 2, width: 1}, o||{})); };
    // lines
   dw.extend(dw.mopt, {
     r1:        route({fg: '#ed1b35'}),
@@ -322,7 +322,6 @@ function init(){
     s16_1:     inst({fg: dw.mopt['r16'].fg, anchor: ['start', 'top']}),
     s16_2:     inst_d({fg: dw.mopt['r16'].fg, anchor: ['start', 'top']}),
     sd1:       st_mcd({fg: dw.mopt['rd1'].fg, anchor: ['start', 'middle']}),
-    sd2:       st_mcd({fg: dw.mopt['rd2'].fg, anchor: ['start', 'middle']}),
     sd2:       st_mcd({fg: dw.mopt['rd2'].fg, anchor: ['start', 'middle']}),
     sd2_1:     inst_mcd({fg: dw.mopt['rd2'].fg})
   });
