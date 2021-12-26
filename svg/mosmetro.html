@@ -16,22 +16,26 @@
 </head>
 <body>
 <table><tr><td id="mcont">
-<select id="chinches"
-  onchange="var o=this.options[this.selectedIndex]; o.innerHTML = (o.innerHTML.indexOf('+')>-1 ? '[-]' : '[+]')+' '+o.innerHTML.trim().slice(4); this.selectedIndex = 0;" 
-  style="position:fixed; top:10px; right:10px">
-<option disabled selected>Рассчитывать пути...</option>
-<option id="inch_r">  [+] Между ветками</option>
-<option id="inch_r5"> [+] Кольцевые</option>
-<option id="inch_mck">[-] МЦК</option>
-<option id="inch_mn"> [-] Монорельс</option>
-<option id="inch_mcd">[-] МЦД</option>
-<option id="inch_ext">[-] Строящиеся</option>
+<select id="chinches" onchange="selectCh(this)" style="position:fixed; top:10px; right:10px">
+<option disabled selected>Пересадки...</option>
+<option id="inch_r">  &#9745; &nbsp; Между ветками</option>
+<option id="inch_r5"> &#9745; &nbsp; Кольцевые</option>
+<option id="inch_mck">&emsp; &nbsp; МЦК</option>
+<option id="inch_mn"> &emsp; &nbsp; Монорельс</option>
+<option id="inch_mcd">&emsp; &nbsp; МЦД</option>
+<option id="inch_ext">&emsp; &nbsp; Строящиеся</option>
 </select>
 </td></tr></table>
 <script src="../js/dbcartasvg.js"></script>
 <script src="../js/data/mosmetro.js"></script>
 <script src="../js/alg/bfs.js"></script>
 <script>
+function selectCh(sel){
+  var o=sel.options[sel.selectedIndex], s=o.innerHTML; 
+  console.log(s, s.indexOf('\u2611'), "'"+s.slice(s.search('&nbsp;')+6)+"'");
+  o.innerHTML = (s.indexOf('\u2611')>-1 ? '&emsp;' : '\u2611')+' &nbsp; '+s.slice(s.search('&nbsp;')+6);
+  sel.selectedIndex = 0;
+}
 var inch=[]; // interchanges for BFS
 function draw() {
   var mopt = {};
@@ -374,7 +378,7 @@ function calcRoutes(fromid, toid){
   var inches= [];
   for(var i=0; i<document.getElementById('chinches').options.length; i++){
     var o = document.getElementById('chinches').options[i];
-    if(o.innerHTML.indexOf('+')>-1){
+    if(o.innerHTML.indexOf('\u2611')>-1){
       if(o.id == 'inch_r5'){      // interchanges radial
         inches = inches.concat(makecrds(MLINES.filter(
           function(a){ return a[0]=='inch'; })).filter(
