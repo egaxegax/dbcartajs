@@ -1,7 +1,7 @@
 <!--
  Moscow Metro map. Canvas version.
  View lines and stations with additional info.
- egax@bk.ru, 2013-21.
+ egax@bk.ru, 2013-22.
 -->
 <!DOCTYPE html>
 <html>
@@ -118,7 +118,6 @@ function init(){
   function inch(o)     { return route(dw.extend({fg: '#ccc', join: 'round', cap: 'round', width: 8}, o||{})); };
   function inch_d(o)   { return inch(dw.extend({fg: '#fff', width: 5}, o||{})); };
   function inch_ext(o) { return inch(dw.extend({width: 4, dash: [4,2]}, o||{})); };
-  function inch_ed(o)  { return inch_d(dw.extend({width: 2, dash: [2,4]}, o||{})); };
   function river(o)    { return route(dw.extend({fg: '#daebf4', join: 'round', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})); };
   function rail(o)     { return route(dw.extend({fg: '#ddd', width: 2, labelscale: 0}, o||{})); };
   function rail_d(o)   { return rail(dw.extend({fg: '#fff', dash: [10,10]}, o||{})); };
@@ -167,7 +166,6 @@ function init(){
     inch:      inch(),
     inch_d:    inch_d(),
     inch_ext:  inch_ext(),
-    inch_ext_d:inch_ed(),
     inch_mck:  inch_mck(),
     inch_mn:   inch_mn(),
     inch_mcd:  inch_mcd(),
