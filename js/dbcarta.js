@@ -2,7 +2,7 @@
 // HTML5 Canvas vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013. b210506.
+// egax@bk.ru, 2013. b220128.
 //
 function dbCarta(cfg) {
   cfg = cfg||{};
@@ -15,6 +15,7 @@ function dbCarta(cfg) {
   if (!cfg.width) dw.style.width = '100%';
   dw.width = (cfg.width ? cfg.width : dw.offsetWidth);
   dw.height = (cfg.height ? cfg.height : dw.offsetWidth / 2.0);
+  // set key/value
   dw.extend = function(dst, src) {
     if (!src) {
       src = dst;
@@ -26,8 +27,7 @@ function dbCarta(cfg) {
     return dst;
   };
   dw.extend({
-    // Config
-    // cfg {
+    // Constructor config {
     //   pid: parent id
     //   width, height: canvas size
     //   draggable: move map by cursor
@@ -45,8 +45,7 @@ function dbCarta(cfg) {
       mapbg: cfg.mapbg || 'rgba(80,90,100,0.5)',
       mapfg: cfg.mapfg
     },
-    // Base Layers
-    // Options {
+    // Base layers options {
     //   cls: type {Image|Polygon|Line|Dot|Rect|Label}
     //   fg: : color (stroke)
     //   bg: background color (fill)
@@ -76,7 +75,7 @@ function dbCarta(cfg) {
       'Line':       {cls: 'Line', fg: 'rgb(0,130,200)'},
       'DashLine':   {cls: 'Line', fg: 'rgba(0,0,0,0.2)', dash: [1,2]}
     },
-    // Vars store
+    // Internal vars
     m: {
       delta: dw.width / 360.0,
       halfX: dw.width / 2.0,
@@ -321,7 +320,7 @@ function dbCarta(cfg) {
       }
     },
     //
-    // Refill obj in mflood new points from coords
+    // Refill obj in mflood with new points from M coords
     //
     reload: function(m) {
       if (m['ftype'] == '.Image' && m['coords'] && this.chkPts(m['coords'][0]) && this.chkPts(m['coords'][1])) {
@@ -334,7 +333,7 @@ function dbCarta(cfg) {
     },
     //
     // Find obj under mouse cursor like html MAP-AREA
-    // Use ONMOUSEMOVE callback in your script to show info
+    // Use ONMOUSEMOVE callback to show info
     //
     doMap: function(pts) {
       if (Number(new Date()) - this.m.tmap < 100) // not so quickly
@@ -401,9 +400,6 @@ function dbCarta(cfg) {
       }
       this.m.pmap = fkey;
     },
-    //
-    // Get snapshot or bg image for redraw
-    //
     doMapImg: function() {
       if (this.m.bgimg) {
         this.m.mimg = this.m.bgimg.img; // bg img from mflood
@@ -413,7 +409,7 @@ function dbCarta(cfg) {
       }
     },
     //
-    // Draw Sphere radii bounds
+    // Draw Sphere bounds by radius
     //
     paintBound: function() {
       var centerof = this.centerOf();

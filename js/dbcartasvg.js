@@ -2,7 +2,7 @@
 // HTML5 SVG vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2015. b210620.
+// egax@bk.ru, 2015. b220128.
 //
 var SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -59,13 +59,12 @@ function dbCartaSvg(cfg) {
   // add props
   extend(this, {
     // Public
-    root: root, // svg node
-    vp: vp, // g node (rotate, scale, translate)
-    extend: extend,
-    attr: attr,
-    append: append,
-    // Config
-    // cfg {
+    root: root,     // svg node (not transform)
+    vp: vp,         // g node (rotate, scale, translate)
+    extend: extend, // set new obj key/value
+    attr: attr,     // set DOM obj attribute
+    append: append, // add SVG figure (polygon, path, ...)
+    // Constructor config {
     //   pid: parent id
     //   width, height: map size
     //   draggable: move map by cursor
@@ -235,7 +234,7 @@ function dbCartaSvg(cfg) {
       this.m.pmap.i = 1; // set counter
     },
     //
-    // Append Sphere radii bounds
+    // Draw Sphere bounds by radius
     //
     paintBound: function() {
       var centerof = this.centerOf();
@@ -258,7 +257,7 @@ function dbCartaSvg(cfg) {
       }
     },
     //
-    // Append right bar with scale buttons
+    // Draw left/right bar with scale buttons
     //
     paintBar: function() {
       if (!this.cfg.sbar) return;
@@ -313,7 +312,7 @@ function dbCartaSvg(cfg) {
                (rect[1] + rect[3]) / 2.0 ];
     },
     //
-    // Map visible borders in degrees
+    // Return visible borders in degrees
     //
     viewsizeOf: function() {
       var rect = this.sizeOf();
@@ -437,6 +436,10 @@ function dbCartaSvg(cfg) {
       project = project || this.project;
       return (project == 202 || project == 203);
     },
+    //
+    // Convert COORDS degrees to points
+    // Use projection transform. DOTRANSFORM [0|1]
+    //
     toPoints: function(coords, dotransform) {
       var m = coords;
       if (dotransform && this.project != 0) {
@@ -449,7 +452,7 @@ function dbCartaSvg(cfg) {
       return pts;
     },
     //
-    // Convert points to degrees
+    // Convert PTS points to degrees
     // Use projection transform. DOTRANSFORM [0|1] and matrix transform. DONTSCALE [0|1]
     //
     fromPoints: function(pts, dotransform, dontscale) {
