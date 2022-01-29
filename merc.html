@@ -57,47 +57,66 @@ function init() {
     dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
     dw.loadCarta(dw.createMeridians());
     // draw countries
-    var cntrylist = {
-      'Brazil': [12,4],
-      'South Africa': [1,1],
-      'Spain': [0,5]
-    };
-    var route = [];
-    for(var cntryname in cntrylist) {
-      var npart = cntrylist[cntryname][0],
-          ncity = cntrylist[cntryname][1],
-          m = {};
-      for(var mpart in COUNTRIES[cntryname]) {
-        m.abbr = COUNTRIES[cntryname][mpart][0];
-        m.coords = COUNTRIES[cntryname][mpart][1];
-        m.centerof = COUNTRIES[cntryname][mpart][3];
-        dw.loadCarta([['Area', m.abbr + mpart, m.coords, (mpart==npart ? cntryname : ''), m.centerof]]);
-      };
-      // capitals
-      if (CITIES[cntryname]) {
-        m.cityname = CITIES[cntryname][ncity][0];
-        m.citycoords = CITIES[cntryname][ncity][1];
-        dw.loadCarta([['DotPort', m.cityname, m.citycoords, m.cityname, null, 1]]);
-        route.push(m.citycoords[0]);
-        // flags
-        var abbrf = m.abbr.replace(mpart, '').toLowerCase();
-        if (FLAGSB64[abbrf]) {
-          var im = new Image();
-          im.m = m;
-          im.src = FLAGSB64[abbrf];
-          im.onload = function() {
-            var m = this.m;
-            dw.loadCarta([{0:'.Image', 1:m.abbr, 2:[m.citycoords], 6:this}], 1);
+    var clist = [
+      {
+        'Cuba': [1,0],
+        'Mexico': [4,0],
+        'Ecuador': [0,1]
+      },
+      {
+        'Saudi Arabia': [1,0],
+        'Kenya': [0,3]
+      },
+      {
+        'Italy': [1,7],
+        'India': [5,12]
+      },
+      {
+        'Brazil': [12,4],
+        'South Africa': [1,1],
+        'Spain': [0,5]
+      }
+    ];
+    dw.extend(dw.mopt['Line'], {fg:'yellow'});
+    for(var ii=0; ii<clist.length; ii++) {
+      var cntrylist = clist[ii];
+      var route = [];
+      for(var cntryname in cntrylist) {
+        var npart = cntrylist[cntryname][0],
+            ncity = cntrylist[cntryname][1],
+            m = {};
+        for(var mpart in COUNTRIES[cntryname]) {
+          m.abbr = COUNTRIES[cntryname][mpart][0];
+          m.coords = COUNTRIES[cntryname][mpart][1];
+          m.centerof = COUNTRIES[cntryname][mpart][3];
+          dw.loadCarta([['Area', m.abbr + mpart, m.coords, (mpart==npart ? cntryname : ''), m.centerof]]);
+        };
+        // city
+        if (CITIES[cntryname]) {
+          m.cityname = CITIES[cntryname][ncity][0];
+          m.citycoords = CITIES[cntryname][ncity][1];
+          dw.loadCarta([['DotPort', m.cityname, m.citycoords, m.cityname, null, 1]]);
+          route.push(m.citycoords[0]);
+          // flags
+          var abbrf = m.abbr.replace(mpart, '').toLowerCase();
+          if (FLAGSB64[abbrf]) {
+            var im = new Image();
+            im.m = m;
+            im.src = FLAGSB64[abbrf];
+            im.onload = function() {
+              var m = this.m;
+              dw.loadCarta([{0:'.Image', 1:m.abbr, 2:[m.citycoords], 6:this}], 1);
+            }
           }
         }
       }
+      // concat
+      if (route) {
+        route.push(route[0]);
+        route.push(route[1]);
+      };
+      dw.loadCarta([['Line', 'route'+String(ii), route, null, null, 1]]);
     };
-    // concat
-    if (route) {
-      route.push(route[0]);
-      route.push(route[1]);
-    };
-    dw.loadCarta([['Line', 'route1', route, null, null, 1]]);
     delete COUNTRIES;
     delete CITIES;
     dw.draw();

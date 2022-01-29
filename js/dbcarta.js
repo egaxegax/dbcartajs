@@ -332,7 +332,7 @@ function dbCarta(cfg) {
       return m;
     },
     //
-    // Find obj under mouse cursor like html MAP-AREA
+    // Find obj under mouse cursor points PTS like html MAP-AREA
     // Use ONMOUSEMOVE callback to show info
     //
     doMap: function(pts) {

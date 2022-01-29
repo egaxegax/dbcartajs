@@ -200,7 +200,8 @@ function dbCartaSvg(cfg) {
       this.m.offset = [ offx, offy ];
     },
     //
-    // Select obj under mouse cursor like html MAP-AREA
+    // Select EV.TARGET obj under mouse cursor like html MAP-AREA
+    // with AT attributes
     //
     doMap: function(ev, at) {
       this.mousemove(ev[0] || ev);
