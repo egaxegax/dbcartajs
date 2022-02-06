@@ -204,11 +204,11 @@ function draw(){
     s5_1: station({fg: mopt['r5'].fg, anchor: ['end', 'middle']})
   });
   MLINES.map(function(line){
-    var ftype = line[0], abbr = line[1], coords = line[2], label = line[3], cnt = line[4];
+    var ftype = line[0], abbr = line[1], coords = line[2];
     var pts = DC.interpolateCoords(coords, true),
         path = ('M ' + pts).replace(/,/g, ' ');
     DC.append('path', {
-      class: [i, ftype, abbr].join(),
+      id: ftype + '_' + abbr,
       fill: mopt[ftype].bg || 'none', stroke: mopt[ftype].fg,
       'stroke-dasharray': mopt[ftype].dash,
       'stroke-linejoin': mopt[ftype].join,
@@ -260,7 +260,7 @@ function draw(){
         var pref = ['', '_ext'], suf = ['', '_1', '_2'];
         for(var i=0; i<pref.length; i++){
           for(var ii=0; ii<suf.length; ii++) {
-            var line = document.getElementById('r'+rtype+pref[i]+'_'+'r'+rtype+suf[ii]);
+            var line = document.getElementById('r'+rtype+pref[i]+suf[ii]);
             if(line){
               lns.push( {target: line} );
               lnsattr.push( {'stroke-width': 12} );
@@ -316,12 +316,13 @@ function draw(){
     }
     text.appendChild(document.createTextNode(t));    
   });
-  DC.scaleCarta(1.1);
+//  DC.scaleCarta(1.1);
 }
   //
 function calcRoutes(fromid, toid){
   var inches = [];
   inches = inches.concat(makecrds(MLINES.filter(function(a){ return a[0]=='inch'; })));
+//  console.log(inches);
   BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
     if(i < sts.length-1){
       var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;

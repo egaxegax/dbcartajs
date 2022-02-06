@@ -182,10 +182,10 @@ function init(){
     yauza_t:   river({rotate: 45, anchor: ['start', 'top']}),
     t:         rail(),
     t_d:       rail_d(),
-    rd1:       rail({fg: '#fa842f'}),
-    rd1_d:     rail_d(),
-    rd2:       rail({fg: '#29c0d3'}),
-    rd2_d:     rail_d(),
+    rmcd1:     rail({fg: '#fa842f'}),
+    rmcd1_d:   rail_d(),
+    rmcd2:     rail({fg: '#29c0d3'}),
+    rmcd2_d:   rail_d(),
     svo_t:     label({anchor: ['end', 'middle']}),
     svo_d_t:   label({anchor: ['end', 'top']}),
     vko_t:     label({anchor: ['start', 'middle']}),
@@ -319,9 +319,9 @@ function init(){
     s16:       station({fg: dw.mopt['r16'].fg, anchor: ['start', 'middle']}),
     s16_1:     inst({fg: dw.mopt['r16'].fg, anchor: ['start', 'top']}),
     s16_2:     inst_d({fg: dw.mopt['r16'].fg, anchor: ['start', 'top']}),
-    sd1:       st_mcd({fg: dw.mopt['rd1'].fg, anchor: ['start', 'middle']}),
-    sd2:       st_mcd({fg: dw.mopt['rd2'].fg, anchor: ['start', 'middle']}),
-    sd2_1:     inst_mcd({fg: dw.mopt['rd2'].fg})
+    smcd1:     st_mcd({fg: dw.mopt['rmcd1'].fg, anchor: ['start', 'middle']}),
+    smcd2:     st_mcd({fg: dw.mopt['rmcd2'].fg, anchor: ['start', 'middle']}),
+    smcd2_1:   inst_mcd({fg: dw.mopt['rmcd2'].fg})
   });
    // add lines dashed
   MLINES.map(function(a){

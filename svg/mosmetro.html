@@ -18,8 +18,7 @@
 <table><tr><td id="mcont">
 <select id="chinches" onchange="selectCh(this)" style="position:fixed; top:30px; right:10px">
 <option disabled selected>Пересадки...</option>
-<option id="inch_r">&#9745; Ветки</option>
-<option id="inch_r5">&#9745; Кольцевые</option>
+<option id="inch">&#9745; Метро</option>
 <option id="inch_mn">&emsp; Монорельс</option>
 <option id="inch_mck">&emsp; МЦК</option>
 <option id="inch_mcd">&emsp; МЦД</option>
@@ -106,10 +105,10 @@ function draw() {
     yauza_t:   river({rotate: 45, anchor: ['start', 'top']}),
     t:         rail(),
     t_d:       rail_d(),
-    rd1:       rail({fg: '#fa842f'}),
-    rd1_d:     rail_d(),
-    rd2:       rail({fg: '#29c0d3'}),
-    rd2_d:     rail_d(),
+    rmcd1:     rail({fg: '#fa842f'}),
+    rmcd1_d:   rail_d(),
+    rmcd2:     rail({fg: '#29c0d3'}),
+    rmcd2_d:   rail_d(),
     svo_t:     label({anchor: ['end', 'middle']}),
     svo_d_t:   label({anchor: ['end', 'top']}),
     vko_t:     label({anchor: ['start', 'middle']}),
@@ -238,9 +237,9 @@ function draw() {
     s16:       station({fg: mopt['r16'].fg, anchor: ['start', 'middle']}),
     s16_1:     inst({fg: mopt['r16'].fg, anchor: ['start', 'top']}),
     s16_2:     inst_d({fg: mopt['r16'].fg, anchor: ['start', 'top']}),
-    sd1:       st_mcd({fg: mopt['rd1'].fg, anchor: ['start', 'middle']}),
-    sd2:       st_mcd({fg: mopt['rd2'].fg, anchor: ['start', 'middle']}),
-    sd2_1:     inst_mcd({fg: mopt['rd2'].fg})
+    smcd1:     st_mcd({fg: mopt['rmcd1'].fg, anchor: ['start', 'middle']}),
+    smcd2:     st_mcd({fg: mopt['rmcd2'].fg, anchor: ['start', 'middle']}),
+    smcd2_1:   inst_mcd({fg: mopt['rmcd2'].fg})
   });
     //
   MLINES.map(function(line){
@@ -372,29 +371,12 @@ function draw() {
   //
 function calcRoutes(fromid, toid){
   var inches= [];
-  for(var i=0; i<document.getElementById('chinches').options.length; i++){
-    var o = document.getElementById('chinches').options[i];
+  [].slice.call(document.getElementById('chinches').options).map(function(o){
     if(o.innerHTML.indexOf('\u2611')>-1){
-      if(o.id == 'inch_r5'){      // interchanges radial
-        inches = inches.concat(makecrds(MLINES.filter(
-          function(a){ return a[0]=='inch'; })).filter(
-            function(b){ return b.filter( 
-              function(c){ return makecrds(MSTATIONS.filter(
-                function(d){ return maketip(d)=='s5'; } )).filter(
-                  function(e){ return e.indexOf(String(c))>-1; }).length; }).length; }));
-      }else if(o.id == 'inch_r'){ // interchanges not radial
-        inches = inches.concat(makecrds(MLINES.filter(
-          function(a){ return a[0]=='inch'; })).filter(
-            function(b){ return b.filter(
-              function(c){ return makecrds(MSTATIONS.filter(
-                function(d){ return maketip(d)=='s5'; })).filter(
-                  function(e){ return e.indexOf(String(c))>-1; }).length; }).length==0; }));
-      }else{
-        inches = inches.concat(makecrds(MLINES.filter(function(a){ return a[0]==o.id; })));
-      }
+      inches = inches.concat(makecrds(MLINES.filter(function(a){ return a[0]==o.id; })));
     }
-  }
-//  console.log(inches.length);
+  });
+//  console.log(inches);
   BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
 //    console.log(st);
     if(i < sts.length-1){
