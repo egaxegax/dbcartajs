@@ -172,7 +172,7 @@ function draw(){
       river = function(o){ return route(DC.extend({fg: "#daebf4", join: 'round', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})) },
       inch = function(o){ return route(DC.extend({fg: '#ddd', join: 'round', cap: 'round'}, o||{})) },
       station = function(o){ return DC.extend({bg: 'white', size: 4, width: 2, labelscale: 1}, o||{}) };
-   // lines
+    // lines
   DC.extend(mopt, {
     neva_river1: river({width: 20, rotate: -43}),
     neva_river2: river({width: 25, rotate: 0}),
@@ -183,11 +183,11 @@ function draw(){
     r4: route({fg: '#ffcB31'}),
     r5: route({fg: '#ed1b35'})
   });
-   // inchs
+    // inchs
   DC.extend(mopt, {
     inch: inch()
   });
-   // stations
+    // stations
   DC.extend(mopt, {
     s1: station({fg: mopt['r1'].fg, anchor: ['end', 'middle']}),
     s1_1: station({fg: mopt['r1'].fg, anchor: ['start', 'top']}),
@@ -316,7 +316,11 @@ function draw(){
     }
     text.appendChild(document.createTextNode(t));    
   });
-//  DC.scaleCarta(1.1);
+   //
+  var ys = 180,    // needed height of map in degrees
+      mpts = DC.viewsizeOf(), // visible size of map in degrees 
+      scaley = (mpts[1]-mpts[3])/ys;
+  DC.scaleCarta(scaley);
 }
   //
 function calcRoutes(fromid, toid){

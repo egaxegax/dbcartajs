@@ -367,6 +367,12 @@ function draw() {
     }
     text.appendChild(document.createTextNode(t));    
   });
+    //
+  var xs = 400, ys = 220,     // need width, height of map in degrees
+      mpts = DC.viewsizeOf(), // visible size of map in degrees 
+      scalex = (mpts[2]-mpts[0])/xs,
+      scaley = (mpts[1]-mpts[3])/ys;
+  DC.scaleCarta(scalex);
 };
   //
 function calcRoutes(fromid, toid){
@@ -426,7 +432,6 @@ var DC = new dbCartaSvg({
   bg: 'rgb(250,255,250)',
   scalebg: 'rgba(100,100,100,0.1)'
 });
-DC.scaleCarta(0.8);
   // events
 //DC.extend(DC.root, {
 //  ondblclick: function(){ DC.savetoimage(); }
