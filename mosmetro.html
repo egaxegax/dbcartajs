@@ -113,12 +113,12 @@ function init(){
   });
   dw.style.backgroundColor = 'rgb(250,255,250)';
    // define new layers
-  function route(o)    { return dw.extend({cls: 'Line', width: 6, anchor: ['start', 'middle'], labelscale: 1}, o||{}); };
+  function route(o)    { return dw.extend({cls: 'Line', width: 6, join: 'round', anchor: ['start', 'middle'], labelscale: 1}, o||{}); };
   function route_ext(o){ return route(dw.extend({width: 4, dash: [2,4]}, o||{})); };
-  function inch(o)     { return route(dw.extend({fg: '#ccc', join: 'round', cap: 'round', width: 8}, o||{})); };
+  function inch(o)     { return route(dw.extend({fg: '#ccc', cap: 'round', width: 8}, o||{})); };
   function inch_d(o)   { return inch(dw.extend({fg: '#fff', width: 5}, o||{})); };
   function inch_ext(o) { return inch(dw.extend({width: 4, dash: [4,2]}, o||{})); };
-  function river(o)    { return route(dw.extend({fg: '#daebf4', join: 'round', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})); };
+  function river(o)    { return route(dw.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})); };
   function rail(o)     { return route(dw.extend({fg: '#ddd', width: 2, labelscale: 0}, o||{})); };
   function rail_d(o)   { return rail(dw.extend({fg: '#fff', dash: [10,10]}, o||{})); };
   function label(o)    { return dw.extend({cls: 'Polygon', labelcolor:'#aaa', labelscale: 1, anchor: ['start', 'top']}, o||{}); };

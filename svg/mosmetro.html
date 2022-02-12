@@ -38,10 +38,10 @@ function draw() {
   var mopt = {};
   function route(o)    { return DC.extend({class: 'route', bg: 'none', join: 'round', width: 8, anchor: ['start', 'middle']}, o||{}); };
   function route_ext(o){ return route(DC.extend({width: 5, dash: [6,4]}, o||{})); };
-  function inch(o)     { return route(DC.extend({fg: '#ccc', join: 'round', cap: 'round', width: 12}, o||{})); };
+  function inch(o)     { return route(DC.extend({fg: '#ccc', cap: 'round', width: 12}, o||{})); };
   function inch_d(o)   { return inch(DC.extend({fg: '#fff', width: 8}, o||{})); };
   function inch_ext(o) { return inch(DC.extend({width: 12, fg:'white'}, o||{})); };
-  function river(o)    { return route(DC.extend({fg: '#daebf4', join: 'round', cap: 'round', labelcolor: '#5555ff'}, o||{})); };
+  function river(o)    { return route(DC.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff'}, o||{})); };
   function rail(o)     { return route(DC.extend({width: 2, fg: '#ccc'}, o||{})); };
   function rail_d(o)   { return rail(DC.extend({fg: '#fff', dash: [10,10]}, o||{})); };
   function label(o)    { return DC.extend({labelcolor: '#aaa', anchor: ['start', 'top']}, o||{}); };
