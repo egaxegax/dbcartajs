@@ -134,8 +134,9 @@ function init() {
   var im = new Image();
   im.src = imgurls[0]; // default img
   im.onload = function() {
-    var ratio = im.width/im.height;
-    dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-90*ratio,90],[90*ratio,-90]], 6:this}]);
+    var ratio = im.width/im.height,
+        vs = dw.viewsizeOf();  // map sizes degrees
+    dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-vs[1]*ratio,vs[1]],[-vs[3]*ratio,vs[3]]], 6:this}]);
     dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
     // clear setka
     for (var tag in dw.mflood){

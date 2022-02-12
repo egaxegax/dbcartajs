@@ -51,7 +51,7 @@ function init(){
     '/foto/Природа/Большой мухомор.JPG',
     '/foto/Природа/Цветочек синенький.JPG'
   ];
-  
+
   // fill list
   for(var k in imgurls) {
     var el2 = document.createElement('img');
@@ -78,8 +78,9 @@ function init(){
     for(var i=0; i<childs.length; i++)
       DC.vp.removeChild(childs[i]);
     childs = [];
-    var ratio = this.width/this.height;
-    var crds = [[-90*ratio,90],[90*ratio,-90]],
+    var ratio = this.width/this.height,
+        vs = DC.viewsizeOf();  // map sizes degrees
+    var crds = [[-vs[1]*ratio,vs[1]],[-vs[3]*ratio,vs[3]]],
         pts = [DC.toPoints(crds[1]), DC.toPoints(crds[0])];
     var img = DC.append('image', {
       width:  pts[0][0]-pts[1][0],
