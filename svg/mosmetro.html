@@ -312,10 +312,6 @@ function draw() {
         }
       },
       onmousemove: function(ev){
-        var scale = 2,
-            ratio = scale/(scale-1);
-        var cx = this.getAttribute('cx')/ratio,
-            cy = this.getAttribute('cy')/ratio;
          // find text by id
         var text = document.getElementById('t'+this.getAttribute('id'));
         var ts = [], tsattr =[];
@@ -323,10 +319,8 @@ function draw() {
           ts.push( {target: text} );
           tsattr.push( {'font-size': DC.root.getAttribute('width')/80} );
         }
-        DC.doMap([ev].concat(ts), [{ // highlight station(ev) + label
-            transform: 'scale(' + scale + ') translate(' + -cx + ',' + -cy + ')'
-          }].concat(tsattr)
-        );
+         // highlight station(ev) + label
+        DC.doMap([ev].concat(ts), [{r: 8}].concat(tsattr));
       }
     });
     if(!label) return;
