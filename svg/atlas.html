@@ -139,6 +139,8 @@ function TransferCoords(){
   });
 }
 
+var h = document.getElementById('mcont').offsetHeight;
+
 var mcont = document.getElementById('mcont');
 var el = document.createElement('input');
 mcont.appendChild(el);
@@ -147,7 +149,7 @@ el.name = '203';
 el.value = 'ortho';
 el.style.backgroundColor = 'gold';
 el.style.position = 'fixed';
-el.style.top = '30%';
+el.style.top = h/6+'px';
 el.style.right = '1%';
 el.onclick = draw;
 
@@ -158,7 +160,7 @@ el.name = '101';
 el.value = 'merc';
 el.style.backgroundColor = 'gold';
 el.style.position = 'fixed';
-el.style.top = '38%';
+el.style.top = h/6 + h/12 +'px';
 el.style.right = '1%';
 el.onclick = draw;
 
@@ -169,7 +171,7 @@ el.name = '102';
 el.value = 'miller';
 el.style.backgroundColor = 'gold';
 el.style.position = 'fixed';
-el.style.top = '46%';
+el.style.top = h/6 + 2*h/12+'px';
 el.style.right = '1%';
 el.onclick = draw;
 
@@ -180,7 +182,7 @@ el.name = '0';
 el.value = 'lonlat';
 el.style.backgroundColor = 'gold';
 el.style.position = 'fixed';
-el.style.top = '54%';
+el.style.top = h/6 + 3*h/12+'px';
 el.style.right = '1%';
 el.onclick = draw;
 
@@ -191,7 +193,7 @@ el.name = '204';
 el.value = 'moll';
 el.style.backgroundColor = 'gold';
 el.style.position = 'fixed';
-el.style.top = '62%';
+el.style.top = h/6 + 4*h/12+'px';
 el.style.right = '1%';
 el.onclick = draw;
 
@@ -202,7 +204,7 @@ el.name = 'lonlat';
 el.value = 'perspective';
 el.style.backgroundColor = 'lightblue';
 el.style.position = 'fixed';
-el.style.top = '70%';
+el.style.top = h/6 + 5*h/12+'px';
 el.style.right = '1%';
 el.onclick = TransferCoords;
 
