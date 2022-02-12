@@ -367,7 +367,7 @@ function calcRoute(fromid, toid){
       var pts = DC.interpolateCoords(cc, true),
           path = ('M ' + pts).replace(/,/g, ' ');
       DC.extend( 
-        DC.append('path', { class: 'selpath', onclick: clearRoute, d: path, stroke: ost.getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-width': 12}),
+        DC.append('path', { class: 'selpath', d: path, stroke: ost.getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-width': 12}),
           { onclick: clearRoute });
     }
     sels.push(ost);
