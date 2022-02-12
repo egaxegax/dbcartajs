@@ -36,7 +36,7 @@ function selectCh(sel){
 }
 function draw() {
   var mopt = {};
-  function route(o)    { return DC.extend({class: 'route', join: 'round', width: 8, anchor: ['start', 'middle']}, o||{}); };
+  function route(o)    { return DC.extend({class: 'route', bg: 'none', join: 'round', width: 8, anchor: ['start', 'middle']}, o||{}); };
   function route_ext(o){ return route(DC.extend({width: 5, dash: [6,4]}, o||{})); };
   function inch(o)     { return route(DC.extend({fg: '#ccc', join: 'round', cap: 'round', width: 12}, o||{})); };
   function inch_d(o)   { return inch(DC.extend({fg: '#fff', width: 8}, o||{})); };
@@ -246,25 +246,45 @@ function draw() {
     var ftype = line[0], abbr = line[1], coords = line[2];
     var pts = DC.interpolateCoords(coords, true),
         path = ('M ' + pts).replace(/,/g, ' ');
-    DC.append('path', {
-      id: ftype + '_' + abbr, class: mopt[ftype].class,
-      fill: mopt[ftype].bg || 'none', stroke: mopt[ftype].fg,
+    var route = DC.append('path', {
+      id: ftype + '_' + abbr, d: path,
+      class: mopt[ftype].class, mclass: ftype,
+      fill: mopt[ftype].bg, stroke: mopt[ftype].fg,
       'stroke-dasharray': mopt[ftype].dash,
       'stroke-linejoin': mopt[ftype].join,
       'stroke-linecap': mopt[ftype].cap,
-      'stroke-width': mopt[ftype].width, d: path
+      'stroke-width': mopt[ftype].width
     });
      // interchange double line
     if(mopt[ftype +'_d']){
       DC.append('path', {
-        class: mopt[ftype + '_d'].class,
+        id: ftype + '_' + abbr + '_d', d: path,
+        class: mopt[ftype + '_d'].class, mclass: ftype,
         fill: 'none', stroke: mopt[ftype +'_d'].fg,
         'stroke-dasharray': mopt[ftype +'_d'].dash,
         'stroke-linejoin': mopt[ftype +'_d'].join,
         'stroke-linecap': mopt[ftype +'_d'].cap,
-        'stroke-width': mopt[ftype +'_d'].width, d: path
+        'stroke-width': mopt[ftype +'_d'].width
       });
-    }    
+    }
+    DC.extend(route, {
+      onmousemove: function(ev){
+         // find lines by type
+        var rtype = this.getAttribute('mclass').slice(1);
+        var lns = [], lnsattr =[];
+        var pref = ['', '_ext'], suf = ['', '_1', '_2'];
+        for(var i=0; i<pref.length; i++){
+          for(var ii=0; ii<suf.length; ii++) {
+            var line = document.getElementById('r'+rtype+pref[i]+'_'+'r'+rtype+suf[ii]);
+            if(line){ // highlight line
+              lns.push( {target: line} );
+              lnsattr.push( {'stroke-width': 12} );
+            }
+          }
+        }
+        DC.doMap(lns, lnsattr);
+      }
+    });
   });
     //
   MSTATIONS.map(function(station){
@@ -292,8 +312,8 @@ function draw() {
         }
       },
       onmousemove: function(ev){
-        var scale = 2;
-        var ratio = scale/(scale-1);
+        var scale = 2,
+            ratio = scale/(scale-1);
         var cx = this.getAttribute('cx')/ratio,
             cy = this.getAttribute('cy')/ratio;
          // find text by id
@@ -303,22 +323,9 @@ function draw() {
           ts.push( {target: text} );
           tsattr.push( {'font-size': DC.root.getAttribute('width')/80} );
         }
-         // find lines by type
-        var rtype = this.getAttribute('mclass').split('_')[0].slice(1);
-        var lns = [], lnsattr =[];
-        var pref = ['', '_ext'], suf = ['', '_1', '_2'];
-        for(var i=0; i<pref.length; i++){
-          for(var ii=0; ii<suf.length; ii++) {
-            var line = document.getElementById('r'+rtype+pref[i]+'_'+'r'+rtype+suf[ii]);
-            if(line){
-              lns.push( {target: line} );
-              lnsattr.push( {'stroke-width': 12} );
-            }
-          }
-        }
-        DC.doMap([ev].concat(lns).concat(ts), [{ // highlight station + label + lines
+        DC.doMap([ev].concat(ts), [{ // highlight station(ev) + label
             transform: 'scale(' + scale + ') translate(' + -cx + ',' + -cy + ')'
-          }].concat(lnsattr).concat(tsattr)
+          }].concat(tsattr)
         );
       }
     });
