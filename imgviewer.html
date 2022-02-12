@@ -1,6 +1,6 @@
 <!--
  Image Canvas viewer.
- egax@bk.ru, 2015.
+ egax@bk.ru, 2015-22.
 -->
 <!DOCTYPE html>
 <html>
@@ -117,8 +117,6 @@ function init() {
     el2.style.display = 'block';
     el2.width = 100;
     el2.src = imgurls[k];
-    if (imgurls[k].search('ggpht.com')==0)
-      el2.src += '=s320'; // google image size change for appspot.com
     el2.onclick = function(){
       im.src = this.src;
     };

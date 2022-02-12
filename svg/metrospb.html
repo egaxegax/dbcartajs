@@ -168,10 +168,10 @@ var MLABELS=[
   // 
 function draw(){
   var mopt = {}; // define new layers
-  var route = function(o){ return DC.extend({ width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
-      river = function(o){ return route(DC.extend({fg: "#daebf4", join: 'round', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})) },
+  var route = function(o){ return DC.extend({class: 'route', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
+      river = function(o){ return route(DC.extend({fg: '#daebf4', join: 'round', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})) },
       inch = function(o){ return route(DC.extend({fg: '#ddd', join: 'round', cap: 'round'}, o||{})) },
-      station = function(o){ return DC.extend({bg: 'white', size: 4, width: 2, labelscale: 1}, o||{}) };
+      station = function(o){ return DC.extend({class: 'station', bg: 'white', size: 4, width: 2, labelscale: 1}, o||{}) };
     // lines
   DC.extend(mopt, {
     neva_river1: river({width: 20, rotate: -43}),
@@ -208,7 +208,7 @@ function draw(){
     var pts = DC.interpolateCoords(coords, true),
         path = ('M ' + pts).replace(/,/g, ' ');
     DC.append('path', {
-      id: ftype + '_' + abbr,
+      id: ftype + '_' + abbr, class: mopt[ftype].class,
       fill: mopt[ftype].bg || 'none', stroke: mopt[ftype].fg,
       'stroke-dasharray': mopt[ftype].dash,
       'stroke-linejoin': mopt[ftype].join,
@@ -221,25 +221,23 @@ function draw(){
         stype = 's' + ftype.slice(1); // station type in mopt
     var pts = DC.toPoints(coords, true);
     var station = DC.append('circle', {
-      id: ftype +'_'+ abbr, mclass: stype,
+      id: ftype +'_'+ abbr, class: mopt[ftype].class, mclass: stype,
       fill: mopt[stype].bg, stroke: mopt[stype].fg, 'stroke-width': mopt[stype].width, 
       cx: pts[0], cy: pts[1], r: mopt[stype].size
     });
     DC.extend(station, {
       onclick: function(ev){
         var sel;
-        if(DC.root.querySelectorAll('.selected').length > 2){
+        if(DC.root.querySelectorAll('.selected').length > 1){
           while((sel = DC.root.querySelectorAll('.selected')).length){
-            while (sel[0].firstChild) sel[0].removeChild(sel[0].firstChild); // remove animate
-            DC.attr(sel[0], {class: '_', fill: mopt[sel[0].getAttribute('mclass')].bg, r: mopt[sel[0].getAttribute('mclass')].size, 'stroke-width': 1});
+            var m = sel[0].getAttribute('mclass');
+            DC.attr(sel[0], {class: mopt[m].class, fill: mopt[m].bg, r: mopt[m].size});
           }
-          while((sel = DC.root.querySelectorAll('.selpath')).length){
-            DC.vp.removeChild(sel[0]);
-          }
+          clearRoute();
         }
-        DC.attr(ev.target, {class: 'selected', fill: 'gold', r:6, 'stroke-width': 2});
+        DC.attr(ev.target, {class: 'selected', fill: 'gold', r: 6});
         if((sel = DC.root.querySelectorAll('.selected')).length == 2){
-          calcRoutes(sel[0].getAttribute('id'), sel[1].getAttribute('id'));
+          calcRoute(sel[0].getAttribute('id'), sel[1].getAttribute('id'));
         }
       },
       onmousemove: function(ev){
@@ -323,11 +321,23 @@ function draw(){
   DC.scaleCarta(scaley);
 }
   //
-function calcRoutes(fromid, toid){
+function clearRoute(){
+  var sel;
+  while((sel = DC.root.querySelectorAll('.selpath')).length){
+    DC.vp.removeChild(sel[0]);
+  }
+  [].slice.call(DC.root.querySelectorAll('.route, .station')).map(function(o){
+    DC.attr(o, {opacity: '1'});
+  });
+}
+  //
+function calcRoute(fromid, toid){
   var inches = [];
   inches = inches.concat(makecrds(MLINES.filter(function(a){ return a[0]=='inch'; })));
-//  console.log(inches);
+    //
+  var sels= [];
   BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
+    var ost = DC.root.getElementById(makeid(sts[i]));
     if(i < sts.length-1){
       var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;
       MLINES.map(function(b){
@@ -356,15 +366,22 @@ function calcRoutes(fromid, toid){
       }
       var pts = DC.interpolateCoords(cc, true),
           path = ('M ' + pts).replace(/,/g, ' ');
-      DC.append('path', { class: 'selpath', d: path, stroke:'black', fill: 'none', 'stroke-linecap': 'round', 'stroke-width': 1 });
-      DC.append(
-        DC.append('path', { class: 'selpath', d: path, stroke:'white', fill: 'none', 'stroke-dasharray': [4,8], 'stroke-linecap': 'round', 'stroke-width': 4 }),
-          'animate', { attributeName: 'stroke-width', values: '1;4;1', dur: '1s', repeatCount: 'indefinite' });
+      DC.extend( 
+        DC.append('path', { class: 'selpath', onclick: clearRoute, d: path, stroke: ost.getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-width': 12}),
+          { onclick: clearRoute });
     }
-    DC.append(
-      DC.attr(DC.root.getElementById(makeid(sts[i])), { class: 'selected', 'stroke-width': 4, r: 8, transform: 'scale(1)' }),
-        'animate', { attributeName: 'r', values: '4;8;4', dur: '1s', repeatCount: 'indefinite' });
+    sels.push(ost);
   });
+  if(sels.length){
+    [].slice.call(DC.root.querySelectorAll('.route, .station')).map(function(o){ // opacity map
+      DC.attr(o, {opacity: '0.3'});
+    });
+    sels.map(function(st){ // stations above route
+      DC.extend(
+        DC.append('circle', {class: 'selpath', stroke: st.getAttribute('stroke'), cx: st.getAttribute('cx'), cy: st.getAttribute('cy'), fill:'white', 'stroke-width': 2, r: 6}),
+          { onclick: clearRoute });
+    });
+  }
 }
   //
 var DC = new dbCartaSvg({

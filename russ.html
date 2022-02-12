@@ -11,7 +11,7 @@
 <script src="/static/js/metrics.js"></script>
 </head>
 <body>
-<div id="cont-russ"></div>
+<table><tr><td id="mcont"></td></tr></table>
 <script>
 function draw(){
   // трассы под белыми кругами
@@ -361,9 +361,10 @@ function draw(){
   ];
   // --------------------------------------
   var dw = new dbCarta({
-    id: 'cont-russ',
+    id: 'mcont',
     viewportx: 220,
     viewporty: 220,
+    height: document.getElementById('mcont').offsetHeight,
     scalebg: 'rgba(100,200,100,0.2)'
   });
   dw.style.backgroundColor = 'white';
