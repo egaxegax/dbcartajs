@@ -2,7 +2,7 @@
 // HTML5 SVG vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2015. b220128.
+// egax@bk.ru, 2015. b220213.
 //
 var SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -194,10 +194,12 @@ function dbCartaSvg(cfg) {
           offy = pts[1]/scale - (this.m.mpts ? this.m.mpts[1] : 0);
       var fx = offx + cx,
           fy = offy + cy;
-      attr(vp, {
-        transform: 'rotate(' + this.m.rotate + ' ' + centerof[0] + ' ' + centerof[1] + ') scale(' + scale + ') translate(' + fx + ',' + fy + ')'
-      });
-      this.m.offset = [ offx, offy ];
+      if(this.chkPts([offx, offy])) {
+        attr(vp, {
+          transform: 'rotate(' + this.m.rotate + ' ' + centerof[0] + ' ' + centerof[1] + ') scale(' + scale + ') translate(' + fx + ',' + fy + ')'
+        });
+        this.m.offset = [ offx, offy ];
+      }
     },
     //
     // Select EV.TARGET obj under mouse cursor like html MAP-AREA
