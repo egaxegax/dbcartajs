@@ -329,7 +329,7 @@ function init(){
       MLINES_D.push( [a[0]+'_d'].concat(a.slice(1)) );
     }
   });
-   // add stations  under construction (u prefix)
+   // add stations under construction (u prefix)
   for(var skey in dw.mopt){
     if(skey.search(/s\d+/)>-1){
       dw.mopt['u'+skey.slice(1)] = dw.mopt[skey];

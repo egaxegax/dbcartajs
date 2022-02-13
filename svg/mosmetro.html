@@ -388,7 +388,7 @@ function clearRoute(){
 function calcRoute(fromid, toid){
   var inches= [];
   [].slice.call(document.getElementById('chinches').options).map(function(o){
-    if(o.innerHTML.indexOf('\u2611')>-1){
+    if(o.innerHTML.indexOf('\u2611')>-1){ // checked
       inches = inches.concat(makecrds(MLINES.filter(function(a){ return a[0]==o.id; })));
     }
   });
