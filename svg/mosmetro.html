@@ -16,7 +16,7 @@
 </head>
 <body>
 <table><tr><td id="mcont">
-<select id="chinches" onchange="selectCh(this)" style="position:fixed; top:30px; right:10px">
+<select id="chinches" onchange="selectCh(this)" style="position:fixed; top:30px; right:30px">
 <option disabled selected>Пересадки...</option>
 <option id="inch">&#9745; Метро</option>
 <option id="inch_mn">&emsp; Монорельс</option>
@@ -238,6 +238,7 @@ function draw() {
     s16_1:     inst({fg: mopt['r16'].fg, anchor: ['start', 'top']}),
     s16_2:     inst_d({fg: mopt['r16'].fg, anchor: ['start', 'top']}),
     smcd1:     st_mcd({fg: mopt['rmcd1'].fg, anchor: ['start', 'middle']}),
+    smcd1_1:   inst_mcd({fg: mopt['rmcd1'].fg}),
     smcd2:     st_mcd({fg: mopt['rmcd2'].fg, anchor: ['start', 'middle']}),
     smcd2_1:   inst_mcd({fg: mopt['rmcd2'].fg})
   });
