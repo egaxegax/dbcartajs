@@ -2,7 +2,7 @@
 // HTML5 Canvas vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013. b220128.
+// egax@bk.ru, 2013. b220219.
 //
 function dbCarta(cfg) {
   cfg = cfg||{};
@@ -511,7 +511,7 @@ function dbCarta(cfg) {
     },
     //
     // Draw obj with POINTS, FTYPE (see mflood) and centre with FTEXT in CENTEROFPTS (see paintCarta)
-    // Check points if bezierCurve as "[[1,1,'Q'],[1,2,'Q'],[2,3,'Q'],...]"
+    // Check points if bezierCurve as "[[1,1,'Q'],[1,2,''],[2,3,'L'],...]"
     //
     paintCartaPts: function(pts, ftype, ftext, centerofpts) {
       if (!(ftype in this.mopt))
@@ -538,18 +538,18 @@ function dbCarta(cfg) {
           if (this.chkPts(pts[i])){
             this.ctx.beginPath();
             this.ctx.arc(pts[i][0], pts[i][1], msize, 0, Math.PI*2, 0);
-            this.ctx.strokeStyle = m['fg'];
+            this.ctx.strokeStyle = m['fg'] || 'transparent';
             this.ctx.stroke();
-            this.ctx.fillStyle = m['bg'] || m['fg'];
+            this.ctx.fillStyle = m['bg'] || m['fg'] || 'transparent';
             this.ctx.fill();
           }
       } else if (m['cls'] == 'Rect') {
         centerofpts = pts;
         if (this.chkPts(pts[0])){
           this.ctx.rect(pts[0][0] - msize/2.0, pts[0][1] - msize/2.0, msize, msize);
-          this.ctx.strokeStyle = m['fg'];
+          this.ctx.strokeStyle = m['fg'] || 'transparent';
           this.ctx.stroke();
-          this.ctx.fillStyle = m['bg'] || m['fg'];
+          this.ctx.fillStyle = m['bg'] || m['fg'] || 'transparent';
           this.ctx.fill();
         }
       } else {
@@ -567,10 +567,10 @@ function dbCarta(cfg) {
         }
         if (m['cls'] == 'Polygon') {
           this.ctx.closePath();
-          this.ctx.fillStyle = m['bg'];
+          this.ctx.fillStyle = m['bg'] || 'transparent';
           this.ctx.fill();
         }
-        this.ctx.strokeStyle = m['fg'];
+        this.ctx.strokeStyle = m['fg'] || 'transparent';
         this.ctx.stroke();
       }
       if (ftext) {
