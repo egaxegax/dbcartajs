@@ -1221,13 +1221,13 @@ function initMap() {
   function setAutoTime() {
     if (window.autotime) {
       window.autotime = window.clearInterval(window.autotime);
-      document.getElementById('btauto').textContent = '▶';
+      document.getElementById('btauto').textContent = '\u25B6';
     } else {
       window.autotime = setInterval(function() {
         setSelTime(500*500);
         update();
       }, 50);
-      document.getElementById('btauto').textContent = '◼';
+      document.getElementById('btauto').textContent = '\u23F8';
     }
   }
 
@@ -1589,9 +1589,11 @@ function initMap() {
   var layerlist = el = document.createElement('select');
   el.id = 'layerlist';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var satlist = el = document.createElement('select');
   el.id = 'satlist';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var projlist = el = document.createElement('select');
   el.id = 'projlist';
   col.appendChild(el);
@@ -1602,9 +1604,11 @@ function initMap() {
   var yy = el = document.createElement('select');
   yy.id = 'yy';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var mm = el = document.createElement('select');
   mm.id = 'mm';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var dd = el = document.createElement('select');
   dd.id = 'dd';
   col.appendChild(el);
@@ -1615,9 +1619,11 @@ function initMap() {
   var hh = el = document.createElement('select');
   hh.id = 'hh';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var mi = el = document.createElement('select');
   mi.id = 'mi';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var ss = el = document.createElement('select');
   ss.id = 'ss';
   col.appendChild(el);
@@ -1630,7 +1636,7 @@ function initMap() {
   col.appendChild(el);
   el.onclick = setAutoTime;
   el.title = 'Обновлять по таймеру';
-  el.appendChild(document.createTextNode('▶'));
+  el.appendChild(document.createTextNode('\u25B6'));
   col.appendChild(el);
   row.appendChild(col);
 

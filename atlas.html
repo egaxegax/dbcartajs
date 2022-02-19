@@ -135,17 +135,19 @@ function init() {
   el.id = 'tvalue';
   el.value= '1';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var el = document.createElement('button');
   el.title = 'Scale';
   el.style.padding = '0 10px';
   el.onclick = scale;
   el.appendChild(document.createTextNode('S'));
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var el = document.createElement('button');
   el.title = 'Rotate';
   el.style.padding = '0 10px';
   el.onclick = rotate;
-  el.appendChild(document.createTextNode('R'));
+  el.appendChild(document.createTextNode('\u21A9'));
   col.appendChild(el);
   row.appendChild(col);
 
@@ -175,10 +177,12 @@ function init() {
   el2.appendChild(document.createTextNode(el2.value));
   el.appendChild(el2);
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   el = document.createElement('input');
   el.type = 'text';
   el.id = 'getcoords';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   el = document.createElement('button');
   el.style.padding = '0 10px';
   el.onclick = draw;

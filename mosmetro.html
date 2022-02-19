@@ -67,13 +67,14 @@ function init(){
   el.id = 'tvalue';
   el.value = '10';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var el = document.createElement('button');
   el.title = 'Rotate';
   el.onclick = function(){
     dw.rotateCarta(parseFloat(document.getElementById('tvalue').value));
     dw.draw();
   };
-  el.appendChild(document.createTextNode('R'));
+  el.appendChild(document.createTextNode('\u21A9'));
   col.appendChild(el);
   row.appendChild(col);
 
@@ -117,7 +118,7 @@ function init(){
   function route_ext(o){ return route(dw.extend({width: 4, dash: [2,4]}, o||{})); };
   function inch(o)     { return route(dw.extend({fg: '#ccc', cap: 'round', width: 8}, o||{})); };
   function inch_d(o)   { return inch(dw.extend({fg: '#fff', width: 5}, o||{})); };
-  function inch_ext(o) { return inch(dw.extend({width: 4, dash: [4,2]}, o||{})); };
+  function inch_ext(o) { return inch(dw.extend({width: 4, fg:'white', dash: [4,2]}, o||{})); };
   function river(o)    { return route(dw.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})); };
   function rail(o)     { return route(dw.extend({fg: '#ddd', width: 2, labelscale: 0}, o||{})); };
   function rail_d(o)   { return rail(dw.extend({fg: '#fff', dash: [10,10]}, o||{})); };
@@ -125,12 +126,12 @@ function init(){
   function station(o)  { return dw.extend({cls: 'Rect', bg: 'white', size: 5, width: 3, scale: 1, labelscale: 1}, o||{}); };
   function st_mck(o)   { return station(dw.extend({fg: '#f76093', size: 4, labelcolor: 'gray'}, o)); };
   function st_mcd(o)   { return station(dw.extend({size: 2, labelcolor: 'rgb(180,180,180)'}, o)); };
-  function inch_mck(o) { return inch(dw.extend({dash:[2,4], width: 3}, o||{})); };
+  function inch_mck(o) { return inch(dw.extend({dash:[1,2], width: 2}, o||{})); };
   function inch_mn(o)  { return inch(dw.extend({dash:[1,2], fg: 'black', width: 1}, o||{})); };
   function inch_mcd(o) { return inch(dw.extend({dash:[1,3], fg: '#777', width: 1}, o||{})); };
   function inst_mck(o) { return st_mck(dw.extend({size: 4, labelcolor: o['fg'], bg: o['fg']}, o)); };
   function inst_mcd(o) { return st_mcd(dw.extend({size: 2, labelcolor: o['fg'], bg: o['fg']}, o)); };
-  function inst(o)     { return station(dw.extend({size: 3, labelcolor: o['fg'], bg: o['fg']}, o)); };
+  function inst(o)     { return station(dw.extend({size: 5, labelcolor: o['fg'], bg: o['fg']}, o)); };
   function inst_d(o)   { return inst(dw.extend({size: 2, width: 1}, o||{})); };
    // lines
   dw.extend(dw.mopt, {

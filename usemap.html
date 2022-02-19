@@ -1,7 +1,7 @@
 <!--
  Population density by country.
  View countries under mouse cursor.
- egax@bk.ru, 2013. r210504.
+ egax@bk.ru, 2013-21.
 -->
 <!DOCTYPE html>
 <html>
@@ -128,11 +128,12 @@ function init() {
   el.id = 'tvalue';
   el.value= '10';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var el = document.createElement('button')
   el.title = 'Rotate';
   el.style.padding = '0 10px';
   el.onclick = rotate;
-  el.appendChild(document.createTextNode('R'));
+  el.appendChild(document.createTextNode('\u21A9'));
   col.appendChild(el);
   row.appendChild(col);
 
@@ -197,7 +198,7 @@ function init() {
         label = m['label'] + ' : ' + dw.m.pmap.split('_')[1] + label;
         // tooltip
         var ds = INFOCNT[m['label']] ? INFOCNT[m['label']][0] : 0;
-        mtip = m['label'] + '<br>' + 'Плотность населения: ' + ds;
+        mtip = '<b>' + m['label'] + '</b>' + '<br>' + 'Плотность населения: ' + ds;
       }
       // text
       mcoord.innerHTML = label;

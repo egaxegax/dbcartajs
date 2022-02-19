@@ -92,7 +92,7 @@ function draw() {
     inch_mck:  inch_mck(),
     inch_mn:   inch_mn(),
     inch_mcd:  inch_mcd(),
-    mkad:      label({fg: '#c8c8ff',  bg: '#fff', anchor: ['center', 'middle']}),
+    mkad:      label({fg: '#c8c8ff',  bg: '#fff', anchor: ['middle', 'middle']}),
     moskvar:   river({width: 15}),
     moskvac:   river({width: 5}),
     strogino:  river({width: 5}),
@@ -139,7 +139,6 @@ function draw() {
     s3_4:      inst({fg: mopt['r3'].fg, anchor: ['start', 'bottom']}),
     s3_5:      inst({fg: mopt['r3'].fg, anchor: ['end', 'top']}),
     s3_7:      inst({fg: mopt['r3'].fg, anchor: ['end']}),
-    s3_8:      inst({fg: mopt['r3'].fg, anchor: ['middle', 'bottom']}),
     s4:        station({fg: mopt['r4'].fg, anchor: ['start', 'middle']}),
     s4_1:      station({fg: mopt['r4'].fg, anchor: ['end', 'middle']}),
     s4_2:      inst({fg: mopt['r4'].fg, anchor: ['end', 'middle']}),
@@ -350,7 +349,7 @@ function draw() {
     var pts = DC.toPoints(coords, true);
     if(a = mopt[ftype].anchor) {
       if(a[0] == 'start') dx = 10;
-      else if(a[0] == 'center') dx = -5;
+      else if(a[0] == 'middle') dx = -5;
       else if(a[0] == 'end') dx = -10;
       if(a[1] == 'top') dy = 14;
       else if(a[1] == 'middle') dy = 4;
@@ -408,7 +407,7 @@ function calcRoute(fromid, toid){
             if((r0 <= rr) && (r1 <= rr)){
               if(!inarray(cc,c)) cc.push(c);
             }
-          })
+          });
         }
       });
 //      console.log(cc);
@@ -425,19 +424,20 @@ function calcRoute(fromid, toid){
       }
       var pts = DC.interpolateCoords(cc, true),
           path = ('M ' + pts).replace(/,/g, ' ');
+      var bInch = inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length;
       DC.extend( 
-        DC.append('path', { class: 'selpath', d: path, stroke: ost.getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-width': 12}),
+        DC.append('path', { class: 'selpath', d: path, stroke: ost.getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-dasharray': bInch ? [3,2] : 'none', 'stroke-width': bInch ? 6 : 12}),
           { onclick: clearRoute });
     }
     sels.push(ost);
   });
   if(sels.length){
     [].slice.call(DC.root.querySelectorAll('.route, .station')).map(function(o){ // opacity map
-      DC.attr(o, {opacity: '0.3'});
+      DC.attr(o, {opacity: '0.2'});
     });
     sels.map(function(st){ // stations above route
       DC.extend(
-        DC.append('circle', {class: 'selpath', stroke: st.getAttribute('stroke'), cx: st.getAttribute('cx'), cy: st.getAttribute('cy'), fill:'white', 'stroke-width': 2, r: 6}),
+        DC.append('circle', {class: 'selpath', stroke: st.getAttribute('stroke'), cx: st.getAttribute('cx'), cy: st.getAttribute('cy'), fill:'white', 'stroke-width': 2, r: 5}),
           { onclick: clearRoute });
     });
   }
