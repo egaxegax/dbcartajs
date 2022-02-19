@@ -108,8 +108,16 @@ function init() {
     '/foto/Москва/Кировоградские пруды.JPG',
     '/foto/Церкви/Кижи. Карелия.JPG',
     '/foto/Церкви/Родионово. Ленинградская область.JPG',
-    '/foto/Природа/Цветочек синенький.JPG'    
+    '/foto/Природа/Цветочек синенький.JPG'
   ];
+  if(window.location.protocol == 'file:'){
+    imgurls = [
+      window.location + '/../img/earth_map.jpg',
+      window.location + '/../img/wrld-small-mill.jpg',
+      window.location + '/../img/wrld-small-moll.jpg',
+      window.location + '/../img/wrld-small.jpg'
+    ];
+  }
   
   // fill list
   for (var k in imgurls) {
