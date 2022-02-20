@@ -417,13 +417,13 @@ function setSelTime(interval) {
 function setAutoTime() {
   if (window.autotime) {
     window.autotime = window.clearInterval(window.autotime);
-    document.getElementById('btauto').textContent = '▶';
+    document.getElementById('btauto').textContent = '\u25B6';
   } else {
     window.autotime = setInterval(function() {
       setSelTime(100*1000);
       draw();
     }, 100);
-    document.getElementById('btauto').textContent = '◼';
+    document.getElementById('btauto').textContent = '\u23F8';
   }
 }
 function init() {
@@ -448,12 +448,15 @@ function init() {
   var layerlist = el = document.createElement('select');
   el.id = 'layerlist';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var satlist = el = document.createElement('select');
   el.id = 'satlist';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var projh = el = document.createElement('select');
   el.id = 'projh';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var projlist = el = document.createElement('select');
   el.id = 'projlist';
   col.appendChild(el);
@@ -481,10 +484,11 @@ function init() {
   el.id = 'tvalue';
   el.value= '1';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var el = document.createElement('button');
   el.title = 'Rotate';
   el.onclick = rotate;
-  el.appendChild(document.createTextNode('Q'));
+  el.appendChild(document.createTextNode('\u21A9'));
   col.appendChild(el);
   row.appendChild(col);
 
@@ -493,9 +497,11 @@ function init() {
   var yy = el = document.createElement('select');
   yy.id = 'yy';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var mm = el = document.createElement('select');
   mm.id = 'mm';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var dd = el = document.createElement('select');
   dd.id = 'dd';
   col.appendChild(el);
@@ -506,9 +512,11 @@ function init() {
   var hh = el = document.createElement('select');
   hh.id = 'hh';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var mi = el = document.createElement('select');
   mi.id = 'mi';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
   var ss = el = document.createElement('select');
   ss.id = 'ss';
   col.appendChild(el);
