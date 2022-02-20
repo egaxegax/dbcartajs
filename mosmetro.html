@@ -17,10 +17,9 @@
 <body>
 <script src="js/dbcarta.js"></script>
 <script src="js/data/mosmetro.js"></script>
+<script src="js/alg/bfs.js"></script>
 <script>
-var dw;
-var MLINES_D=[];
- // tooltip under cursor
+// tooltip under cursor
 function infobox(ev, label){
   var mtip = document.getElementById('maptooltip');
   if (dw.m.pmap && label) {
@@ -41,7 +40,7 @@ function init(){
   mtab.appendChild(row);
 
   var col = document.createElement('td');
-  col.width = '40%';
+  col.width = '35%';
   var el = document.createElement('h2');
   el.appendChild(document.createTextNode('Московское метро'));
   el.style.padding = '0';
@@ -50,28 +49,39 @@ function init(){
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '10%';
-  col.align = 'center';
+  col.width = '35%';
   col.style.whiteSpace = 'nowrap';
-  var stationlist = el = document.createElement('select');
-  el.id = 'stationlist';
+  var stlist = el = document.createElement('select');
+  el.id = 'stlist';
+  col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
+  var stlist2 = el = document.createElement('select');
+  el.id = 'stlist2';
+  col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
+  var el = document.createElement('button');
+  el.title = 'Calc route';
+  el.onclick = optchange;
+  el.appendChild(document.createTextNode('\u25B6'));
   col.appendChild(el);
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '20%';
-  col.align = 'center';
-  var el = document.createElement('input');
-  el.type = 'text';
-  el.size = '3';
-  el.id = 'tvalue';
-  el.value = '10';
+  col.width = '10%';
+  col.style.whiteSpace = 'nowrap';
+  var chinches = el = document.createElement('select');
+  el.id = 'chinches';
+  el.onchange = function(){
+    var o=this.options[this.selectedIndex], s=o.innerHTML; 
+    o.innerHTML = (s.indexOf('\u2611')>-1 ? '&emsp;' : '\u2611')+' '+s.slice(s.search(' '));
+    this.selectedIndex = 0;    
+  }
   col.appendChild(el);
   col.appendChild(document.createTextNode(' '));
   var el = document.createElement('button');
   el.title = 'Rotate';
   el.onclick = function(){
-    dw.rotateCarta(parseFloat(document.getElementById('tvalue').value));
+    dw.rotateCarta(10);
     dw.draw();
   };
   el.appendChild(document.createTextNode('\u21A9'));
@@ -126,7 +136,7 @@ function init(){
   function station(o)  { return dw.extend({cls: 'Rect', bg: 'white', size: 5, width: 3, scale: 1, labelscale: 1}, o||{}); };
   function st_mck(o)   { return station(dw.extend({fg: '#f76093', size: 4, labelcolor: 'gray'}, o)); };
   function st_mcd(o)   { return station(dw.extend({size: 2, labelcolor: 'rgb(180,180,180)'}, o)); };
-  function inch_mck(o) { return inch(dw.extend({dash:[1,2], width: 2}, o||{})); };
+  function inch_mck(o) { return inch(dw.extend({dash:[2,4], width: 2}, o||{})); };
   function inch_mn(o)  { return inch(dw.extend({dash:[1,2], fg: 'black', width: 1}, o||{})); };
   function inch_mcd(o) { return inch(dw.extend({dash:[1,3], fg: '#777', width: 1}, o||{})); };
   function inst_mck(o) { return st_mck(dw.extend({size: 4, labelcolor: o['fg'], bg: o['fg']}, o)); };
@@ -326,9 +336,9 @@ function init(){
     smcd2_1:   inst_mcd({fg: dw.mopt['rmcd2'].fg})
   });
    // add lines dashed
-  MLINES.map(function(a){
+  [].slice.call(MLINES).map(function(a){
     if(dw.mopt[a[0]+'_d']){
-      MLINES_D.push( [a[0]+'_d'].concat(a.slice(1)) );
+      MLINES.push( [a[0]+'_d'].concat(a.slice(1)) );
     }
   });
    // add stations under construction (u prefix)
@@ -354,53 +364,97 @@ function init(){
       infobox(ev, mlabel);
     }
   });
+  function optfunc(o, k, v, disabled) {
+    var el = document.createElement('option');
+    el.value = k;
+    el.innerHTML = v;
+    if(disabled) el.disabled = true;
+    o.appendChild(el);
+  };
+  function optchange(){
+    calcRoute(stlist.value, stlist2.value);
+  };
    // fill station list
-  MSTATIONS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1});
-  MSTATIONS.map(function(a){
+  [].slice.call(MSTATIONS).sort(function(a,b){
+    return (a[3]>b[3]) ? 1 : -1;
+  }).map(function(a){
     a[5] = true; // do ismap (show infobox)
     if (!a[3]) return;
-    var el = document.createElement('option');
-    el.value = a[0] + '_' + a[1];
-    el.appendChild(document.createTextNode(a[3]));
-    stationlist.appendChild(el);    
+    optfunc(stlist,  a[0]+'_'+a[1], a[3]);
+    optfunc(stlist2, a[0]+'_'+a[1], a[3]);
   });
-  stationlist.onchange = function(){
-    if(this.options[this.selectedIndex]) {
-      var centerofpts = dw.mflood[this.value]['pts'];
-      dw.centerCarta(centerofpts[0][0] + dw.m.offset[0], centerofpts[0][1] + dw.m.offset[1]);
-      dw.scaleCarta(1);
-      dw.scaleCarta(parseInt(this.value.length/10 + 0.5));
-      dw.draw();
-       // drawcrosshair
-      var ctx = dw.getContext('2d');
-      ctx.save();
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.beginPath();
-      ctx.moveTo(dw.width/2.0, 0);
-      ctx.lineTo(dw.width/2.0, dw.height);
-      ctx.moveTo(0, dw.height/2.0);
-      ctx.lineTo(dw.width, dw.height/2.0);
-      ctx.lineWidth = 15;
-      ctx.strokeStyle = 'rgba(100,100,200,0.2)';
-      ctx.stroke();
-      ctx.restore();
-    }
-  };
+   // inches
+  optfunc(chinches, 'ch', 'Пересадки...', true);  
+  optfunc(chinches, 'inch', '\u2611 Метро');
+  optfunc(chinches, 'inch_mn', '&emsp; Монорельс');
+  optfunc(chinches, 'inch_mck', '&emsp; МЦК');
+  optfunc(chinches, 'inch_mcd', '&emsp; МЦД');
+  optfunc(chinches, 'inch_ext', '&emsp; Строящиеся');
+  chinches.selectedIndex = 0;
 
   dw.loadCarta(MLINES);
-  dw.loadCarta(MLINES_D);
   dw.loadCarta(MLABELS);
   dw.loadCarta(MSTATIONS);
   dw.scaleCarta(0.8);
   dw.draw();
-    
+
   delete MLINES;
-  delete MLINES_D;
   delete MLABELS;
   delete MSTATIONS;
 }
+  //
+function calcRoute(fromid, toid){
+  var inches= [];
+  [].slice.call(document.getElementById('chinches').options).map(function(o){
+    if(o.innerHTML.indexOf('\u2611')>-1){ // checked
+      inches = inches.concat(makecrds(MLINES.filter(function(a){ return a[0]==o.value; })));
+    }
+  });
+  var vs = dw.viewsizeOf(),
+      rect = [[vs[0], vs[1]], [vs[2], vs[1]], [vs[2], vs[3]], [vs[0], vs[3]]]; 
+  dw.mopt['selpath'] = {cls: 'Polygon', bg: 'rgba(255,255,255,0.8)', fg: 'transparent'};
+  dw.paintCarta(rect, 'selpath');
+  BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
+    if(i < sts.length-1){
+      var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;
+      MLINES.map(function(b){
+        if((maketipn(b) == maketipn(sts[i])) && (maketipn(b) == maketipn(sts[i+1]))){
+          b[2].map(function(c,j){ // find coords between stations
+            r0 = Math.sqrt(Math.pow(d[0]-c[0],2)+Math.pow(d[1]-c[1],2));
+            r1 = Math.sqrt(Math.pow(e[0]-c[0],2)+Math.pow(e[1]-c[1],2));
+            rr = Math.sqrt(Math.pow(d[0]-e[0],2)+Math.pow(d[1]-e[1],2));
+            if((r0 <= rr) && (r1 <= rr)){
+              if(!inarray(cc,c)) cc.push(c);
+            }
+          });
+        }
+      });
+//      console.log(cc);
+      if(cc.length<3) cc = cc.map(function(a){ return a.slice(0,2); }); //remove Q flag bezier without L
+      if(cc.length && //rotate first with last if indirect
+         (Math.sqrt(Math.pow(d[0]-cc[0][0],2)+Math.pow(d[1]-cc[0][1],2)))>=
+         (Math.sqrt(Math.pow(d[0]-cc[cc.length-1][0],2)+Math.pow(d[1]-cc[cc.length-1][1],2))))
+      {
+        if(!inarray(cc,e)) cc.unshift(e); 
+        if(!inarray(cc,d)) cc.push(d);
+      } else {
+        if(!inarray(cc,d)) cc.unshift(d);
+        if(!inarray(cc,e)) cc.push(e);
+      }
+      var bInch = inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length;
+      dw.mopt['selpath'] = {cls: 'Line', width: bInch ? 6 : 12, join: 'round', cap: bInch ? 'butt' : 'round', dash: bInch ? [2,2] : false, fg: dw.mopt[sts[i][0]].fg};
+      dw.paintCarta(cc, 'selpath');
+    } else { // stations above route
+      for(var i=0; i<sts.length; i++){
+        dw.mopt['selstation'] = {cls: 'Rect', size: 8, bg: 'white', fg: dw.mopt[sts[i][0]].fg, anchor: dw.mopt[sts[i][0]].anchor, labelscale: dw.mopt[sts[i][0]].labelscale};
+        dw.paintCarta(sts[i][2], 'selstation', sts[i][3]);
+      }      
+    }
+  });
+}
 
 init();
+calcRoute('s3_Partizanskaya', 's6_2_Rizhskaya');
 
 </script>
 </body>

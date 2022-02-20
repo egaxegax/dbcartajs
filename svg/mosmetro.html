@@ -403,7 +403,6 @@ function calcRoute(fromid, toid){
             r0 = Math.sqrt(Math.pow(d[0]-c[0],2)+Math.pow(d[1]-c[1],2));
             r1 = Math.sqrt(Math.pow(e[0]-c[0],2)+Math.pow(e[1]-c[1],2));
             rr = Math.sqrt(Math.pow(d[0]-e[0],2)+Math.pow(d[1]-e[1],2));
-//            console.log(c,d,e,r0,r1,rr);
             if((r0 <= rr) && (r1 <= rr)){
               if(!inarray(cc,c)) cc.push(c);
             }
