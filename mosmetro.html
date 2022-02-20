@@ -67,7 +67,7 @@ function init(){
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '10%';
+  col.align = 'center';
   col.style.whiteSpace = 'nowrap';
   var chinches = el = document.createElement('select');
   el.id = 'chinches';
@@ -86,11 +86,6 @@ function init(){
   };
   el.appendChild(document.createTextNode('\u21A9'));
   col.appendChild(el);
-  row.appendChild(col);
-
-  var col = document.createElement('td');
-  col.align = 'center';
-  col.id = 'tcoords';
   row.appendChild(col);
   document.body.appendChild(mtab);
 
@@ -350,14 +345,11 @@ function init(){
    // callbacks
   dw.extend(dw.clfunc, {
     onmousemove: function(o, sd, dd, ev) {
-      var mcoord = document.getElementById('tcoords');
-      mcoord.innerHTML = '';
       if(o.m.pmap){
         var m = o.mflood[o.m.pmap];
         var rtype = 'r' + m['ftype'].split('_')[0].slice(1);
         var mlabel = '<b>'+ (m['label'] || m['ftag'])+ '</b>'; // tooltip
         if(!m['label']) MSTATIONS.filter(function(s){ return s[1] == m['ftag'] && s[3]; }).map(function(a){ mlabel = '<b>' + (a[3]||a[1]) + '</b>'});
-        mcoord.innerHTML = mlabel; // text
         if(MLEGEND[rtype]) mlabel += '<br><br>' + MLEGEND[rtype] + ' ('+ rtype + ')';
       }
       o.paintCoords(dd);
