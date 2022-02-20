@@ -90,7 +90,7 @@ function dbCarta(cfg) {
     },
     // Keys store
     clfunc: {}, // user callbacks
-    mflood: {}, // obj draw
+    mflood: {}, // objects to draw
     marea: {},  // area info {ftype, ftag, pts, desc} for doMap
     //
     // Proj4 projects ids defs
