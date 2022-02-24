@@ -53,15 +53,28 @@ function init(){
   col.style.whiteSpace = 'nowrap';
   var stlist = el = document.createElement('select');
   el.id = 'stlist';
+  stlist.onchange = function(){
+    var pts = dw.mflood[this.value]['pts'];
+    dw.centerCarta(pts[0][0] + dw.m.offset[0], pts[0][1] + dw.m.offset[1]);
+    dw.draw();
+  };
   col.appendChild(el);
   col.appendChild(document.createTextNode(' '));
   var stlist2 = el = document.createElement('select');
   el.id = 'stlist2';
+  stlist2.onchange = function(){
+    var pts = dw.mflood[this.value]['pts'];
+    dw.centerCarta(pts[0][0] + dw.m.offset[0], pts[0][1] + dw.m.offset[1]);
+    dw.draw();
+  };
   col.appendChild(el);
   col.appendChild(document.createTextNode(' '));
   var el = document.createElement('button');
   el.title = 'Calc route';
-  el.onclick = optchange;
+  el.style.margin = '0 10px';
+  el.onclick = function(){
+    calcRoute(stlist.value, stlist2.value);
+  };
   el.appendChild(document.createTextNode('\u25B6'));
   col.appendChild(el);
   row.appendChild(col);
@@ -74,12 +87,13 @@ function init(){
   el.onchange = function(){
     var o=this.options[this.selectedIndex], s=o.innerHTML; 
     o.innerHTML = (s.indexOf('\u2611')>-1 ? '&emsp;' : '\u2611')+' '+s.slice(s.search(' '));
-    this.selectedIndex = 0;    
-  }
+    this.selectedIndex = 0;
+  };
   col.appendChild(el);
   col.appendChild(document.createTextNode(' '));
   var el = document.createElement('button');
   el.title = 'Rotate';
+  el.style.margin = '0 10px';
   el.onclick = function(){
     dw.rotateCarta(10);
     dw.draw();
@@ -363,13 +377,6 @@ function init(){
     if(disabled) el.disabled = true;
     o.appendChild(el);
   };
-  function optchange(){
-    var pts = dw.mflood[stlist.value]['pts'],
-        pts2 = dw.mflood[stlist2.value]['pts'];
-    dw.centerCarta((pts[0][0] + pts2[0][0])/2.0 + dw.m.offset[0], (pts[0][1] + pts2[0][1])/2.0 + dw.m.offset[1]);
-    dw.draw();
-    calcRoute(stlist.value, stlist2.value);
-  };
    // fill station list
   [].slice.call(MSTATIONS).sort(function(a,b){
     return (a[3]>b[3]) ? 1 : -1;
@@ -406,10 +413,7 @@ function calcRoute(fromid, toid){
       inches = inches.concat(makecrds(MLINES.filter(function(a){ return a[0]==o.value; })));
     }
   });
-  var vs = dw.viewsizeOf(),
-      rect = [[vs[0], vs[1]], [vs[2], vs[1]], [vs[2], vs[3]], [vs[0], vs[3]]]; 
-  dw.mopt['selpath'] = {cls: 'Polygon', bg: 'rgba(255,255,255,0.8)', fg: 'transparent'};
-  dw.paintCarta(rect, 'selpath');
+  var routes=[];
   BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
     if(i < sts.length-1){
       var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;
@@ -425,7 +429,6 @@ function calcRoute(fromid, toid){
           });
         }
       });
-//      console.log(cc);
       if(cc.length<3) cc = cc.map(function(a){ return a.slice(0,2); }); //remove Q flag bezier without L
       if(cc.length && //rotate first with last if indirect
          (Math.sqrt(Math.pow(d[0]-cc[0][0],2)+Math.pow(d[1]-cc[0][1],2)))>=
@@ -437,14 +440,36 @@ function calcRoute(fromid, toid){
         if(!inarray(cc,d)) cc.unshift(d);
         if(!inarray(cc,e)) cc.push(e);
       }
-      var bInch = inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length;
-      dw.mopt['selpath'] = {cls: 'Line', width: bInch ? 6 : 12, join: 'round', cap: bInch ? 'butt' : 'round', dash: bInch ? [2,2] : false, fg: dw.mopt[sts[i][0]].fg};
-      dw.paintCarta(cc, 'selpath');
-    } else { // stations above route
+      routes.push( cc );
+    } else { // draw founded routes and stations
+        // center route in map
+      var minx, maxx, miny, maxy;
+      sts.map(function(st){
+        if(st[2][0][0] < minx || !minx) minx = st[2][0][0];
+        if(st[2][0][0] > maxx || !maxx) maxx = st[2][0][0];
+        if(st[2][0][1] < miny || !miny) miny = st[2][0][1];
+        if(st[2][0][1] > maxy || !maxy) maxy = st[2][0][1];
+      });
+      var pts = dw.toPoints([(minx + maxx)/2.0, (miny + maxy)/2.0]);
+      dw.centerCarta(pts[0] + dw.m.offset[0], pts[1] + dw.m.offset[1]);
+      dw.draw();
+        // mask map
+      var vs = dw.viewsizeOf(), // mask map
+          rect = [[vs[0], vs[1]], [vs[2], vs[1]], [vs[2], vs[3]], [vs[0], vs[3]]]; 
+      dw.mopt['selpath'] = {cls: 'Polygon', bg: 'rgba(255,255,255,0.8)', fg: 'transparent'};
+      dw.paintCarta(rect, 'selpath');
+        // routes
+      for(var i=0; i<routes.length; i++){
+        var cc = routes[i],
+            bInch = inches.filter(function(m){ return (inarray(m,cc[0]) && inarray(m,cc[cc.length-1])); }).length;
+        dw.mopt['selpath'] = {cls: 'Line', width: bInch ? 6 : 12, join: 'round', cap: bInch ? 'butt' : 'round', dash: bInch ? [2,2] : false, fg: dw.mopt[sts[i][0]].fg};
+        dw.paintCarta(cc, 'selpath');
+      }
+        // stations above routes
       for(var i=0; i<sts.length; i++){
         dw.mopt['selstation'] = {cls: 'Rect', size: 8, bg: 'white', fg: dw.mopt[sts[i][0]].fg, anchor: dw.mopt[sts[i][0]].anchor, labelscale: dw.mopt[sts[i][0]].labelscale};
         dw.paintCarta(sts[i][2], 'selstation', sts[i][3]);
-      }      
+      }
     }
   });
 }
