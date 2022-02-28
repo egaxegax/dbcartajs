@@ -459,16 +459,19 @@ function calcRoute(fromid, toid){
       dw.mopt['selpath'] = {cls: 'Polygon', bg: 'rgba(255,255,255,0.8)', fg: 'transparent'};
       dw.paintCarta(rect, 'selpath');
         // routes
-      for(var i=0; i<routes.length; i++){
-        var cc = routes[i],
+      for(var j=0; j<routes.length; j++){
+        var cc = routes[j],
             bInch = inches.filter(function(m){ return (inarray(m,cc[0]) && inarray(m,cc[cc.length-1])); }).length;
-        dw.mopt['selpath'] = {cls: 'Line', width: bInch ? 6 : 12, join: 'round', cap: bInch ? 'butt' : 'round', dash: bInch ? [2,2] : false, fg: dw.mopt[sts[i][0]].fg};
+        dw.mopt['selpath'] = {cls: 'Line', width: bInch ? 6 : 12, join: 'round', cap: bInch ? 'butt' : 'round', dash: bInch ? [2,2] : false, fg: dw.mopt[sts[j][0]].fg};
         dw.paintCarta(cc, 'selpath');
       }
-        // stations above routes
-      for(var i=0; i<sts.length; i++){
-        dw.mopt['selstation'] = {cls: 'Rect', size: 8, bg: 'white', fg: dw.mopt[sts[i][0]].fg, anchor: dw.mopt[sts[i][0]].anchor, labelscale: dw.mopt[sts[i][0]].labelscale};
-        dw.paintCarta(sts[i][2], 'selstation', sts[i][3]);
+        // station with label above routes
+      for(var j=0; j<sts.length; j++){
+        dw.mopt['selstation'] = dw.mopt[sts[j][0]];
+        dw.mopt['selstation'].labelcolor = 'transparent';
+        dw.paintCarta(sts[i][2], 'selstation', sts[j][3]); // fill white under label with same coords
+        dw.mopt['selstation'] = {cls: 'Rect', size: 8, bg: 'white', fg: dw.mopt[sts[j][0]].fg, anchor: dw.mopt[sts[j][0]].anchor, labelscale: dw.mopt[sts[j][0]].labelscale};
+        dw.paintCarta(sts[j][2], 'selstation', sts[j][3]);
       }
     }
   });

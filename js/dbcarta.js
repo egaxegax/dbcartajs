@@ -2,7 +2,7 @@
 // HTML5 Canvas vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013. b220220.
+// egax@bk.ru, 2013. b220228.
 //
 function dbCarta(cfg) {
   cfg = cfg||{};
@@ -557,8 +557,8 @@ function dbCarta(cfg) {
         for (var i=0; i<pts.length; i++) {
           if (!mpts.length && this.chkPts(pts[i]))
             this.ctx.lineTo(pts[i][0], pts[i][1]);
-          if (pts[i][2] != undefined) {
-            mpts.push(pts[i]);
+          if (pts[i][2] != undefined) { 
+            if(this.chkPts(pts[i-mpts.length+2])) mpts.push(pts[i]); // exists 3 pt to end
             if (mpts.length == 3) {
               this.ctx.bezierCurveTo(mpts[0][0], mpts[0][1], mpts[1][0], mpts[1][1], mpts[2][0], mpts[2][1]);
               mpts = [];
