@@ -285,7 +285,7 @@ function draw(){
       else if(a[1] == 'bottom') dy = -8;
     };
     var text = DC.append('text', {
-      id: 't'+ ftype +'_'+ abbr,
+      id: 't'+ ftype +'_'+ abbr, class: mopt[ftype].class,
       x: pts[0] + dx, y: pts[1] + dy, fill: mopt[stype].labelcolor || 'black',
       'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
       'text-anchor': a ? a[0] : ''
@@ -305,7 +305,8 @@ function draw(){
       else if(a[1] == 'bottom') dy = -8;
     };
     var text = DC.append('text', {
-      x: pts[0] + dx, y: pts[1] + dy, fill: mopt[ftype].labelcolor || '',
+      x: pts[0] + dx, y: pts[1] + dy, class: mopt[ftype].class,
+      fill: mopt[ftype].labelcolor || '',
       'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
       'text-anchor': a ? a[0] : ''
     });
@@ -337,9 +338,7 @@ function calcRoute(fromid, toid){
   var inches = [];
   inches = inches.concat(makecrds(MLINES.filter(function(a){ return a[0]=='inch'; })));
     //
-  var sels= [];
   BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
-    var ost = DC.root.getElementById(makeid(sts[i]));
     if(i < sts.length-1){
       var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;
       MLINES.map(function(b){
@@ -354,9 +353,8 @@ function calcRoute(fromid, toid){
           });
         }
       });
-//      console.log(cc);
       if(cc.length<3) cc = cc.map(function(a){ return a.slice(0,2); }); //remove Q flag bezier without L
-      if(cc.length && //rotate first with last if indirect
+      if(cc.length &&   // rotate first with last if indirect
          (Math.sqrt(Math.pow(d[0]-cc[0][0],2)+Math.pow(d[1]-cc[0][1],2)))>=
          (Math.sqrt(Math.pow(d[0]-cc[cc.length-1][0],2)+Math.pow(d[1]-cc[cc.length-1][1],2))))
       {
@@ -370,21 +368,29 @@ function calcRoute(fromid, toid){
           path = ('M ' + pts).replace(/,/g, ' ');
       var bInch = inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length;
       DC.extend( 
-        DC.append('path', { class: 'selpath', d: path, stroke: ost.getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-dasharray': bInch ? [3,2] : 'none', 'stroke-width': bInch ? 6 : 12}),
+        DC.append('path', { class: 'selpath', d: path, stroke: DC.root.getElementById(makeid(st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-dasharray': bInch ? [3,2] : 'none', 'stroke-width': bInch ? 6 : 12}),
           { onclick: clearRoute });
+    } else {
+      [].slice.call(DC.root.querySelectorAll('.route, .station')).map(function(o){ // opacity map
+        DC.attr(o, {opacity: '0.1'});
+      });
+      sts.map(function(st){ // stations above route
+        var ost = DC.root.getElementById(makeid(st));
+        var t = DC.root.getElementById('t' + ost.getAttribute('id'));
+        DC.extend(
+          DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('stroke'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill:'white', 'stroke-width': 2, r: 5}),
+            { onclick: clearRoute });
+        if(t){
+          DC.append('text', {
+            x: t.getAttribute('x'), y: t.getAttribute('y'), 
+            class: 'selpath',  fill: t.getAttribute('fill'),
+            'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
+            'text-anchor': t.getAttribute('text-anchor')
+          }).innerHTML = t.innerHTML;
+        }
+      }); 
     }
-    sels.push(ost);
   });
-  if(sels.length){
-    [].slice.call(DC.root.querySelectorAll('.route, .station')).map(function(o){ // opacity map
-      DC.attr(o, {opacity: '0.2'});
-    });
-    sels.map(function(st){ // stations above route
-      DC.extend(
-        DC.append('circle', {class: 'selpath', stroke: st.getAttribute('stroke'), cx: st.getAttribute('cx'), cy: st.getAttribute('cy'), fill:'white', 'stroke-width': 2, r: 5}),
-          { onclick: clearRoute });
-    });
-  }
 }
   //
 var DC = new dbCartaSvg({
