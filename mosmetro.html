@@ -31,6 +31,20 @@ function infobox(ev, label){
     mtip.style.display = 'none';
   }
 }
+function drawcrosshair(){
+  var ctx = dw.getContext('2d');
+  ctx.save();
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.beginPath();
+  ctx.moveTo(dw.width/2.0, 0);
+  ctx.lineTo(dw.width/2.0, dw.height);
+  ctx.moveTo(0, dw.height/2.0);
+  ctx.lineTo(dw.width, dw.height/2.0);
+  ctx.lineWidth = 15;
+  ctx.strokeStyle = 'rgba(100,100,200,0.2)';
+  ctx.stroke();
+  ctx.restore();
+}
 function init(){
   var mtab = document.createElement('table');
   mtab.style.borderCollapse = 'collapse';
@@ -53,10 +67,12 @@ function init(){
   col.style.whiteSpace = 'nowrap';
   var stlist = el = document.createElement('select');
   el.id = 'stlist';
+  el.style.margin = '0 10px';
   stlist.onchange = function(){
     var pts = dw.mflood[this.value]['pts'];
     dw.centerCarta(pts[0][0] + dw.m.offset[0], pts[0][1] + dw.m.offset[1]);
     dw.draw();
+    drawcrosshair();
   };
   col.appendChild(el);
   col.appendChild(document.createTextNode(' '));
@@ -66,6 +82,7 @@ function init(){
     var pts = dw.mflood[this.value]['pts'];
     dw.centerCarta(pts[0][0] + dw.m.offset[0], pts[0][1] + dw.m.offset[1]);
     dw.draw();
+    drawcrosshair();
   };
   col.appendChild(el);
   col.appendChild(document.createTextNode(' '));
@@ -379,12 +396,11 @@ function init(){
   };
    // fill station list
   [].slice.call(MSTATIONS).sort(function(a,b){
-    return (a[3]>b[3]) ? 1 : -1;
+    return ((a[3]||a[1])>(b[3]||b[1])) ? 1 : -1;
   }).map(function(a){
     a[5] = true; // do ismap (show infobox)
-    if (!a[3]) return;
-    optfunc(stlist,  a[0]+'_'+a[1], a[3]);
-    optfunc(stlist2, a[0]+'_'+a[1], a[3]);
+    optfunc(stlist,  a[0]+'_'+a[1], a[3]||a[1]);
+    optfunc(stlist2, a[0]+'_'+a[1], a[3]||a[1]);
   });
    // inches
   optfunc(chinches, 'ch', 'Пересадки...', true);  
