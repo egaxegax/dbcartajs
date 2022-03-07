@@ -129,7 +129,7 @@ function init(){
   mtab.appendChild(row);
   document.body.appendChild(mtab);
 
-   // domap tooltip
+    // domap tooltip
   var el = document.createElement('div');
   el.id = 'maptooltip';
   el.style.padding = '5px';
@@ -149,7 +149,7 @@ function init(){
     scalebg: 'rgba(100,200,100,0.1)'
   });
   dw.style.backgroundColor = 'rgb(250,255,250)';
-   // define new layers
+    // define new layers
   function route(o)    { return dw.extend({cls: 'Line', width: 6, join: 'round', anchor: ['start', 'middle'], labelscale: 1}, o||{}); };
   function route_ext(o){ return route(dw.extend({width: 4, dash: [2,4]}, o||{})); };
   function inch(o)     { return route(dw.extend({fg: '#ccc', cap: 'round', width: 8}, o||{})); };
@@ -169,7 +169,7 @@ function init(){
   function inst_mcd(o) { return st_mcd(dw.extend({size: 2, labelcolor: o['fg'], bg: o['fg']}, o)); };
   function inst(o)     { return station(dw.extend({size: 5, labelcolor: o['fg'], bg: o['fg']}, o)); };
   function inst_d(o)   { return inst(dw.extend({size: 2, width: 1}, o||{})); };
-   // lines
+    // lines
   dw.extend(dw.mopt, {
     r1:        route({fg: '#ed1b35'}),
     r1_ext:    route_ext({fg: '#ed1b35'}),
@@ -229,9 +229,8 @@ function init(){
     vko_d_t:   label({anchor: ['center', 'top']}),
     dme_t:     label({anchor: ['start', 'middle']}),
     dme_d_t:   label({anchor: ['center', 'top']})
-    
   });
-   // stations
+    // stations
   dw.extend(dw.mopt, {
     s1:        station({fg: dw.mopt['r1'].fg, anchor: ['start', 'middle']}),
     s1_1:      inst({fg: dw.mopt['r1'].fg, anchor: ['start', 'middle']}),
@@ -361,19 +360,13 @@ function init(){
     smcd2:     st_mcd({fg: dw.mopt['rmcd2'].fg, anchor: ['start', 'middle']}),
     smcd2_1:   inst_mcd({fg: dw.mopt['rmcd2'].fg})
   });
-   // add lines dashed
+    // add lines dashed
   [].slice.call(MLINES).map(function(a){
     if(dw.mopt[a[0]+'_d']){
       MLINES.push( [a[0]+'_d'].concat(a.slice(1)) );
     }
   });
-   // add stations under construction (u prefix)
-  for(var skey in dw.mopt){
-    if(skey.search(/s\d+/)>-1){
-      dw.mopt['u'+skey.slice(1)] = dw.mopt[skey];
-    }
-  }
-   // callbacks
+    // callbacks
   dw.extend(dw.clfunc, {
     onmousemove: function(o, sd, dd, ev){
       if(o.m.pmap){
@@ -408,7 +401,7 @@ function init(){
     if(disabled) el.disabled = true;
     o.appendChild(el);
   };
-   // fill station list
+    // fill station list
   [].slice.call(MSTATIONS).sort(function(a,b){
     return ((a[3]||a[1])>(b[3]||b[1])) ? 1 : -1;
   }).map(function(a){
@@ -416,7 +409,7 @@ function init(){
     optfunc(stlist,  a[0]+'_'+a[1], a[3]||a[1]);
     optfunc(stlist2, a[0]+'_'+a[1], a[3]||a[1]);
   });
-   // inches
+    // inches
   optfunc(chinches, 'ch', 'Пересадки...', true);  
   optfunc(chinches, 'inch', '\u2611 Метро');
   optfunc(chinches, 'inch_mn', '&emsp; Монорельс');

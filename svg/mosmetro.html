@@ -289,12 +289,11 @@ function draw() {
     //
   MSTATIONS.map(function(station){
     var ftype = station[0], abbr = station[1], coords = station[2][0], label = station[3],
-        stype = 's' + ftype.slice(1); // station type in mopt
-    var pts = DC.toPoints(coords, true);
+        pts = DC.toPoints(coords, true);
     var station = DC.append('circle', {
-      id: ftype +'_'+ abbr, class: mopt[stype].class, mclass: stype,
-      fill: mopt[stype].bg, stroke: mopt[stype].fg, 'stroke-width': mopt[stype].width, 
-      cx: pts[0], cy: pts[1], r: mopt[stype].size
+      id: ftype +'_'+ abbr, class: mopt[ftype].class, mclass: ftype,
+      fill: mopt[ftype].bg, stroke: mopt[ftype].fg, 'stroke-width': mopt[ftype].width, 
+      cx: pts[0], cy: pts[1], r: mopt[ftype].size
     });
     DC.extend(station, {
       onclick: function(ev){
@@ -326,7 +325,7 @@ function draw() {
     if(!label) return;
      // text anchor
     var a, dx = 10, dy = 0;
-    if(a = mopt[stype].anchor) {
+    if(a = mopt[ftype].anchor) {
       if(a[0] == 'start')    dx = 10;
       else if(a[0] == 'middle') dx = -5;
       else if(a[0] == 'end') dx = -10;
@@ -335,8 +334,8 @@ function draw() {
       else if(a[1] == 'bottom') dy = -8;
     };
     var text = DC.append('text', {
-      id: 't'+ ftype +'_'+ abbr, class: mopt[stype].class,
-      x: pts[0] + dx, y: pts[1] + dy, fill: mopt[stype].labelcolor || 'black',
+      id: 't'+ ftype +'_'+ abbr, class: mopt[ftype].class,
+      x: pts[0] + dx, y: pts[1] + dy, fill: mopt[ftype].labelcolor || 'black',
       'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
       'text-anchor': a ? a[0] : ''
     });
