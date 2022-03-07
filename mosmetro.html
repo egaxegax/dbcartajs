@@ -375,7 +375,7 @@ function init(){
   }
    // callbacks
   dw.extend(dw.clfunc, {
-    onmousemove: function(o, sd, dd, ev) {
+    onmousemove: function(o, sd, dd, ev){
       if(o.m.pmap){
         var m = o.mflood[o.m.pmap];
         var rtype = 'r' + m['ftype'].split('_')[0].slice(1);
@@ -385,6 +385,20 @@ function init(){
       }
       o.paintCoords(dd);
       infobox(ev, mlabel);
+    },
+    onclick: function(o, pts, ev) {
+      if (o.m.pmap) {
+        if(stlist.class == 'selected'){
+          stlist2.class = 'selected';
+          stlist2.value = o.m.pmap;
+          stlist.class = '';
+        } else {
+          stlist.class = 'selected';
+          stlist.value = o.m.pmap;
+          stlist2.class = '';
+        }
+      }
+      dw.draw();
     }
   });
   function optfunc(o, k, v, disabled) {
@@ -483,10 +497,8 @@ function calcRoute(fromid, toid){
       }
         // station with label above routes
       for(var j=0; j<sts.length; j++){
-        dw.mopt['selstation'] = dw.mopt[sts[j][0]];
-        dw.mopt['selstation'].labelcolor = 'transparent';
-        dw.paintCarta(sts[i][2], 'selstation', sts[j][3]); // fill white under label with same coords
-        dw.mopt['selstation'] = {cls: 'Rect', size: 8, bg: 'white', fg: dw.mopt[sts[j][0]].fg, anchor: dw.mopt[sts[j][0]].anchor, labelscale: dw.mopt[sts[j][0]].labelscale};
+        dw.mopt['selstation'] = dw.extend({}, dw.mopt[sts[j][0]]);
+        dw.mopt['selstation'].bg = 'white';
         dw.paintCarta(sts[j][2], 'selstation', sts[j][3]);
       }
     }
