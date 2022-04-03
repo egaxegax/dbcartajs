@@ -25,7 +25,8 @@
 var childs = [];
 
 function draw(ev) {
-  if(ev) DC.initProj(ev.target.name, '+lon_0=0 +lat_0=0'); //set proj
+  if(ev) DC.changeProject(ev.target.name);
+//  if(ev) DC.initProj(ev.target.name, '+lon_0=0 +lat_0=0'); //set proj
    // clear all
   childs = childs.filter(function(child){ DC.vp.removeChild(child); });
    // globus boundary
@@ -212,7 +213,7 @@ var DC = new dbCartaSvg({
   id: 'mcont',
   height: document.getElementById('mcont').offsetHeight,
   bg:'white',
-  sbarpos: 'left', scalebg: 'rgba(255,255,255,0.1)'
+  sbarpos: 'left', scalebg: 'rgba(55,255,255,0.2)'
 });
 
 if(window.addEventListener)

@@ -38,7 +38,7 @@ function dbCarta(cfg) {
     // }
     cfg: {
       draggable: cfg.draggable == undefined ? true : cfg.draggable,
-      viewportx: cfg.viewportx || 180.0,
+      viewportx: cfg.viewportx || 300.0,
       viewporty: cfg.viewporty || 150.0,
       scalebg: cfg.scalebg || 'rgba(255,255,255,0.3)',
       rbar: cfg.rbar == undefined ? true : cfg.rbar,

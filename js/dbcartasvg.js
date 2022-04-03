@@ -2,7 +2,7 @@
 // HTML5 SVG vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2015. b220213.
+// egax@bk.ru, 2015. b220403.
 //
 var SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -105,7 +105,7 @@ function dbCartaSvg(cfg) {
           202: '+proj=nsper +units=m +h=40000000',
           203: '+proj=ortho +units=m',
           204: '+proj=moll +units=m'
-        }
+        };
       }
       return {};
     }(),
@@ -188,17 +188,19 @@ function dbCartaSvg(cfg) {
     centerCarta: function(pts) {
       var scale = this.m.scale;
       var centerof = this.centerOf();
-      var cx = centerof[0]/scale - centerof[0],
-          cy = centerof[1]/scale - centerof[1];
-      var offx = pts[0]/scale - (this.m.mpts ? this.m.mpts[0] : 0),
-          offy = pts[1]/scale - (this.m.mpts ? this.m.mpts[1] : 0);
-      var fx = offx + cx,
-          fy = offy + cy;
-      if(this.chkPts([offx, offy])) {
+      var dx = centerof[0] - pts[0],
+          dy = centerof[1] - pts[1];
+      var offx = centerof[0]/scale - pts[0],
+          offy = centerof[1]/scale - pts[1];
+      var mx = (this.m.mpts ? this.m.mpts[0] : 0),
+          my = (this.m.mpts ? this.m.mpts[1] : 1);
+      offx -= mx;
+      offy -= my;
+      if(this.chkPts([ offx, offy ])) {
         attr(vp, {
-          transform: 'rotate(' + this.m.rotate + ' ' + centerof[0] + ' ' + centerof[1] + ') scale(' + scale + ') translate(' + fx + ',' + fy + ')'
+          transform: 'rotate(' + this.m.rotate + ' ' + centerof[0] + ' ' + centerof[1] + ') scale(' + scale + ') translate(' + offx + ',' + offy + ')'
         });
-        this.m.offset = [ offx, offy ];
+        this.m.offset = [ dx - mx, dy - my ];
       }
     },
     //
@@ -232,10 +234,11 @@ function dbCartaSvg(cfg) {
         };
         this.m.pmap = {
           elems: elems
-        }
+        };
       };
       this.m.pmap.i = 1; // set counter
     },
+    // - paints ---------------------------------
     //
     // Draw Sphere bounds by radius
     //
@@ -269,7 +272,7 @@ function dbCartaSvg(cfg) {
           ch = sz[3];
       var h = ch/this.cfg.sbarsize,
           w = h/2,
-          tleft = this.cfg.sbarpos == 'left' ? w/10 : cw - w - w/10,
+          tleft = (this.cfg.sbarpos == 'left') ? w/10 : cw - w - w/10,
           ttop = ch/2 - h/2,
           d = w/10; // + - size
       var cols = 20, // arc col vertex
@@ -306,6 +309,9 @@ function dbCartaSvg(cfg) {
       });
     },
     // - sizes ----------------------------
+    //
+    // Return sizes of map in pixels
+    //
     sizeOf: function() {
       return [0, 0, root.getAttribute('width'), root.getAttribute('height')];
     },
@@ -313,6 +319,19 @@ function dbCartaSvg(cfg) {
       var rect = this.sizeOf();
       return [ (rect[0] + rect[2]) / 2.0,
                (rect[1] + rect[3]) / 2.0 ];
+    },
+    resize: function(w, h) {
+      attr(root, {
+        width: w,
+        height: h
+      });
+      attr(vp, {
+        width: w,
+        height: h
+      });
+      this.m.delta = w / 360;
+      this.m.halfX = w / 2.0;
+      this.m.halfY = h / 2.0;
     },
     //
     // Return visible borders in degrees
@@ -343,7 +362,7 @@ function dbCartaSvg(cfg) {
           ch = sz[3];
       var h = ch/this.cfg.sbarsize,
           w = h/2,
-          tleft = this.cfg.sbarpos == 'left' ? w/10 : cw - w - w/10,
+          tleft = (this.cfg.sbarpos == 'left') ? w/10 : cw - w - w/10,
           ttop = ch/2 - h/2,
           d = w/10;
       var mx = pts[0] - tleft,
@@ -361,27 +380,12 @@ function dbCartaSvg(cfg) {
         zoom = (zoom > 1 ? zoom : 1/(2-zoom));
         this.scaleCarta(zoom);
         if (zoom == 1) {
-//          var centerof = this.centerOf();
-//          this.centerCarta(centerof[0] + this.m.offset[0] - this.m.scaleoff[0], 
-//                           centerof[1] + this.m.offset[1] - this.m.scaleoff[1]);
+          this.centerCarta(this.centerOf());
         }
       }
     },
     chkPts: function(pts) {
       return (pts && !isNaN(pts[0]) && !isNaN(pts[1]));
-    },
-    resize: function(w, h) {
-      attr(root, {
-        width: w,
-        height: h
-      });
-      attr(vp, {
-        width: w,
-        height: h
-      });
-      this.m.delta = w / 360;
-      this.m.halfX = w / 2.0;
-      this.m.halfY = h / 2.0;
     },
     // - reproject ------------------------
     //
@@ -389,22 +393,21 @@ function dbCartaSvg(cfg) {
     //
     changeProject: function(new_project) {
       // curr. centerof
-      var centerof = this.centerOf();
       if (this.isTurnable()) {
         var proj = this.initProj();
         viewcenterof = [ proj.long0 * 180/Math.PI, proj.lat0 * 180/Math.PI ];
       } else {
-        var viewcenterof = this.fromPoints(centerof, true);
+        var viewcenterof = this.fromPoints(this.centerOf(), true);
       }
       // new centerof
       if (this.isTurnable(new_project)) {
-//        this.centerCarta([centerof[0] + this.m.offset[0], centerof[1] + this.m.offset[1]]);
+        this.centerCarta(this.centerOf());
         this.initProj(new_project, ' +lon_0=' + viewcenterof[0] + ' +lat_0=' + viewcenterof[1]);
       } else {
         this.initProj(new_project, ' +lon_0=0 +lat_0=0');
         var centerof = this.toPoints(viewcenterof, true);
-        if (!this.chkPts(centerof)) centerof = [0, 0];
-//        this.centerCarta([centerof[0] + this.m.offset[0], centerof[1] + this.m.offset[1]]);
+        if (!this.chkPts(centerof)) centerof = this.centerOf();
+        this.centerCarta(centerof);
       }
     },
     //
@@ -539,19 +542,20 @@ function dbCartaSvg(cfg) {
         return coords;
     },
     //
-    // Return new COORDS rotated around Z-axis with ANGLE relative to CENTEROF
+    // Return new PTS rotated around Z-axis with ANGLE relative to CENTEROF
+    // used for mouse events
     //
-    rotateCoords: function(coords, angle, centerof) {
+    rotatePts: function(pts, angle, centerof) {
       var roll = angle * Math.PI/180,
-          x = coords[0], y = coords[1], cx = centerof[0], cy = centerof[1],
+          x = pts[0], y = pts[1], cx = centerof[0], cy = centerof[1],
           r = Math.sqrt((cx - x) * (cx - x) + (y - cy) * (y - cy));
       if (r > 0) {
           var a = Math.acos((cx - x) / r);
           if (y < cy) a = 2.0 * Math.PI - a;
-          coords = [ cx - r * Math.cos(roll + a),
-                     cy + r * Math.sin(roll + a) ];
+          pts = [ cx - r * Math.cos(roll + a),
+                  cy + r * Math.sin(roll + a) ];
       }
-      return coords;
+      return pts;
     },
     savetoimage: function() {
       if (this.cfg.sbar) this.cfg.sbar.setAttribute('fill', 'none');
@@ -572,9 +576,10 @@ function dbCartaSvg(cfg) {
     // - handlers -----------------------------
     mousemove: function(ev) {
       var spts = this.canvasXY(ev),
-          pts = this.rotateCoords(spts, this.m.rotate, this.centerOf());
+          centerof = this.centerOf(),
+          pts = this.rotatePts(spts, this.m.rotate, this.centerOf());
       if (this.m.mpts && this.cfg.draggable && !this.isTurnable()) {
-        this.centerCarta(pts);
+        this.centerCarta([ -pts[0]/this.m.scale + centerof[0], -pts[1]/this.m.scale + centerof[1] ]);
       }
       if (this.m.pmap) {
         if (this.m.pmap.i === 0) {
@@ -589,7 +594,7 @@ function dbCartaSvg(cfg) {
     mousedown: function(ev) {
       if (ev.preventDefault) ev.preventDefault(); // skip events
       var spts = this.canvasXY(ev),
-          pts = this.rotateCoords(spts, this.m.rotate, this.centerOf());
+          pts = this.rotatePts(spts, this.m.rotate, this.centerOf());
       if (this.m.mbar = this.chkBar(spts)) return; // if bar
       if (this.isTurnable()) { // proj.center for spherical turn
         var dst = this.fromPoints(pts, true);
@@ -606,27 +611,25 @@ function dbCartaSvg(cfg) {
     },
     mouseup: function(ev) {
       var spts = this.canvasXY(ev),
-          pts = this.rotateCoords(spts, this.m.rotate, this.centerOf());
+          pts = this.rotatePts(spts, this.m.rotate, this.centerOf());
       if (this.m.mbar) { // bar
         this.chkBar(spts, true);
-      } else { //drag
-        var centerof = this.centerOf();
-        var mpts = [
-          centerof[0] - pts[0] + this.m.mpts[0],
-          centerof[1] - pts[1] + this.m.mpts[1] ];
+      } else { //turn
         if (this.m.mcenterof && this.isTurnable()) {
+          var centerof = this.centerOf();
+          var mpts = [
+            centerof[0] - pts[0] + (this.m.mpts ? this.m.mpts[0] : 0),
+            centerof[1] - pts[1] + (this.m.mpts ? this.m.mpts[1] : 0) ];
           var dst = this.fromPoints(mpts, false, this.isTurnable());
           this.initProj(' +h=' + this.m.mcenterof[2] + ' +lon_0=' + (this.m.mcenterof[0] + dst[0]) + ' +lat_0=' + (this.m.mcenterof[1] + dst[1]));
           if ('draw' in window) draw();
         }
       }
-      with (this.m) {
-        delete mpts;
-        delete mcenterof;
-      }
+      delete this.m.mpts;
+      delete this.m.mcenterof;
     }
   });
-  // - events -----------------------------
+  // - root events -----------------------------
   extend(root, {
     mousewheel: function(ev) {
       var delta = 0;
