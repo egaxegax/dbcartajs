@@ -576,10 +576,10 @@ function dbCartaSvg(cfg) {
     // - handlers -----------------------------
     mousemove: function(ev) {
       var spts = this.canvasXY(ev),
-          centerof = this.centerOf(),
           pts = this.rotatePts(spts, this.m.rotate, this.centerOf());
       if (this.m.mpts && this.cfg.draggable && !this.isTurnable()) {
-        this.centerCarta([ -pts[0]/this.m.scale + centerof[0], -pts[1]/this.m.scale + centerof[1] ]);
+        var centerof = this.centerOf();
+        this.centerCarta([ centerof[0] - pts[0]/this.m.scale, centerof[1] - pts[1]/this.m.scale ]);
       }
       if (this.m.pmap) {
         if (this.m.pmap.i === 0) {

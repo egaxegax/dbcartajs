@@ -1,7 +1,7 @@
 <!--
  Atlas. SVG version.
  Draw background images in diff. projections.
- egax@bk.ru, 2015-21.
+ egax@bk.ru, 2015-22.
 -->
 <!DOCTYPE html>
 <html>
@@ -214,6 +214,23 @@ var DC = new dbCartaSvg({
   height: document.getElementById('mcont').offsetHeight,
   bg:'white',
   sbarpos: 'left', scalebg: 'rgba(55,255,255,0.2)'
+});
+
+var ptext = DC.append(DC.root, 'text', {
+  x: DC.root.getAttribute('width')-10, y: DC.root.getAttribute('height')-35,
+  fill: 'rgb(240,140,40)',
+  'text-anchor': 'end'
+});
+
+// events
+DC.extend(DC.root, {
+  onmousemove: function(ev){
+    DC.mousemove(ev);
+    for(var i=0; i<ptext.childNodes.length; i++)
+      ptext.removeChild(ptext.childNodes[i]);
+    var pts = DC.fromPoints( DC.canvasXY(ev), true );
+    if (pts) ptext.appendChild(document.createTextNode('X '+ pts[0].toFixed(1) + ' Y ' + pts[1].toFixed(1)));
+  }
 });
 
 if(window.addEventListener)
