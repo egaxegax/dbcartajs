@@ -1,7 +1,7 @@
 <!--
  Population density by country.
  View countries under mouse cursor.
- egax@bk.ru, 2013-21.
+ egax@bk.ru, 2013-22.
 -->
 <!DOCTYPE html>
 <html>
@@ -68,6 +68,7 @@ function zoomOne(dw, pts, ev) {
       dw.centerCarta(pts[0], pts[1], true);
     dw.scaleCarta(1); // scale twice to fix bug with labels
     dw.scaleCarta(5);
+    dw.mopt['DotPort'].labelcolor = 'green';
     // load selected country
     dw.loadCarta([[m['ftype'], m['ftag'], m['coords'], m['label'], m['centerof']]]);
     dw.loadCarta(dw.createMeridians());
@@ -192,13 +193,17 @@ function init() {
       var mcoord = document.getElementById('tcoords');
       var mtip, label = '';
       if(dw.m.pmap) {
-        var o, m = dw.mflood[dw.m.pmap];
-        // cities count
-        if(o = CITIES[m['label']]) label = ' : ' + o.length + ' городов';
-        label = m['label'] + ' : ' + dw.m.pmap.split('_')[1] + label;
+        var m = dw.mflood[dw.m.pmap];
+        // abbr
+        label = m['label'] + ' : ' + dw.m.pmap.split('_')[1];
         // tooltip
-        var ds = INFOCNT[m['label']] ? INFOCNT[m['label']][0] : 0;
-        mtip = '<b>' + m['label'] + '</b>' + '<br>' + 'Плотность населения: ' + ds;
+        mtip = '<b><i>' + m['label'] + '</i></b>';
+        if(INFOCNT[m['label']][1]) // rusname
+          mtip = '<i>' + INFOCNT[m['label']][1] + '</i>' + '<br><sup>' + mtip + '</sup>';
+        if(CITIES[m['label']]) // cities count
+          mtip += '<br>Крупных городов: <i>' + CITIES[m['label']].length + '</i>';
+        if(INFOCNT[m['label']]) // density
+          mtip += '<br>Плотность населения: <i>' + INFOCNT[m['label']][0] + '</i>';
       }
       // text
       mcoord.innerHTML = label;

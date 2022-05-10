@@ -1,7 +1,7 @@
 <!--
  Population density by country. SVG version.
  View countries under mouse cursor.
- egax@bk.ru, 2015-21.
+ egax@bk.ru, 2015-22.
 -->
 <!DOCTYPE html>
 <html>
@@ -83,11 +83,13 @@ function draw() {
         var mcntryname = this.getAttribute('class');
         var label = mcntryname;
         if(label.search('<b>') == -1)
-          label = '<b>'+ label +'</b>';
+          label = '<b><i>'+ label +'</i></b>';
+        if(INFOCNT[mcntryname][1]) // rusname
+          label = '<i>' + INFOCNT[mcntryname][1] + '</i>' + '<br><sup>' + label + '</sup>';
         if(CITIES[mcntryname]) // cities count
-          label += '<br>Крупных городов: ' + CITIES[mcntryname].length;
+          label += '<br>Крупных городов: <i>' + CITIES[mcntryname].length + '</i>';
         if(INFOCNT[mcntryname]) // density
-          label += '<br>Плотность населения: ' + INFOCNT[mcntryname][0];
+          label += '<br>Плотность населения: <i>' + INFOCNT[mcntryname][0] + '</i>';
         this.setAttribute('class', label);
       }
     });
