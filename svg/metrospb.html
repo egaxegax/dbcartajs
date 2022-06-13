@@ -6,12 +6,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Карта метро Петербурга с расчётом пути / SVG векторная карта</title>
 <meta name="description" content="Карта метро Санкт-Петебурга c расчётом пути. Схема действующих линий и станций петербургского метро в 2022 году">
 <meta name="keywords" content="схема метро питера, svg векторная карта петербурга, metrospb">
 <link rel="icon" href="../img/fav.svg" type="image/svg+xml">
-<style type="text/css">html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
+<style>html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
 <script src="/static/js/metrics.js"></script>
 </head>
 <body>
@@ -168,10 +169,11 @@ var MLABELS=[
   // 
 function draw(){
   var mopt = {}; // define new layers
-  var route = function(o){ return DC.extend({class: 'route', bg: 'none', join: 'round', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
-      river = function(o){ return route(DC.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})) },
-      inch = function(o){ return route(DC.extend({fg: '#ddd', cap: 'round'}, o||{})) },
-      station = function(o){ return DC.extend({class: 'station', bg: 'white', size: 4, width: 2, labelscale: 1}, o||{}) };
+  var route = function(o){ return DC.extend({class: 'route', bg: 'none', join: 'round', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}); },
+      river = function(o){ return route(DC.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})); },
+      inch = function(o){ return route(DC.extend({fg: '#ddd', cap: 'round'}, o||{})); },
+      station = function(o){ return DC.extend({class: 'station', bg: 'white', size: 4, width: 2, labelscale: 1}, o||{}); };
+  var mds = function(x){ return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*x/100; }; // diagonale
     // lines
   DC.extend(mopt, {
     neva_river1: river({width: 20, rotate: -43}),
@@ -214,7 +216,7 @@ function draw(){
       'stroke-dasharray': mopt[ftype].dash,
       'stroke-linejoin': mopt[ftype].join,
       'stroke-linecap': mopt[ftype].cap,
-      'stroke-width': mopt[ftype].width
+      'stroke-width': mds(mopt[ftype].width)
     });
     DC.extend(route, {
       onmousemove: function(ev){
@@ -227,7 +229,7 @@ function draw(){
             var line = document.getElementById('r'+rtype+pref[i]+suf[ii]);
             if(line){ // highlight line
               lns.push( {target: line} );
-              lnsattr.push( {'stroke-width': 12} );
+              lnsattr.push( {'stroke-width': mds(12)} );
             }
           }
         }
@@ -241,8 +243,8 @@ function draw(){
     var pts = DC.toPoints(coords, true);
     var station = DC.append('circle', {
       id: ftype +'_'+ abbr, class: mopt[ftype].class, mclass: stype,
-      fill: mopt[stype].bg, stroke: mopt[stype].fg, 'stroke-width': mopt[stype].width, 
-      cx: pts[0], cy: pts[1], r: mopt[stype].size
+      fill: mopt[stype].bg, stroke: mopt[stype].fg, 'stroke-width': mds(mopt[stype].width), 
+      cx: pts[0], cy: pts[1], r: mds(mopt[stype].size)
     });
     DC.extend(station, {
       onclick: function(ev){
@@ -268,7 +270,7 @@ function draw(){
           tsattr.push( {'font-size': DC.root.getAttribute('width')/80} );
         }
         DC.doMap([ev].concat(ts), [{ // highlight station(ev) + label
-            r: 8
+            r: mds(8)
           }].concat(tsattr)
         );
       }
@@ -286,7 +288,7 @@ function draw(){
     };
     var text = DC.append('text', {
       id: 't'+ ftype +'_'+ abbr, class: mopt[ftype].class,
-      x: pts[0] + dx, y: pts[1] + dy, fill: mopt[stype].labelcolor || 'black',
+      x: pts[0] + mds(dx), y: pts[1] + mds(dy), fill: mopt[stype].labelcolor || 'black',
       'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
       'text-anchor': a ? a[0] : ''
     });

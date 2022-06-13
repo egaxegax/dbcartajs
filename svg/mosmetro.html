@@ -6,12 +6,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Карта метро Москвы с расчётом пути / SVG векторная карта</title>
 <meta name="description" content="Карта метро Москвы c расчётом пути. Схема действующих и строящихся линий и станций московского метро в 2022 году">
 <meta name="keywords" content="схема метро москвы, svg векторная карта метро, мцк, mosmetro">
 <link rel="icon" href="../img/fav.svg" type="image/svg+xml">
-<style type="text/css">html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
+<style>html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
 <script src="/static/js/metrics.js"></script>
 </head>
 <body>
@@ -34,6 +35,10 @@ function selectCh(sel){
   o.innerHTML = (s.indexOf('\u2611')>-1 ? '&emsp;' : '\u2611')+' '+s.slice(s.search(' '));
   sel.selectedIndex = 0;
 }
+  // diagonal size
+function mds(o) { 
+  return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*o/100;
+};
 function draw() {
   var mopt = {};
   function route(o)    { return DC.extend({class: 'route', bg: 'none', join: 'round', width: 8, anchor: ['start', 'middle']}, o||{}); };
@@ -253,7 +258,7 @@ function draw() {
       'stroke-dasharray': mopt[ftype].dash,
       'stroke-linejoin': mopt[ftype].join,
       'stroke-linecap': mopt[ftype].cap,
-      'stroke-width': mopt[ftype].width
+      'stroke-width': mds(mopt[ftype].width)
     });
      // interchange double line
     if(mopt[ftype +'_d']){
@@ -264,7 +269,7 @@ function draw() {
         'stroke-dasharray': mopt[ftype +'_d'].dash,
         'stroke-linejoin': mopt[ftype +'_d'].join,
         'stroke-linecap': mopt[ftype +'_d'].cap,
-        'stroke-width': mopt[ftype +'_d'].width
+        'stroke-width': mds(mopt[ftype +'_d'].width)
       });
     }
     DC.extend(route, {
@@ -278,7 +283,7 @@ function draw() {
             var line = document.getElementById('r'+rtype+pref[i]+'_'+'r'+rtype+suf[ii]);
             if(line){ // highlight line
               lns.push( {target: line} );
-              lnsattr.push( {'stroke-width': 12} );
+              lnsattr.push( {'stroke-width': mds(12)} );
             }
           }
         }
@@ -292,8 +297,8 @@ function draw() {
         pts = DC.toPoints(coords, true);
     var station = DC.append('circle', {
       id: ftype +'_'+ abbr, class: mopt[ftype].class, mclass: ftype,
-      fill: mopt[ftype].bg, stroke: mopt[ftype].fg, 'stroke-width': mopt[ftype].width, 
-      cx: pts[0], cy: pts[1], r: mopt[ftype].size
+      fill: mopt[ftype].bg, stroke: mopt[ftype].fg, 'stroke-width': mds(mopt[ftype].width), 
+      cx: pts[0], cy: pts[1], r: mds(mopt[ftype].size)
     });
     DC.extend(station, {
       onclick: function(ev){
@@ -301,11 +306,11 @@ function draw() {
         if(DC.root.querySelectorAll('.selected').length > 1){
           while((sel = DC.root.querySelectorAll('.selected')).length){
             var m = sel[0].getAttribute('mclass');
-            DC.attr(sel[0], {class: mopt[m].class, fill: mopt[m].bg, r: mopt[m].size, 'stroke-width': mopt[m].width});
+            DC.attr(sel[0], {class: mopt[m].class, fill: mopt[m].bg, r: mds(mopt[m].size), 'stroke-width': mds(mopt[m].width)});
           }
           clearRoute();
         }
-        DC.attr(ev.target, {class: 'selected', fill: 'gold', r: 6, 'stroke-width': 2});
+        DC.attr(ev.target, {class: 'selected', fill: 'gold', r: mds(6), 'stroke-width': mds(2)});
         if((sel = DC.root.querySelectorAll('.selected')).length == 2){
           calcRoute(sel[0].getAttribute('id'), sel[1].getAttribute('id'));
         }
@@ -319,23 +324,23 @@ function draw() {
           tsattr.push( {'font-size': DC.root.getAttribute('width')/80} );
         }
          // highlight station(ev) + label
-        DC.doMap([ev].concat(ts), [{r: 8}].concat(tsattr));
+        DC.doMap([ev].concat(ts), [{r: mds(8)}].concat(tsattr));
       }
     });
     if(!label) return;
      // text anchor
     var a, dx = 10, dy = 0;
     if(a = mopt[ftype].anchor) {
-      if(a[0] == 'start')    dx = 10;
+      if(a[0] == 'start')    dx = 8;
       else if(a[0] == 'middle') dx = -5;
       else if(a[0] == 'end') dx = -10;
-      if(a[1] == 'top') dy = 16;
+      if(a[1] == 'top') dy = 12;
       else if(a[1] == 'middle') dy = 4;
       else if(a[1] == 'bottom') dy = -8;
     };
     var text = DC.append('text', {
       id: 't'+ ftype +'_'+ abbr, class: mopt[ftype].class,
-      x: pts[0] + dx, y: pts[1] + dy, fill: mopt[ftype].labelcolor || 'black',
+      x: pts[0] + mds(dx), y: pts[1] + mds(dy), fill: mopt[ftype].labelcolor || 'black',
       'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
       'text-anchor': a ? a[0] : ''
     });
@@ -355,7 +360,7 @@ function draw() {
       else if(a[1] == 'bottom') dy = -8;
     };
     var text = DC.append('text', {
-      x: pts[0] + dx, y: pts[1] + dy, class: mopt[ftype].class, fill: mopt[ftype].labelcolor || '',
+      x: pts[0] + mds(dx), y: pts[1] + mds(dy), class: mopt[ftype].class, fill: mopt[ftype].labelcolor || '',
       'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
       'text-anchor': a ? a[0] : ''
     });
@@ -421,7 +426,7 @@ function calcRoute(fromid, toid){
           path = ('M ' + pts).replace(/,/g, ' ');
       var bInch = inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length;
       DC.extend( 
-        DC.append('path', { class: 'selpath', d: path, stroke: DC.root.getElementById(makeid(st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-dasharray': bInch ? [3,2] : 'none', 'stroke-width': bInch ? 6 : 12}),
+        DC.append('path', { class: 'selpath', d: path, stroke: DC.root.getElementById(makeid(st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-dasharray': bInch ? [3,2] : 'none', 'stroke-width': mds(bInch ? 6 : 12)}),
           { onclick: clearRoute });
     } else {
       [].slice.call(DC.root.querySelectorAll('.route, .station, .label')).map(function(o){ // opacity map
@@ -431,7 +436,7 @@ function calcRoute(fromid, toid){
         var ost = DC.root.getElementById(makeid(st));
         var t = DC.root.getElementById('t' + ost.getAttribute('id'));
         DC.extend(
-          DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('stroke'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill: 'white', 'stroke-width': 2, r: 5}),
+          DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('stroke'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill: 'white', 'stroke-width': mds(2), r: mds(5)}),
             { onclick: clearRoute });
         if(t){
           DC.append('text', {

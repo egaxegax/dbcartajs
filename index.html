@@ -3,6 +3,7 @@
 <head>
 <title>dbcartajs / Canvas+SVG vector map and image viewer javascript library</title>
 <meta http-equiv="content-type" content="text/html;charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Карта-Навигатор с проекциями Proj4js. Отрисовка векторных данных. Вывод изображений. Управление, масштабирование карты. HTML5 Canvas+SVG vector map with some Proj4js projections. Pure javascript and serverless">
 <meta name="keywords" content="карта, проекция, html5, canvas, svg, 2d, vector, proj4js, projection, javascript, dbcartajs, map">
 <meta name="author" content="Grigoriy Eremin, Григорий Еремин, egax@bk.ru">
@@ -10,209 +11,205 @@
 <meta name="yandex-verification" content="bf07f0af8e739c66">
 <link rel="icon" href="img/fav.svg" type="image/svg+xml" />
 <style>
-body { background:#fff; margin:0; font-family:tahoma,verdana,arial; font-size:16px; }
+body { background:#fff; margin:0; font-family:tahoma,arial; }
 a, a:active, a:focus { color:#4d3ca0; outline:none; }
+.en { float:left; width:350px; }
 .disabled { color:transparent; }
-.stripe { padding:10px; background-color: rgb(210,224,240); }
-.footer { font-size: smaller; }
+.gray { color:#78788c; }
+.stripe { padding:10px; background-color:rgb(210,224,240); }
+.footer { font-size: medium !important; text-align:center; }
+.nowrap { white-space:nowrap; }
+.main { margin:10px auto 10px auto; font-size:larger; max-width:700px; }
 </style>
-<script src="/static/js/metrics.js"></script>
-</head>
-<body>
 <script src="js/proj4js-combined.js"></script>
 <script src="js/dbcarta.js"></script>
 <script src="js/data/continents.js"></script>
-
-<table border=0 cellpadding=5 cellspacing=0 align="center" style="width:960px; font-size: larger">
-<tr>
-  <td id="demo1" width="1%"></td>
-  <td colspan="2" style="text-align: center; padding: 10px 0; font-size: 120%; font-weight: normal">
-    Canvas+SVG vector map and image viewer library  
-  </td>
-  <td id="demo2" width="1%"></td>
-</tr>
-<tr>
-  <td colspan="10" class="stripe">
-    Интерактивные схемы метро Москвы со строящимися линиями и станциями и Петербурга в <i>2022</i> году, 
-    пригородного ж/д транспорта Москвы и МО в <i>2015</i> году.
-    В картах метро Москвы и Петербурга по клику на станциях или выбору из списка можно рассчитать кратчайший путь между ними по алгоритму <i>BFS</i>. 
-  </td>
-</tr>
-<tr>
-  <td colspan="2" width="50%"> &emsp; Схема метро Москвы</td>
-  <td width="30%"> <i>Moscow Metro</i> </td>
-  <td> &emsp;
-    <a href="svg/mosmetro.html">SVG</a> &emsp; &emsp;
+</head>
+<body>
+<div id="demo1" class="main" style="text-align: center;"></div>
+<div class="main" style="font-size: x-large; text-align: center;">
+  Canvas+SVG vector map and image viewer library  
+</div>
+<p class="main stripe">
+  Интерактивные схемы метро Москвы со строящимися линиями и станциями и Петербурга в <i>2022</i> году, 
+  пригородного ж/д транспорта Москвы и МО в <i>2015</i> году.
+  В картах метро Москвы и Петербурга по клику на станциях или выбору из списка можно рассчитать кратчайший путь между ними по алгоритму <i>BFS</i>. 
+</p>
+<div class="main">
+  &emsp; Схема метро Москвы &ensp; <br>
+  <div class="gray nowrap en"><i>&emsp; Moscow Metro</i></div> 
+  <span class="nowrap"> &emsp; &emsp;
+    <a href="svg/mosmetro.html">SVG</a> &emsp; &emsp; 
     <a href="mosmetro.html">Canvas</a>
-  </td>
-</tr>
-<tr>
-  <td colspan="2"> &emsp; Схема ж/д Москвы и МО</td>
-  <td> <i>Moscow Railroad </i> </td>
-  <td> &emsp;
-    <a href="svg/mosrails.html">SVG</a> &emsp; &emsp;
+  </span>
+</div>
+<div class="main">  
+  &emsp; Схема ж/д Москвы и МО &ensp; <br>
+  <div class="gray nowrap en"><i>&emsp; Moscow Railroad </i></div> 
+  <span class="nowrap"> &emsp; &emsp;
+    <a href="svg/mosrails.html">SVG</a> &emsp; &emsp; 
     <a href="mosrails.html">Canvas</a>
-  </td>
-</tr>
-<tr>
-  <td colspan="2"> &emsp; Схема метро Петербурга</td>
-  <td> <i>St. Petersburg Metro</i> 
-  <td> &emsp;
-    <a href="svg/metrospb.html">SVG</a>
-  </td>
-</tr>
-<tr>
-  <td colspan="2"> &emsp; Схема метро Тбилиси</td>
-  <td> <i>Tbilisi Metro</i> 
-  <td> &emsp;
+  </span>
+</div>
+<div class="main">
+  &emsp; Схема метро Петербурга <br>
+  <div class="gray nowrap en"><i> &emsp; St. Petersburg Metro</i></div>
+  <span class="nowrap"> &emsp; &emsp;
+    <a href="svg/metrospb.html">SVG</a> &emsp; &emsp;
+  </span>
+</div>
+<div class="main">
+  &emsp; Схема метро Тбилиси <br>
+  <div class="gray nowrap en"><i> &emsp; Tbilisi Metro</i></div> 
+  <span class="nowrap"> &emsp; &emsp;
     <a class="disabled">SVG</a> &emsp; &emsp;
     <a href="metro-tbilisi.html">Canvas</a>
-  </td>
-</tr>
-<tr>
-  <td colspan="10" class="stripe">
-    Просмотр <i>jpeg</i>  и <i>svg</i> картинок с возможностью масштабирования.
-  </td>
-</tr>
-<tr>
-  <td colspan="2"> &emsp; Просмотровщик картинок</td>
-  <td> <i>Image Viewer</i> </td>
-  <td> &emsp;
+  </span>
+</div>
+
+<p class="main stripe">
+  Просмотр <i>jpeg</i>  и <i>svg</i> картинок с возможностью масштабирования.
+</p>
+
+<div class="main">
+  &emsp; Просмотровщик картинок <br>
+  <div class="gray nowrap en"><i> &emsp; Image Viewer</i></div> 
+  <span class="nowrap"> &emsp; &emsp;
     <a href="svg/imgviewer.html">SVG</a> &emsp; &emsp; 
     <a href="imgviewer.html">Canvas</a>
-  </td>
-</tr>
-<tr>
-  <td colspan="2"> &emsp; Анимация масштаба в SVG</td>
-  <td> <i>Pan Zoom</i> </td>
-  <td> &emsp;
-    <a href="svg/panzoom.html">SVG</a>
-  </td>
-</tr>
-<tr>
-  <td colspan="10" class="stripe">
-    Примеры использования градиента и <i>svg</i>-анимации с эффектом движения.
-  </td>
-<tr>
-  <td colspan="2"> &emsp; Настенные часы</td>
-  <td> <i>Wall Clock</i> </td>
-  <td> &emsp;
-    <a href="svg/clock.html">SVG</a>
-  </td>
-<tr>
-  <td colspan="2"> &emsp; Анимация движения в SVG</td>
-  <td> <i>Roller Ball</i> </td>
-  <td> &emsp;
-    <a href="svg/rollerball.html">SVG</a>
-  </td>
-<tr>
-  <td colspan="10" class="stripe">
-    Интерактивные карты мира со списками городов и стран в различных проекциях. 
-    Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
-  </td>
-</tr>
-<tr>
-  <td colspan="2"> &emsp; Атлас мира</td>
-  <td> <i>Atlas</i> </td>
-  <td> &emsp;
+  </span>
+</div>
+<div class="main">
+  &emsp; Анимация масштаба в SVG <br>
+  <div class="gray nowrap en"><i> &emsp; Pan Zoom</i></div> 
+  <span class="nowrap"> &emsp; &emsp;
+    <a href="svg/panzoom.html">SVG</a> &emsp; &emsp; 
+  </span>
+</div>
+
+<p class="main stripe">
+  Примеры использования градиента и <i>svg</i>-анимации с эффектом движения.
+</p>
+
+<div class="main">
+  &emsp; Настенные часы <br>
+  <div class="gray nowrap en"><i> &emsp; Pan Zoom</i></div> 
+  <span class="nowrap"> &emsp; &emsp;
+    <a href="svg/panzoom.html">SVG</a> &emsp; &emsp; 
+  </span>
+</div>
+<div class="main">
+  &emsp; Анимация движения в SVG <br>
+  <div class="gray nowrap en"><i> &emsp; Roller Ball</i></div> 
+  <span class="nowrap"> &emsp; &emsp;
+    <a href="svg/rollerball.html">SVG</a> &emsp; &emsp;  
+  </span>
+</div>
+
+<p class="main stripe">
+  Интерактивные карты мира со списками городов и стран в различных проекциях. 
+  Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
+</p>
+
+<div class="main">
+  &emsp; Атлас мира <br>
+  <div class="gray nowrap en"><i> &emsp; Atlas</i></div>
+  <span class="nowrap"> &emsp; &emsp;
     <a href="svg/atlas.html">SVG</a> &emsp; &emsp; 
     <a href="atlas.html">Canvas</a>
-  </td>
-</tr>
-<tr>
-  <td colspan="2"> &emsp; Население мира</td>
-  <td> <i>Population</i> </td>
-  <td> &emsp;
+  </span>
+</div>
+<div class="main">
+  &emsp; Население мира <br>
+  <div class="gray nowrap en"><i> &emsp; Population</i></div>
+  <span class="nowrap"> &emsp; &emsp;
     <a href="svg/usemap.html">SVG</a> &emsp; &emsp; 
     <a href="usemap.html">Canvas</a>
-  </td>
-</tr>
-<tr>
-  <td colspan="2"> &emsp; Население США</td>
-  <td> <i>Population USA</i> </td>
-  <td> &emsp;
-    <a href="svg/us.html">SVG</a>
-  </td>
-<tr>
-  <td colspan="2"> &emsp; Города мира</td>
-  <td><i>Cities</i></td>
-  <td> &emsp;
+  </span>
+</div>
+<div class="main">
+  &emsp; Население США <br>
+  <div class="gray nowrap en"><i> &emsp; Population USA</i></div>
+  <span class="nowrap"> &emsp; &emsp;
+    <a href="svg/us.html">SVG</a> &emsp; &emsp; 
+  </span>
+</div>
+<div class="main">
+  &emsp; Города мира <br>
+  <div class="gray nowrap en"><i> &emsp; Cities</i></div>
+  <span class="nowrap"> &emsp; &emsp;
     <a class="disabled">SVG</a> &emsp; &emsp; 
     <a href="cities.html">Canvas</a>
-  </td>
-</tr>
-<tr>
-  <td colspan="2"> &emsp; Города России без расстояний</td>
-  <td> <i>Russian Cities</i> </td>
-  <td> &emsp;
+  </span>
+</div>
+<div class="main">
+  &emsp; Города России без расстояний <br>
+  <div class="gray nowrap en"><i> &emsp; Russian Cities</i></div>
+  <span class="nowrap"> &emsp; &emsp;
     <a class="disabled">SVG</a> &emsp; &emsp; 
     <a href="russ.html">Canvas</a>
-  </td>
-</tr>
-<tr>
-  <td colspan="2"> &emsp; Страны мира</td>
-  <td> <i>Countries</i> </td>
-  <td> &emsp;
+  </span>
+</div>
+<div class="main">
+  &emsp; Страны мира <br>
+  <div class="gray nowrap en"><i> &emsp; Countries</i></div>
+  <span class="nowrap"> &emsp; &emsp;
     <a class="disabled">SVG</a> &emsp; &emsp; 
     <a href="countries.html">Canvas</a>
-  </td>
-</tr>
-<tr>
-  <td colspan="2"> &emsp; Маршруты на карте</td>
-  <td> <i>Routes</i> </td>
-  <td> &emsp;
+  </span>
+</div>
+<div class="main">
+  &emsp; Маршруты на карте <br>
+  <div class="gray nowrap en"><i> &emsp; Routes</i></div>
+  <span class="nowrap"> &emsp; &emsp;
     <a class="disabled">SVG</a> &emsp; &emsp; 
     <a href="merc.html">Canvas</a>
-  </td>
-</tr>
-<tr>
-  <td colspan="10" class="stripe">
-    Отрисовка картинки в канвасе <i>3d</i> с пересчетом проекции отображения через шейдеры <i>WebGL</i> на основе примеров с с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
-    Звездное небо в канвасе <i>2d</i> и <i>3d</i> с использованием скриптов <a href="https://github.com/mrdoob/three.js">three.js</a>.
-  </td>
-</tr>
-<tr>
-  <td colspan="2"> &emsp; Атлас 3D</td>
-  <td> <i>Atlas 3D</i> </td>
-  <td> &emsp;
+  </span>
+</div>
+
+<p class="main stripe">
+  Отрисовка картинки в канвасе <i>3d</i> с пересчетом проекции отображения через шейдеры <i>WebGL</i> на основе примеров с с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
+  Звездное небо в канвасе <i>2d</i> и <i>3d</i> с использованием скриптов <a href="https://github.com/mrdoob/three.js">three.js</a>.
+</p>
+
+<div class="main">
+  &emsp; Атлас 3D <br>
+  <div class="gray nowrap en"><i> &emsp; Atlas 3D</i></div>
+  <span class="nowrap"> &emsp; &emsp;
     <a class="disabled">SVG</a> &emsp; &emsp; 
     <a href="map3d.html">Canvas</a>
-  </td>
-</tr>
-<tr>
-  <td colspan="2"> &emsp; Звездное небо</td>
-  <td> <i>Starry Sky</i> </td>
-  <td> &emsp;
+  </span>
+</div>
+<div class="main">
+  &emsp; Звездное небо <br>
+  <div class="gray nowrap en"><i> &emsp; Starry Sky</i></div>
+  <span class="nowrap"> &emsp; &emsp;
     <a class="disabled">SVG</a> &emsp; &emsp; 
     <a href="starry.html">Canvas</a>
-  </td>
-</tr>
-<tr>
-  <td colspan="2"> &emsp; Звездное небо 3D</td>
-  <td> <i>Sky 3D</i> </td>
-  <td> &emsp;
+  </span>
+</div>
+<div class="main">
+  &emsp; Звездное небо 3D <br>
+  <div class="gray nowrap en"><i> &emsp; Sky 3D</i></div>
+  <span class="nowrap"> &emsp; &emsp;
     <a class="disabled">SVG</a> &emsp; &emsp; 
     <a href="sky3d.html">Canvas</a>
-  </td>
-</tr>
-<tr>
-  <td colspan="2" class="stripe" align="center">
-    Больше карт в блоге <a href="https://dbcartajs.blogspot.ru" target="_blank">dbcartajs.blogspot.ru</a>
-  </td>
-  <td colspan="2" class="stripe" align="center">
-    <a href="https://github.com/egaxegax/dbcartajs" target="_blank">Source Code</a>
-  </td>
-</tr>
-<tr>
-  <td class="footer">
-    &emsp; &emsp; &emsp; &emsp; <a href="https://metrika.yandex.ru/stat/?id=65044687&amp;from=informer" target="_blank" rel="nofollow"><img src="https://informer.yandex.ru/informer/65044687/3_1_FFFFFFFF_EFEFEFFF_0_pageviews" style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" class="ym-advanced-informer" data-cid="65044687" data-lang="ru" /></a>
-  </td>
-  <td colspan="2" class="footer" align="center"> <a href="/" title="Сайт автора">egaxegax</a> </td>
-  <td class="footer" align="center">
-    <p> © 2013-2022 </p>
-  </td>
-</tr>
-</table>
+  </span>
+</div>
+
+<p class="main stripe" style="text-align: center">
+  Больше карт в блоге <a href="https://dbcartajs.blogspot.ru" target="_blank">dbcartajs.blogspot.ru</a>
+    &emsp; &emsp;
+  <a href="https://github.com/egaxegax/dbcartajs" target="_blank">Source Code</a>
+</p>
+
+<p class="main footer">
+  <a href="https://metrika.yandex.ru/stat/?id=65044687&amp;from=informer" target="_blank" rel="nofollow"><img src="https://informer.yandex.ru/informer/65044687/3_1_FFFFFFFF_EFEFEFFF_0_pageviews" style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" class="ym-advanced-informer" data-cid="65044687" data-lang="ru" /></a>
+  &emsp; &emsp;
+   <a href="/" title="Сайт автора">egaxegax</a>
+  &emsp; &emsp;
+  <span class="nowrap"> © 2013-2022 </span>
+</p>
 
 <script>
   // add anim
@@ -234,6 +231,7 @@ a, a:active, a:focus { color:#4d3ca0; outline:none; }
   delete CONTINENTS;
   dw2.draw();
 </script>
+<script src="/static/js/metrics.js"></script>
 </body>
 </html>
   

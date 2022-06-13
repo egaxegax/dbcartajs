@@ -6,12 +6,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Схема электричек МО / SVG векторная карта</title>
 <meta name="description" content="Карта железных дорог Москвы и МО. Схема пригородного жд сообщения Москвы и МО в 2015 году.">
 <meta name="keywords" content="Схема электричек, Карта железных дорог Москвы и МО, Схема пригородного ж/д транспорта Москвы и МО. Moscow Underground and Commuter Rail Map">
 <link rel="icon" href="../img/fav.svg" type="image/svg+xml" />
-<style type="text/css">html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
+<style>html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
 <script src="/static/js/metrics.js"></script>
 </head>
 <body>
@@ -19,7 +20,10 @@
 <script src="../js/dbcartasvg.js"></script>
 <table><tr><td id="mcont"></td></tr></table>
 <script>
-var DC;
+  // diagonal size
+function mds(o) { 
+  return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*o/100;
+};
  // tooltip under cursor
 function infobox(ev) {
   var mtip = document.getElementById('maptooltip');
@@ -49,18 +53,18 @@ function infobox(ev) {
 }
 function draw() {
   var mopt = {};
-  function route(o)  { return DC.extend({cls: 'Line', width: 6, anchor: ['start', 'middle'], labelscale: 1}, o||{}) };
+  function route(o)  { return DC.extend({width: 6, anchor: ['start', 'middle'], labelscale: 1}, o||{}) };
   function route_d(o){ return route(DC.extend({width: 1, fg: 'white', dash: [4,2]}, o||{})) };
   function inch(o)   { return route(DC.extend({fg: 'black', join: 'round', cap: 'round', width: 6}, o||{})) };
   function inch_d(o) { return inch(DC.extend({fg: 'white', width: 5}, o||{})) };
-  function label(o)  { return DC.extend({cls: 'Label', labelscale: 1, labelcolor: '#a5a6aa'}, o||{}) };
-  function station(o){ return DC.extend({cls: 'Rect', bg: 'white', size: 4, width: 3, scale: 1, labelscale: 1}, o||{}) };
+  function label(o)  { return DC.extend({labelscale: 1, labelcolor: '#a5a6aa'}, o||{}) };
+  function station(o){ return DC.extend({bg: 'white', size: 4, width: 3, scale: 1, labelscale: 1}, o||{}) };
   function inst(o)   { return station(DC.extend({fg: '#a5a6aa', labelcolor: o['labelcolor']}, o)) };
   function inst_l(o) { return inst(DC.extend({bg: o['labelcolor'], fg: o['labelcolor']}, o)) };
-  function rst(o)    { return station(DC.extend({cls: 'Rect', size: 6, width: 4, join: 'round', labelcolor: 'black'}, o)) };
+  function rst(o)    { return station(DC.extend({size: 6, width: 4, join: 'round', labelcolor: 'black'}, o)) };
   function rst_d(o)  { return rst(DC.extend({size: 3}, o)) };
   function rst_l(o)  { return rst(DC.extend({labelcolor: o['fg']}, o)) };
-  function ost(o)    { return rst(DC.extend({size: 3, width: 1, fg: 'white'}, o)) };
+  function ost(o)    { return rst(DC.extend({size: 3, width: 1}, o)) };
    // lines
   DC.extend(mopt, {
    // metro
@@ -91,7 +95,7 @@ function draw() {
     t11:    route({fg: '#eb479d'}),
     mono:   route({fg: '#2c87c5', width: 2, labelcolor: '#2c87c5', anchor: ['start', 'bottom']}),
    // roads
-    mkad:   route({cls: 'Polygon', bg: 'white', fg: 'rgb(180,180,180)', width: 1, labelcolor: 'rgb(180,180,180)', anchor: ['center', 'middle']}),
+    mkad:   route({bg: 'white', fg: 'rgb(180,180,180)', width: 1, labelcolor: 'rgb(180,180,180)', anchor: ['center', 'middle']}),
    // label
     e1:     label({anchor: ['end', 'middle']}),
     e2:     label({anchor: ['start', 'middle']}),
@@ -204,6 +208,7 @@ function draw() {
     a4_7:   ost({anchor: ['end', 'middle']}),
     a4_8:   ost({anchor: ['start', 'middle']}),
     a5:     rst({fg: mopt['t5'].fg, anchor: ['end', 'bottom']}),
+    a5_0:   rst({fg: mopt['t5'].fg, anchor: ['end', 'middle']}),
     a5_1:   rst({fg: mopt['t5'].fg, anchor: ['center', 'bottom']}),
     a5_2:   rst({fg: mopt['t5'].fg, anchor: ['start', 'top']}),
     a5_3:   rst({fg: mopt['t5'].fg, anchor: ['end', 'top']}),
@@ -220,6 +225,7 @@ function draw() {
     a6_6:   ost({anchor: ['center', 'bottom']}),
     a6_7:   ost({anchor: ['center', 'top']}),
     a7:     rst({fg: mopt['t7'].fg, anchor: ['end', 'middle']}),
+    a7_0:   rst({fg: mopt['t7'].fg, anchor: ['end', 'top']}),
     a7_1:   rst({fg: mopt['t7'].fg, anchor: ['start', 'middle']}),
     a7_2:   rst_l({fg: mopt['t7'].fg, anchor: ['end', 'top']}),
     a7_3:   ost({anchor: ['end', 'middle']}),
@@ -275,7 +281,7 @@ function draw() {
       'stroke-dasharray': mopt[ftype].dash,
       'stroke-linejoin': mopt[ftype].join,
       'stroke-linecap': mopt[ftype].cap,
-      'stroke-width': mopt[ftype].width, d: path
+      'stroke-width': mds(mopt[ftype].width), d: path
     });
   });
     // add stations
@@ -289,7 +295,7 @@ function draw() {
     if(ftype[0] == 's' && MLEGEND['r'+tip]) mlabel += '<br><br>' + MLEGEND['r'+tip] + ' ('+ tip + ')';
     var station = DC.append('circle', {
       id: ftype +'_'+ abbr, class: mlabel,
-      cx: pts[0], cy: pts[1], r: mopt[ftype].size,
+      cx: pts[0], cy: pts[1], r: mds(mopt[ftype].size),
       fill: mopt[ftype].bg, stroke: mopt[ftype].fg
     });
     if(!label) return;
@@ -304,7 +310,7 @@ function draw() {
     };
     var text = DC.append('text', {
       id: 'txt'+ ftype +'_'+ abbr,
-      x: pts[0] + dx, y: pts[1] + dy, fill: mopt[ftype].labelcolor || 'black',
+      x: pts[0] + mds(dx), y: pts[1] + mds(dy), fill: mopt[ftype].labelcolor || 'black',
       'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/110, 'font-weight':'normal',
       'text-anchor': a ? a[0] : ''
     });
@@ -332,7 +338,7 @@ function draw() {
   });
 };
 
-DC = new dbCartaSvg({
+var DC = new dbCartaSvg({
   id: 'mcont',
   height: document.getElementById('mcont').offsetHeight,
   sbarpos: 'left',

@@ -6,12 +6,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SVG-image pan and zoom / SVG векторная карта</title>
 <meta name="description" content="Просмотровщик svg-изображений">
 <meta name="keywords" content="image viewer, просмотровщик svg, pan, zoom, scale">
 <link rel="icon" href="../img/fav.svg" type="image/svg+xml" />
-<style type="text/css">html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
+<style>html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
 <script src="/static/js/metrics.js"></script>
 </head>
 <body>
@@ -278,11 +279,6 @@ function draw(){
     // create new image
     DC.vp.style.cursor = 'pointer';
     DC.vp.innerHTML = o.innerHTML;
-    // center map minus tiger width/2 height/2
-    var cn = DC.centerOf();
-    DC.centerCarta([ cn[0]-o.getAttribute('width')/2, cn[1]-o.getAttribute('height')/2 ]);
-    // scale map to fit height
-    DC.scaleCarta( 0.8*DC.root.getAttribute('height') / o.getAttribute('height') );
     // remove old image
     document.body.removeChild(o);
     // animate
