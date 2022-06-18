@@ -1,12 +1,12 @@
-<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Карта метро Тбилиси / Canvas векторная карта</title>
 <meta name="description" content="Схема метро Тбилиси">
 <meta name="keywords" content="Схема метро Тбилиси, Карта метро Тбилиси">
 <link rel="icon" href="img/fav.svg" type="image/svg+xml">
-<style type="text/css">html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
+<style>html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
 <script src="js/dbcarta.js"></script>
 <script src="/static/js/metrics.js"></script>
 </head>
@@ -16,6 +16,9 @@
 <option disabled selected>Выберите...</option></select>
 </td></tr></table>
 <script>
+  // diag.size ratio
+function mds(o){ return Math.sqrt(dw.sizeOf()[2]*dw.sizeOf()[2]+dw.sizeOf()[3]*dw.sizeOf()[3])/15*o/100; }
+  //
 function draw(){
   var MLINES = [
     ['r1', '1', [
@@ -84,15 +87,15 @@ function draw(){
 //
   ];
   // -------------------------------------------
-  var dw = new dbCarta({
+  dw = new dbCarta({
     id: 'mcont',
     height: document.getElementById('mcont').offsetHeight,
     scalebg: 'rgba(200,100,50,0.2)'
   });
   dw.style.backgroundColor = 'white';
   // define new layers
-  var route = function(o){ return dw.extend({cls: 'Line', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
-      station = function(o){ return dw.extend({cls: 'Dot', size: 8, width: 6, bg: dw.style.backgroundColor, labelscale: 1}, o||{}) },
+  var route = function(o){ return dw.extend({cls: 'Line', width: mds(5), anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
+      station = function(o){ return dw.extend({cls: 'Dot', size: mds(8), width: mds(6), bg: dw.style.backgroundColor, labelscale: 1}, o||{}) },
       redst = function(o){ return station(dw.extend({fg: 'rgb(193,41,22)'}, o||{})) },
       bluest = function(o){ return station(dw.extend({fg: 'rgb(25,74,103)'}, o||{})) };
   // lines
@@ -108,26 +111,26 @@ function draw(){
     s1_3: redst({anchor: ['center', 'top']}),
     s1_4: redst({anchor: ['start', 'top']}),
     s1_5: redst({anchor: ['start', 'bottom']}),
-    s1s: redst({bg: redst().fg, size: 5, width: 1}),
+    s1s: redst({bg: redst().fg, size: mds(5), width: mds(1)}),
     s2: bluest({anchor: ['start', 'top']}),
     s2_1: bluest({anchor: ['center', 'top']}),
     s2_2: bluest({anchor: ['end', 'bottom']}),
     s2_3: bluest({anchor: ['center', 'bottom']}),
-    s2s: bluest({bg: bluest().fg, size: 5, width: 1})
+    s2s: bluest({bg: bluest().fg, size: mds(5), width: mds(1)})
   });
   dw.loadCarta(MLINES);
   dw.loadCarta(MSTATIONS);
-  dw.scaleCarta(1.25);
+  dw.scaleCarta(dw.sizeOf()[3]/dw.sizeOf()[2]*2);
   dw.draw();
   //
-  MSTATIONS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1});
+  MSTATIONS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1;});
   MSTATIONS.map(function(a){
     if (!a[3]) return;
     var el = document.createElement('option');
     el.value = a[0] + '_' + a[1];
     el.appendChild(document.createTextNode(a[3]));
     document.getElementById('stationlist').appendChild(el);    
-  })
+  });
   // station list
   document.getElementById('stationlist').onchange = function(){
     if(this.options[this.selectedIndex]){
