@@ -278,6 +278,10 @@ function draw(){
     // create new image
     DC.vp.style.cursor = 'pointer';
     DC.vp.innerHTML = o.innerHTML;
+    // center map minus tiger width/2 height/2
+    DC.centerCarta([ o.getAttribute('width')/2, o.getAttribute('height')/2 ]);
+    // scale map to fit height
+    DC.scaleCarta( DC.root.getAttribute('height') / o.getAttribute('height') );
     // remove old image
     document.body.removeChild(o);
     // animate
@@ -290,7 +294,7 @@ function draw(){
 if(window.addEventListener)
   window.addEventListener('load', draw, false); 
 else
-  window.attachEvent('onload', draw)
+  window.attachEvent('onload', draw);
 
 </script>
 </body>
