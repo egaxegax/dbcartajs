@@ -15,8 +15,9 @@ egax@bk.ru, 2015-22.
 <script src="/static/js/metrics.js"></script>
 </head>
 <body>
-<table><tr><td id="mcont">
-<select id="chinches" onchange="selectCh(this)" style="position:fixed; top:30px; right:30px">
+<table><tr>
+<td id="mcont">
+<select id="chinches" onchange="clchange(this)" style="position:fixed; top:10px; right:10px">
 <option disabled selected>Пересадки...</option>
 <option id="inch">&#9745; Метро</option>
 <option id="inch_mn">&emsp; Монорельс</option>
@@ -24,12 +25,13 @@ egax@bk.ru, 2015-22.
 <option id="inch_mcd">&emsp; МЦД</option>
 <option id="inch_ext">&emsp; Строящиеся</option>
 </select>
-</td></tr></table>
+</td>
+</tr></table>
 <script src="../js/dbcartasvg.js"></script>
 <script src="../js/data/mosmetro.js"></script>
 <script src="../js/alg/bfs.js"></script>
 <script>
-function selectCh(sel){
+function clchange(sel){
   var o=sel.options[sel.selectedIndex], s=o.innerHTML; 
   o.innerHTML = (s.indexOf('\u2611')>-1 ? '&emsp;' : '\u2611')+' '+s.slice(s.search(' '));
   sel.selectedIndex = 0;
@@ -37,7 +39,7 @@ function selectCh(sel){
   // diagonal size
 function mds(o) { 
   return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*o/100;
-};
+}
 function draw() {
   var mopt = {};
   function route(o)    { return DC.extend({class: 'route', bg: 'none', join: 'round', width: 8, anchor: ['start', 'middle']}, o||{}); };
@@ -49,7 +51,7 @@ function draw() {
   function rail(o)     { return route(DC.extend({width: 2, fg: '#ccc'}, o||{})); };
   function rail_d(o)   { return rail(DC.extend({fg: '#fff', dash: [10,10]}, o||{})); };
   function label(o)    { return DC.extend({class: 'label', labelcolor: '#aaa', anchor: ['start', 'top']}, o||{}); };
-  function station(o)  { return DC.extend({class: 'station', bg: 'white', size: 5, width: 1, scale: 1}, o||{}); };
+  function station(o)  { return DC.extend({class: 'station', bg: '#f5f5dc', size: 5, width: 20, scale: 1}, o||{}); };
   function st_mck(o)   { return station(DC.extend({fg: '#f76093', size: 4, labelcolor: 'gray'}, o)); };
   function st_mcd(o)   { return station(DC.extend({size: 2, labelcolor: 'rgb(180,180,180)'}, o)); };
   function inch_mck(o) { return inch(DC.extend({dash:[2,4], width: 3}, o||{})); };
@@ -57,7 +59,7 @@ function draw() {
   function inch_mcd(o) { return inch(DC.extend({dash:[1,3], fg: '#777', width: 1}, o||{})); };
   function inst_mck(o) { return st_mck(DC.extend({size: 4, labelcolor: o['fg'], bg: o['fg']}, o)); };
   function inst_mcd(o) { return st_mcd(DC.extend({size: 2, labelcolor: o['fg'], bg: o['fg']}, o)); };
-  function inst(o)     { return station(DC.extend({size: 4, labelcolor: o['fg'], width: 1, bg: o['fg']}, o)); };
+  function inst(o)     { return station(DC.extend({size: 4, width: 20, labelcolor: o['fg'], bg: o['fg']}, o)); };
   function inst_d(o)   { return inst(DC.extend({size: 2, width: 2}, o||{})); };
     // lines
   DC.extend(mopt, {
@@ -296,7 +298,7 @@ function draw() {
         pts = DC.toPoints(coords, true);
     var station = DC.append('circle', {
       id: ftype +'_'+ abbr, class: mopt[ftype].class, mclass: ftype,
-      fill: mopt[ftype].bg, stroke: mopt[ftype].fg, 'stroke-width': mds(mopt[ftype].width), 
+      fill: mopt[ftype].bg, mstroke: mopt[ftype].fg, stroke: 'transparent', 'stroke-width': mds(mopt[ftype].width), 
       cx: pts[0], cy: pts[1], r: mds(mopt[ftype].size)
     });
     DC.extend(station, {
@@ -309,7 +311,7 @@ function draw() {
           }
           clearRoute();
         }
-        DC.attr(ev.target, {class: 'selected', fill: 'gold', r: mds(6), 'stroke-width': mds(2)});
+        DC.attr(ev.target, {class: 'selected', fill: 'gold', r: mds(6), 'stroke-width': mds(5)});
         if((sel = DC.root.querySelectorAll('.selected')).length == 2){
           calcRoute(sel[0].getAttribute('id'), sel[1].getAttribute('id'));
         }
@@ -333,7 +335,7 @@ function draw() {
       if(a[0] == 'start')    dx = 8;
       else if(a[0] == 'middle') dx = -5;
       else if(a[0] == 'end') dx = -10;
-      if(a[1] == 'top') dy = 12;
+      if(a[1] == 'top') dy = 16;
       else if(a[1] == 'middle') dy = 4;
       else if(a[1] == 'bottom') dy = -8;
     };
@@ -371,11 +373,7 @@ function draw() {
     text.appendChild(document.createTextNode(t));    
   });
     //
-  var xs = 400, ys = 220,     // need width, height of map in degrees
-      mpts = DC.viewsizeOf(), // visible size of map in degrees 
-      scalex = (mpts[2]-mpts[0])/xs,
-      scaley = (mpts[1]-mpts[3])/ys;
-  DC.scaleCarta(scalex);
+//  DC.scaleCarta(0.8);
 };
   //
 function clearRoute(){
@@ -425,7 +423,7 @@ function calcRoute(fromid, toid){
           path = ('M ' + pts).replace(/,/g, ' ');
       var bInch = inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length;
       DC.extend( 
-        DC.append('path', { class: 'selpath', d: path, stroke: DC.root.getElementById(makeid(st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-dasharray': bInch ? [3,2] : 'none', 'stroke-width': mds(bInch ? 6 : 12)}),
+        DC.append('path', { class: 'selpath', d: path, stroke: DC.root.getElementById(makeid(st)).getAttribute('mstroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-dasharray': bInch ? [3,2] : 'none', 'stroke-width': mds(bInch ? 6 : 12)}),
           { onclick: clearRoute });
     } else {
       [].slice.call(DC.root.querySelectorAll('.route, .station, .label')).map(function(o){ // opacity map
@@ -455,7 +453,7 @@ var DC = new dbCartaSvg({
   height: document.getElementById('mcont').offsetHeight,
   sbarpos: 'right',
   bg: 'rgb(250,255,250)',
-  scalebg: 'rgba(100,100,100,0.1)'
+  scalebg: 'rgba(100,200,100,0.2)'
 });
   // events
 //DC.extend(DC.root, {

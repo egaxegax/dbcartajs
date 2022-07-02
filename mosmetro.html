@@ -6,6 +6,7 @@ egax@bk.ru, 2013-22.
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Карта метро Москвы / Canvas векторная карта</title>
 <meta name="description" content="Схема метро Москвы c расчётом пути с действующими и строящимися линиями и станциями в 2022 году">
 <meta name="keywords" content="схема метро москвы, canvas векторная карта метро, мцк, mosmetro">
@@ -14,6 +15,22 @@ egax@bk.ru, 2013-22.
 <script src="/static/js/metrics.js"></script>
 </head>
 <body>
+<table style="border-collapse: collapse;">
+<tr style="height: 1px; background-color: rgb(210, 224, 240);">
+<td width="35%">
+  <h2 style="margin: 0px;">Московское метро</h2>
+</td>
+<td>
+  <select id="stlist"></select>
+  <select id="stlist2"></select> <button id="btcalc" title="Calc Route">&#9654;&nbsp;</button>
+  <select id="chinches"></select>
+</td>
+</tr>
+<tr>
+  <td colspan="2" id="mcol"></td>
+</tr>
+</table>
+<div id="maptooltip" style="padding:5px; color:#333; border:2px solid rgba(19,64,117,0.5); border-radius:4px; position:absolute; background:rgba(250,250,250,0.9)"></div>
 <script src="js/dbcarta.js"></script>
 <script src="js/data/mosmetro.js"></script>
 <script src="js/alg/bfs.js"></script>
@@ -30,402 +47,22 @@ function infobox(ev, label){
     mtip.style.display = 'none';
   }
 }
-function drawcrosshair(){
-  var ctx = dw.getContext('2d');
-  ctx.save();
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.beginPath();
-  ctx.moveTo(dw.width/2.0, 0);
-  ctx.lineTo(dw.width/2.0, dw.height);
-  ctx.moveTo(0, dw.height/2.0);
-  ctx.lineTo(dw.width, dw.height/2.0);
-  ctx.lineWidth = 15;
-  ctx.strokeStyle = 'rgba(100,100,200,0.2)';
-  ctx.stroke();
-  ctx.restore();
-}
-function init(){
-  var mtab = document.createElement('table');
-  mtab.style.borderCollapse = 'collapse';
-  var row = document.createElement('tr');
-  row.style.height = '1px';
-  row.style.backgroundColor = '#d2e0f0';
-  mtab.appendChild(row);
-
-  var col = document.createElement('td');
-  col.width = '35%';
-  var el = document.createElement('h2');
-  el.appendChild(document.createTextNode('Московское метро'));
-  el.style.padding = '0';
-  el.style.margin = '0';
-  col.appendChild(el);
-  row.appendChild(col);
-
-  var col = document.createElement('td');
-  col.width = '35%';
-  col.style.whiteSpace = 'nowrap';
-  var stlist = el = document.createElement('select');
-  el.id = 'stlist';
-  el.style.margin = '0 10px';
-  stlist.onchange = function(){
-    var pts = dw.mflood[this.value]['pts'];
-    dw.centerCarta(pts[0][0] + dw.m.offset[0], pts[0][1] + dw.m.offset[1]);
-    dw.draw();
-    drawcrosshair();
-  };
-  col.appendChild(el);
-  col.appendChild(document.createTextNode(' '));
-  var stlist2 = el = document.createElement('select');
-  el.id = 'stlist2';
-  stlist2.onchange = function(){
-    var pts = dw.mflood[this.value]['pts'];
-    dw.centerCarta(pts[0][0] + dw.m.offset[0], pts[0][1] + dw.m.offset[1]);
-    dw.draw();
-    drawcrosshair();
-  };
-  col.appendChild(el);
-  col.appendChild(document.createTextNode(' '));
-  var el = document.createElement('button');
-  el.title = 'Calc route';
-  el.style.margin = '0 10px';
-  el.onclick = function(){
-    calcRoute(stlist.value, stlist2.value);
-  };
-  el.appendChild(document.createTextNode('\u25B6'));
-  col.appendChild(el);
-  row.appendChild(col);
-
-  var col = document.createElement('td');
-  col.align = 'center';
-  col.style.whiteSpace = 'nowrap';
-  var chinches = el = document.createElement('select');
-  el.id = 'chinches';
-  el.onchange = function(){
-    var o=this.options[this.selectedIndex], s=o.innerHTML; 
-    o.innerHTML = (s.indexOf('\u2611')>-1 ? '&emsp;' : '\u2611')+' '+s.slice(s.search(' '));
-    this.selectedIndex = 0;
-  };
-  col.appendChild(el);
-  col.appendChild(document.createTextNode(' '));
-  var el = document.createElement('button');
-  el.title = 'Rotate';
-  el.style.margin = '0 10px';
-  el.onclick = function(){
-    dw.rotateCarta(10);
-    dw.draw();
-  };
-  el.appendChild(document.createTextNode('\u21A9'));
-  col.appendChild(el);
-  row.appendChild(col);
-  document.body.appendChild(mtab);
-
-  var row = document.createElement('tr');
-  var col = document.createElement('td');
-  col.colSpan = '10';
-  col.id = 'mcol';
-  col.style.padding = "0";
-  row.appendChild(col);
-  mtab.appendChild(row);
-  document.body.appendChild(mtab);
-
-    // domap tooltip
-  var el = document.createElement('div');
-  el.id = 'maptooltip';
-  el.style.padding = '5px';
-  el.style.color = '#333333';
-  el.style.font = '1em arial';
-  el.style.border = '2px solid rgba(19,64,117,0.5)';
-  el.style.borderRadius = '4px';
-  el.style.backgroundColor = 'rgba(250,250,250,0.9)';
-  el.style.position = 'absolute';
-  el.style.zIndex = '10000';
-  el.onmousemove = function(){ this.innerHTML = ''; };
-  document.body.appendChild(el);
-
-  dw = new dbCarta({
-    id: 'mcol', height: col.offsetHeight,
-    viewportx: 220, viewporty: 220,
-    scalebg: 'rgba(100,200,100,0.1)'
-  });
-  dw.style.backgroundColor = 'rgb(250,255,250)';
-    // define new layers
-  function route(o)    { return dw.extend({cls: 'Line', width: 6, join: 'round', anchor: ['start', 'middle'], labelscale: 1}, o||{}); };
-  function route_ext(o){ return route(dw.extend({width: 4, dash: [2,4]}, o||{})); };
-  function inch(o)     { return route(dw.extend({fg: '#ccc', cap: 'round', width: 8}, o||{})); };
-  function inch_d(o)   { return inch(dw.extend({fg: '#fff', width: 5}, o||{})); };
-  function inch_ext(o) { return inch(dw.extend({width: 4, fg:'white', dash: [4,2]}, o||{})); };
-  function river(o)    { return route(dw.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})); };
-  function rail(o)     { return route(dw.extend({fg: '#ddd', width: 2, labelscale: 0}, o||{})); };
-  function rail_d(o)   { return rail(dw.extend({fg: '#fff', dash: [10,10]}, o||{})); };
-  function label(o)    { return dw.extend({cls: 'Polygon', labelcolor:'#aaa', labelscale: 1, anchor: ['start', 'top']}, o||{}); };
-  function station(o)  { return dw.extend({cls: 'Rect', bg: 'white', size: 5, width: 3, scale: 1, labelscale: 1}, o||{}); };
-  function st_mck(o)   { return station(dw.extend({fg: '#f76093', size: 4, labelcolor: 'gray'}, o)); };
-  function st_mcd(o)   { return station(dw.extend({size: 2, labelcolor: 'rgb(180,180,180)'}, o)); };
-  function inch_mck(o) { return inch(dw.extend({dash:[2,4], width: 2}, o||{})); };
-  function inch_mn(o)  { return inch(dw.extend({dash:[1,2], fg: 'black', width: 1}, o||{})); };
-  function inch_mcd(o) { return inch(dw.extend({dash:[1,3], fg: '#777', width: 1}, o||{})); };
-  function inst_mck(o) { return st_mck(dw.extend({size: 4, labelcolor: o['fg'], bg: o['fg']}, o)); };
-  function inst_mcd(o) { return st_mcd(dw.extend({size: 2, labelcolor: o['fg'], bg: o['fg']}, o)); };
-  function inst(o)     { return station(dw.extend({size: 5, labelcolor: o['fg'], bg: o['fg']}, o)); };
-  function inst_d(o)   { return inst(dw.extend({size: 2, width: 1}, o||{})); };
-    // lines
-  dw.extend(dw.mopt, {
-    r1:        route({fg: '#ed1b35'}),
-    r1_ext:    route_ext({fg: '#ed1b35'}),
-    r2:        route({fg: '#44b85c'}),
-    r2_ext:    route_ext({fg: '#44b85c'}),
-    r3:        route({fg: '#0078bf'}),
-    r3_ext:    route_ext({fg: '#0078bf'}),
-    r4:        route({fg: '#19c1f3'}),
-    r4A:       route({fg: '#19c1f3'}),
-    r5:        route({fg: '#894e35'}),
-    r6:        route({fg: '#f58631'}),
-    r6_ext:    route_ext({fg: '#f58631'}),
-    r7:        route({fg: '#8e479c'}),
-    r7_ext:    route_ext({fg: '#8e479c'}),
-    r8:        route({fg: '#ffcb31'}),
-    r8_ext:    route_ext({fg: '#ffcb31'}),
-    r9:        route({fg: '#a1a2a3'}),
-    r10:       route({fg: '#b3d445'}),
-    r10_ext:   route_ext({fg: '#b3d445'}),
-    r11:       route({fg: '#79cdcd'}),
-    r11_ext:   route_ext({fg: '#79cdcd'}),
-    r11A:      route({fg: '#79cdcd'}),
-    r12:       route({fg: '#acbfe1'}),
-    r12_ext:   route_ext({fg: '#acbfe1'}),
-    r13:       route({fg: '#2c87c5', width: 2}),
-    r14:       rail({fg: '#f76093', width: 2}),
-    r14_d:     rail_d({width:2}),
-    r15:       route({fg: '#de62be'}),
-    r16:       route({fg: '#554d26'}),
-    r16_ext:   route_ext({fg: '#554d26'}),
-    inch:      inch(),
-    inch_d:    inch_d(),
-    inch_ext:  inch_ext(),
-    inch_mck:  inch_mck(),
-    inch_mn:   inch_mn(),
-    inch_mcd:  inch_mcd(),
-    mkad:      label({fg: '#c8c8ff',  bg: '#fff', anchor: ['center', 'middle']}),
-    moskvar:   river({width: 15}),
-    moskvac:   river({width: 5}),
-    strogino:  river({width: 5}),
-    vodootvod: river({width: 5}),
-    yauza:     river({width: 5}),
-    nagatino:  river({width: 6}),
-    grebnoy:   river({width: 3}),
-    moskvar_t: river({rotate: 48, anchor: ['start', 'top']}),
-    moskvac_t: river({rotate: -90, anchor: ['start', 'middle']}),
-    yauza_t:   river({rotate: 45, anchor: ['start', 'top']}),
-    t:         rail(),
-    t_d:       rail_d(),
-    rmcd1:     rail({fg: '#fa842f'}),
-    rmcd1_d:   rail_d(),
-    rmcd2:     rail({fg: '#29c0d3'}),
-    rmcd2_d:   rail_d(),
-    svo_t:     label({anchor: ['end', 'middle']}),
-    svo_d_t:   label({anchor: ['end', 'top']}),
-    vko_t:     label({anchor: ['start', 'middle']}),
-    vko_d_t:   label({anchor: ['center', 'top']}),
-    dme_t:     label({anchor: ['start', 'middle']}),
-    dme_d_t:   label({anchor: ['center', 'top']})
-  });
-    // stations
-  dw.extend(dw.mopt, {
-    s1:        station({fg: dw.mopt['r1'].fg, anchor: ['start', 'middle']}),
-    s1_1:      inst({fg: dw.mopt['r1'].fg, anchor: ['start', 'middle']}),
-    s1_2:      inst({fg: dw.mopt['r1'].fg, anchor: ['end', 'middle']}),
-    s1_3:      inst({fg: dw.mopt['r1'].fg, anchor: ['end', 'bottom']}),
-    s1_4:      inst({fg: dw.mopt['r1'].fg, anchor: ['start', 'top']}),
-    s1_5:      station({fg: dw.mopt['r1'].fg, anchor: ['end', 'middle']}),
-    s1_6:      station({fg: dw.mopt['r1'].fg, anchor: ['start', 'top']}),
-    s1_7:      station({fg: dw.mopt['r1'].fg}),
-    s1_8:      station({fg: dw.mopt['r1'].fg, anchor: ['start', 'bottom']}),
-    s2:        station({fg: dw.mopt['r2'].fg, anchor: ['start', 'middle']}),
-    s2_1:      station({fg: dw.mopt['r2'].fg}),
-    s2_2:      inst({fg: dw.mopt['r2'].fg, anchor: ['end', 'middle']}),
-    s2_3:      inst({fg: dw.mopt['r2'].fg}),
-    s2_4:      station({fg: dw.mopt['r2'].fg, anchor: ['end', 'middle']}),
-    s2_5:      inst({fg: dw.mopt['r2'].fg, anchor: ['center', 'top']}),
-    s2_6:      station({fg: dw.mopt['r2'].fg, anchor: ['start', 'top']}),
-    s2_7:      inst({fg: dw.mopt['r2'].fg, anchor: ['end', 'top']}),
-    s3:        station({fg: dw.mopt['r3'].fg, anchor: ['start', 'middle']}),
-    s3_1:      station({fg: dw.mopt['r3'].fg, anchor: ['end', 'middle']}),
-    s3_2:      station({fg: dw.mopt['r3'].fg, anchor: ['end', 'middle']}),
-    s3_3:      inst({fg: dw.mopt['r3'].fg, anchor: ['end', 'bottom']}),
-    s3_4:      inst({fg: dw.mopt['r3'].fg, anchor: ['start', 'bottom']}),
-    s3_5:      inst({fg: dw.mopt['r3'].fg, anchor: ['end', 'top']}),
-    s3_6:      inst({fg: dw.mopt['r3'].fg, anchor: ['end', 'middle']}),
-    s3_7:      inst({fg: dw.mopt['r3'].fg, anchor: ['end']}),
-    s3_8:      inst({fg: dw.mopt['r3'].fg, anchor: ['center', 'bottom']}),
-    s4:        station({fg: dw.mopt['r4'].fg, anchor: ['start', 'middle']}),
-    s4_1:      station({fg: dw.mopt['r4'].fg, anchor: ['end', 'middle']}),
-    s4_2:      inst({fg: dw.mopt['r4'].fg, anchor: ['end', 'middle']}),
-    s4_3:      station({fg: dw.mopt['r4'].fg, anchor: ['start', 'bottom']}),
-    s4_5:      inst_d({fg: dw.mopt['r4'].fg}),
-    s4_6:      station({fg: dw.mopt['r4'].fg, anchor: ['center', 'bottom']}),
-    s4_7:      station({fg: dw.mopt['r4'].fg, anchor: ['end', 'top']}),
-    s4A:       station({fg: dw.mopt['r4A'].fg, anchor: ['start', 'middle']}),
-    s4A_1:     inst({fg: dw.mopt['r4A'].fg, anchor: ['start', 'bottom']}),
-    s4A_2:     inst({fg: dw.mopt['r4A'].fg, anchor: ['end', 'middle']}),
-    s5:        inst({fg: dw.mopt['r5'].fg}),
-    s5_1:      inst({fg: dw.mopt['r5'].fg, anchor: ['end', 'bottom']}),
-    s5_2:      inst({fg: dw.mopt['r5'].fg, anchor: ['start', 'middle']}),
-    s6:        station({fg: dw.mopt['r6'].fg, anchor: ['start', 'middle']}),
-    s6_1:      station({fg: dw.mopt['r6'].fg, anchor: ['end', 'middle']}),
-    s6_2:      inst({fg: dw.mopt['r6'].fg, anchor: ['start', 'middle']}),
-    s6_3:      inst({fg: dw.mopt['r6'].fg, anchor: ['end', 'bottom']}),
-    s6_4:      inst({fg: dw.mopt['r6'].fg, anchor: ['start', 'top']}),
-    s6_5:      inst({fg: dw.mopt['r6'].fg, anchor: ['end', 'middle']}),
-    s6_6:      inst({fg: dw.mopt['r6'].fg, anchor: ['end', 'top']}),
-    s6_7:      inst({fg: dw.mopt['r6'].fg, anchor: ['start', 'bottom']}),
-    s7:        station({fg: dw.mopt['r7'].fg, anchor: ['end', 'middle']}),
-    s7_1:      inst({fg: dw.mopt['r7'].fg, anchor: ['end', 'middle']}),
-    s7_2:      inst({fg: dw.mopt['r7'].fg, anchor: ['start', 'bottom']}),
-    s7_3:      inst({fg: dw.mopt['r7'].fg, anchor: ['start', 'top']}),
-    s7_4:      station({fg: dw.mopt['r7'].fg, anchor: ['start', 'bottom']}),
-    s7_5:      inst_d({fg: dw.mopt['r7'].fg}),
-    s7_6:      station({fg: dw.mopt['r7'].fg, anchor: ['start', 'middle']}),
-    s7_7:      station({fg: dw.mopt['r7'].fg, anchor: ['center', 'bottom']}),
-    s7_8:      station({fg: dw.mopt['r7'].fg, anchor: ['end', 'top']}),
-    s7_9:      station({fg: dw.mopt['r7'].fg}),
-    s7_10:     inst({fg: dw.mopt['r7'].fg}),
-    s7_11:     inst({fg: dw.mopt['r7'].fg, anchor: ['end', 'top']}),
-    s8:        station({fg: dw.mopt['r8'].fg, anchor: ['start', 'middle']}),
-    s8_1:      inst({fg: dw.mopt['r8'].fg, anchor: ['start', 'middle']}),
-    s8_2:      inst({fg: dw.mopt['r8'].fg, anchor: ['start', 'top']}),
-    s8_3:      inst({fg: dw.mopt['r8'].fg}),
-    s8_4:      inst({fg: dw.mopt['r8'].fg, anchor: ['end', 'middle']}),
-    s8_5:      inst({fg: dw.mopt['r8'].fg, anchor: ['end', 'bottom']}),
-    s8_6:      inst_d({fg: dw.mopt['r8'].fg}),
-    s9:        station({fg: dw.mopt['r9'].fg, anchor: ['start', 'middle']}),
-    s9_1:      inst({fg: dw.mopt['r9'].fg, anchor: ['end', 'middle']}),
-    s9_2:      inst({fg: dw.mopt['r9'].fg, anchor: ['start', 'middle']}),
-    s9_3:      inst({fg: dw.mopt['r9'].fg, anchor: ['start', 'top']}),
-    s9_4:      station({fg: dw.mopt['r9'].fg, anchor: ['end', 'middle']}),
-    s9_5:      inst({fg: dw.mopt['r9'].fg, anchor: ['start', 'bottom']}),
-    s9_6:      inst({fg: dw.mopt['r9'].fg, anchor: ['end', 'bottom']}),
-    s10:       station({fg: dw.mopt['r10'].fg,  anchor: ['end', 'middle']}),
-    s10_1:     station({fg: dw.mopt['r10'].fg, anchor: ['start', 'middle']}),
-    s10_2:     inst({fg: dw.mopt['r10'].fg, anchor: ['start', 'middle']}),
-    s10_3:     inst({fg: dw.mopt['r10'].fg, anchor: ['center', 'top']}),
-    s10_4:     inst_d({fg: dw.mopt['r10'].fg}),
-    s10_5:     station({fg: dw.mopt['r10'].fg,  anchor: ['end', 'top']}),
-    s11:       station({fg: dw.mopt['r11'].fg, anchor: ['start', 'top']}),
-    s11_1:     station({fg: dw.mopt['r11'].fg, anchor: ['start', 'middle']}),
-    s11_2:     station({fg: dw.mopt['r11'].fg, anchor: ['end', 'middle']}),
-    s11_3:     inst({fg: dw.mopt['r11'].fg}),
-    s11_4:     inst({fg: dw.mopt['r11'].fg, anchor: ['start', 'bottom']}),
-    s11_5:     inst_d({fg: dw.mopt['r11'].fg}),
-    s11_6:     station({fg: dw.mopt['r11'].fg, anchor: ['center', 'bottom']}),
-    s11_7:     inst({fg: dw.mopt['r11'].fg, anchor: ['start', 'middle']}),
-    s11_8:     station({fg: dw.mopt['r11'].fg, anchor: ['end', 'bottom']}),
-    s11_9:     inst({fg: dw.mopt['r11'].fg, anchor: ['end', 'middle']}),
-    s11_10:    station({fg: dw.mopt['r11'].fg, anchor: ['start', 'bottom']}),
-    s11_11:    inst({fg: dw.mopt['r11'].fg, anchor: ['start', 'top']}),
-    s11_12:    inst({fg: dw.mopt['r11'].fg, anchor: ['end', 'top']}),
-    s11_13:    inst({fg: dw.mopt['r11'].fg, anchor: ['center', 'top']}),
-    s11_14:    inst({fg: dw.mopt['r11'].fg, anchor: ['center', 'bottom']}),
-    s11_15:    station({fg: dw.mopt['r11'].fg, anchor: ['center', 'top']}),
-    s11A:      inst_d({fg: dw.mopt['r11A'].fg}),
-    s11A_1:    station({fg: dw.mopt['r11A'].fg, anchor: ['end', 'bottom']}),
-    s11A_2:    inst({fg: dw.mopt['r11A'].fg, anchor: ['end', 'middle']}),    
-    s12:       station({fg: dw.mopt['r12'].fg, anchor: ['center', 'bottom']}),
-    s12_1:     station({fg: dw.mopt['r12'].fg, anchor: ['center', 'top']}),
-    s12_2:     station({fg: dw.mopt['r12'].fg, anchor: ['start', 'top']}),
-    s12_3:     inst({fg: dw.mopt['r12'].fg}),
-    s12_4:     station({fg: dw.mopt['r12'].fg, anchor: ['end', 'top']}),
-    s12_5:     inst({fg: dw.mopt['r12'].fg, anchor: ['start', 'top']}),
-    s13:       inst({fg: dw.mopt['r13'].fg, size: 2, anchor: ['center', 'top']}),
-    s13_1:     inst({fg: dw.mopt['r13'].fg, size: 2, anchor: ['start', 'middle']}),
-    s14:       st_mck({anchor: ['start', 'middle']}),
-    s14_1:     st_mck({anchor: ['start', 'top']}),
-    s14_2:     st_mck({anchor: ['end', 'middle']}),
-    s14_3:     st_mck({anchor: ['end', 'bottom']}),
-    s14_4:     st_mck({anchor: ['start', 'bottom']}),
-    s14_5:     inst_mck({fg: dw.mopt['r14'].fg, anchor: ['start', 'middle']}),
-    s14_6:     inst_mck({fg: dw.mopt['r14'].fg, anchor: ['start', 'top']}),
-    s14_7:     inst_mck({fg: dw.mopt['r14'].fg, anchor: ['end', 'middle']}),
-    s14_8:     inst_mck({fg: dw.mopt['r14'].fg, anchor: ['center', 'bottom']}),
-    s14_9:     inst_mck({fg: dw.mopt['r14'].fg, anchor: ['start', 'bottom']}),
-    s15:       station({fg: dw.mopt['r15'].fg, anchor: ['start', 'middle']}),
-    s15_1:     station({fg: dw.mopt['r15'].fg, anchor: ['end', 'middle']}),
-    s15_2:     inst({fg: dw.mopt['r15'].fg, anchor: ['start', 'middle']}),
-    s15_3:     inst_d({fg: dw.mopt['r15'].fg, anchor: ['start', 'middle']}),
-    s16:       station({fg: dw.mopt['r16'].fg, anchor: ['start', 'middle']}),
-    s16_1:     inst({fg: dw.mopt['r16'].fg, anchor: ['start', 'top']}),
-    s16_2:     inst_d({fg: dw.mopt['r16'].fg, anchor: ['start', 'top']}),
-    smcd1:     st_mcd({fg: dw.mopt['rmcd1'].fg, anchor: ['start', 'middle']}),
-    smcd1_1:   inst_mcd({fg: dw.mopt['rmcd1'].fg}),
-    smcd2:     st_mcd({fg: dw.mopt['rmcd2'].fg, anchor: ['start', 'middle']}),
-    smcd2_1:   inst_mcd({fg: dw.mopt['rmcd2'].fg})
-  });
-    // add lines dashed
-  [].slice.call(MLINES).map(function(a){
-    if(dw.mopt[a[0]+'_d']){
-      MLINES.push( [a[0]+'_d'].concat(a.slice(1)) );
-    }
-  });
-    // callbacks
-  dw.extend(dw.clfunc, {
-    onmousemove: function(o, sd, dd, ev){
-      if(o.m.pmap){
-        var m = o.mflood[o.m.pmap];
-        var rtype = 'r' + m['ftype'].split('_')[0].slice(1);
-        var mlabel = '<b>'+ (m['label'] || m['ftag'])+ '</b>'; // tooltip
-        if(!m['label']) MSTATIONS.filter(function(s){ return s[1] == m['ftag'] && s[3]; }).map(function(a){ mlabel = '<b>' + (a[3]||a[1]) + '</b>'});
-        if(MLEGEND[rtype]) mlabel += '<br><br>' + MLEGEND[rtype] + ' ('+ rtype + ')';
-      }
-      o.paintCoords(dd);
-      infobox(ev, mlabel);
-    },
-    onclick: function(o, pts, ev) {
-      if (o.m.pmap) {
-        if(stlist.class == 'selected'){
-          stlist2.class = 'selected';
-          stlist2.value = o.m.pmap;
-          stlist.class = '';
-        } else {
-          stlist.class = 'selected';
-          stlist.value = o.m.pmap;
-          stlist2.class = '';
-        }
-      }
-      dw.draw();
-    }
-  });
-  function optfunc(o, k, v, disabled) {
-    var el = document.createElement('option');
-    el.value = k;
-    el.innerHTML = v;
-    if(disabled) el.disabled = true;
-    o.appendChild(el);
-  };
-    // fill station list
-  [].slice.call(MSTATIONS).sort(function(a,b){
-    return ((a[3]||a[1])>(b[3]||b[1])) ? 1 : -1;
-  }).map(function(a){
-    a[5] = true; // do ismap (show infobox)
-    optfunc(stlist,  a[0]+'_'+a[1], a[3]||a[1]);
-    optfunc(stlist2, a[0]+'_'+a[1], a[3]||a[1]);
-  });
-    // inches
-  optfunc(chinches, 'ch', 'Пересадки...', true);  
-  optfunc(chinches, 'inch', '\u2611 Метро');
-  optfunc(chinches, 'inch_mn', '&emsp; Монорельс');
-  optfunc(chinches, 'inch_mck', '&emsp; МЦК');
-  optfunc(chinches, 'inch_mcd', '&emsp; МЦД');
-  optfunc(chinches, 'inch_ext', '&emsp; Строящиеся');
-  chinches.selectedIndex = 0;
-
-  dw.loadCarta(MLINES);
-  dw.loadCarta(MLABELS);
-  dw.loadCarta(MSTATIONS);
-  dw.scaleCarta(0.8);
+// center map
+function centerMap(coords){
+  var pts = dw.toPoints(coords);
+  dw.centerCarta(pts[0] + dw.m.offset[0], pts[1] + dw.m.offset[1]);
   dw.draw();
-
-  delete MLINES;
-  delete MLABELS;
-  delete MSTATIONS;
+}
+// draw tranparent rect above viewmap
+function maskMap(){
+  var vs = dw.viewsizeOf(),
+      rect = [[vs[0], vs[1]], [vs[2], vs[1]], [vs[2], vs[3]], [vs[0], vs[3]]]; 
+  dw.mopt['selpath'] = {cls: 'Polygon', bg: 'rgba(255,255,255,0.8)', fg: 'transparent'};
+  dw.paintCarta(rect, 'selpath');
+}
+// diagonal size
+function mds(o) { 
+  return Math.sqrt(dw.sizeOf()[2]*dw.sizeOf()[2]+dw.sizeOf()[3]*dw.sizeOf()[3])/15*o/100;
 }
   //
 function calcRoute(fromid, toid){
@@ -472,22 +109,18 @@ function calcRoute(fromid, toid){
         if(st[2][0][1] < miny || !miny) miny = st[2][0][1];
         if(st[2][0][1] > maxy || !maxy) maxy = st[2][0][1];
       });
-      var pts = dw.toPoints([(minx + maxx)/2.0, (miny + maxy)/2.0]);
-      dw.centerCarta(pts[0] + dw.m.offset[0], pts[1] + dw.m.offset[1]);
-      dw.draw();
-        // mask map
-      var vs = dw.viewsizeOf(), // mask map
-          rect = [[vs[0], vs[1]], [vs[2], vs[1]], [vs[2], vs[3]], [vs[0], vs[3]]]; 
-      dw.mopt['selpath'] = {cls: 'Polygon', bg: 'rgba(255,255,255,0.8)', fg: 'transparent'};
-      dw.paintCarta(rect, 'selpath');
-        // routes
+        // center and mask map
+      centerMap([(minx + maxx)/2.0, (miny + maxy)/2.0]);
+      maskMap();
+      dw.paintBar();
+        // draw routes
       for(var j=0; j<routes.length; j++){
         var cc = routes[j],
             bInch = inches.filter(function(m){ return (inarray(m,cc[0]) && inarray(m,cc[cc.length-1])); }).length;
-        dw.mopt['selpath'] = {cls: 'Line', width: bInch ? 6 : 12, join: 'round', cap: bInch ? 'butt' : 'round', dash: bInch ? [2,2] : false, fg: dw.mopt[sts[j][0]].fg};
+        dw.mopt['selpath'] = {cls: 'Line', width: mds(bInch ? 6 : 12), join: 'round', cap: bInch ? 'butt' : 'round', dash: bInch ? [2,2] : false, fg: dw.mopt[sts[j][0]].fg};
         dw.paintCarta(cc, 'selpath');
       }
-        // station with label above routes
+        // draw stations with label above routes
       for(var j=0; j<sts.length; j++){
         dw.mopt['selstation'] = dw.extend({}, dw.mopt[sts[j][0]]);
         dw.mopt['selstation'].bg = 'white';
@@ -496,8 +129,322 @@ function calcRoute(fromid, toid){
     }
   });
 }
+var stlist = document.getElementById('stlist');
+stlist.onchange = function(){
+  var v = this.value;
+  MSTATIONS.filter(function(s){ return makeid(s) == v; }).map(function(st){ 
+    centerMap(st[2][0]);
+    maskMap();
+    dw.mopt['selstation'] = dw.extend({}, dw.mopt[st[0]]);
+    dw.mopt['selstation'].bg = 'gold';
+    dw.paintCarta(st[2], 'selstation', st[3]||st[1]);
+  });
+};
+var stlist2 = document.getElementById('stlist2');
+stlist2.onchange = function(){
+  var v = this.value;
+  MSTATIONS.filter(function(s){ return makeid(s) == v; }).map(function(st){ 
+    centerMap(st[2][0]);
+    maskMap();
+    dw.mopt['selstation'] = dw.extend({}, dw.mopt[st[0]]);
+    dw.mopt['selstation'].bg = 'gold';
+    dw.paintCarta(st[2], 'selstation', st[3]||st[1]);
+  });
+};
+var btcalc = document.getElementById('btcalc');
+btcalc.onclick = function(){
+  calcRoute( stlist.value, stlist2.value );
+};
+var chinches = document.getElementById('chinches');
+chinches.onchange = function(){
+  var o=this.options[this.selectedIndex], s=o.innerHTML; 
+  o.innerHTML = (s.indexOf('\u2611')>-1 ? '&emsp;' : '\u2611')+' '+s.slice(s.search(' '));
+  this.selectedIndex = 0;
+};
+  //
+var dw = new dbCarta({
+  id: 'mcol', height: document.getElementById('mcol').offsetHeight,
+  viewportx: 220, viewporty: 220, scalebg: 'rgba(100,200,100,0.2)'
+});
+dw.style.backgroundColor = 'rgb(250,255,250)';
+  // define new layers
+function route(o)    { return dw.extend({cls: 'Line', width: mds(6), join: 'round', anchor: ['start', 'middle'], labelscale: 1}, o||{}); };
+function route_ext(o){ return route(dw.extend({width: mds(4), dash: [2,4]}, o||{})); };
+function inch(o)     { return route(dw.extend({fg: '#ccc', cap: 'round', width: mds(8)}, o||{})); };
+function inch_d(o)   { return inch(dw.extend({fg: '#fff', width: mds(5)}, o||{})); };
+function inch_ext(o) { return inch(dw.extend({width: mds(4), fg:'white', dash: [4,2]}, o||{})); };
+function river(o)    { return route(dw.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})); };
+function rail(o)     { return route(dw.extend({fg: '#ddd', width: mds(2), labelscale: 0}, o||{})); };
+function rail_d(o)   { return rail(dw.extend({fg: '#fff', dash: [10,10]}, o||{})); };
+function label(o)    { return dw.extend({cls: 'Polygon', labelcolor:'#aaa', labelscale: 1, anchor: ['start', 'top']}, o||{}); };
+function station(o)  { return dw.extend({cls: 'Rect', bg: '#f5f5dc', size: mds(8), width: mds(2), scale: 1, labelscale: 1, labelpad: mds(1)}, o||{}); };
+function st_mck(o)   { return station(dw.extend({fg: '#f76093', size: mds(5), labelcolor: 'gray'}, o)); };
+function st_mcd(o)   { return station(dw.extend({size: mds(2), labelcolor: 'rgb(180,180,180)'}, o)); };
+function inch_mck(o) { return inch(dw.extend({dash:[2,4], width: mds(2)}, o||{})); };
+function inch_mn(o)  { return inch(dw.extend({dash:[1,2], fg: 'black', width: mds(1)}, o||{})); };
+function inch_mcd(o) { return inch(dw.extend({dash:[1,3], fg: '#777', width: mds(1)}, o||{})); };
+function inst_mck(o) { return st_mck(dw.extend({size: mds(4), labelcolor: o['fg'], bg: o['fg']}, o)); };
+function inst_mcd(o) { return st_mcd(dw.extend({size: mds(2), labelcolor: o['fg'], bg: o['fg']}, o)); };
+function inst(o)     { return station(dw.extend({size: mds(5), labelcolor: o['fg'], bg: o['fg']}, o)); };
+function inst_d(o)   { return inst(dw.extend({size: mds(2), width: mds(1)}, o||{})); };
+  // lines
+dw.extend(dw.mopt, {
+  r1:        route({fg: '#ed1b35'}),
+  r1_ext:    route_ext({fg: '#ed1b35'}),
+  r2:        route({fg: '#44b85c'}),
+  r2_ext:    route_ext({fg: '#44b85c'}),
+  r3:        route({fg: '#0078bf'}),
+  r3_ext:    route_ext({fg: '#0078bf'}),
+  r4:        route({fg: '#19c1f3'}),
+  r4A:       route({fg: '#19c1f3'}),
+  r5:        route({fg: '#894e35'}),
+  r6:        route({fg: '#f58631'}),
+  r6_ext:    route_ext({fg: '#f58631'}),
+  r7:        route({fg: '#8e479c'}),
+  r7_ext:    route_ext({fg: '#8e479c'}),
+  r8:        route({fg: '#ffcb31'}),
+  r8_ext:    route_ext({fg: '#ffcb31'}),
+  r9:        route({fg: '#a1a2a3'}),
+  r10:       route({fg: '#b3d445'}),
+  r10_ext:   route_ext({fg: '#b3d445'}),
+  r11:       route({fg: '#79cdcd'}),
+  r11_ext:   route_ext({fg: '#79cdcd'}),
+  r11A:      route({fg: '#79cdcd'}),
+  r12:       route({fg: '#acbfe1'}),
+  r12_ext:   route_ext({fg: '#acbfe1'}),
+  r13:       route({fg: '#2c87c5', width: 2}),
+  r14:       rail({fg: '#f76093', width: 2}),
+  r14_d:     rail_d({width:2}),
+  r15:       route({fg: '#de62be'}),
+  r16:       route({fg: '#554d26'}),
+  r16_ext:   route_ext({fg: '#554d26'}),
+  inch:      inch(),
+  inch_d:    inch_d(),
+  inch_ext:  inch_ext(),
+  inch_mck:  inch_mck(),
+  inch_mn:   inch_mn(),
+  inch_mcd:  inch_mcd(),
+  mkad:      label({fg: '#c8c8ff',  bg: '#fff', anchor: ['center', 'middle']}),
+  moskvar:   river({width: 15}),
+  moskvac:   river({width: 5}),
+  strogino:  river({width: 5}),
+  vodootvod: river({width: 5}),
+  yauza:     river({width: 5}),
+  nagatino:  river({width: 6}),
+  grebnoy:   river({width: 3}),
+  moskvar_t: river({rotate: 48, anchor: ['start', 'top']}),
+  moskvac_t: river({rotate: -90, anchor: ['start', 'middle']}),
+  yauza_t:   river({rotate: 45, anchor: ['start', 'top']}),
+  t:         rail(),
+  t_d:       rail_d(),
+  rmcd1:     rail({fg: '#fa842f'}),
+  rmcd1_d:   rail_d(),
+  rmcd2:     rail({fg: '#29c0d3'}),
+  rmcd2_d:   rail_d(),
+  svo_t:     label({anchor: ['end', 'middle']}),
+  svo_d_t:   label({anchor: ['end', 'top']}),
+  vko_t:     label({anchor: ['start', 'middle']}),
+  vko_d_t:   label({anchor: ['center', 'top']}),
+  dme_t:     label({anchor: ['start', 'middle']}),
+  dme_d_t:   label({anchor: ['center', 'top']})
+});
+  // stations
+dw.extend(dw.mopt, {
+  s1:        station({fg: dw.mopt['r1'].fg, anchor: ['start', 'middle']}),
+  s1_1:      inst({fg: dw.mopt['r1'].fg, anchor: ['start', 'middle']}),
+  s1_2:      inst({fg: dw.mopt['r1'].fg, anchor: ['end', 'middle']}),
+  s1_3:      inst({fg: dw.mopt['r1'].fg, anchor: ['end', 'bottom']}),
+  s1_4:      inst({fg: dw.mopt['r1'].fg, anchor: ['start', 'top']}),
+  s1_5:      station({fg: dw.mopt['r1'].fg, anchor: ['end', 'middle']}),
+  s1_6:      station({fg: dw.mopt['r1'].fg, anchor: ['start', 'top']}),
+  s1_7:      station({fg: dw.mopt['r1'].fg}),
+  s1_8:      station({fg: dw.mopt['r1'].fg, anchor: ['start', 'bottom']}),
+  s2:        station({fg: dw.mopt['r2'].fg, anchor: ['start', 'middle']}),
+  s2_1:      station({fg: dw.mopt['r2'].fg}),
+  s2_2:      inst({fg: dw.mopt['r2'].fg, anchor: ['end', 'middle']}),
+  s2_3:      inst({fg: dw.mopt['r2'].fg}),
+  s2_4:      station({fg: dw.mopt['r2'].fg, anchor: ['end', 'middle']}),
+  s2_5:      inst({fg: dw.mopt['r2'].fg, anchor: ['center', 'top']}),
+  s2_6:      station({fg: dw.mopt['r2'].fg, anchor: ['start', 'top']}),
+  s2_7:      inst({fg: dw.mopt['r2'].fg, anchor: ['end', 'top']}),
+  s3:        station({fg: dw.mopt['r3'].fg, anchor: ['start', 'middle']}),
+  s3_1:      station({fg: dw.mopt['r3'].fg, anchor: ['end', 'middle']}),
+  s3_2:      station({fg: dw.mopt['r3'].fg, anchor: ['end', 'middle']}),
+  s3_3:      inst({fg: dw.mopt['r3'].fg, anchor: ['end', 'bottom']}),
+  s3_4:      inst({fg: dw.mopt['r3'].fg, anchor: ['start', 'bottom']}),
+  s3_5:      inst({fg: dw.mopt['r3'].fg, anchor: ['end', 'top']}),
+  s3_6:      inst({fg: dw.mopt['r3'].fg, anchor: ['end', 'middle']}),
+  s3_7:      inst({fg: dw.mopt['r3'].fg, anchor: ['end']}),
+  s3_8:      inst({fg: dw.mopt['r3'].fg, anchor: ['center', 'bottom']}),
+  s4:        station({fg: dw.mopt['r4'].fg, anchor: ['start', 'middle']}),
+  s4_1:      station({fg: dw.mopt['r4'].fg, anchor: ['end', 'middle']}),
+  s4_2:      inst({fg: dw.mopt['r4'].fg, anchor: ['end', 'middle']}),
+  s4_3:      station({fg: dw.mopt['r4'].fg, anchor: ['start', 'bottom']}),
+  s4_5:      inst_d({fg: dw.mopt['r4'].fg}),
+  s4_6:      station({fg: dw.mopt['r4'].fg, anchor: ['center', 'bottom']}),
+  s4_7:      station({fg: dw.mopt['r4'].fg, anchor: ['end', 'top']}),
+  s4A:       station({fg: dw.mopt['r4A'].fg, anchor: ['start', 'middle']}),
+  s4A_1:     inst({fg: dw.mopt['r4A'].fg, anchor: ['start', 'bottom']}),
+  s4A_2:     inst({fg: dw.mopt['r4A'].fg, anchor: ['end', 'middle']}),
+  s5:        inst({fg: dw.mopt['r5'].fg}),
+  s5_1:      inst({fg: dw.mopt['r5'].fg, anchor: ['end', 'bottom']}),
+  s5_2:      inst({fg: dw.mopt['r5'].fg, anchor: ['start', 'middle']}),
+  s6:        station({fg: dw.mopt['r6'].fg, anchor: ['start', 'middle']}),
+  s6_1:      station({fg: dw.mopt['r6'].fg, anchor: ['end', 'middle']}),
+  s6_2:      inst({fg: dw.mopt['r6'].fg, anchor: ['start', 'middle']}),
+  s6_3:      inst({fg: dw.mopt['r6'].fg, anchor: ['end', 'bottom']}),
+  s6_4:      inst({fg: dw.mopt['r6'].fg, anchor: ['start', 'top']}),
+  s6_5:      inst({fg: dw.mopt['r6'].fg, anchor: ['end', 'middle']}),
+  s6_6:      inst({fg: dw.mopt['r6'].fg, anchor: ['end', 'top']}),
+  s6_7:      inst({fg: dw.mopt['r6'].fg, anchor: ['start', 'bottom']}),
+  s7:        station({fg: dw.mopt['r7'].fg, anchor: ['end', 'middle']}),
+  s7_1:      inst({fg: dw.mopt['r7'].fg, anchor: ['end', 'middle']}),
+  s7_2:      inst({fg: dw.mopt['r7'].fg, anchor: ['start', 'bottom']}),
+  s7_3:      inst({fg: dw.mopt['r7'].fg, anchor: ['start', 'top']}),
+  s7_4:      station({fg: dw.mopt['r7'].fg, anchor: ['start', 'bottom']}),
+  s7_5:      inst_d({fg: dw.mopt['r7'].fg}),
+  s7_6:      station({fg: dw.mopt['r7'].fg, anchor: ['start', 'middle']}),
+  s7_7:      station({fg: dw.mopt['r7'].fg, anchor: ['center', 'bottom']}),
+  s7_8:      station({fg: dw.mopt['r7'].fg, anchor: ['end', 'top']}),
+  s7_9:      station({fg: dw.mopt['r7'].fg}),
+  s7_10:     inst({fg: dw.mopt['r7'].fg}),
+  s7_11:     inst({fg: dw.mopt['r7'].fg, anchor: ['end', 'top']}),
+  s8:        station({fg: dw.mopt['r8'].fg, anchor: ['start', 'middle']}),
+  s8_1:      inst({fg: dw.mopt['r8'].fg, anchor: ['start', 'middle']}),
+  s8_2:      inst({fg: dw.mopt['r8'].fg, anchor: ['start', 'top']}),
+  s8_3:      inst({fg: dw.mopt['r8'].fg}),
+  s8_4:      inst({fg: dw.mopt['r8'].fg, anchor: ['end', 'middle']}),
+  s8_5:      inst({fg: dw.mopt['r8'].fg, anchor: ['end', 'bottom']}),
+  s8_6:      inst_d({fg: dw.mopt['r8'].fg}),
+  s9:        station({fg: dw.mopt['r9'].fg, anchor: ['start', 'middle']}),
+  s9_1:      inst({fg: dw.mopt['r9'].fg, anchor: ['end', 'middle']}),
+  s9_2:      inst({fg: dw.mopt['r9'].fg, anchor: ['start', 'middle']}),
+  s9_3:      inst({fg: dw.mopt['r9'].fg, anchor: ['start', 'top']}),
+  s9_4:      station({fg: dw.mopt['r9'].fg, anchor: ['end', 'middle']}),
+  s9_5:      inst({fg: dw.mopt['r9'].fg, anchor: ['start', 'bottom']}),
+  s9_6:      inst({fg: dw.mopt['r9'].fg, anchor: ['end', 'bottom']}),
+  s10:       station({fg: dw.mopt['r10'].fg,  anchor: ['end', 'middle']}),
+  s10_1:     station({fg: dw.mopt['r10'].fg, anchor: ['start', 'middle']}),
+  s10_2:     inst({fg: dw.mopt['r10'].fg, anchor: ['start', 'middle']}),
+  s10_3:     inst({fg: dw.mopt['r10'].fg, anchor: ['center', 'top']}),
+  s10_4:     inst_d({fg: dw.mopt['r10'].fg}),
+  s10_5:     station({fg: dw.mopt['r10'].fg,  anchor: ['end', 'top']}),
+  s11:       station({fg: dw.mopt['r11'].fg, anchor: ['start', 'top']}),
+  s11_1:     station({fg: dw.mopt['r11'].fg, anchor: ['start', 'middle']}),
+  s11_2:     station({fg: dw.mopt['r11'].fg, anchor: ['end', 'middle']}),
+  s11_3:     inst({fg: dw.mopt['r11'].fg}),
+  s11_4:     inst({fg: dw.mopt['r11'].fg, anchor: ['start', 'bottom']}),
+  s11_5:     inst_d({fg: dw.mopt['r11'].fg}),
+  s11_6:     station({fg: dw.mopt['r11'].fg, anchor: ['center', 'bottom']}),
+  s11_7:     inst({fg: dw.mopt['r11'].fg, anchor: ['start', 'middle']}),
+  s11_8:     station({fg: dw.mopt['r11'].fg, anchor: ['end', 'bottom']}),
+  s11_9:     inst({fg: dw.mopt['r11'].fg, anchor: ['end', 'middle']}),
+  s11_10:    station({fg: dw.mopt['r11'].fg, anchor: ['start', 'bottom']}),
+  s11_11:    inst({fg: dw.mopt['r11'].fg, anchor: ['start', 'top']}),
+  s11_12:    inst({fg: dw.mopt['r11'].fg, anchor: ['end', 'top']}),
+  s11_13:    inst({fg: dw.mopt['r11'].fg, anchor: ['center', 'top']}),
+  s11_14:    inst({fg: dw.mopt['r11'].fg, anchor: ['center', 'bottom']}),
+  s11_15:    station({fg: dw.mopt['r11'].fg, anchor: ['center', 'top']}),
+  s11A:      inst_d({fg: dw.mopt['r11A'].fg}),
+  s11A_1:    station({fg: dw.mopt['r11A'].fg, anchor: ['end', 'bottom']}),
+  s11A_2:    inst({fg: dw.mopt['r11A'].fg, anchor: ['end', 'middle']}),    
+  s12:       station({fg: dw.mopt['r12'].fg, anchor: ['center', 'bottom']}),
+  s12_1:     station({fg: dw.mopt['r12'].fg, anchor: ['center', 'top']}),
+  s12_2:     station({fg: dw.mopt['r12'].fg, anchor: ['start', 'top']}),
+  s12_3:     inst({fg: dw.mopt['r12'].fg}),
+  s12_4:     station({fg: dw.mopt['r12'].fg, anchor: ['end', 'top']}),
+  s12_5:     inst({fg: dw.mopt['r12'].fg, anchor: ['start', 'top']}),
+  s13:       inst({fg: dw.mopt['r13'].fg, size: 2, anchor: ['center', 'top']}),
+  s13_1:     inst({fg: dw.mopt['r13'].fg, size: 2, anchor: ['start', 'middle']}),
+  s14:       st_mck({anchor: ['start', 'middle']}),
+  s14_1:     st_mck({anchor: ['start', 'top']}),
+  s14_2:     st_mck({anchor: ['end', 'middle']}),
+  s14_3:     st_mck({anchor: ['end', 'bottom']}),
+  s14_4:     st_mck({anchor: ['start', 'bottom']}),
+  s14_5:     inst_mck({fg: dw.mopt['r14'].fg, anchor: ['start', 'middle']}),
+  s14_6:     inst_mck({fg: dw.mopt['r14'].fg, anchor: ['start', 'top']}),
+  s14_7:     inst_mck({fg: dw.mopt['r14'].fg, anchor: ['end', 'middle']}),
+  s14_8:     inst_mck({fg: dw.mopt['r14'].fg, anchor: ['center', 'bottom']}),
+  s14_9:     inst_mck({fg: dw.mopt['r14'].fg, anchor: ['start', 'bottom']}),
+  s15:       station({fg: dw.mopt['r15'].fg, anchor: ['start', 'middle']}),
+  s15_1:     station({fg: dw.mopt['r15'].fg, anchor: ['end', 'middle']}),
+  s15_2:     inst({fg: dw.mopt['r15'].fg, anchor: ['start', 'middle']}),
+  s15_3:     inst_d({fg: dw.mopt['r15'].fg, anchor: ['start', 'middle']}),
+  s16:       station({fg: dw.mopt['r16'].fg, anchor: ['start', 'middle']}),
+  s16_1:     inst({fg: dw.mopt['r16'].fg, anchor: ['start', 'top']}),
+  s16_2:     inst_d({fg: dw.mopt['r16'].fg, anchor: ['start', 'top']}),
+  smcd1:     st_mcd({fg: dw.mopt['rmcd1'].fg, anchor: ['start', 'middle']}),
+  smcd1_1:   inst_mcd({fg: dw.mopt['rmcd1'].fg}),
+  smcd2:     st_mcd({fg: dw.mopt['rmcd2'].fg, anchor: ['start', 'middle']}),
+  smcd2_1:   inst_mcd({fg: dw.mopt['rmcd2'].fg})
+});
+  // add lines dashed
+[].slice.call(MLINES).map(function(a){
+  if(dw.mopt[a[0]+'_d']){
+    MLINES.push( [a[0]+'_d'].concat(a.slice(1)) );
+  }
+});
+  // callbacks
+dw.extend(dw.clfunc, {
+  onmousemove: function(o, sd, dd, ev){
+    if(o.m.pmap){
+      var m = o.mflood[o.m.pmap];
+      var rtype = 'r' + m['ftype'].split('_')[0].slice(1);
+      var mlabel = '<b>'+ (m['label'] || m['ftag'])+ '</b>'; // tooltip
+      if(!m['label']) MSTATIONS.filter(function(s){ return s[1] == m['ftag'] && s[3]; }).map(function(a){ mlabel = '<b>' + (a[3]||a[1]) + '</b>'});
+      if(MLEGEND[rtype]) mlabel += '<br><br>' + MLEGEND[rtype] + ' ('+ rtype + ')';
+    }
+    o.paintCoords(dd);
+    infobox(ev, mlabel);
+  },
+  onclick: function(o, pts, ev) {
+    if (o.m.pmap) {
+      if(stlist.class == 'selected'){
+        stlist2.class = 'selected';
+        stlist2.value = o.m.pmap;
+        stlist.class = '';
+      } else {
+        stlist.class = 'selected';
+        stlist.value = o.m.pmap;
+        stlist2.class = '';
+      }
+    }
+    dw.draw();
+  }
+});
+function optfunc(o, k, v, disabled) {
+  var el = document.createElement('option');
+  el.value = k;
+  el.innerHTML = v;
+  if(disabled) el.disabled = true;
+  o.appendChild(el);
+};
+  // fill station list
+[].slice.call(MSTATIONS).sort(function(a,b){
+  return ((a[3]||a[1])>(b[3]||b[1])) ? -1 : 1;
+}).map(function(a){
+  a[5] = true; // do ismap (show infobox)
+  optfunc(stlist,  a[0]+'_'+a[1], a[3]||a[1]);
+  optfunc(stlist2, a[0]+'_'+a[1], a[3]||a[1]);
+});
+  // inches
+optfunc(chinches, 'ch', 'Пересадки...', true);  
+optfunc(chinches, 'inch', '\u2611 Метро');
+optfunc(chinches, 'inch_mn', '&emsp; Монорельс');
+optfunc(chinches, 'inch_mck', '&emsp; МЦК');
+optfunc(chinches, 'inch_mcd', '&emsp; МЦД');
+optfunc(chinches, 'inch_ext', '&emsp; Строящиеся');
+chinches.selectedIndex = 0;
 
-init();
+dw.loadCarta(MLINES);
+dw.loadCarta(MLABELS);
+dw.loadCarta(MSTATIONS);
+//dw.scaleCarta(0.8);
+dw.draw();
+
+delete MLINES;
+delete MLABELS;
+delete MSTATIONS;
 
 </script>
 </body>

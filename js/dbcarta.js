@@ -2,7 +2,7 @@
 // HTML5 Canvas vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013. b220228.
+// egax@bk.ru, 2013. b220702.
 //
 function dbCarta(cfg) {
   cfg = cfg||{};
@@ -518,6 +518,7 @@ function dbCarta(cfg) {
         return;
       var m = this.mopt[ftype];
       var msize = m['scale'] ? (m['size'] || 1) : (m['size'] || 1) / this.m.scale,
+          mlabelpad = m['labelpad'] || 3,
           mwidth = (m['width'] || 1) / this.m.scale,
           mjoin = m['join'] || 'miter',
           mcap = m['cap'] || 'butt',
@@ -583,7 +584,7 @@ function dbCarta(cfg) {
           var hs = (mtalign == 'end' ? -1 : (mtalign == 'start' ? 1 : 0)),
               vs = (mtbaseline == 'bottom' ? -1 : (mtbaseline == 'top' ? 1 : 0));
           if (m['labelscale']) {
-            this.ctx.fillText(ftext, centerofpts[0][0] + (msize + 3) * hs, centerofpts[0][1] + (msize) * vs);
+            this.ctx.fillText(ftext, centerofpts[0][0] + (msize + mlabelpad) * hs, centerofpts[0][1] + (msize) * vs);
           } else {
             this.ctx.save();
             this.ctx.setTransform(1, 0, 0, 1, 0, 0);
