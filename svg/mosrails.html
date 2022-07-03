@@ -1,13 +1,13 @@
 <!--
 Moscow Rail Roads map. SVG version.
 View lines and stations with additional info.
-egax@bk.ru, 2015-21.
+egax@bk.ru, 2015-22.
 -->
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Схема электричек МО / SVG векторная карта</title>
+<title>Схема ж/д Москвы и МО в 2015 году / SVG векторная карта</title>
 <meta name="description" content="Карта железных дорог Москвы и МО. Схема пригородного жд сообщения Москвы и МО в 2015 году.">
 <meta name="keywords" content="Схема электричек, Карта железных дорог Москвы и МО, Схема пригородного ж/д транспорта Москвы и МО. Moscow Underground and Commuter Rail Map">
 <link rel="icon" href="../img/fav.svg" type="image/svg+xml">
@@ -80,7 +80,7 @@ function draw() {
     r10:    route({fg: '#9ec167'}),
     r11:    route({fg: '#81cec8'}),
     r12:    route({fg: '#000000'}),
-     // rails
+   // rails
     t1:     route({fg: '#f6422b'}),
     t2:     route({fg: '#005a96'}),
     t3:     route({fg: '#8fc442'}),
@@ -150,7 +150,7 @@ function draw() {
     s8:     inst_l({labelcolor: mopt['r8'].fg, anchor: ['center', 'bottom']}),
     s8_1:   inst({labelcolor: mopt['r8'].fg, anchor: ['start', 'bottom']}),
     s8_2:   inst({labelcolor: mopt['r8'].fg, anchor: ['center', 'top']}),
-    s8_3:   inst({labelcolor: mopt['r8'].fg, anchor: ['start', 'top']}),
+    s8_3:   inst({labelcolor: mopt['r8'].fg, anchor: ['start', 'middle']}),
     s8_4:   inst({labelcolor: mopt['r8'].fg, anchor: ['end', 'bottom']}),
     s9:     inst_l({labelcolor: mopt['r9'].fg, anchor: ['center', 'bottom']}),
     s9_1:   inst({labelcolor: mopt['r9'].fg, anchor: ['start', 'middle']}),
@@ -172,11 +172,12 @@ function draw() {
     s13:    station({fg: mopt['mono'].fg, width: 2, anchor: ['end', 'bottom']}),
     s13_1:  station({fg: mopt['mono'].fg, width: 2, anchor: ['center', 'bottom']}),
     s13_2:  station({fg: mopt['mono'].fg, width: 2, anchor: ['start', 'bottom']}),
-    s13_3:  station({fg: mopt['mono'].fg, width: 2, anchor: ['end', 'top']})
+    s13_3:  station({fg: mopt['mono'].fg, width: 2, anchor: ['end', 'top']}),
+    s13_4:  station({fg: mopt['mono'].fg, width: 2, anchor: ['start', 'middle']})
   });
    // rail stations
   DC.extend(mopt, {
-    r1:     rst({fg: mopt['r'].fg, anchor: ['center', 'top']}),
+    b1:     rst({fg: mopt['r'].fg, anchor: ['center', 'top']}),
     a1:     rst({fg: mopt['t1'].fg, anchor: ['end', 'middle']}),
     a1_1:   rst({fg: mopt['t1'].fg, anchor: ['center', 'bottom']}),
     a1_2:   rst({fg: mopt['t1'].fg, anchor: ['center', 'top']}),
@@ -209,7 +210,7 @@ function draw() {
     a5:     rst({fg: mopt['t5'].fg, anchor: ['end', 'bottom']}),
     a5_0:   rst({fg: mopt['t5'].fg, anchor: ['end', 'middle']}),
     a5_1:   rst({fg: mopt['t5'].fg, anchor: ['center', 'bottom']}),
-    a5_2:   rst({fg: mopt['t5'].fg, anchor: ['start', 'top']}),
+    a5_2:   rst({fg: mopt['t5'].fg, anchor: ['start', 'bottom']}),
     a5_3:   rst({fg: mopt['t5'].fg, anchor: ['end', 'top']}),
     a5_4:   ost({anchor: ['end', 'middle']}),
     a5_5:   ost({anchor: ['start', 'middle']}),
@@ -301,10 +302,10 @@ function draw() {
     var a, dx = 10, dy = 0;
     if(a = mopt[ftype].anchor) {
       if(a[0] == 'start')    dx = 10;
-      else if(a[0] == 'center') dx = -20;
+      else if(a[0] == 'center') dx = -label.length*2;
       else if(a[0] == 'end') dx = -10;
       if(a[1] == 'top') dy = 15;
-      else if(a[1] == 'middle') dy = 4;
+      else if(a[1] == 'middle') dy = 3;
       else if(a[1] == 'bottom') dy = -10;
     };
     var text = DC.append('text', {
@@ -341,7 +342,7 @@ var DC = new dbCartaSvg({
   id: 'mcont',
   height: document.getElementById('mcont').offsetHeight,
   sbarpos: 'left',
-  bg: 'rgb(240,245,251)',
+  bg: 'rgb(246,251,255)',
   scalebg: 'rgba(100,200,100,0.2)'
 });
 DC.scaleCarta(0.7);
