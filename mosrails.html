@@ -189,10 +189,11 @@ dw.extend(dw.mopt, {
   s11_2:  inst({labelcolor: dw.mopt['r11'].fg, anchor: ['center', 'bottom']}),
   s12_1:  inst({labelcolor: dw.mopt['r12'].fg}),
   s12_2:  inst({labelcolor: dw.mopt['r12'].fg, anchor: ['end', 'top']}),
-  s13:    station({fg: dw.mopt['mono'].fg, anchor: ['end', 'bottom']}),
-  s13_1:  station({fg: dw.mopt['mono'].fg, anchor: ['center', 'bottom']}),
-  s13_2:  station({fg: dw.mopt['mono'].fg, anchor: ['start', 'bottom']}),
-  s13_3:  station({fg: dw.mopt['mono'].fg, anchor: ['end', 'top']})
+  s13:    station({fg: dw.mopt['mono'].fg, width: mds(2), anchor: ['end', 'bottom']}),
+  s13_1:  station({fg: dw.mopt['mono'].fg, width: mds(2), anchor: ['center', 'bottom']}),
+  s13_2:  station({fg: dw.mopt['mono'].fg, width: mds(2), anchor: ['start', 'bottom']}),
+  s13_3:  station({fg: dw.mopt['mono'].fg, width: mds(2), anchor: ['end', 'top']}),
+  s13_4:  station({fg: dw.mopt['mono'].fg, width: mds(2), anchor: ['start', 'middle']})
 });
 // rail stations
 dw.extend(dw.mopt, {
@@ -228,7 +229,7 @@ dw.extend(dw.mopt, {
   a4_8:   ost({fg: dw.mopt['t4'].fg, anchor: ['start', 'middle']}),
   a5:     rst({fg: dw.mopt['t5'].fg, anchor: ['end', 'bottom']}),
   a5_1:   rst({fg: dw.mopt['t5'].fg, anchor: ['center', 'bottom']}),
-  a5_2:   rst({fg: dw.mopt['t5'].fg, anchor: ['start', 'top']}),
+  a5_2:   rst({fg: dw.mopt['t5'].fg, anchor: ['start', 'bottom']}),
   a5_3:   rst({fg: dw.mopt['t5'].fg, anchor: ['end', 'top']}),
   a5_4:   ost({fg: dw.mopt['t5'].fg, anchor: ['end', 'middle']}),
   a5_5:   ost({fg: dw.mopt['t5'].fg, anchor: ['start', 'middle']}),
@@ -243,6 +244,7 @@ dw.extend(dw.mopt, {
   a6_6:   ost({fg: dw.mopt['t6'].fg, anchor: ['center', 'bottom']}),
   a6_7:   ost({fg: dw.mopt['t6'].fg, anchor: ['center', 'top']}),
   a7:     rst({fg: dw.mopt['t7'].fg, anchor: ['end', 'middle']}),
+  a7_0:   rst({fg: dw.mopt['t7'].fg, anchor: ['end', 'top']}),
   a7_1:   rst({fg: dw.mopt['t7'].fg, anchor: ['start', 'middle']}),
   a7_2:   rst_l({fg: dw.mopt['t7'].fg, anchor: ['end', 'top']}),
   a7_3:   ost({fg: dw.mopt['t7'].fg, anchor: ['end', 'middle']}),
