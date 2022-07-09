@@ -19,7 +19,7 @@ Canvas+SVG vector map and image viewer javascript library.
 *St. Petersburg Metro*  
 [SVG](https://egaxegax.github.io/svg/metrospb.html) &emsp; &emsp;
 
-***Схема метро Тбилиси**  
+**Схема метро Тбилиси**  
 *Tbilisi Metro*
 [Canvas](https://egaxegax.github.io/metro-tbilisi.html)
 
