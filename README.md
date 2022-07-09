@@ -70,8 +70,7 @@ Canvas+SVG vector map and image viewer javascript library.
 
 **Страны мира**  
 *Countries*  
- &emsp; &emsp;  
-[Canvas](https://egaxegax.github.io/dbcartajs/countries.html)
+ [Canvas](https://egaxegax.github.io/dbcartajs/countries.html)
 
 **Маршруты на карте**  
 *Routes*  
