@@ -7,87 +7,87 @@ Canvas+SVG vector map and image viewer javascript library.
 
 **Схема метро Москвы**  
 *Moscow Metro*  
-[SVG](https://egaxegax.github.io/svg/mosmetro.html) &emsp; &emsp; 
-[Canvas](https://egaxegax.github.io/mosmetro.html)
+[SVG](https://egaxegax.github.io/dbcartajs/svg/mosmetro.html) &emsp; &emsp; 
+[Canvas](https://egaxegax.github.io/dbcartajs/mosmetro.html)
 
 **Схема ж/д Москвы и МО**  
 *Moscow Railroad*  
-[SVG](https://egaxegax.github.io/svg/mosrails.html) &emsp; &emsp; 
-[Canvas](https://egaxegax.github.io/mosrails.html)
+[SVG](https://egaxegax.github.io/dbcartajs/svg/mosrails.html) &emsp; &emsp; 
+[Canvas](https://egaxegax.github.io/dbcartajs/mosrails.html)
 
 **Схема метро Петербурга**  
 *St. Petersburg Metro*  
-[SVG](https://egaxegax.github.io/svg/metrospb.html) &emsp; &emsp;
+[SVG](https://egaxegax.github.io/dbcartajs/svg/metrospb.html) &emsp; &emsp;
 
 **Схема метро Тбилиси**  
 *Tbilisi Metro*  
-[Canvas](https://egaxegax.github.io/metro-tbilisi.html)
+[Canvas](https://egaxegax.github.io/dbcartajs/metro-tbilisi.html)
 
 > Просмотр *jpeg* и *svg* картинок с возможностью масштабирования.
 
 **Просмотровщик картинок**  
 *Image Viewer*  
-[SVG](https://egaxegax.github.io/svg/imgviewer.html) &emsp; &emsp; 
+[SVG](https://egaxegax.github.io/dbcartajs/svg/imgviewer.html) &emsp; &emsp; 
 
 **Анимация масштаба в SVG**  
 *Pan Zoom*  
-[SVG](https://egaxegax.github.io/svg/panzoom.html) &emsp; &emsp; 
+[SVG](https://egaxegax.github.io/dbcartajs/svg/panzoom.html) &emsp; &emsp; 
 
 > Примеры использования градиента и *svg*-анимации с эффектом движения.
 
 **Настенные часы**  
 *Wall Clock*  
-[SVG](https://egaxegax.github.io/svg/clock.html) &emsp; &emsp;
+[SVG](https://egaxegax.github.io/dbcartajs/svg/clock.html) &emsp; &emsp;
 
 **Анимация движения в SVG**  
 *Roller Ball*  
-[SVG](https://egaxegax.github.io/svg/rollerball.html) &emsp; &emsp;  
+[SVG](https://egaxegax.github.io/dbcartajs/svg/rollerball.html) &emsp; &emsp;  
 
 > Интерактивные карты мира со списками городов и стран в различных проекциях. 
 Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
 
 **Атлас мира**  
 *Atlas*  
-[SVG](https://egaxegax.github.io/svg/atlas.html) &emsp; &emsp; 
-[Canvas](https://egaxegax.github.io/atlas.html)
+[SVG](https://egaxegax.github.io/dbcartajs/svg/atlas.html) &emsp; &emsp; 
+[Canvas](https://egaxegax.github.io/dbcartajs/atlas.html)
 
 **Население мира**  
 *Population*  
-[SVG](https://egaxegax.github.io/svg/usemap.html) &emsp; &emsp; 
-[Canvas](https://egaxegax.github.io/usemap.html)
+[SVG](https://egaxegax.github.io/dbcartajs/svg/usemap.html) &emsp; &emsp; 
+[Canvas](https://egaxegax.github.io/dbcartajs/usemap.html)
 
 **Население США**  
 *Population USA*  
-[SVG](https://egaxegax.github.io/svg/us.html) &emsp; &emsp; 
+[SVG](https://egaxegax.github.io/dbcartajs/svg/us.html) &emsp; &emsp; 
 
 **Города мира**  
 *Cities*  
-[Canvas](https://egaxegax.github.io/cities.html)
+[Canvas](https://egaxegax.github.io/dbcartajs/cities.html)
 
 **Города России без расстояний**  
 *Russian Cities*  
-[Canvas](https://egaxegax.github.io/russ.html)
+[Canvas](https://egaxegax.github.io/dbcartajs/russ.html)
 
 **Страны мира**  
 *Countries*  
  &emsp; &emsp;  
-[Canvas](https://egaxegax.github.io/countries.html)
+[Canvas](https://egaxegax.github.io/dbcartajs/countries.html)
 
 **Маршруты на карте**  
 *Routes*  
-[Canvas](https://egaxegax.github.io/merc.html)
+[Canvas](https://egaxegax.github.io/dbcartajs/merc.html)
 
 > Отрисовка картинки в канвасе <i>3d</i> с пересчетом проекции отображения через шейдеры <i>WebGL</i> на основе примеров с с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
 > Звездное небо в канвасе <i>2d</i> и <i>3d</i> с использованием скриптов <a href="https://github.com/mrdoob/three.js">three.js</a>.
 
 **Атлас 3D**  
 *Atlas 3D*  
-[Canvas](https://egaxegax.github.io/map3d.html)
+[Canvas](https://egaxegax.github.io/dbcartajs/map3d.html)
 
 **Звездное небо**  
 *Starry Sky*  
-[Canvas](https://egaxegax.github.io/starry.html)
+[Canvas](https://egaxegax.github.io/dbcartajs/starry.html)
 
 **Звездное небо 3D**  
 *Sky 3D*  
-[Canvas](https://egaxegax.github.io/sky3d.html)
+[Canvas](https://egaxegax.github.io/dbcartajs/sky3d.html)
