@@ -118,7 +118,7 @@ var MLINES=[
 ['inch_mck',  'Shelepikha',                      [[-116,27],[-113,29.5]]],
 ['inch_mck',  'Delovoy_Tsentr__Mezhdunarodnaya', [[-115,21],[-111,20]]],
 ['inch_mck',  'Kutuzovskaya',                    [[-120,3],[-116.8,7]]],
-['inch_mck',  'Sportivnaya__Luzhniki',           [[-81.2,-78],[-87,-78]]],
+['inch_mck',  'Sportivnaya__Luzhniki',           [[-81,-78],[-87,-78]]],
 ['inch_mck',  'Pl_Gagarina__Lenins_Prospekt',    [[-49,-106.2],[-41,-99]]],
 ['inch_mck',  'V_Kotly__Nagatinskaya',           [[30,-113.1],[19,-117]]],
 ['inch_mck',  'Avtozavodskaya',                  [[65,-97],[68,-90]]],
@@ -166,8 +166,8 @@ var MSTATIONS=[
 ['s1_4',      'Biblioteka_Im_Lenina',[[-14,-11]],       'Библиотека им. Ленина'],
 ['s1_1',      'Kropotkinskaya',      [[-29.83,-26.83]], 'Кропоткинская'],
 ['s1_2',      'Park_Kultury',        [[-53,-50]],       'Парк Культуры'],
-['s1',        'Frunzenskaya',        [[-68.2,-65]],     'Фрунзенская'],
-['s1',        'Sportivnaya',         [[-81.2,-78]],     'Спортивная'],
+['s1',        'Frunzenskaya',        [[-68,-65]],       'Фрунзенская'],
+['s1',        'Sportivnaya',         [[-81,-78]],       'Спортивная'],
 ['s1',        'Vorobyovy_Gory',      [[-97,-94]],       'Воробьёвы горы'],
 ['s1',        'Universitet',         [[-103,-100]],     'Университет'],
 ['s1_2',      'Prospekt_Vernadskogo',[[-110,-107.5]],   'Пр-т Вернадского'],
@@ -342,7 +342,7 @@ var MSTATIONS=[
 ['s9_1',      'Tsvetnoy_Bulvar',     [[-4,43.5]],       'Цветной бульвар'],
 ['s9_2',      'Chekhovskaya',        [[-18.55,24]],     'Чеховская'],
 ['s9_3',      'Borovitskaya',        [[-19,-16]],       'Боровицкая'],
-['s9_4',      'Polyanka',            [[3.5,-45]],       'Полянка'],
+['s9_4',      'Polyanka',            [[3.4,-45]],       'Полянка'],
 ['s9_2',      'Serpukhovskaya',      [[19,-72]],        'Серпуховская'],
 ['s9',        'Tulskaya',            [[19,-99]],        'Тульская'],
 ['s9',        'Nagatinskaya',        [[19,-117]],       'Нагатинская'],
@@ -511,7 +511,7 @@ var MSTATIONS=[
 ['smcd2',     'Nahabino',            [[-200,122]],      'Нахабино']
 ];
 var MLABELS=[
-['moskvar_t', 'mr',        [], 'Москва-река',     [112,-145]],
+['moskvar_t', 'mr',        [], 'Москва-река',     [112,-149]],
 ['moskvac_t', 'mc',        [], 'Канал им. Москвы',[-98,111]],
 ['yauza_t',   'yr',        [], 'река Яуза',       [64,89]],
 ['svo_t',     'svo',       [], 'Шереметьево',     [-25,162]],
