@@ -56,7 +56,7 @@ function draw() {
   function station(o)  { return DC.extend({class: 'station', bg: '#f5f5dc', size: 4, width: 20, scale: 1}, o||{}); };
   function st_mck(o)   { return station(DC.extend({fg: '#f76093', size: 4, labelcolor: 'gray'}, o)); };
   function st_mcd(o)   { return station(DC.extend({size: 2, labelcolor: 'rgb(180,180,180)'}, o)); };
-  function inch_mck(o) { return inch(DC.extend({dash:[2,4], width: 3}, o||{})); };
+  function inch_mck(o) { return inch(DC.extend({dash:[2,4], width: 2}, o||{})); };
   function inch_mn(o)  { return inch(DC.extend({dash:[1,2], fg: 'black', width: 1}, o||{})); };
   function inch_mcd(o) { return inch(DC.extend({dash:[1,3], fg: '#777', width: 1}, o||{})); };
   function inst_mck(o) { return st_mck(DC.extend({size: 4, labelcolor: o['fg'], bg: o['fg']}, o)); };
@@ -313,7 +313,7 @@ function draw() {
           }
           clearRoute();
         }
-        DC.attr(ev.target, {class: 'selected', fill: 'gold', r: mds(6), 'stroke-width': mds(5)});
+        DC.attr(ev.target, {class: 'selected', fill: 'gold'});
         if((sel = DC.root.querySelectorAll('.selected')).length == 2){
           calcRoute(sel[0].getAttribute('id'), sel[1].getAttribute('id'));
         }
@@ -425,17 +425,17 @@ function calcRoute(fromid, toid){
           path = ('M ' + pts).replace(/,/g, ' ');
       var bInch = inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length;
       DC.extend( 
-        DC.append('path', { class: 'selpath', d: path, stroke: DC.root.getElementById(makeid(st)).getAttribute('mstroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-dasharray': bInch ? [3,2] : 'none', 'stroke-width': mds(bInch ? 6 : 12)}),
+        DC.append('path', { class: 'selpath', d: path, stroke: DC.root.getElementById(makeid(st)).getAttribute('mstroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-dasharray': bInch ? [3,2] : 'none', 'stroke-width': mds(bInch ? 4 : 10)}),
           { onclick: clearRoute });
     } else {
       [].slice.call(DC.root.querySelectorAll('.route, .station, .label')).map(function(o){ // opacity map
-        DC.attr(o, {opacity: '0.1'});
+        DC.attr(o, {opacity: '0.07'});
       });
       sts.map(function(st){ // station + label above route
         var ost = DC.root.getElementById(makeid(st));
         var t = DC.root.getElementById('t' + ost.getAttribute('id'));
         DC.extend(
-          DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('stroke'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill: 'white', 'stroke-width': mds(2), r: mds(5)}),
+          DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('fill'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill: 'white', 'stroke-width': mds(2), r: mds(5)}),
             { onclick: clearRoute });
         if(t){
           DC.append('text', {
@@ -458,9 +458,10 @@ var DC = new dbCartaSvg({
   scalebg: 'rgba(100,200,100,0.2)'
 });
   // events
-//DC.extend(DC.root, {
+DC.extend(DC.root, {
+  ondblclick: function(){ clearRoute(); }
 //  ondblclick: function(){ DC.savetoimage(); }
-//});
+});
 if(window.addEventListener) 
   window.addEventListener('load', draw, false);
 else 

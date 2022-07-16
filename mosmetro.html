@@ -59,7 +59,7 @@ function centerMap(coords){
 function maskMap(){
   var vs = dw.viewsizeOf(),
       rect = [[vs[0], vs[1]], [vs[2], vs[1]], [vs[2], vs[3]], [vs[0], vs[3]]]; 
-  dw.mopt['selpath'] = {cls: 'Polygon', bg: 'rgba(255,255,255,0.8)', fg: 'transparent'};
+  dw.mopt['selpath'] = {cls: 'Polygon', bg: 'rgba(255,255,255,0.9)', fg: 'transparent'};
   dw.paintCarta(rect, 'selpath');
 }
 // diagonal size
@@ -112,7 +112,7 @@ function calcRoute(fromid, toid){
         if(st[2][0][1] > maxy || !maxy) maxy = st[2][0][1];
       });
         // center and mask map
-      centerMap([(minx + maxx)/2.0, (miny + maxy)/2.0]);
+//      centerMap([(minx + maxx)/2.0, (miny + maxy)/2.0]);
       maskMap();
       dw.paintBar();
         // draw routes
