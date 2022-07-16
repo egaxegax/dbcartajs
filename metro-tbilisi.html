@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Карта метро Тбилиси / Canvas векторная карта</title>
+<title>Карта метро Тбилиси в 2014 году / Canvas векторная карта</title>
 <meta name="description" content="Схема метро Тбилиси">
 <meta name="keywords" content="Схема метро Тбилиси, Карта метро Тбилиси">
 <link rel="icon" href="img/fav.svg" type="image/svg+xml">
@@ -96,10 +96,10 @@ function draw(){
   });
   dw.style.backgroundColor = 'white';
   // define new layers
-  var route = function(o){ return dw.extend({cls: 'Line', width: mds(5), anchor: ['start', 'middle'], labelscale: 1}, o||{}) },
-      station = function(o){ return dw.extend({cls: 'Dot', size: mds(8), width: mds(6), bg: dw.style.backgroundColor, labelscale: 1}, o||{}) },
-      redst = function(o){ return station(dw.extend({fg: 'rgb(193,41,22)'}, o||{})) },
-      bluest = function(o){ return station(dw.extend({fg: 'rgb(25,74,103)'}, o||{})) };
+  var route = function(o){ return dw.extend({cls: 'Line', width: mds(5), anchor: ['start', 'middle'], labelscale: 1}, o||{}); },
+      station = function(o){ return dw.extend({cls: 'Dot', size: mds(8), width: mds(6), bg: dw.style.backgroundColor, labelscale: 1}, o||{}); },
+      redst = function(o){ return station(dw.extend({fg: 'rgb(193,41,22)'}, o||{})); },
+      bluest = function(o){ return station(dw.extend({fg: 'rgb(25,74,103)'}, o||{})); };
   // lines
   dw.extend(dw.mopt, {
     r1: route({fg: 'rgb(236,66,45)'}),
