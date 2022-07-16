@@ -97,7 +97,7 @@ function draw(){
   dw.style.backgroundColor = 'white';
   // define new layers
   var route = function(o){ return dw.extend({cls: 'Line', width: mds(5), anchor: ['start', 'middle'], labelscale: 1}, o||{}); },
-      station = function(o){ return dw.extend({cls: 'Dot', size: mds(8), width: mds(6), bg: dw.style.backgroundColor, labelscale: 1}, o||{}); },
+      station = function(o){ return dw.extend({cls: 'Dot', size: mds(8), width: mds(6), bg: dw.style.backgroundColor, labelscale: 1, labelpad: mds(3)}, o||{}); },
       redst = function(o){ return station(dw.extend({fg: 'rgb(193,41,22)'}, o||{})); },
       bluest = function(o){ return station(dw.extend({fg: 'rgb(25,74,103)'}, o||{})); };
   // lines
