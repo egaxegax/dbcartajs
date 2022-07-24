@@ -61,6 +61,7 @@ function maskMap(){
       rect = [[vs[0], vs[1]], [vs[2], vs[1]], [vs[2], vs[3]], [vs[0], vs[3]]]; 
   dw.mopt['selpath'] = {cls: 'Polygon', bg: 'rgba(255,255,255,0.9)', fg: 'transparent'};
   dw.paintCarta(rect, 'selpath');
+  dw.paintBar();
 }
 // diagonal size
 function mds(o) { 
@@ -111,10 +112,8 @@ function calcRoute(fromid, toid){
         if(st[2][0][1] < miny || !miny) miny = st[2][0][1];
         if(st[2][0][1] > maxy || !maxy) maxy = st[2][0][1];
       });
-        // center and mask map
 //      centerMap([(minx + maxx)/2.0, (miny + maxy)/2.0]);
       maskMap();
-      dw.paintBar();
         // draw routes
       for(var j=0; j<routes.length; j++){
         var cc = routes[j],
@@ -166,7 +165,7 @@ chinches.onchange = function(){
   //
 var dw = new dbCarta({
   id: 'mcol', height: document.getElementById('mcol').offsetHeight,
-  viewportx: 220, viewporty: 220, scalebg: 'rgba(100,200,100,0.2)'
+  viewportx: 220, viewporty: 220, scalebg: 'rgba(100,200,100,0.3)'
 });
 dw.style.backgroundColor = 'rgb(250,255,250)';
   // define new layers
@@ -441,7 +440,7 @@ chinches.selectedIndex = 0;
 dw.loadCarta(MLINES);
 dw.loadCarta(MLABELS);
 dw.loadCarta(MSTATIONS);
-//dw.scaleCarta(0.8);
+dw.scaleCarta( dw.sizeOf()[2]>dw.sizeOf()[3] ? 1 : 1.5 );
 dw.draw();
 
 delete MLINES;
