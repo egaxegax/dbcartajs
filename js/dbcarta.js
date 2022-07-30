@@ -2,7 +2,7 @@
 // HTML5 Canvas vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013. b220716.
+// egax@bk.ru, 2013. b220730.
 //
 function dbCarta(cfg) {
   cfg = cfg||{};
@@ -300,12 +300,12 @@ function dbCarta(cfg) {
           'centerof': 4 in d ? d[4] : undefined,
           'ismap': 5 in d ? d[5] : undefined,
           'img': 6 in d ? d[6] : undefined
-        }
+        };
         var m = {
           'ftype': ftype,
           'ftag': ftag,
           'coords': coords
-        }
+        };
         for (var j in opts) // optional args
           if (opts[j]) m[j] = opts[j]
         if (dopaint) {
@@ -986,9 +986,9 @@ function dbCarta(cfg) {
     mousewheel: function(ev) {
       var delta = 0;
       if (ev.wheelDelta) { // WebKit / Opera / Explorer 9
-        delta = ev.wheelDelta / 40;
+        delta = ev.wheelDelta / 150;
       } else if (ev.detail) { // Firefox
-        delta = -ev.detail / 3;
+        delta = -ev.detail / 6;
       }
       var zoom = (this.m.scale > 1 ? this.m.scale : 2-1/this.m.scale);
       zoom += delta * 0.5;
