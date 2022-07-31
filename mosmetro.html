@@ -1,9 +1,9 @@
+<!DOCTYPE html>
 <!--
 Moscow Metro map. Canvas version.
-View lines and stations with additional info.
+View lines, stations and calc routes.
 egax@bk.ru, 2013-22.
 -->
-<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
@@ -187,7 +187,7 @@ function inch_mn(o)  { return inch(dw.extend({dash:[1,2], fg: 'black', width: md
 function inch_mcd(o) { return inch(dw.extend({dash:[1,3], fg: '#777', width: mds(1)}, o||{})); };
 function inst_mck(o) { return st_mck(dw.extend({size: mds(4), labelcolor: o['fg'], bg: o['fg']}, o)); };
 function inst_mcd(o) { return st_mcd(dw.extend({size: mds(2), labelcolor: o['fg'], bg: o['fg']}, o)); };
-function inst(o)     { return station(dw.extend({size: mds(6), labelcolor: o['fg'], bg: o['fg']}, o)); };
+function inst(o)     { return station(dw.extend({size: mds(7), labelcolor: o['fg'], bg: o['fg']}, o)); };
 function inst_d(o)   { return inst(dw.extend({size: mds(2), width: mds(1)}, o||{})); };
   // lines
 dw.extend(dw.mopt, {

@@ -5,6 +5,15 @@
 // egax@bk.ru, 2013. b220730.
 //
 function dbCarta(cfg) {
+  // Constructor config {
+  //   id: parent id
+  //   width, height: canvas size
+  //   draggable: move map by cursor
+  //   viewportx, viewporty: offset limits for centerCarta in degrees
+  //   scalebg: bgcolor for paintBar
+  //   rbar: show right bar?
+  //   mapbg: bgcolor for doMap
+  // }
   cfg = cfg||{};
   var dw = document.createElement('canvas'),
       el = document.getElementById(cfg.id);
@@ -27,15 +36,6 @@ function dbCarta(cfg) {
     return dst;
   };
   dw.extend({
-    // Constructor config {
-    //   pid: parent id
-    //   width, height: canvas size
-    //   draggable: move map by cursor
-    //   viewportx, viewporty: offset limits for centerCarta in degrees
-    //   scalebg: bgcolor for paintBar
-    //   rbar: show right bar?
-    //   mapbg: bgcolor for doMap
-    // }
     cfg: {
       draggable: cfg.draggable == undefined ? true : cfg.draggable,
       viewportx: cfg.viewportx || 300.0,

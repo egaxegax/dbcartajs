@@ -1,9 +1,9 @@
+<!DOCTYPE html>
 <!--
 Moscow Metro map. SVG version.
-View lines and stations and calc routes.
+View lines, stations and calc routes.
 egax@bk.ru, 2015-22.
 -->
-<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="utf-8">
@@ -33,6 +33,8 @@ egax@bk.ru, 2015-22.
 <script src="../js/data/mosmetro.js"></script>
 <script src="../js/alg/bfs.js"></script>
 <script>
+var msel, mopt = {};
+  // peresadki click
 function clchange(sel){
   var o=sel.options[sel.selectedIndex], s=o.innerHTML; 
   o.innerHTML = (s.indexOf('\u2611')>-1 ? '&emsp;' : '\u2611')+' '+s.slice(s.search(' '));
@@ -43,7 +45,6 @@ function mds(o) {
   return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*o/100;
 }
 function draw() {
-  var mopt = {};
   function route(o)    { return DC.extend({class: 'route', bg: 'none', join: 'round', cap: 'round', width: 8, anchor: ['start', 'middle']}, o||{}); };
   function route_ext(o){ return route(DC.extend({width: 5, cap: 'butt', dash: [6,4]}, o||{})); };
   function inch(o)     { return route(DC.extend({fg: '#ccc', cap: 'round', width: 12}, o||{})); };
@@ -54,13 +55,13 @@ function draw() {
   function rail_d(o)   { return rail(DC.extend({fg: '#fff', dash: [10,10]}, o||{})); };
   function label(o)    { return DC.extend({class: 'label', labelcolor: '#aaa', anchor: ['start', 'top']}, o||{}); };
   function station(o)  { return DC.extend({class: 'station', bg: '#f5f5dc', size: 4, width: 20, scale: 1}, o||{}); };
-  function st_mck(o)   { return station(DC.extend({fg: '#f76093', size: 4, labelcolor: 'gray'}, o)); };
-  function st_mcd(o)   { return station(DC.extend({size: 2, labelcolor: 'rgb(180,180,180)'}, o)); };
+  function st_mck(o)   { return station(DC.extend({size: 2, labelcolor: 'gray', bg: o['fg']}, o)); };
+  function st_mcd(o)   { return station(DC.extend({size: 2, labelcolor: 'rgb(180,180,180)', bg: o['fg']}, o)); };
   function inch_mck(o) { return inch(DC.extend({dash:[2,4], width: 2}, o||{})); };
   function inch_mn(o)  { return inch(DC.extend({dash:[1,2], fg: 'black', width: 1}, o||{})); };
   function inch_mcd(o) { return inch(DC.extend({dash:[1,3], fg: '#777', width: 1}, o||{})); };
-  function inst_mck(o) { return st_mck(DC.extend({size: 4, labelcolor: o['fg'], bg: o['fg']}, o)); };
-  function inst_mcd(o) { return st_mcd(DC.extend({size: 2, labelcolor: o['fg'], bg: o['fg']}, o)); };
+  function inst_mck(o) { return st_mck(DC.extend({size: 3, labelcolor: o['fg']}, o)); };
+  function inst_mcd(o) { return st_mcd(DC.extend({size: 3, labelcolor: o['fg']}, o)); };
   function inst(o)     { return station(DC.extend({size: 4, width: 20, labelcolor: o['fg'], bg: o['fg']}, o)); };
   function inst_d(o)   { return inst(DC.extend({size: 2, width: 2}, o||{})); };
     // lines
@@ -228,11 +229,11 @@ function draw() {
     s12_5:     inst({fg: mopt['r12'].fg, anchor: ['start', 'top']}),
     s13:       inst({fg: mopt['r13'].fg, size: 2, anchor: ['middle', 'top']}),
     s13_1:     inst({fg: mopt['r13'].fg, size: 2, anchor: ['start', 'middle']}),
-    s14:       st_mck({anchor: ['start', 'middle']}),
-    s14_1:     st_mck({anchor: ['start', 'top']}),
-    s14_2:     st_mck({anchor: ['end', 'middle']}),
-    s14_3:     st_mck({anchor: ['end', 'bottom']}),
-    s14_4:     st_mck({anchor: ['start', 'bottom']}),
+    s14:       st_mck({fg: mopt['r14'].fg, anchor: ['start', 'middle']}),
+    s14_1:     st_mck({fg: mopt['r14'].fg, anchor: ['start', 'top']}),
+    s14_2:     st_mck({fg: mopt['r14'].fg, anchor: ['end', 'middle']}),
+    s14_3:     st_mck({fg: mopt['r14'].fg, anchor: ['end', 'bottom']}),
+    s14_4:     st_mck({fg: mopt['r14'].fg, anchor: ['start', 'bottom']}),
     s14_5:     inst_mck({fg: mopt['r14'].fg}),
     s14_6:     inst_mck({fg: mopt['r14'].fg, anchor: ['start', 'top']}),
     s14_7:     inst_mck({fg: mopt['r14'].fg, anchor: ['end', 'middle']}),
@@ -306,17 +307,9 @@ function draw() {
     });
     DC.extend(station, {
       onclick: function(ev){
-        var sel;
-        if(DC.root.querySelectorAll('.selected').length > 1){
-          while((sel = DC.root.querySelectorAll('.selected')).length){
-            var m = sel[0].getAttribute('mclass');
-            DC.attr(sel[0], {class: mopt[m].class, fill: mopt[m].bg, r: mds(mopt[m].size), 'stroke-width': mds(mopt[m].width)});
-          }
-          clearRoute();
-        }
         DC.attr(ev.target, {class: 'selected', fill: 'gold'});
-        if((sel = DC.root.querySelectorAll('.selected')).length == 2){
-          calcRoute(sel[0].getAttribute('id'), sel[1].getAttribute('id'));
+        if((msel = DC.root.querySelectorAll('.selected')).length == 2){
+          calcRoute(msel[0].getAttribute('id'), msel[1].getAttribute('id'));
         }
       },
       onmousemove: function(ev){
@@ -375,15 +368,17 @@ function draw() {
     }
     text.appendChild(document.createTextNode(t));    
   });
-    //
 //  DC.scaleCarta(0.8);
 };
   //
 function clearRoute(){
-  var sel;
-  while((sel = DC.root.querySelectorAll('.selpath')).length){
-    DC.vp.removeChild(sel[0]);
+  while((msel = DC.root.querySelectorAll('.selpath')).length){
+    DC.vp.removeChild(msel[0]);
   }
+  [].slice.call(DC.root.querySelectorAll('.selected')).map(function(o){
+    var m = o.getAttribute('mclass');
+    DC.attr(o, {class: mopt[m].class, fill: mopt[m].bg, r: mds(mopt[m].size), 'stroke-width': mds(mopt[m].width)});
+  });
   [].slice.call(DC.root.querySelectorAll('.route, .station, .label')).map(function(o){
     DC.attr(o, {opacity: '1'});
   });
@@ -436,7 +431,7 @@ function calcRoute(fromid, toid){
         var ost = DC.root.getElementById(makeid(st));
         var t = DC.root.getElementById('t' + ost.getAttribute('id'));
         DC.extend(
-          DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('fill'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill: 'white', 'stroke-width': mds(2), r: mds(5)}),
+          DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('fill'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill: '#f5f5dc', 'stroke-width': mds(2), r: mds(5)}),
             { onclick: clearRoute });
         if(t){
           DC.append('text', {
