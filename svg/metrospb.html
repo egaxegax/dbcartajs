@@ -175,7 +175,7 @@ function draw(){
   var route = function(o){ return DC.extend({class: 'route', bg: 'none', join: 'round', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}); },
       river = function(o){ return route(DC.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})); },
       inch = function(o){ return route(DC.extend({fg: '#ddd', cap: 'round'}, o||{})); },
-      station = function(o){ return DC.extend({class: 'station', bg: 'white', size: 4, width: 2, labelscale: 1}, o||{}); };
+      station = function(o){ return DC.extend({class: 'station', bg: 'white', size: 4, width: 1, labelscale: 1}, o||{}); };
     // lines
   DC.extend(mopt, {
     neva_river1: river({width: 20, rotate: -43}),
