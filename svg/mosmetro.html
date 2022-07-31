@@ -54,7 +54,7 @@ function draw() {
   function rail(o)     { return route(DC.extend({width: 2, fg: '#ccc'}, o||{})); };
   function rail_d(o)   { return rail(DC.extend({fg: '#fff', dash: [10,10]}, o||{})); };
   function label(o)    { return DC.extend({class: 'label', labelcolor: '#aaa', anchor: ['start', 'top']}, o||{}); };
-  function station(o)  { return DC.extend({class: 'station', bg: '#f5f5dc', size: 4, width: 20, scale: 1}, o||{}); };
+  function station(o)  { return DC.extend({class: 'station', bg: '#f5f5dc', size: 4, width: 1}, o||{}); };
   function st_mck(o)   { return station(DC.extend({size: 2, labelcolor: 'gray', bg: o['fg']}, o)); };
   function st_mcd(o)   { return station(DC.extend({size: 2, labelcolor: 'gray', bg: o['fg']}, o)); };
   function inch_mck(o) { return inch(DC.extend({dash:[2,4], width: 2}, o||{})); };
@@ -62,7 +62,7 @@ function draw() {
   function inch_mcd(o) { return inch(DC.extend({dash:[1,3], fg: '#777', width: 1}, o||{})); };
   function inst_mck(o) { return st_mck(DC.extend({size: 3, labelcolor: o['fg']}, o)); };
   function inst_mcd(o) { return st_mcd(DC.extend({size: 3, labelcolor: o['fg']}, o)); };
-  function inst(o)     { return station(DC.extend({size: 4, width: 20, labelcolor: o['fg'], bg: o['fg']}, o)); };
+  function inst(o)     { return station(DC.extend({size: 3, width: 2, labelcolor: o['fg'], bg: o['fg']}, o)); };
   function inst_d(o)   { return inst(DC.extend({size: 2, width: 2}, o||{})); };
     // lines
   DC.extend(mopt, {
@@ -302,7 +302,7 @@ function draw() {
         pts = DC.toPoints(coords, true);
     var station = DC.append('circle', {
       id: ftype +'_'+ abbr, class: mopt[ftype].class, mclass: ftype,
-      fill: mopt[ftype].bg, mstroke: mopt[ftype].fg, stroke: 'transparent', 'stroke-width': mds(mopt[ftype].width), 
+      fill: mopt[ftype].bg, stroke: mopt[ftype].fg, 'stroke-width': mds(mopt[ftype].width), 
       cx: pts[0], cy: pts[1], r: mds(mopt[ftype].size)
     });
     DC.extend(station, {
@@ -421,7 +421,7 @@ function calcRoute(fromid, toid){
           path = ('M ' + pts).replace(/,/g, ' ');
       var bInch = inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length;
       DC.extend( 
-        DC.append('path', { class: 'selpath', d: path, stroke: DC.root.getElementById(makeid(st)).getAttribute('mstroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-dasharray': bInch ? [3,2] : 'none', 'stroke-width': mds(bInch ? 4 : 10)}),
+        DC.append('path', { class: 'selpath', d: path, stroke: DC.root.getElementById(makeid(st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-dasharray': bInch ? [3,2] : 'none', 'stroke-width': mds(bInch ? 4 : 10)}),
           { onclick: clearRoute });
     } else {
       [].slice.call(DC.root.querySelectorAll('.route, .station, .label')).map(function(o){ // opacity map
@@ -431,7 +431,7 @@ function calcRoute(fromid, toid){
         var ost = DC.root.getElementById(makeid(st));
         var t = DC.root.getElementById('t' + ost.getAttribute('id'));
         DC.extend(
-          DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('fill'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill: '#f5f5dc', 'stroke-width': mds(2), r: mds(5)}),
+          DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('stroke'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill: '#f5f5dc', 'stroke-width': mds(2), r: mds(5)}),
             { onclick: clearRoute });
         if(t){
           DC.append('text', {
