@@ -167,11 +167,11 @@ var MLABELS=[
 ['neva_river2', 'nr', [], 'река Нева',    [-20,30]],
 ['neva_river3', 'nr', [], 'Большая Нева', [-94,50]]
 ];
+var msel, mopt = {}; // define new layers
   // diag. size ratio
 function mds(o){ return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*o/100; }
   // 
 function draw(){
-  var mopt = {}; // define new layers
   var route = function(o){ return DC.extend({class: 'route', bg: 'none', join: 'round', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}); },
       river = function(o){ return route(DC.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})); },
       inch = function(o){ return route(DC.extend({fg: '#ddd', cap: 'round'}, o||{})); },
@@ -250,21 +250,13 @@ function draw(){
     });
     DC.extend(station, {
       onclick: function(ev){
-        var sel;
-        if(DC.root.querySelectorAll('.selected').length > 1){
-          while((sel = DC.root.querySelectorAll('.selected')).length){
-            var m = sel[0].getAttribute('mclass');
-            DC.attr(sel[0], {class: mopt[m].class, fill: mopt[m].bg, r: mds(mopt[m].size)});
-          }
-          clearRoute();
-        }
         DC.attr(ev.target, {class: 'selected', fill: 'gold', r: mds(6)});
-        if((sel = DC.root.querySelectorAll('.selected')).length == 2){
-          calcRoute(sel[0].getAttribute('id'), sel[1].getAttribute('id'));
+        if((msel = DC.root.querySelectorAll('.selected')).length == 2){
+          calcRoute(msel[0].getAttribute('id'), msel[1].getAttribute('id'));
         }
       },
       onmousemove: function(ev){
-         // find text by id
+          // find text by id
         var text = document.getElementById('t'+this.getAttribute('id'));
         var ts = [], tsattr =[];
         if(text){
@@ -329,10 +321,13 @@ function draw(){
 }
   //
 function clearRoute(){
-  var sel;
-  while((sel = DC.root.querySelectorAll('.selpath')).length){
-    DC.vp.removeChild(sel[0]);
+  while((msel = DC.root.querySelectorAll('.selpath')).length){
+    DC.vp.removeChild(msel[0]);
   }
+  [].slice.call(DC.root.querySelectorAll('.selected')).map(function(o){
+    var m = o.getAttribute('mclass');
+    DC.attr(o, {class: mopt[m].class, fill: mopt[m].bg, r: mds(mopt[m].size)});
+  });
   [].slice.call(DC.root.querySelectorAll('.route, .station')).map(function(o){
     DC.attr(o, {opacity: '1'});
   });
@@ -403,6 +398,10 @@ var DC = new dbCartaSvg({
   sbarpos: 'left',
   bg: 'white',
   scalebg: 'rgba(100,200,100,0.2)'
+});
+  // events
+DC.extend(DC.root, {
+  ondblclick: function(){ clearRoute(); }
 });
 if(window.addEventListener) 
   window.addEventListener('load', draw, false);
