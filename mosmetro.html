@@ -180,13 +180,13 @@ function rail(o)     { return route(dw.extend({fg: '#ddd', width: mds(2), labels
 function rail_d(o)   { return rail(dw.extend({fg: '#fff', dash: [10,10]}, o||{})); };
 function label(o)    { return dw.extend({cls: 'Polygon', labelcolor:'#aaa', labelscale: 1, anchor: ['start', 'top']}, o||{}); };
 function station(o)  { return dw.extend({cls: 'Rect', bg: '#f5f5dc', size: mds(8), width: mds(2), scale: 1, labelscale: 1, labelpad: mds(1)}, o||{}); };
-function st_mck(o)   { return station(dw.extend({fg: '#f76093', size: mds(5), labelcolor: 'gray'}, o)); };
-function st_mcd(o)   { return station(dw.extend({size: mds(2), labelcolor: 'rgb(180,180,180)'}, o)); };
+function st_mck(o)   { return station(dw.extend({size: mds(3), labelcolor: 'gray', bg: o['fg']}, o)); };
+function st_mcd(o)   { return station(dw.extend({size: mds(3), labelcolor: 'gray', bg: o['fg']}, o)); };
 function inch_mck(o) { return inch(dw.extend({dash:[2,4], width: mds(2)}, o||{})); };
 function inch_mn(o)  { return inch(dw.extend({dash:[1,2], fg: 'black', width: mds(1)}, o||{})); };
 function inch_mcd(o) { return inch(dw.extend({dash:[1,3], fg: '#777', width: mds(1)}, o||{})); };
-function inst_mck(o) { return st_mck(dw.extend({size: mds(4), labelcolor: o['fg'], bg: o['fg']}, o)); };
-function inst_mcd(o) { return st_mcd(dw.extend({size: mds(2), labelcolor: o['fg'], bg: o['fg']}, o)); };
+function inst_mck(o) { return st_mck(dw.extend({size: mds(3), labelcolor: o['fg']}, o)); };
+function inst_mcd(o) { return st_mcd(dw.extend({size: mds(3), labelcolor: o['fg']}, o)); };
 function inst(o)     { return station(dw.extend({size: mds(7), labelcolor: o['fg'], bg: o['fg']}, o)); };
 function inst_d(o)   { return inst(dw.extend({size: mds(2), width: mds(1)}, o||{})); };
   // lines
@@ -359,11 +359,11 @@ dw.extend(dw.mopt, {
   s12_5:     inst({fg: dw.mopt['r12'].fg, anchor: ['start', 'top']}),
   s13:       inst({fg: dw.mopt['r13'].fg, size: 2, anchor: ['center', 'top']}),
   s13_1:     inst({fg: dw.mopt['r13'].fg, size: 2, anchor: ['start', 'middle']}),
-  s14:       st_mck({anchor: ['start', 'middle']}),
-  s14_1:     st_mck({anchor: ['start', 'top']}),
-  s14_2:     st_mck({anchor: ['end', 'middle']}),
-  s14_3:     st_mck({anchor: ['end', 'bottom']}),
-  s14_4:     st_mck({anchor: ['start', 'bottom']}),
+  s14:       st_mck({fg: dw.mopt['r14'].fg, anchor: ['start', 'middle']}),
+  s14_1:     st_mck({fg: dw.mopt['r14'].fg, anchor: ['start', 'top']}),
+  s14_2:     st_mck({fg: dw.mopt['r14'].fg, anchor: ['end', 'middle']}),
+  s14_3:     st_mck({fg: dw.mopt['r14'].fg, anchor: ['end', 'bottom']}),
+  s14_4:     st_mck({fg: dw.mopt['r14'].fg, anchor: ['start', 'bottom']}),
   s14_5:     inst_mck({fg: dw.mopt['r14'].fg}),
   s14_6:     inst_mck({fg: dw.mopt['r14'].fg, anchor: ['start', 'top']}),
   s14_7:     inst_mck({fg: dw.mopt['r14'].fg, anchor: ['end', 'middle']}),

@@ -56,7 +56,7 @@ function draw() {
   function label(o)    { return DC.extend({class: 'label', labelcolor: '#aaa', anchor: ['start', 'top']}, o||{}); };
   function station(o)  { return DC.extend({class: 'station', bg: '#f5f5dc', size: 4, width: 20, scale: 1}, o||{}); };
   function st_mck(o)   { return station(DC.extend({size: 2, labelcolor: 'gray', bg: o['fg']}, o)); };
-  function st_mcd(o)   { return station(DC.extend({size: 2, labelcolor: 'rgb(180,180,180)', bg: o['fg']}, o)); };
+  function st_mcd(o)   { return station(DC.extend({size: 2, labelcolor: 'gray', bg: o['fg']}, o)); };
   function inch_mck(o) { return inch(DC.extend({dash:[2,4], width: 2}, o||{})); };
   function inch_mn(o)  { return inch(DC.extend({dash:[1,2], fg: 'black', width: 1}, o||{})); };
   function inch_mcd(o) { return inch(DC.extend({dash:[1,3], fg: '#777', width: 1}, o||{})); };
