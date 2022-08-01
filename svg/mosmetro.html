@@ -443,7 +443,7 @@ function calcRoute(fromid, toid){
         }
       });      
     }
-  });
+  }).length || clearRoute();
 }
   //
 var DC = new dbCartaSvg({
