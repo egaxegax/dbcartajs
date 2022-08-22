@@ -418,7 +418,7 @@ var MSTATIONS=[
 ['s12_2',     'Ulitsa_Skobelevskaya',[[-28,-186]],      'Ул. Скобелевская'],
 ['s12_1',     'Bulvar_Adm_Ushakova', [[-45,-186]],      'Б-р Адм. Ушакова'],
 ['s12',       'Ulitsa_Gorchakova',   [[-66,-186]],      'Ул. Горчакова'],
-['s12_1',     'Buninskaya_Alleya',   [[-88,-186]],      'Бунинская аллея'],
+['s12_1',     'Buninskaya_Alleya',   [[-89,-186]],      'Бунинская аллея'],
 ['s13',       'Timiryazevskaya',     [[-25,100]],       ''],
 ['s13',       'Ulitsa_Milashenkova', [[-13,100]],       ''],
 ['s13',       'Teletsentr',          [[0,100]],         ''],
