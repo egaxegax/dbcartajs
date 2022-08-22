@@ -408,7 +408,7 @@ var MSTATIONS=[
 ['s11_3',     'Michurinsky_Prospekt',[[-113,-58]],      'Мичуринский пр-т'],
 ['s11_2',     'Aminyevskaya',        [[-135.26,-35.74]],'Аминьевская'],
 ['s11_2',     'Davydkovo',           [[-145.73,-25.27]],'Давыдково'],
-['s11_1',     'Kuntsevskaya',        [[-152.2,34]],     ''],   // closed radial
+['s11_3',     'Kuntsevskaya',        [[-152.2,34]],     ''],   // closed radial
 ['s11A',      'Delovoy_Tsentr',      [[-104,11]],       ''],
 ['s11A_1',    'Shelepikha',          [[-116,27]],       'Шелепиха'],
 ['s11A_2',    'Khoroshyobskaya',     [[-80,44]],        ''],

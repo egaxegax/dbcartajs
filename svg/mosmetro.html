@@ -431,7 +431,7 @@ function calcRoute(fromid, toid){
         var ost = DC.root.getElementById(makeid(st));
         var t = DC.root.getElementById('t' + ost.getAttribute('id'));
         DC.extend(
-          DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('fill'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill: '#f5f5dc', 'stroke-width': mds(2), r: mds(4)}),
+          DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('mstroke'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill: '#f5f5dc', 'stroke-width': mds(2), r: mds(4)}),
             { onclick: clearRoute });
         if(t){
           DC.append('text', {
