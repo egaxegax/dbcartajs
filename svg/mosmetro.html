@@ -54,7 +54,7 @@ function draw() {
   function rail(o)     { return route(DC.extend({width: 2, fg: '#ccc'}, o||{})); };
   function rail_d(o)   { return rail(DC.extend({fg: '#eee', dash: [8,7]}, o||{})); };
   function label(o)    { return DC.extend({class: 'label', labelcolor: '#aaa', anchor: ['start', 'top']}, o||{}); };
-  function station(o)  { return DC.extend({class: 'station', bg: '#f5f5dc', size: 4, width: 20}, o||{}); };
+  function station(o)  { return DC.extend({class: 'station', bg: '#f5f5dc', size: 3, width: 20}, o||{}); };
   function st_mck(o)   { return station(DC.extend({size: 2, labelcolor: 'gray', bg: o['fg']}, o)); };
   function st_mcd(o)   { return station(DC.extend({size: 2, labelcolor: 'gray', bg: o['fg']}, o)); };
   function inch_mck(o) { return inch(DC.extend({dash:[2,4], width: 2}, o||{})); };
