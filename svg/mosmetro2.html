@@ -474,6 +474,7 @@ function calcRoute(fromid, toid, inst){
     ['M (855 803) Q ([^L]+) L (778 715)', 'M $3 Q $2 L $1'], //r2
     ['M (1052 1199) Q ([^L]+) L (992 1189)', 'M $3 Q $2 L $1'], //r2
     ['M 77 436 L (82 451)', 'M 82 436 L $1'], //r4
+    ['Q 518 975 (518 989)', 'L $1'], //r6
     ['M (1250 994) Q ([^L]+) L (1300 930)', 'M $3 Q $2 L $1'], //r7
     ['M (314 322) Q ([^L]+) L (284 278)', 'M $3 Q $2 L $1'],//r7
     ['L 752 735 L (621 735)', 'L $1 Q 595 735 575 716'],//r8
@@ -716,7 +717,7 @@ function tests(){
 //  calcRoute('s3_Golyanovo','s3_Pyatnitskoye_Shosse', []);
 //  calcRoute('s4_Aleksandrovsky_Sad','s4_Kuntsevskaya_4', []);
 //  calcRoute('s5_Komsomolskaya_5 ', 's5_Komsomolskaya_5', []);
-//  calcRoute('s6_Medvedkovo', 's6_Novoyasenevskaya', []);
+  calcRoute('s6_Medvedkovo', 's6_Novoyasenevskaya', []);
 //  calcRoute('s7_Planernaya', 's7_Kotelniki', []);
 //  calcRoute('s8_Novokosino', 's8_Vnukovo_8', []);
 //  calcRoute('s9_Altufyevo', 's9_Bulvar_Dmitriya_Donskogo', []);
