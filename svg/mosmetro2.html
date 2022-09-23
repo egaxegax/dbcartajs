@@ -48,6 +48,7 @@ function cbchange(sel, index){
   var o=sel.options[index||sel.selectedIndex], s=o.innerHTML; 
   o.innerHTML = (s.indexOf('\u2611')>-1 ? '&emsp;' : '\u2611')+' '+s.slice(s.search(' '));
   sel.selectedIndex = 0;
+  clearRoute();
 }
 //
 // Translater func
