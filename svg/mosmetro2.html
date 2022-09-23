@@ -153,10 +153,10 @@ function find(str){
 //
 function stsel(ev){
   if(!ev || !ev.target) return;
-  [].slice.call((ev.target.getAttribute('xlink:href')||'').match(/(\d+)/).slice(1).map(function(s){
+  [].slice.call((ev.target.getAttribute('xlink:href')||'').match(/(\d+)/)||[]).slice(1).map(function(s){
     DC.attr(ev.target, {class: 'selected', stid: 's'+s+'_'+ev.target.getAttribute('id')});
     console.log(ev.target.getAttribute('stid'));
-  }));
+  });
   find('.selected').map(function(a,i,all){
     if(i > 0){ 
       var inches = [];
