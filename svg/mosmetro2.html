@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<!--
+Moscow Metro map from wikipedia. SVG version.
+View lines, stations and calc routes.
+egax@bk.ru, 2022.
+-->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Карта метро Москвы в 2022 году / SVG векторная карта</title>
+<meta name="description" content="Векторная карта, схема метро Москвы из Википедии c расчётом пути">
+<meta name="keywords" content="схема метро москвы, svg векторная карта метро, википедия">
+<link rel="icon" href="../img/fav.svg" type="image/svg+xml">
+<link rel="canonical" href="mosmetro2.html">
+<style>html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
+<script src="/static/js/metrics.js"></script>
+</head>
+<body>
+<table><tr>
+<td id="mcont"></td>
+</tr></table>
+<script src="../js/dbcartasvg.js"></script>
+<script src="../js/alg/bfs.js"></script>
+<script src="../js/alg/starry.js"></script>
+<script src="../js/3rdparty/svgpath/svgpath.js"></script>
+<script src="../js/3rdparty/svgpath/path_parse.js"></script>
+<script>
+//
+// XmlHttpRequest updater
+//
+function upfunc(p, clfunc, id){
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange = function() { 
+    if (xhr.readyState == 4) {
+      if (id) document.getElementById(id).innerHTML = xhr.responseText;
+      if (clfunc) clfunc(xhr.status == 404 ? '' : xhr.responseText, p, xhr.status);
+    }
+  };
+  xhr.open("GET", p.url, true);
+  xhr.responseType = 'text';
+  xhr.send();
+}
+//
+// Peresadki vkl/vykl
+//
+function cbchange(sel, index){
+  var o=sel.options[index||sel.selectedIndex], s=o.innerHTML; 
+  o.innerHTML = (s.indexOf('\u2611')>-1 ? '&emsp;' : '\u2611')+' '+s.slice(s.search(' '));
+  sel.selectedIndex = 0;
+}
+//
+// Translater func
+//
+function trans(s){
+  var ru = {
+    'а':'a', 'б':'b', 'в':'v', 'г':'g', 'д':'d', 'е':'e', 'ё':'yo', 'ж':'zh',
+    'з':'z', 'и':'i', 'й':'y', 'к':'k', 'л':'l', 'м':'m', 'н':'n', 'о':'o', 
+    'п':'p', 'р':'r', 'с':'s', 'т':'t', 'у':'u', 'ф':'f', 'х':'kh','ц':'ts', 
+    'ч':'ch', 'ш':'sh', 'щ':'shch', 'ы':'y', 'э':'e', 'ю':'yu', 'я':'ya'
+  }, tr = [];
+
+  if(s.indexOf('ый')>-1) s = s.replace(/ый/g,'й');
+  if(s.indexOf('ий')>-1) s = s.replace(/ий/g,'й');
+  if(s.indexOf('ие')>-1) s = s.replace(/ие/g,'ийе');
+  if(s.indexOf('ае')>-1) s = s.replace(/ае/g,'айе');
+  if(s.indexOf('ее')>-1) s = s.replace(/ее/g,'ейе');
+  if(s.indexOf('ое')>-1) s = s.replace(/ое/g,'ойе');
+  if(s.indexOf('яе')>-1) s = s.replace(/яе/g,'яйе');
+  if(s.indexOf('ье')>-1) s = s.replace(/ье/g,'ьйе');
+  if(s.indexOf('ьи')>-1) s = s.replace(/ьи/g,'ьйи');
+  if(s.indexOf('ь')>-1) s = s.replace(/ь/g,'');
+  if(s.indexOf('ъ')>-1) s = s.replace(/ъ/g,'');
+  if(s.indexOf(' ')>-1) s = s.replace(/\s/g,'_');
+
+  for(var i=0; i<s.length; ++i){
+    var t = 
+      ru[ s[i] ] || 
+      ru[ s[i].toLowerCase() ] || 
+      ru[ s[i].toLowerCase() ] == undefined && s[i];
+    if(i == 0 || s[i-1] == '_' || s[i-1] == '-') t = t.charAt(0).toUpperCase() + t.slice(1);
+    tr.push( t );
+  }
+
+  s = tr.join('');
+
+    // fix some incorrect name
+  s = (s == 'Nekrasovka' ? 'Nekrasova' :
+       s == 'Maryino' ? 'Marino' :
+       s == 'Tsska' ? 'CSKA' :
+       s == 'Vdnkh' ? 'VDNKh' :
+       s == 'Narodnoye_Opolcheniye' ? 'Narodnoe_Opolcheniye' :
+       s == 'Novatorskaya' ? 'Ulitsa_Novatorov' : 
+       s == 'Novogireyevo' ? 'Novogireevo' : s);
+
+  return s;
+}
+//
+// Parse points from Svg string
+//
+function topoints(o){
+  var s, tr, x, y, r,
+      ret = {};
+  if((x = o.getAttribute('x')) && (y = o.getAttribute('y'))){
+    ret.x = Number(x); ret.y = Number(y); // x,y
+  } else if((x = o.getAttribute('cx')) && (y = o.getAttribute('cy')) && (r = o.getAttribute('r'))){
+    ret.x = Number(x); ret.y = Number(y); ret.r = Number(r); // cx,cy circle
+  } else if((x = o.getAttribute('mx')) && (y = o.getAttribute('my'))){
+    ret.x = Number(x); ret.y = Number(y); ret.mxy = true; // x,y saved
+    ret.rot = Number(o.getAttribute('mrot'));
+  } else if((tr = o.getAttribute('transform'))){
+    if((s = tr.match(/translate\(([^\)]+)\)/))){
+      ret.x = Number(s[1].split(',')[0]); ret.y = Number(s[1].split(',')[1])||0;
+      tr = tr.replace(s[0], '');
+    }
+    if((s = tr.match(/rotate\(([^\)]+)\)/))) {
+      ret.rot = Number(s[1]);
+      tr = tr.replace(s[0], '');
+    }
+    if((s = tr.match(/translate\(([^\)]+)\)/))){
+      ret.x1 = Number(s[1].split(',')[0]); ret.y1 = Number(s[1].split(',')[1])||0;
+      tr = tr.replace(s[0], '');
+    }
+    if((s = tr.match(/rotate\(([^\)]+)\)/))) {
+      ret.rot1 = Number(s[1]);
+      tr = tr.replace(s[0], '');
+    }
+  }
+  return ret;
+}
+//
+// Translate, rotate point by x,y
+//
+function trpoint(ptc, x, y, rot){
+  var spt = [ptc.x+x, ptc.y+y];
+  if(rot){
+    spt = MVector.rotateZ(spt[0], spt[1], rot, ptc.x, ptc.y);
+  }
+  return {
+    x: Number(spt[0].toFixed(3)),
+    y: Number(spt[1].toFixed(3)),
+    rot: 0
+  };
+}
+//
+// Find Svg nodes
+//
+function find(str){
+  return [].slice.call(DC.root.querySelectorAll(str));
+}
+//
+// Append station to selection
+//
+function stsel(ev){
+  if(!ev || !ev.target) return;
+  [].slice.call((ev.target.getAttribute('xlink:href')||'').match(/(\d+)/).slice(1).map(function(s){
+    DC.attr(ev.target, {class: 'selected', stid: 's'+s+'_'+ev.target.getAttribute('id')});
+    console.log(ev.target.getAttribute('stid'));
+  }));
+  find('.selected').map(function(a,i,all){
+    if(i > 0){ 
+      var inches = [];
+      [].slice.call(cbInches.options).map(function(o){
+        if(o.innerHTML.indexOf('\u2611')>-1){ // checked
+          if(o.id == 'inch') inches = inches.concat(Inst);
+          if(o.id == 'inch_out') inches = inches.concat(InstOut);
+        }
+      });
+      calcRoute(all[i-1].getAttribute('stid'), all[i].getAttribute('stid'), inches);
+    }
+  });
+}
+//
+// Animate station/route under cursor
+//
+function stmove(ev){
+  if(!ev || !ev.target) return;
+  var o = ev.target, 
+      pt = topoints(o);
+  // - scale station under cursor --
+  var scale = 2.5,
+      st = [], stattr = []; 
+  if(!o.getAttribute('x') && !o.getAttribute('mx')){ // set mx,my from translate
+    o.setAttribute('mx', pt.x);
+    o.setAttribute('my', pt.y);
+    o.setAttribute('mrot', pt.rot);
+  }
+  st.push( ev );
+  stattr.push( 
+    { transform: 'scale('+scale+')' + 
+               ((pt.mxy) ? 
+                 'translate('+ pt.x/scale +','+ pt.y/scale +')' : 
+               ((pt.x && pt.y) ? 
+                 'translate('+ -pt.x/scale*(scale-1) +','+ -pt.y/scale*(scale-1) +')' : '')) +
+               ((pt.rot) ? 
+                 'rotate('+ pt.rot +')' : '') });
+  // - find route under text --
+//  var s, g = ts[0].target;
+//  var lns = [], lnsattr = [];
+//  while((g = g.parentNode)){
+//    if(g.getAttribute && (s = (g.getAttribute('id')||'').match(/route(\d+)/))){
+//      find('g[class="me p' +s[1]+ '"] path').map(function(o){ // route15 ???
+//        o.setAttribute('stroke-width', window.getComputedStyle(o).getPropertyValue('stroke-width'));
+//        lns.push( {target: o} );
+//        lnsattr.push( {'stroke-width': 12} );
+//      });
+//      break;
+//    }
+//  }
+  DC.doMap(st, stattr );
+}
+//
+// Move event on text station
+//
+function tsmove(ev){
+  if(!ev || !ev.target) return;
+  var ts = [], tsattr = [];
+  ts = [ {target: ev.target} ];
+  tsattr = [ {'font-size': '150%', transform: ev.target.getAttribute('transform')} ];
+  ev.target.setAttribute('font-size', '100%');
+  DC.doMap(ts, tsattr );
+}
+//
+// Parses interchanges to array
+//
+function getInches(){
+  var s, rs = [];
+    // interchanges
+  mInst.map(function(o){
+    var pts = [],
+        ptc = topoints(o);
+    if(ptc.x1){ // twice translate/rotate coords Oktyabrskaya
+      ptc = trpoint(ptc, ptc.x1, ptc.y1, -ptc.rot );
+    }
+    if((s = o.getAttribute('xlink:href')) && (s = DC.root.getElementById(s.slice(1)))){
+      [].slice.call(s.querySelectorAll('circle,use')).map(function(n){
+        var pt = topoints(n);
+        pt = trpoint(ptc, pt.x, pt.y, -ptc.rot);
+        pts.push( [pt.x, pt.y] );
+      });
+    }
+    rs.push( ['inch', o.getAttribute('id'), pts] );
+      // append Kuntsevskaya_3 pos
+    if(o.getAttribute('id') == 'Kuntsevskaya-Mozhayskaya'){
+      pts.unshift( [ topoints(DC.root.getElementById('Molodyozhnaya')).x,
+                     topoints(DC.root.getElementById('Kuntsevskaya_3')).y] );
+    }
+  });
+  return rs;
+}
+//
+// Parses out interchanges to array
+//
+function getInchesOut(){
+  var rs = [];
+  [['inch_out','Elektrozavodskaya_3','Elektrozavodskaya_14'],
+   ['inch_out','Aviamotornaya_8','Aviamotornaya_15'],
+   ['inch_out','Kozhukhovskaya','Dubrovka_14'],
+   ['inch_out','Avtozavodskaya_14','Avtozavodskaya_2'],
+   ['inch_out','Verkhnie_Kotly','Nagatinskaya'],
+   ['inch_out','Krymskaya_14','Krymskaya_16'],
+   ['inch_out','Ploshchad_Gagarina_14','Leninsky_Prospekt'],
+   ['inch_out','Luzhniki_14','Sportivnaya_1'],
+   ['inch_out','Kutuzovskaya_14','Kutuzovskaya_4'],
+   ['inch_out','Shelepikha_14','Shelepikha_11'],
+   ['inch_out','Khoroshyovo_14','Polezhayevskaya'],
+   ['inch_out','Zorge','Oktyabrskoye_Pole'],
+   ['inch_out','Panfilovskaya','Oktyabrskoye_Pole'],
+   ['inch_out','Voykovskaya','Baltiyskaya'],
+   ['inch_out','Voykovskaya','Streshnevo'],
+   ['inch_out','Okruzhnaya_14','Okruzhnaya_10'],
+   ['inch_out','Botanichesky_Sad_14','Botanichesky_Sad_6'],
+   ['inch_out','Bulvar_Rokossovskogo_14','Bulvar_Rokossovskogo_1'],
+   ['inch_out','Izmaylovo_14','Partizanskaya'],
+   ['inch_out','Shosse_Entuziastov_14','Shosse_Entuziastov_8'],
+   ['inch_out','Nizhegorodskaya_14','Nizhegorodskaya_15'],
+   ['inch_out','Ugreshskaya','Volgogradsky_Prospekt'],
+   ['inch_out','Timiryazevskaya_mono','Timiryazevskaya'], //monorail
+   ['inch_out','Vystavochny_Tsentr','VDNKh'] //monorail
+  ].map(function(a)
+  {
+    var o, pt, pts = [];
+    a.slice(1).map(function(b){
+      if(b && (o = DC.root.getElementById(b))){
+        pt = topoints(o); 
+        if(pt.x1) pt = trpoint(pt, pt.x1, pt.y1, -pt.rot);
+        pts.push( [pt.x, pt.y] );
+      }
+    });
+    rs.push( [a[0], a.slice(1).join('-'), pts] );
+  });
+  return rs;
+}
+//
+// Parse stations to array
+//
+function getStations(){
+  var s, rnum, rs = [];
+  mStations.map(function(o){
+    if((s = (o.getAttribute('xlink:href')||'').match(/(\w+)/))){
+      rnum = (s[1].indexOf('stmono')>-1 ? 'monorail' : s[1]);
+      if((s = (o.getAttribute('xlink:href')||'').match(/(\d+)/))) rnum = s[1];
+      var pt = topoints(o);
+      if(pt.x1){
+        pt = trpoint(pt, pt.x1, pt.y1, -pt.rot);
+      }
+      rs.push( ['s'+rnum, o.getAttribute('id'), [[pt.x, pt.y]]] );
+    }
+  });
+    // sort stations position
+  rs.splice(makeind(rs, 's2_Kantemirovskaya'), 0, rs.splice(makeind(rs, 's2_Kashirskaya_2'), 1)[0]);
+  rs[makeind(rs, 's3_Kuntsevskaya_3')][2][0][0] = rs[makeind(rs, 's3_Molodyozhnaya')][2][0][0];
+  rs.splice(makeind(rs, 's3_Khmelnitskaya'), 1);
+  rs.splice(makeind(rs, 's3_Slavyansky_Bulvar'), 0, rs.splice(makeind(rs, 's3_Kuntsevskaya_3'), 1)[0]);
+  rs.splice(makeind(rs, 's8_Minskaya'), 0, rs.splice(makeind(rs, 's8_Park_Pobedy_8'), 1)[0]);
+  rs.splice(makeind(rs, 's6_Oktyabrskaya_6'), 0, rs.splice(makeind(rs, 's6_Tretyakovskaya_8a'), 1)[0]);
+  rs.splice(makeind(rs, 's6_Kitay-Gorod_6'), 0, rs.splice(makeind(rs, 's6_Kitay-Gorod_6a'), 1)[0]);
+  rs.splice(makeind(rs, 's9_Timiryazevskaya'), 0, rs.splice(makeind(rs, 's9_Petrovsko-Razumovskaya_9'), 1)[0]);
+  rs.splice(makeind(rs, 's15_Nizhegorodskaya_15')-1, 0, rs.splice(makeind(rs, 's15_Elektrozavodskaya_14'), 1)[0]);
+  rs.splice(makeind(rs, 's15_Elektrozavodskaya_14'), 0, rs.splice(makeind(rs, 's15_Lefortovo_15'), 1)[0]);
+  rs.splice(makeind(rs, 's15_Lefortovo_15'), 0, rs.splice(makeind(rs, 's15_Aviamotornaya_15'), 1)[0]);
+  rs.splice(makeind(rs, 's4_Kiyevskaya_4'), 0, rs.splice(makeind(rs, 's4_Vystavochnaya'), 1)[0]);
+  rs.splice(makeind(rs, 's4_Vystavochnaya'), 0, rs.splice(makeind(rs, 's4_Mezhdunarodnaya'), 1)[0]);
+    // append stations r4 for BFS
+  var st = rs[makeind(rs, 's4_Vystavochnaya')];
+  rs.splice(makeind(rs, 's4_Smolenskaya_4'), 0, [st[0], st[1]+' ', st[2]]);
+  var st = rs[makeind(rs, 's4_Kiyevskaya_4')];
+  rs.splice(makeind(rs, 's4_Smolenskaya_4'), 0, [st[0], st[1]+' ', st[2]]);
+    // append stations r5
+  var st = rs[makeind(rs, 's5_Komsomolskaya_5')]; // closed radial
+  rs.splice(makeind(rs, 's5_Prospekt_Mira_5')+1, 0, ['s5', st[1]+' ', st[2]]);
+    // append stations r11
+  var st = rs[makeind(rs, 's15_Elektrozavodskaya_14')];
+  rs.splice(makeind(rs, 's11_Tekstilshchiki_11'), 0, ['s11', st[1]+' ', st[2]]);
+  var st = rs[makeind(rs, 's15_Lefortovo_15')];
+  rs.splice(makeind(rs, 's11_Tekstilshchiki_11'), 0, ['s11', st[1]+' ', st[2]]);
+  var st = rs[makeind(rs, 's15_Aviamotornaya_15')];
+  rs.splice(makeind(rs, 's11_Tekstilshchiki_11'), 0, ['s11', st[1]+' ', st[2]]);
+  var st = rs[makeind(rs, 's15_Nizhegorodskaya_15')];
+  rs.splice(makeind(rs, 's11_Tekstilshchiki_11'), 0, ['s11', st[1]+' ', st[2]]);
+  rs.splice(makeind(rs, 's11_Zyuzino'), 0, rs.splice(makeind(rs, 's11_Kakhovskaya_11'), 1)[0]);
+  rs.splice(makeind(rs, 's11_Kakhovskaya_11'), 0, rs.splice(makeind(rs, 's11_Varshavskaya'), 1)[0]);
+  rs.splice(makeind(rs, 's11_Varshavskaya'), 0, rs.splice(makeind(rs, 's11_Kashirskaya_11'), 1)[0]);
+  var st = rs[makeind(rs, 's11_Kuntsevskaya_11')];
+  rs.splice(makeind(rs, 's11_Davydkovo')+1, 0, ['s11', st[1]+' ', st[2]]); // closed radial
+  rs.splice(makeind(rs, 's11_Khoroshyovskaya'), 0, rs.splice(makeind(rs, 's11_Shelepikha_11'), 1)[0]);
+  rs.splice(makeind(rs, 's11_Shelepikha_11'), 0, rs.splice(makeind(rs, 's11_Delovoy_Tsentr_11'), 1)[0]);
+  var st = rs[makeind(rs, 's11_Shelepikha_11')];
+  rs.splice(makeind(rs, 's11_Delovoy_Tsentr_11')+1, 0, ['s11', st[1]+' ', st[2]]);
+  var st = rs[makeind(rs, 's11_Khoroshyovskaya')];
+  rs.splice(makeind(rs, 's11_Shelepikha_11_11A')+1, 0, ['s11', st[1]+' ', st[2]]);
+    // append stations r14
+  var st = rs[makeind(rs, 's14_Delovoy_Tsentr_14')]; // closed radial
+  rs.splice(makeind(rs, 's14_Kutuzovskaya_14')+1, 0, ['s14', st[1]+' ', st[2]]);
+  return rs;
+}
+//
+// Parse routes to array
+//
+function getRoutes(){
+  var s, rnum, rid, rs = [];
+  mRoutes.map(function(o){
+    if((s = (o.getAttribute('class')||'').match(/p(\d+)/))){
+      rnum = s[1]; // route num
+      rid = 'route'+s[1]; // route id
+    }
+    if((s = (o.getAttribute('id')||'').match(/(\w+)/))){
+      rnum = s[1];
+      if((s = (o.getAttribute('id')||'').match(/(\d+)/))) rnum = s[1];
+      rid = o.getAttribute('id');
+    }
+    if(o.getAttribute('d')){ // route path
+      var sp = new SvgPath(o.getAttribute('d')),
+          seg = sp.abs().segments, pts = [];
+      seg.map(function(o,i){
+        if(o[0] == 'H') o = ['L', o[1], seg[i-1].slice(-2)[1]];
+        if(o[0] == 'V') o = ['L', seg[i-1].slice(-2)[0], o[1]];
+        pts.push( o );
+      });
+      rs.push( ['r'+rnum, rid||'', pts] );
+    }
+    if(o.getAttribute('cx')){ // radial r5 circle to path
+      var pt = topoints(o), pts = [];
+      MGeo.circle2poly(pt.x, pt.y, pt.r, 36).map(function(c){
+        pts.push( ['L', parseInt(c[0]), parseInt(c[1])] );
+      });
+      rs.push( ['r'+(rnum||''), rid||'', pts] );
+    }    
+  });  
+  return rs;
+}
+//
+// Parse mck/out interchanges routes
+//
+function getRoutesOut(){
+  var s, rnum, rid, rs = [];
+  mRoutesOut.map(function(o,i){
+    if((s = (o.getAttribute('id')||''))){
+      rnum = s[1];
+      rid = o.getAttribute('id');
+    }
+    if(o.getAttribute('d')){ // route path
+      var sp = new SvgPath(o.getAttribute('d'));
+      var seg = sp.abs().segments,
+          pts = [];
+      seg.map(function(o,i){
+        if(o[0] == 'H') o = ['L', o[1], seg[i-1].slice(-2)[1]];
+        if(o[0] == 'V') o = ['L', seg[i-1].slice(-2)[0], o[1]];
+        pts.push( o );
+      });
+      rs.push( ['rmck'+i, rid||'', pts] );
+    }
+  });  
+  return rs;
+}
+//
+// Link labels to stations
+//
+function makeLabels(){
+  var rs = {};
+  mLabels.filter(function(b){
+    var s = trans(b.textContent);
+    Stations.map(function(a){
+      if((a[1] == s) || (a[1].substr(0, a[1].lastIndexOf('_')) == s)){
+        rs[b.textContent] = a[1].trim();
+      }
+    }); 
+  });
+  return rs;
+}
+//
+// Link captions to stations
+//
+function makeCaptions(){
+  var rs = {};
+  mCaptions.filter(function(b){
+    var pt = topoints(b);
+    Stations.map(function(a){ 
+      if((a[2][0][0] == pt.x) && (a[2][0][1] == pt.y)){
+        rs[b.textContent+'_'+pt.x+','+pt.y] = a[1];
+      }
+    });
+  });
+  return rs;
+}
+//
+// Calc route by BFS
+//
+function calcRoute(fromid, toid, inst){
+  var inches = makecrds(inst),
+      stations = Stations,
+      routes = Routes;
+  var blacklist = [ // points to remove
+    ['L,65,578'],
+    ['L,227,620'],
+    ['L,295.2,541.2'],
+    ['L,398,608'],
+    ['L,413,608'],
+    ['L,517,277.00000000000006'],
+    ['L,517.88,277.88'],
+    ['L,547,267.00000000000006'],
+    ['L,547,268.25'],
+    ['L,484.38,311.38'],
+    ['L,428,582'],//r5
+    ['L,443,494'],//r5
+    ['L,1166,764'],//r15
+    ['L,1170,782'],//r15
+    ['A,32.892,32.892,0,0,1,541.138,268.25'],//r11
+    ['C,1178,790,1186,784,1194,792'] //r15
+  ];
+  var replacelist = [ // points to replace
+    ['M (1066.8 256) L (1035 300)', 'M $1 A 30 30 0 0 1 1058 277 L $2'],//r1
+    ['M (1035 300) L (1066.8 256)', 'M $2 A 30 30 0 0 1 1058 277 L $1'],//r1
+    ['M (855 803) Q ([^L]+) L (778 715)', 'M $3 Q $2 L $1'], //r2
+    ['M (1052 1199) Q ([^L]+) L (992 1189)', 'M $3 Q $2 L $1'], //r2
+    ['M 77 436 L (82 451)', 'M 82 436 L $1'], //r4
+    ['M (1250 994) Q ([^L]+) L (1300 930)', 'M $3 Q $2 L $1'], //r7
+    ['M (314 322) Q ([^L]+) L (284 278)', 'M $3 Q $2 L $1'],//r7
+    ['L 752 735 L (621 735)', 'L $1 Q 595 735 575 716'],//r8
+    ['M (207.5 788.5) Q ([^L]+) L (227 755)', 'M $3 Q $2 L $1'],//r8
+    ['M (674 84) Q ([^L]+) L (687 57)', 'M $3 Q $2 L $1'], //r9
+    ['M (603 155) Q ([^L]+) L (583 121)', 'M $3 Q $2 L $1'], //r10
+    ['M (705 296) Q ([^L]+) L (695 247)', 'M $3 Q $2 L $1'], //r10
+    ['M (808 528) Q ([^L]+) L (705 415)', 'M $3 Q $2 L $1'], //r10
+    ['M (1042 904) Q ([^L]+) L (1012 860)', 'M $3 Q $2 L $1'], //r10
+    ['M (1067 1040) Q ([^L]+) L (1102 990)', 'M $3 Q $2 L $1'], //r10
+    ['M (589 1271) L (613 1253)', 'M $1 Q 610 1271 $2'], //r12
+    ['M (613 1253) L (589 1271)', 'M $2 Q 610 1271 $1'], //r12
+    ['A 100 100 (0 0 0 95 648)', 'A 150 150 $1'], //r11
+    ['A 30 30 (0 0 1 295.2 498)', 'A 100 60 $1'], // r11
+    ['M (165 430) L (97 456)', 'M $1 A 100 100 0 0 0 $2'], //r11
+    ['M (97 456) L (165 430)', 'M $2 A 100 100 0 0 0 $1'], //r11
+    ['M (985 322) L (868 268)', 'M $1 A 160 160 0 0 0 $2'], //r11
+    ['M (868 268) L (985 322)', 'M $2 A 160 160 0 0 0 $1'], //r11
+    ['M (985 322) L (1048 525)', 'M $1 A 300 280 0 0 1 1048 500 L $2'], //r11
+    ['M (1048 525) L (985 322)', 'M $2 A 300 280 0 0 1 1048 500 L $1'], //r11
+    ['M (131 684) A ([^L]+) L (97 456)', 'M $3 A $2 L $1'], //r11
+    ['M (309 485) A [^L]+ L ([^L]+) L (330 576)', 'M $3 A 100 60 0 0 1 295.8 500 L $2 L $1'], //r11
+    ['M (547 267) Q ([^L]+) L (483.5 310.5)', 'M $3 Q $2 L $1'], //r11
+    ['(379 415) L ([^L]+) Q [^L]+ L (309 485)', '$1 $2 L $3'], //r11
+    ['(309 485) L ([^L]+) Q [^L]+ L (379 415)', '$2 $2 L $1'], //r11
+    ['M (413 608) L (330 540)', 'M $1 L 406 614 L $2'], //r11
+    ['M (330 540) L (413 608)', 'M $1 L 406 614 L $2'], //r11
+    ['M (479 150) L (595 112)', 'M $2 A 200 200 0 0 0 $1'], // r14
+    ['M (595 112) L (479 150)', 'M $1 A 200 200 0 0 0 $2'], // r14
+    ['M (1105 414) L (1077 247)', 'M $1 A 400 400 0 0 0 $2'], //r14
+    ['M (1077 247) L (1105 414)', 'M $2 A 400 400 0 0 0 $1'], //r14
+    ['M (1122 687) L (1105 646)', 'M $1 A 30 50 0 0 1 $2'], //r14
+    ['M (1105 646) L (1122 687)', 'M $2 A 30 50 0 0 1 $1'], //r14
+    ['M (1122 687) L 1140 705 L (1156 761)', 'M $1 A 140 100 0 0 1 $2'], //r14
+    ['M (1156 761) L 1140 705 L (1122 687)', 'M $2 A 140 100 0 0 1 $1'], //r14
+    ['M (1115 815) L (1156 761)', 'M $1 A 150 150 0 0 0 $2'], //r14
+    ['M (1156 761) L (1115 815)', 'M $2 A 150 150 0 0 0 $1'], //r14
+    ['M (997 875) L (1059 867)', 'M $1 A 140 140 0 0 0 $2'], //r14
+    ['M (1059 867) L (997 875)', 'M $2 A 140 140 0 0 0 $1'], //r14
+    ['M (915 900) Q ([^L]+) L (773 920)', 'M $1 Q $2 L $3'], //r14
+    ['M (773 920) Q ([^L]+) L (915 900)', 'M $3 Q $2 L $1'] //r14
+  ];
+  BFS(stations, inches, makeind(stations, fromid), makeind(stations, toid)).map(function(st,i,sts){
+//    console.log(i, String(st));
+    Searched = Searched.concat( [st[1], st[1].substr(0, st[1].lastIndexOf('_'))] );
+    if(i < sts.length-1){
+      var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, r2, r3, rr;
+      routes.map(function(b){
+        if((maketipn(b) == maketipn(sts[i])) && (maketipn(b) == maketipn(sts[i+1]))){
+          b[2].map(function(c,j,ac){ // find coords between stations
+            var mc = c; // modify point to calc
+            if(c[0] == 'M') mc[0] = 'L';
+            if(c[0] == 'A') mc = ['L', ac[j-1][1], ac[j-1][2], c[6], c[7]];
+            r0 = Math.sqrt(Math.pow(d[0]-mc[1],2)+Math.pow(d[1]-mc[2],2));
+            r1 = Math.sqrt(Math.pow(e[0]-mc[1],2)+Math.pow(e[1]-mc[2],2));
+            r2 = (Math.sqrt(Math.pow(d[0]-mc[3],2)+Math.pow(d[1]-mc[4],2)))||0;
+            r3 = (Math.sqrt(Math.pow(e[0]-mc[3],2)+Math.pow(e[1]-mc[4],2)))||0;
+            rr = Math.sqrt(Math.pow(d[0]-e[0],2)+Math.pow(d[1]-e[1],2));
+            if((r0 > 0) && (r1 > 0) && (r0 <= rr) && (r1 <= rr) && (r2 <= rr) && (r3 <= rr)){
+              if(!inarray(blacklist, c) && !inarray(cc,c)) cc.push(c);      
+            }
+          });
+        }
+      });
+      if(cc.length &&   //rotate first with last if indirect
+         (Math.sqrt(Math.pow(d[0]-cc[0].slice(-2)[0],2)+Math.pow(d[1]-cc[0].slice(-2)[1],2)))>=
+         (Math.sqrt(Math.pow(d[0]-cc[cc.length-1].slice(-2)[0],2)+Math.pow(d[1]-cc[cc.length-1].slice(-2)[1],2)))
+        )
+      {
+        if(!inarray(cc,['M'].concat(e))) cc.unshift(['M'].concat(e)); 
+        if(!inarray(cc,['L'].concat(d))) cc.push(['L'].concat(d));
+      } else {
+        if(!inarray(cc,['M'].concat(d))) cc.unshift(['M'].concat(d));
+        if(!inarray(cc,['L'].concat(e))) cc.push(['L'].concat(e));
+      }
+      var path = String(cc).replace(/,/g, ' ');
+      replacelist.map(function(a){
+        path = path.replace(RegExp(a[0]), a[1]);
+      });
+      var bInch = inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length;
+      DC.extend( 
+        DC.append('path', { class: 'selpath '+'p'+maketipn(sts[i]), d: path, fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-dasharray': bInch ? [3,2] : 'none', 'stroke-width': bInch ? 4 : 5}),
+          { onmousemove: function(o){ console.log(o.target.getAttribute('d')); } });
+    } else {
+      mInst.map(function(o){ o.setAttribute('opacity', 0.1); });
+      mRoutes.map(function(o){ o.setAttribute('opacity', 0.5); });
+      mRoutesOut.map(function(o){ o.setAttribute('opacity', 0.1); });
+      mCaptions.map(function(o){ o.setAttribute('visibility', 'hidden'); });
+      mStations.map(function(o){ o.setAttribute('visibility', inarray(Searched, o.getAttribute('id')) ? 'visible' : 'hidden'); });
+      mLabels.map(function(o){ o.setAttribute('visibility', inarray(Searched, trans(o.textContent)) ? 'visible' : 'hidden'); });
+      DC.root.getElementById('title_group').setAttribute('visibility', 'hidden');
+      DC.root.getElementById('monorail_minimap').setAttribute('visibility', 'hidden');
+      DC.root.getElementById('linebox_group').setAttribute('visibility', 'hidden');
+    }
+  });
+}
+//
+// Remove calc route
+//
+function clearRoute(){
+  find('.selpath').map(function(o){ DC.vp.removeChild(o); });
+  find('.selected').map(function(o){ o.removeAttribute('class'); });
+  mInst.map(function(o){ o.setAttribute('opacity', 1); });
+  mRoutes.map(function(o){ o.setAttribute('opacity', 1); });
+  mRoutesOut.map(function(o){ o.setAttribute('opacity', 1); });
+  mCaptions.map(function(o){ o.setAttribute('visibility', 'visible'); });
+  mStations.map(function(o){ o.setAttribute('visibility', 'visible'); });
+  mLabels.map(function(o){ o.setAttribute('visibility', 'visible'); });
+  DC.root.getElementById('title_group').setAttribute('visibility', 'visible');
+  DC.root.getElementById('monorail_minimap').setAttribute('visibility', 'visible');
+  DC.root.getElementById('linebox_group').setAttribute('visibility', 'visible');
+  Searched = [];
+}
+
+upfunc({url: 
+  'https://upload.wikimedia.org/wikipedia/commons/d/d6/Moscow_metro_ring_railway_map_ru_sb_future.svg'
+//  '../img/Moscow_Metro_map_in_Russian_including_future_plans.svg'
+}, function(r){
+  var cont = document.getElementById('mcont');
+  cont.innerHTML =
+'<select id="cbInches" onchange="cbchange(this)" style="position:fixed; top:10px; right:10px">'+
+'<option disabled selected>Пересадки...</option>'+
+'<option id="inch">&#9745; Метро</option>'+
+'<!--<option id="inch_mn">&emsp; Монорельс</option>-->'+
+'<option id="inch_out">&emsp; МЦК</option>'+
+'<!--<option id="inch_ext">&emsp; Строящиеся</option>-->'+
+'</select>';
+  var cont_width = cont.offsetWidth,
+      cont_height = cont.offsetHeight;
+  cont.innerHTML += r;
+  [].slice.call(document.getElementsByTagName('svg')).map(function(o){
+    var root = o,
+        vp = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    var svg_width = root.getAttribute('width'),
+        svg_height = root.getAttribute('height');
+      // move childs into viewport g for pan, zoom
+    [].slice.call(root.querySelectorAll('svg > g')).map(function(c){
+      vp.appendChild(c);
+    });
+    root.appendChild(vp);
+    root.setAttribute('width', cont_width);
+    root.setAttribute('height', cont_height);
+    root.removeAttribute('viewBox');
+    DC = new dbCartaSvg({ svgRoot: root, svgViewport: vp });
+    DC.centerCarta([ svg_width/2, svg_height/2 ]);
+    DC.scaleCarta( cont_width / svg_height );
+  });
+  console.time('tm');
+  mInst = find('g[id="interchange_group"] use');
+  mStations = find('g[id="station_nodes_group"] use,#monorail ~ use[id]');
+  mLabels= find('g[id="stname_group"] text');
+  mCaptions = find('g[class="ic mid"] text, g[class="ic r14_2"] text, g[id="river_name_group"] text, g[id="river_group"] path, g[id="Aeroexpress"] path');
+  mRoutes = find('g[id="metro_route_group"] *,g[cursor="help"] .p14 *,g[cursor="help"] .p14_2,g[cursor="help"] #monorail');
+  mRoutesOut = find('g[id="out_of_station_interchange_under"] *');
+  Inst = getInches();
+  InstOut = getInchesOut();
+  Stations = getStations();
+  Labels = makeLabels();
+  Captions = makeCaptions();
+  Routes = getRoutes();
+  RoutesOut = getRoutesOut();
+  Searched = []; // all searched stations
+  console.timeEnd('tm');
+    // events
+  DC.extend(DC.root, {
+    ondblclick: function(){ clearRoute(); }
+  });
+  mStations.map(function(o){
+    DC.extend(o, {
+      onclick: stsel,
+      onmousemove: stmove
+    });
+  });
+  mLabels.map(function(o){
+    DC.extend(o, {
+      onclick: function(ev){ stsel({target: DC.root.getElementById(Labels[ev.target.textContent])}); },
+      onmousemove: tsmove
+    });
+  });
+  mCaptions.map(function(o){
+    DC.extend(o, {
+      onclick: function(ev){
+        var pt = topoints(ev.target);
+        stsel({target: DC.root.getElementById(Captions[ev.target.textContent+'_'+pt.x+','+pt.y])});
+      },
+      onmousemove: tsmove
+    });
+  });
+  tests();
+});
+//
+// Draw tests routes
+//
+function tests(){
+//  Inst.map(function(e,i){ console.log(i,JSON.stringify(e)); });
+//  InstOut.map(function(e,i){ console.log(i,JSON.stringify(e)); });
+//  Routes.map(function(e,i){ console.log(i,JSON.stringify(e)); });
+//  RoutesOut.map(function(e,i){ console.log(i,JSON.stringify(e)); });
+//  Stations.map(function(e,i){ console.log(i,JSON.stringify(e)); });
+//  console.log(Labels);
+//  console.log(Captions);
+/////////////////////
+//  calcRoute('s8_Novokosino', 's14_Lokomotiv', Inst.concat(InstOut));
+//  calcRoute('s8_Volkhonka', 's8_Tretyakovskaya_6a', Inst);
+//  calcRoute('s10_Okruzhnaya_10', 's10_Petrovsko-Razumovskaya_10', Inst);
+//  calcRoute('s7_Vykhino', 's3_Shchyolkovskaya', Inst);
+//  calcRoute('s9_Chertanovskaya', 's2_Kantemirovskaya', Inst);
+//  calcRoute('s11_Elektrozavodskaya_14_11','s15_Elektrozavodskaya_14', Inst.concat(InstOut));
+//  calcRoute('s11_Kuntsevskaya_11', 's11_Terekhovo', Inst);
+//  calcRoute('s11_Terekhovo', 's11_Kuntsevskaya_11', Inst);
+//  calcRoute('s11_Delovoy_Tsentr_11', 's11_Shelepikha_11', Inst);
+//  calcRoute('s11_Shelepikha_11', 's11_Delovoy_Tsentr_11', Inst);
+//  calcRoute('s11_Savyolovskaya_11','s11_Petrovsky_Park', Inst);
+//  calcRoute('s5_Kiyevskaya_5', 's5_Krasnopresnenskaya', Inst);
+//  calcRoute('s3_Strogino', 's7_Spartak', Inst);
+//  calcRoute('s14_Streshnevo', 's14_Baltiyskaya', Inst.concat(InstOut));
+//  calcRoute('s10_Pechatniki_10', 's2_Avtozavodskaya_2', Inst);
+//  calcRoute('s14_Streshnevo', 's2_Sokol', Inst.concat(InstOut));
+////////////////////
+//  calcRoute('s1_Potapovo', 's1_Bulvar_Rokossovskogo_1', []);
+//  calcRoute('s2_Alma-Atinskaya', 's2_Khovrino', []);
+//  calcRoute('s3_Pyatnitskoye_Shosse', 's3_Golyanovo', []);
+//  calcRoute('s4_Kuntsevskaya_4', 's4_Aleksandrovsky_Sad', []);
+//  calcRoute('s5_Komsomolskaya_5', 's5_Komsomolskaya_5 ', []);
+//  calcRoute('s6_Novoyasenevskaya', 's6_Medvedkovo', []);
+//  calcRoute('s7_Kotelniki', 's7_Planernaya', []);
+//  calcRoute('s8_Vnukovo_8', 's8_Novokosino', []);
+//  calcRoute('s9_Bulvar_Dmitriya_Donskogo', 's9_Altufyevo', []);
+//  calcRoute('s10_Zyablikovo', 's10_Fiztekh', []);
+//  calcRoute('s11_Kuntsevskaya_11', 's11_Kuntsevskaya_11 ', []);
+//  calcRoute('s12_Bittsevsky_Park','s12_Buninskaya_Alleya', []);
+//  calcRoute('s14_Delovoy_Tsentr_14', 's14_Delovoy_Tsentr_14 ', []);
+//  calcRoute('s15_Nekrasova', 's15_Elektrozavodskaya_14', []);
+//  calcRoute('s16_Kommunarka_16', 's16_Krymskaya_16', []);
+//  calcRoute('s9_Timiryazevskaya', 's6_VDNKh', Inst.concat(InstOut));
+//  
+////////////////////
+//  calcRoute('s1_Bulvar_Rokossovskogo_1', 's1_Potapovo', []);
+//  calcRoute('s2_Khovrino', 's2_Alma-Atinskaya', []);
+//  calcRoute('s3_Golyanovo','s3_Pyatnitskoye_Shosse', []);
+//  calcRoute('s4_Aleksandrovsky_Sad','s4_Kuntsevskaya_4', []);
+//  calcRoute('s5_Komsomolskaya_5 ', 's5_Komsomolskaya_5', []);
+//  calcRoute('s6_Medvedkovo', 's6_Novoyasenevskaya', []);
+//  calcRoute('s7_Planernaya', 's7_Kotelniki', []);
+//  calcRoute('s8_Novokosino', 's8_Vnukovo_8', []);
+//  calcRoute('s9_Altufyevo', 's9_Bulvar_Dmitriya_Donskogo', []);
+//  calcRoute('s10_Fiztekh', 's10_Zyablikovo', []);
+//  calcRoute('s11_Kuntsevskaya_11 ', 's11_Kuntsevskaya_11', []);
+//  calcRoute('s12_Buninskaya_Alleya','s12_Bittsevsky_Park', []);
+//  calcRoute('s14_Delovoy_Tsentr_14 ', 's14_Delovoy_Tsentr_14', []);
+//  calcRoute('s15_Elektrozavodskaya_14', 's15_Nekrasova', []);
+//  calcRoute('s16_Krymskaya_16', 's16_Kommunarka_16', []);
+//  calcRoute('s6_VDNKh', 's9_Timiryazevskaya', Inst.concat(InstOut));
+};
+
+</script>
+</body>
+</html>

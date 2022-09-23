@@ -20,7 +20,7 @@ egax@bk.ru, 2021-22.
 <table><tr>
 <td id="mcont">
 <!--SVG Image-->
-<svg id="root" xmlns="http://www.w3.org/2000/svg" width="0" height="0">
+<svg xmlns="http://www.w3.org/2000/svg" width="0" height="0">
 <g id="viewport" fill="none">
 <g transform="translate(190,150)">
 <path stroke-width="0.2" stroke="#000" fill="#FFF" d="m-122.3,84.285s0.1,1.894-0.73,1.875c-0.82-0.019-17.27-48.094-37.8-45.851,0,0,17.78-7.353,38.53,43.976z"/>
@@ -273,20 +273,21 @@ egax@bk.ru, 2021-22.
 <script>
 
 [].slice.call(document.getElementsByTagName('svg')).map(function(o){
-  var vp = document.getElementById('viewport'),
-      old_width = vp.getBoundingClientRect().right - vp.getBoundingClientRect().left,
+  var root = o,
+      vp = document.getElementById('viewport');
+  var old_width = vp.getBoundingClientRect().right - vp.getBoundingClientRect().left,
       old_height = vp.getBoundingClientRect().bottom - vp.getBoundingClientRect().top;
+  var new_width = document.getElementById('mcont').offsetWidth,
+      new_height = document.getElementById('mcont').offsetHeight;
   var DC = new dbCartaSvg({
-    rootId: 'root',
-    vpId: 'viewport',
-    width: document.getElementById('mcont').offsetWidth,
-    height: document.getElementById('mcont').offsetHeight,
-    bg: 'none',
-    scalebg:'rgba(50,155,155,0.2)'
+    svgRoot: root,
+    svgViewport: vp,
+    width: new_width,
+    height: new_height
   });
   DC.vp.style.cursor = 'pointer';
   DC.centerCarta([ old_width/2, old_height/2 ]);
-  DC.scaleCarta( DC.root.getAttribute('height') / old_height );
+  DC.scaleCarta( new_height / old_height );
   // animate
   [].slice.call(DC.vp.querySelectorAll('.eye')).map(function(p){
     p.setAttribute('stroke', p.getAttribute('fill'));

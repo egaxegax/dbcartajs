@@ -2,12 +2,14 @@
 // HTML5 SVG vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2015. b220731.
+// egax@bk.ru, 2015. b220806.
 //
 function dbCartaSvg(cfg) {
   var SVG_NS = 'http://www.w3.org/2000/svg',
       self = this;
-  // set new obj key/value
+  //
+  // Set new obj key/value
+  //
   self.extend = function(dst, src){
     if (!src) {
       src = dst;
@@ -18,7 +20,9 @@ function dbCartaSvg(cfg) {
         dst[prop] = src[prop];
     return dst;
   };
-  // set DOM obj attribute
+  //
+  // Set DOM obj attribute
+  //
   self.attr = function(dst, src){
     if (!src) {
       src = dst;
@@ -28,7 +32,9 @@ function dbCartaSvg(cfg) {
       if (src[prop]) dst.setAttribute(prop, src[prop]);
     return dst;
   };
-  // add SVG figure (polygon, path, ...)
+  //
+  // Add SVG figure (polygon, path, ...)
+  //
   self.append = function(parent, name, at){
     if (!at) {
       at = name;
@@ -42,8 +48,8 @@ function dbCartaSvg(cfg) {
   };
   // Constructor config {
   //   id: parent id to add new
-  //   rootId: exists SVG dom id
-  //   vpId: exists viewport (g tag) dom id
+  //   svgRoot: exists SVG dom id
+  //   svgViewport: exists viewport (g tag) dom id
   //   width, height: map size
   //   draggable: move map by cursor
   //   bg: map bgcolor
@@ -54,14 +60,16 @@ function dbCartaSvg(cfg) {
   //   sbarsize: bar size {height/6}
   // }
   cfg = cfg||{};
-  // Create or use exists elements
-  //   root: svg root node (not transform)
-  //   vp: g viewport node (rotate, scale, translate)
-  if(cfg.rootId && cfg.vpId) { // use exists svg container
-    self.root = document.getElementById(cfg.rootId);
-    self.vp = document.getElementById(cfg.vpId);
-    self.attr(self.root, { width: cfg.width });
-    self.attr(self.root, { height: cfg.height });
+  // Use exists svg or create new
+  //   svgRoot: svg root node (not transform)
+  //   svgViewport: g viewport node (rotate, scale, translate)
+  if(cfg.svgRoot && cfg.svgViewport) { // use exists svg container
+    self.root = cfg.svgRoot;
+    self.vp = cfg.svgViewport;
+    self.attr(self.root, { 
+      width: cfg.width,
+      height: cfg.height
+    });
   } else { // add new
     var cont = document.createElement('div'),
         el = document.getElementById(cfg.id);
@@ -78,8 +86,10 @@ function dbCartaSvg(cfg) {
     width: self.root.getAttribute('width'),
     height: self.root.getAttribute('height')
   });
-  self.root.style.backgroundColor = cfg.bg||'rgb(186,196,205)';
-  // add props
+  self.root.style.backgroundColor = cfg.bg||'none';
+  //
+  // Add props
+  //
   self.extend(self, {
     cfg: {
       draggable: cfg.draggable == undefined ? true : cfg.draggable,

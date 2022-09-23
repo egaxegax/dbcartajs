@@ -59,7 +59,7 @@ function densityColor(ind) {
     (ds < 7) ? 'rgb(117,139,166)' :
     (ds < 10) ? 'rgb(93,120,152)' :
     (ds < 20) ? 'rgb(46,82,125)' : 'rgb(0,44,97)');
-};
+}
 function draw() {
   DC.initProj(203, '+lon_0=-100 +lat_0=40'); //ortho proj
    // states
@@ -98,7 +98,7 @@ function draw() {
     });
   };
   DC.initProj(0, '+lon_0=0 +lat_0=0'); //set lonlat
-};
+}
 var DC = new dbCartaSvg({
   id: 'mcont',
   bg: 'white',
