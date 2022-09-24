@@ -158,6 +158,7 @@ function stsel(ev){
     DC.attr(ev.target, {class: 'selected', stid: 's'+s+'_'+ev.target.getAttribute('id')});
     console.log(ev.target.getAttribute('stid'));
   });
+  if(ev.tgtext) ev.tgtext.setAttribute('font-size', '100%'); // press on click
   find('.selected').map(function(a,i,all){
     if(i > 0){ 
       var inches = [];
@@ -217,7 +218,7 @@ function tsmove(ev){
   if(!ev || !ev.target) return;
   var ts = [], tsattr = [];
   ts = [ {target: ev.target} ];
-  tsattr = [ {'font-size': '150%', transform: ev.target.getAttribute('transform')} ];
+  tsattr = [ {'font-size': '150%', cursor: 'pointer', transform: ev.target.getAttribute('transform')} ];
   ev.target.setAttribute('font-size', '100%');
   DC.doMap(ts, tsattr );
 }
@@ -425,7 +426,7 @@ function makeLabels(){
       if((a[1] == s) || (a[1].substr(0, a[1].lastIndexOf('_')) == s)){
         rs[b.textContent] = a[1].trim();
       }
-    }); 
+    });
   });
   return rs;
 }
@@ -651,7 +652,7 @@ upfunc({url:
   });
   mLabels.map(function(o){
     DC.extend(o, {
-      onclick: function(ev){ stsel({target: DC.root.getElementById(Labels[ev.target.textContent])}); },
+      onclick: function(ev){ stsel({target: DC.root.getElementById(Labels[ev.target.textContent]), tgtext: ev.target}); },
       onmousemove: tsmove
     });
   });
@@ -659,7 +660,7 @@ upfunc({url:
     DC.extend(o, {
       onclick: function(ev){
         var pt = topoints(ev.target);
-        stsel({target: DC.root.getElementById(Captions[ev.target.textContent+'_'+pt.x+','+pt.y])});
+        stsel({target: DC.root.getElementById(Captions[ev.target.textContent+'_'+pt.x+','+pt.y]), tgtext: ev.target});
       },
       onmousemove: tsmove
     });
