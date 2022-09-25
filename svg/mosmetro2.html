@@ -90,7 +90,7 @@ function trans(s){
        s == 'Maryino' ? 'Marino' :
        s == 'Tsska' ? 'CSKA' :
        s == 'Vdnkh' ? 'VDNKh' :
-       s == 'Narodnoye_Opolcheniye' ? 'Narodnoe_Opolcheniye' :
+       s == 'Narodnoyeopolcheniye' ? 'Narodnoe_Opolcheniye' :
        s == 'Novatorskaya' ? 'Ulitsa_Novatorov' : 
        s == 'Novogireyevo' ? 'Novogireevo' : s);
 
@@ -627,7 +627,7 @@ upfunc({url:
   mInst = find('g[id="interchange_group"] use');
   mStations = find('g[id="station_nodes_group"] use,#monorail ~ use[id]');
   mLabels= find('g[id="stname_group"] text');
-  mCaptions = find('g[class="ic mid"] text, g[class="ic r14_2"] text, g[id="river_name_group"] text, g[id="river_group"] path, g[id="Aeroexpress"] path');
+  mCaptions = find('g[class~="ic"][class~="mid"] text, g[class="ic r14_2"] text, g[id="river_name_group"] text, g[id="river_group"] path, g[id="Aeroexpress"] path');
   mRoutes = find('g[id="metro_route_group"] *,g[cursor="help"] .p14 *,g[cursor="help"] .p14_2,g[cursor="help"] #monorail');
   mRoutesOut = find('g[id="out_of_station_interchange_under"] *');
   Inst = getInches();
