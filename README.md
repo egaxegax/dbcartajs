@@ -7,13 +7,14 @@ Canvas+SVG vector map and image viewer javascript library.
 
 **Схема метро Москвы**  
 *Moscow Metro*  
+[Canvas](https://egaxegax.github.io/dbcartajs/mosmetro.html) &emsp; &emsp; 
 [SVG](https://egaxegax.github.io/dbcartajs/svg/mosmetro.html) &emsp; &emsp; 
-[Canvas](https://egaxegax.github.io/dbcartajs/mosmetro.html)
+[SVG(Википедия)](https://egaxegax.github.io/dbcartajs/svg/mosmetro2.html)
 
 **Схема ж/д Москвы и МО**  
 *Moscow Railroad*  
-[SVG](https://egaxegax.github.io/dbcartajs/svg/mosrails.html) &emsp; &emsp; 
-[Canvas](https://egaxegax.github.io/dbcartajs/mosrails.html)
+[Canvas](https://egaxegax.github.io/dbcartajs/mosrails.html) &emsp; &emsp; 
+[SVG](https://egaxegax.github.io/dbcartajs/svg/mosrails.html)
 
 **Схема метро Петербурга**  
 *St. Petersburg Metro*  
@@ -48,13 +49,13 @@ Canvas+SVG vector map and image viewer javascript library.
 
 **Атлас мира**  
 *Atlas*  
-[SVG](https://egaxegax.github.io/dbcartajs/svg/atlas.html) &emsp; &emsp; 
-[Canvas](https://egaxegax.github.io/dbcartajs/atlas.html)
+[Canvas](https://egaxegax.github.io/dbcartajs/atlas.html) &emsp; &emsp; 
+[SVG](https://egaxegax.github.io/dbcartajs/svg/atlas.html)
 
 **Население мира**  
 *Population*  
-[SVG](https://egaxegax.github.io/dbcartajs/svg/usemap.html) &emsp; &emsp; 
-[Canvas](https://egaxegax.github.io/dbcartajs/usemap.html)
+[Canvas](https://egaxegax.github.io/dbcartajs/usemap.html) &emsp; &emsp; 
+[SVG](https://egaxegax.github.io/dbcartajs/svg/usemap.html)
 
 **Население США**  
 *Population USA*  
