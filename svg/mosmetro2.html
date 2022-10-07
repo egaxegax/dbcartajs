@@ -503,7 +503,7 @@ function calcRoute(fromid, toid, inst){
     ['M (985 322) L (1048 525)', 'M $1 A 300 280 0 0 1 1048 500 L $2'], //r11
     ['M (1048 525) L (985 322)', 'M $2 A 300 280 0 0 1 1048 500 L $1'], //r11
     ['M (131 684) A ([^L]+) L (97 456)', 'M $3 A $2 L $1'], //r11
-    ['M (309 485) A [^L]+ L ([^L]+) L (330 576)', 'M $3 A 100 60 0 0 1 295.8 500 L $2 L $1'], //r11
+    ['M (309 485) A [^L]+ L ([^L]+)', 'M $2 A 100 60 0 0 1 295.8 500 L $1'], //r11
     ['M (547 267) Q ([^L]+) L (483.5 310.5)', 'M $3 Q $2 L $1'], //r11
     ['(379 415) L ([^L]+) Q [^L]+ L (309 485)', '$1 $2 L $3'], //r11
     ['(309 485) L ([^L]+) Q [^L]+ L (379 415)', '$2 $2 L $1'], //r11
@@ -692,7 +692,7 @@ function tests(){
 //  calcRoute('s10_Okruzhnaya_10', 's10_Petrovsko-Razumovskaya_10', Inst);
 //  calcRoute('s7_Vykhino', 's3_Shchyolkovskaya', Inst);
 //  calcRoute('s9_Chertanovskaya', 's2_Kantemirovskaya', Inst);
-//  calcRoute('s11_Elektrozavodskaya_14_11','s15_Elektrozavodskaya_14', Inst.concat(InstOut));
+//  calcRoute('s11_Elektrozavodskaya_14 ','s15_Elektrozavodskaya_14', Inst.concat(InstOut));
 //  calcRoute('s11_Kuntsevskaya_11', 's11_Terekhovo', Inst);
 //  calcRoute('s11_Terekhovo', 's11_Kuntsevskaya_11', Inst);
 //  calcRoute('s11_Delovoy_Tsentr_11', 's11_Shelepikha_11', Inst);
