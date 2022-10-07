@@ -159,18 +159,22 @@ function stsel(ev){
     console.log(ev.target.getAttribute('stid'));
   });
   if(ev.tgtext) ev.tgtext.setAttribute('font-size', '100%'); // press on click
-  find('.selected').map(function(a,i,all){
-    if(i > 0){ 
-      var inches = [];
-      [].slice.call(cbInches.options).map(function(o){
-        if(o.innerHTML.indexOf('\u2611')>-1){ // checked
-          if(o.id == 'inch') inches = inches.concat(Inst);
-          if(o.id == 'inch_out') inches = inches.concat(InstOut);
-        }
-      });
-      calcRoute(all[i-1].getAttribute('stid'), all[i].getAttribute('stid'), inches);
-    }
-  });
+  if(find('.selpath').length){
+    clearRoute();
+  } else {
+    find('.selected').map(function(a,i,all){
+      if(i > 0){ 
+        var inches = [];
+        [].slice.call(cbInches.options).map(function(o){
+          if(o.innerHTML.indexOf('\u2611')>-1){ // checked
+            if(o.id == 'inch') inches = inches.concat(Inst);
+            if(o.id == 'inch_out') inches = inches.concat(InstOut);
+          }
+        });
+        calcRoute(all[i-1].getAttribute('stid'), all[i].getAttribute('stid'), inches);
+      }
+    });
+  }
 }
 //
 // Animate station/route under cursor
@@ -423,7 +427,8 @@ function makeLabels(){
   mLabels.filter(function(b){
     var s = trans(b.textContent);
     Stations.map(function(a){
-      if((a[1] == s) || (a[1].substr(0, a[1].lastIndexOf('_')) == s)){
+      var n = a[1].lastIndexOf('_');
+      if((a[1] == s) || ((a[1].substr(0, n) == s) && (parseInt(a[1].substr(n+1)))>0)){
         rs[b.textContent] = a[1].trim();
       }
     });
