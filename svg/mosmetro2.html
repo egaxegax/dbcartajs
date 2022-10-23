@@ -429,7 +429,7 @@ function makeLabels(){
     Stations.map(function(a){
       var n = a[1].lastIndexOf('_');
       if((a[1] == s) || ((a[1].substr(0, n) == s) && (parseInt(a[1].substr(n+1)))>0)){
-        rs[b.textContent] = a[1].trim();
+        if(!rs[b.textContent]) rs[b.textContent] = a[1].trim();
       }
     });
   });
@@ -451,13 +451,36 @@ function makeCaptions(){
   return rs;
 }
 //
+// Under constructed (closed) stations list not search
+//
+function makeStopStations(){
+  return [
+    's11_Kakhovskaya_11',
+    's11_Varshavskaya',
+    's11_Kashirskaya_11',
+    's11_Pechatniki_11',
+    's11_Tekstilshchiki_11',
+    's11_Sokolniki_11',
+    's11_Rizhskaya_11',
+    's11_Maryina_Roshcha_11',
+    's8_Volkhonka',
+    's8_Plyushchikha',
+    's16_Akademicheskaya_16',
+    's16_Ulitsa_Novatorov_16'
+  ].map(function(st){ 
+    return makeind(Stations, st);
+  });
+}
+//
 // Calc route by BFS
 //
 function calcRoute(fromid, toid, inst){
   var inches = makecrds(inst),
       stations = Stations,
-      routes = Routes;
-  var blacklist = [ // points to remove
+      routes = Routes,
+      stoplist = StopStations;
+    // route points to remove
+  var blacklist = [
     ['L,65,578'],
     ['L,227,620'],
     ['L,295.2,541.2'],
@@ -524,7 +547,7 @@ function calcRoute(fromid, toid, inst){
     ['M (915 900) Q ([^L]+) L (773 920)', 'M $1 Q $2 L $3'], //r14
     ['M (773 920) Q ([^L]+) L (915 900)', 'M $3 Q $2 L $1'] //r14
   ];
-  BFS(stations, inches, makeind(stations, fromid), makeind(stations, toid)).map(function(st,i,sts){
+  BFS(stations, inches, makeind(stations, fromid), makeind(stations, toid), stoplist).map(function(st,i,sts){
 //    console.log(i, String(st));
     Searched = Searched.concat( [st[1], st[1].substr(0, st[1].lastIndexOf('_'))] );
     if(i < sts.length-1){
@@ -635,17 +658,18 @@ upfunc({url:
   console.time('tm');
   mInst = find('g[id="interchange_group"] use');
   mStations = find('g[id="station_nodes_group"] use,#monorail ~ use[id]');
-  mLabels= find('g[id="stname_group"] text');
-  mCaptions = find('g[class~="ic"][class~="mid"] text, g[class="ic r14_2"] text, g[id="river_name_group"] text, g[id="river_group"] path, g[id="Aeroexpress"] path');
   mRoutes = find('g[id="metro_route_group"] *,g[cursor="help"] .p14 *,g[cursor="help"] .p14_2,g[cursor="help"] #monorail');
   mRoutesOut = find('g[id="out_of_station_interchange_under"] *');
+  mLabels= find('g[id="stname_group"] text');
+  mCaptions = find('g[class~="ic"][class~="mid"] text, g[class="ic r14_2"] text, g[id="river_name_group"] text, g[id="river_group"] path, g[id="Aeroexpress"] path');
   Inst = getInches();
   InstOut = getInchesOut();
   Stations = getStations();
-  Labels = makeLabels();
-  Captions = makeCaptions();
   Routes = getRoutes();
   RoutesOut = getRoutesOut();
+  Labels = makeLabels();
+  Captions = makeCaptions();
+  StopStations = makeStopStations();
   Searched = []; // all searched stations
   console.timeEnd('tm');
     // events

@@ -25,19 +25,20 @@ function makecrds(m){ return m.map(function(a){ return a[2].map(function(b){ ret
 
 function inarray(m, a){ return m.filter(function(b){ return String(a) == String(b); }).length; }
 
-function childs(m, inst, root){
-  var its = inst.filter(function(a){ return a.indexOf(String(m[root][2]))>-1; });
-  var stIts = m.filter(function(a){ return makeid(a) != makeid(m[root]) && its.filter(function(b){ return b.indexOf(String(a[2]))>-1; }).length });
+function findchilds(m, inst, current, stops){
+  var its = inst.filter(function(a){ return a.indexOf(String(m[current][2]))>-1; });
+  var stIts = m.filter(function(a){ return makeid(a) != makeid(m[current]) && its.filter(function(b){ return b.indexOf(String(a[2]))>-1; }).length });
   var stItsi = stIts.map(function(a){ return makeind(m, makeid(a)); });
-  var avails = [ root - 1, root + 1 ].concat(stItsi);
+  var avails = [ current - 1, current + 1 ].concat(stItsi);
   var valids = avails.filter(function(cell){ return (cell >= 0 && cell < m.length); });
   var vertexes = valids.filter(function(cell){
-//      console.log(root, cell, makeid(m[root]), makeid(m[cell]), String(m[cell][2]), String(m[root][2]),
-//      maketip(m[cell]) == maketip(m[root]), String(m[cell][2]) == String(m[root][2]),
-//      its.filter(function(a){ return a.indexOf(String(m[cell][2]))>-1 && a.indexOf(String(m[root][2]))>-1; }).length, its);
-      return (maketip(m[cell]) == maketip(m[root])) || 
-             String(m[cell][2]) == String(m[root][2]) ||
-             (its.filter(function(a){ return a.indexOf(String(m[cell][2]))>-1 && a.indexOf(String(m[root][2]))>-1; }).length)
+//      console.log(current, cell, makeid(m[current]), makeid(m[cell]), String(m[cell][2]), String(m[current][2]),
+//      stops.indexOf(cell) == -1, maketip(m[cell]) == maketip(m[current]), String(m[cell][2]) == String(m[current][2]),
+//      its.filter(function(a){ return a.indexOf(String(m[cell][2]))>-1 && a.indexOf(String(m[current][2]))>-1; }).length, its);
+      return stops.indexOf(cell) == -1 &&
+             (maketip(m[cell]) == maketip(m[current])) || 
+             String(m[cell][2]) == String(m[current][2]) ||
+             (its.filter(function(a){ return a.indexOf(String(m[cell][2]))>-1 && a.indexOf(String(m[current][2]))>-1; }).length)
     }
   );
   return vertexes;
@@ -54,22 +55,23 @@ function buildpath(m, tree, to){
 // m - list of vertexes (stations)
 // inst - list of interchange stations
 // from - start index of m 
-// to - destionation index of m
-function BFS(m, inst, from, to){
+// to - destination index of m
+// stops - list if vertexes where search stop (stations under constructed) 
+function BFS(m, inst, from, to, stops){
   var tree = [];
   var visited = [];
   var q = [];
   q.push(from);
   while(q.length){
-    var subroot = q.shift();
-    visited.push(subroot.toString());
-    if(subroot.toString() == to.toString()) return buildpath(m, tree, to);
-    var child = childs(m, inst, subroot);
-    for(var i in child){
-      if(visited.indexOf(child[i].toString()) == -1){
-        tree[child[i]] = subroot;
-        if(child[i] == to) q.unshift(child[i]);
-        else q.push(child[i]);
+    var current = q.shift();
+    visited.push(current.toString());
+    if(current.toString() == to.toString()) return buildpath(m, tree, to);
+    var childs = findchilds(m, inst, current, stops||[]);
+    for(var c in childs){
+      if(visited.indexOf(childs[c].toString()) == -1){
+        tree[childs[c]] = current;
+        if(childs[c] == to) q.unshift(childs[c]);
+        else q.push(childs[c]);
       }
     }
   }
