@@ -8,7 +8,7 @@ egax@bk.ru, 2018-21.
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Местное время / SVG векторная карта</title>
-<meta name="description" content="Настенные часы, местное время">
+<meta name="description" content="Настенные часы, местное время, часы со стрелками">
 <meta name="keywords" content="настенные часы, местное время">
 <link rel="icon" href="../img/fav.svg" type="image/svg+xml">
 <link rel="canonical" href="clock.html">
@@ -27,30 +27,30 @@ function timerfunc(){
       gh = t.getUTCHours(), gm = t.getUTCMinutes(), gs = t.getUTCSeconds(),
       hh = t.getHours(), mm = t.getMinutes(), ss = t.getSeconds();
   cls();
-  draw( 1/2, 1, gh, gm, gs, 'GMT' );
-  draw( 3/2, 1, hh, mm, ss, 'MSK' );
+//  draw( 1, 1, gh, gm, gs, 'GMT' );
+  draw( 1, 1, hh, mm, ss, '' );
 }
 function draw( wr, hr, HH, MM, SS, label ){
   var w = DC.vp.getAttribute('width'), h = DC.vp.getAttribute('height');
   var el, gradient = DC.append('radialGradient', {id: 'gradcolor'});
-  DC.append(gradient, 'stop', {offset: '0%', 'stop-color': 'rgb(255,255,255)'});
-  DC.append(gradient, 'stop', {offset: '150%', 'stop-color': 'rgb(55,200,0)'});
+  DC.append(gradient, 'stop', {offset: '0%', 'stop-color': 'rgb(255,255,0)'});
+  DC.append(gradient, 'stop', {offset: '100%', 'stop-color': 'rgb(255,255,250)'});
   childs.push( gradient );
     // center
   childs.push( DC.append('circle', {
-    cx: w/2*wr, cy: h/2*hr, r: h/3-10, fill: 'url(#gradcolor)'
+    cx: w/2*wr, cy: h/2*hr, r: h/4, fill: 'url(#gradcolor)'
   }) );
   childs.push( DC.append('circle', {
     cx: w/2*wr, cy: h/2*hr, r: 3, fill: 'gray'
   }) );
   childs.push( el = DC.append('text', {
     x: w/2*wr, y: h/2*hr,
-    'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/100,
+    'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/100
   }) );
   el.appendChild(document.createTextNode(label));
   DC.attr(el, {
     x: w/2*wr - (el.getBoundingClientRect().right - el.getBoundingClientRect().left)/2,
-    y: h/2*hr + (el.getBoundingClientRect().bottom - el.getBoundingClientRect().top),
+    y: h/2*hr + (el.getBoundingClientRect().bottom - el.getBoundingClientRect().top)
   });
     // clock face
   var s, r, f;
@@ -60,27 +60,27 @@ function draw( wr, hr, HH, MM, SS, label ){
     if(i%90==0 ) { r = 8; s = 'gold'; f = s; };
     childs.push( DC.append('circle', {
       stroke: s, fill: f, r: r,
-      cx: w/2*wr + h/3 * Math.sin(i * Math.PI/180), cy: h/2*hr - h/3 * Math.cos(i * Math.PI/180)
+      cx: w/2*wr + h/4 * Math.sin(i * Math.PI/180), cy: h/2*hr - h/4 * Math.cos(i * Math.PI/180)
     }) );
   };
     // hours
   childs.push( DC.append('path', {
-    stroke: 'rgb(180,180,180)', fill: 'rgb(200,200,200)',
-    d: 'M ' + w/2*wr + ' ' + h/2*hr  + ' Q' + (w/2*wr + h/6 * Math.sin((HH * 30 + MM / 2 + 12) * Math.PI/180)) + ' ' + (h/2*hr - h/6 * Math.cos((HH * 30 + MM / 2 + 12) * Math.PI/180)) +
-       ' ' + (w/2*wr + (h/4 - 12) * Math.sin((HH * 30 + MM / 2) * Math.PI/180)) + ' ' + (h/2*hr - (h/4 - 12) * Math.cos((HH * 30 + MM / 2) * Math.PI/180)) +
-       ' Q' + (w/2*wr + h/6 * Math.sin((HH * 30 + MM / 2 - 12) * Math.PI/180)) + ' ' + (h/2*hr - h/6 * Math.cos((HH * 30 + MM / 2 - 12) * Math.PI/180)) + ' ' + w/2*wr + ' ' + h/2*hr
+    stroke: 'rgb(180,180,180)', fill: 'rgb(180,180,180)',
+    d: 'M ' + w/2*wr + ' ' + h/2*hr  + ' ' + (w/2*wr + h/6 * Math.sin((HH * 30 + MM / 2 + 5) * Math.PI/180)) + ' ' + (h/2*hr - h/6 * Math.cos((HH * 30 + MM / 2 + 5) * Math.PI/180)) +
+       ' ' + (w/2*wr + (h/5) * Math.sin((HH * 30 + MM / 2) * Math.PI/180)) + ' ' + (h/2*hr - (h/5) * Math.cos((HH * 30 + MM / 2) * Math.PI/180)) +
+       ' ' + (w/2*wr + h/6 * Math.sin((HH * 30 + MM / 2 - 5) * Math.PI/180)) + ' ' + (h/2*hr - h/6 * Math.cos((HH * 30 + MM / 2 - 5) * Math.PI/180)) + ' ' + w/2*wr + ' ' + h/2*hr
   }) );
     // minutes
   childs.push( DC.append('path', {
-    stroke: 'rgb(180,180,180)', fill: 'rgb(200,200,200)',
-    d: 'M ' + w/2*wr + ' ' + h/2*hr + ' Q' + (w/2*wr + h/5 * Math.sin((MM * 6 + 20) * Math.PI/180)) + ' ' + (h/2*hr - h/5 * Math.cos((MM * 6 + 20) * Math.PI/180)) +
-       ' ' + (w/2*wr + (h/3 - 10) * Math.sin(MM * 6 * Math.PI/180)) + ' ' + (h/2*hr - (h/3 - 10) * Math.cos(MM * 6 * Math.PI/180)) +
-       ' Q' + (w/2*wr + h/5 * Math.sin((MM * 6 - 20) * Math.PI/180)) + ' ' + (h/2*hr - h/5 * Math.cos((MM * 6 - 20) * Math.PI/180)) + '  ' + w/2*wr + ' ' + h/2*hr
+    stroke: 'rgb(200,200,200)', fill: 'rgb(200,200,200)',
+    d: 'M ' + w/2*wr + ' ' + h/2*hr + ' ' + (w/2*wr + h/5 * Math.sin((MM * 6 + 3) * Math.PI/180)) + ' ' + (h/2*hr - h/5 * Math.cos((MM * 6 + 3) * Math.PI/180)) +
+       ' ' + (w/2*wr + (h/4 - 10) * Math.sin(MM * 6 * Math.PI/180)) + ' ' + (h/2*hr - (h/4 - 10) * Math.cos(MM * 6 * Math.PI/180)) +
+       ' ' + (w/2*wr + h/5 * Math.sin((MM * 6 - 3) * Math.PI/180)) + ' ' + (h/2*hr - h/5 * Math.cos((MM * 6 - 3) * Math.PI/180)) + '  ' + w/2*wr + ' ' + h/2*hr
   }) );
     // seconds
   childs.push( DC.append('path', {
     stroke: 'black',
-    d: 'M ' + w/2*wr + ' ' + h/2*hr + ' L ' + (w/2*wr + h/3.3 * Math.sin(SS * 6 * Math.PI/180)) + ' ' + (h/2*hr - h/3.3 * Math.cos(SS * 6 * Math.PI/180))
+    d: 'M ' + w/2*wr + ' ' + h/2*hr + ' L ' + (w/2*wr + h/4 * Math.sin(SS * 6 * Math.PI/180)) + ' ' + (h/2*hr - h/4 * Math.cos(SS * 6 * Math.PI/180))
   }) );
 }
   //
