@@ -2,7 +2,7 @@
 // HTML5 Canvas vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013. b221111.
+// egax@bk.ru, 2013. b230223.
 //
 function dbCarta(cfg) {
   // Constructor config {
@@ -983,12 +983,15 @@ function dbCarta(cfg) {
         this.draw();
     },
     // - events -----------------------------
-    mousewheel: function(ev) {
+    mousewheel: function(ev, dlt) {
+      ev.preventDefault();
       var delta = 0;
       if (ev.wheelDelta) { // WebKit / Opera / Explorer 9
         delta = ev.wheelDelta / 150;
       } else if (ev.detail) { // Firefox
         delta = -ev.detail / 6;
+      } else if (dlt) { // touched
+        delta = dlt / 30;
       }
       var zoom = (this.m.scale > 1 ? this.m.scale : 2-1/this.m.scale);
       zoom += delta * 0.5;
@@ -1001,10 +1004,18 @@ function dbCarta(cfg) {
         this.draw();
     },
     touchmove: function(ev) {
+      ev.preventDefault();
       var touches = ev.changedTouches;
       if (this.m.touches.length == 1) {
-        ev.preventDefault();
         this.mousemove(touches[touches.length - 1]);
+      } else if (this.m.touches.length == 2) {
+        var a = this.canvasXY(touches[0]),
+            b = this.canvasXY(touches[touches.length - 1]);
+        var d = Math.sqrt( Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2) );
+        if (d && this.m.dtouch) {
+          dw.mousewheel(ev, d - this.m.dtouch);
+        }
+        this.m.dtouch = d;
       }
     },
     touchstart: function(ev) {
@@ -1041,6 +1052,7 @@ function dbCarta(cfg) {
   dw.addEventListener('onmousemove', dw.mousemove, false);
   dw.addEventListener('onmousedown', dw.mousedown, false);
   dw.addEventListener('onmouseup', dw.mouseup, false);
+  dw.addEventListener('wheel', dw.mousewheel, false);
   dw.addEventListener('mousewheel', dw.mousewheel, false);
   dw.addEventListener('DOMMouseScroll', dw.mousewheel, false); // firefox
   dw.addEventListener('touchmove', dw.touchmove, false);

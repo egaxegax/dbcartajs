@@ -2,7 +2,7 @@
 // HTML5 SVG vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2015. b221111.
+// egax@bk.ru, 2015. b230224.
 //
 function dbCartaSvg(cfg) {
   var SVG_NS = 'http://www.w3.org/2000/svg',
@@ -644,16 +644,19 @@ function dbCartaSvg(cfg) {
       }
       delete self.m.mpts;
       delete self.m.mcenterof;
-    }
+    },
   });
   // - root events -----------------------------
   self.extend(self.root, {
-    mousewheel: function(ev) {
+    mousewheel: function(ev, dlt) {
+      ev.preventDefault();
       var delta = 0;
       if (ev.wheelDelta) { // WebKit / Opera / Explorer 9
         delta = ev.wheelDelta / 150;
       } else if (ev.detail) { // Firefox
         delta = -ev.detail / 4;
+      } else if (dlt) { // touched
+        delta = dlt / 10;
       }
       var zoom = (self.m.scale > 1 ? self.m.scale : 2-1/self.m.scale);
       zoom += delta * 0.25;
@@ -661,10 +664,18 @@ function dbCartaSvg(cfg) {
       self.scaleCarta(zoom);
     },
     touchmove: function(ev) {
+      ev.preventDefault(); // prevent window scroll
       var touches = ev.changedTouches;
       if (self.m.touches.length == 1) {
-        ev.preventDefault();
         self.mousemove(touches[touches.length - 1]);
+      } else if (self.m.touches.length == 2) {
+        var a = self.canvasXY(touches[0]),
+            b = self.canvasXY(touches[touches.length - 1]);
+        var d = Math.sqrt( Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2) );
+        if (d && self.m.dtouch) {
+          self.root.mousewheel(ev, d - self.m.dtouch);
+        }
+        self.m.dtouch = d;
       }
     },
     touchstart: function(ev) {
@@ -698,6 +709,7 @@ function dbCartaSvg(cfg) {
       if (!self.m.dotouch) self.mouseup(ev);
     }
   });
+  self.root.addEventListener('wheel', self.root.mousewheel, false);
   self.root.addEventListener('mousewheel', self.root.mousewheel, false);
   self.root.addEventListener('DOMMouseScroll', self.root.mousewheel, false); // firefox
   self.root.addEventListener('touchmove', self.root.touchmove, false);
