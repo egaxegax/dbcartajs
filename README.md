@@ -34,7 +34,7 @@ Canvas+SVG vector map and image viewer javascript library.
 [SVG](https://egaxegax.github.io/dbcartajs/svg/imgviewer.html) &emsp; &emsp; 
 
 **Pan Zoom**  
-*Анимация масштаба в SVG*  
+*Масштабирование SVG-изображения*  
 [SVG](https://egaxegax.github.io/dbcartajs/svg/panzoom.html) &emsp; &emsp; 
 
 > Примеры использования градиента и *svg*-анимации с эффектом движения.
