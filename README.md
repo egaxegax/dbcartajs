@@ -31,7 +31,8 @@ Canvas+SVG vector map and image viewer javascript library.
 
 **Image Viewer**  
 *Просмотровщик картинок*  
-[SVG](https://egaxegax.github.io/dbcartajs/svg/imgviewer.html) &emsp; &emsp; 
+[SVG](https://egaxegax.github.io/dbcartajs/imgviewer.html) &emsp; &emsp; 
+[SVG](https://egaxegax.github.io/dbcartajs/svg/imgviewer.html)  
 
 **Pan Zoom**  
 *Масштабирование SVG-изображения*  
