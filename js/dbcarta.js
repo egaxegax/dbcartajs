@@ -970,17 +970,17 @@ function dbCarta(cfg) {
           this.centerCarta(mpts[0], mpts[1], true);
         }
       }
-      with (this.m) {
-        delete mimg;
-        delete mmove;
-        delete mzoom;
-        delete mpts;
-        delete mcenterof;
-      }
-      if ('onclick' in this.clfunc)
+      if ('onclick' in this.clfunc) {
         this.clfunc.onclick(this, pts, ev);
-      else // draw once
+      } else { // draw once
         this.draw();
+      }
+      delete this.m.mimg;
+      delete this.m.mmove;
+      delete this.m.mzoom;
+      delete this.m.mpts;
+      delete this.m.mcenterof;
+      delete this.m.pmap;
     },
     // - events -----------------------------
     mousewheel: function(ev, dlt) {
@@ -1019,7 +1019,6 @@ function dbCarta(cfg) {
       }
     },
     touchstart: function(ev) {
-      this.m.dotouch = true;
       var touches = ev.changedTouches;
       for (var i=0; i<touches.length; i++)
         this.m.touches.push(touches[i]);
@@ -1040,13 +1039,13 @@ function dbCarta(cfg) {
         this.mouseup(touches[touches.length - 1]);
     },
     onmousemove: function(ev) {
-      if (!this.m.dotouch) this.mousemove(ev);
+      this.mousemove(ev);
     },
     onmousedown: function(ev) {
-      if (!this.m.dotouch) this.mousedown(ev);
+      this.mousedown(ev);
     },
     onmouseup: function(ev) {
-      if (!this.m.dotouch) this.mouseup(ev);
+      this.mouseup(ev);
     }
   });
   dw.addEventListener('onmousemove', dw.mousemove, false);

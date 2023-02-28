@@ -23,9 +23,10 @@ egax@bk.ru, 2013-22.
   <h2 style="margin: 0px; line-height: 1;">Московское метро</h2>
 </td>
 <td>
-  <select id="stlist"></select>
-  <select id="stlist2"></select>
-  <select id="chinches"></select> <button id="btcalc" title="Calc Route">&emsp;&#9654;&emsp;</button>
+  <select id="stl"></select>
+  <select id="stl2"></select>
+  <select id="chinches"></select>
+  <button id="btcalc" title="Calc Route">&emsp;&#9654;&emsp;</button>
 </td>
 </tr>
 <tr>
@@ -119,20 +120,20 @@ function calcRoute(fromid, toid){
       for(var j=0; j<routes.length; j++){
         var cc = routes[j],
             bInch = inches.filter(function(m){ return (inarray(m,cc[0]) && inarray(m,cc[cc.length-1])); }).length;
-        dw.mopt['selpath'] = {cls: 'Line', width: mds(bInch ? 6 : 12), join: 'round', cap: bInch ? 'butt' : 'round', dash: bInch ? [2,2] : false, fg: dw.mopt[sts[j][0]].fg};
+        dw.mopt['selpath'] = {cls: 'Line', width: mds(bInch ? 4 : 12), join: 'round', cap: bInch ? 'butt' : 'round', dash: bInch ? [1,1] : false, fg: dw.mopt[sts[j][0]].fg};
         dw.paintCarta(cc, 'selpath');
       }
         // draw stations with label above routes
       for(var j=0; j<sts.length; j++){
         dw.mopt['selstation'] = dw.extend({}, dw.mopt[sts[j][0]]);
-        dw.mopt['selstation'].bg = 'white';
+        dw.mopt['selstation'].bg = dw.mopt[sts[j][0]].bg;
         dw.paintCarta(sts[j][2], 'selstation', sts[j][3]);
       }
     }
   });
 }
-var stlist = document.getElementById('stlist');
-stlist.onchange = function(){
+var stl = document.getElementById('stl');
+stl.onchange = function(){
   var v = this.value;
   MSTATIONS.filter(function(s){ return makeid(s) == v; }).map(function(st){ 
     centerMap(st[2][0]);
@@ -142,8 +143,8 @@ stlist.onchange = function(){
     dw.paintCarta(st[2], 'selstation', st[3]||st[1]);
   });
 };
-var stlist2 = document.getElementById('stlist2');
-stlist2.onchange = function(){
+var stl2 = document.getElementById('stl2');
+stl2.onchange = function(){
   var v = this.value;
   MSTATIONS.filter(function(s){ return makeid(s) == v; }).map(function(st){ 
     centerMap(st[2][0]);
@@ -155,7 +156,7 @@ stlist2.onchange = function(){
 };
 var btcalc = document.getElementById('btcalc');
 btcalc.onclick = function(){
-  calcRoute( stlist.value, stlist2.value );
+  calcRoute( stl.value, stl2.value );
 };
 var chinches = document.getElementById('chinches');
 chinches.onchange = function(){
@@ -390,26 +391,26 @@ dw.extend(dw.mopt, {
   // callbacks
 dw.extend(dw.clfunc, {
   onmousemove: function(o, sd, dd, ev){
-    if(o.m.pmap){
-      var m = o.mflood[o.m.pmap];
-      var rtype = 'r' + m['ftype'].split('_')[0].slice(1);
-      var mlabel = '<b>'+ (m['label'] || m['ftag'])+ '</b>'; // tooltip
-      if(!m['label']) MSTATIONS.filter(function(s){ return s[1] == m['ftag'] && s[3]; }).map(function(a){ mlabel = '<b>' + (a[3]||a[1]) + '</b>'});
-      if(MLEGEND[rtype]) mlabel += '<br><br>' + MLEGEND[rtype] + ' ('+ rtype + ')';
-    }
+//    if(o.m.pmap){
+//      var m = o.mflood[o.m.pmap];
+//      var rtype = 'r' + m['ftype'].split('_')[0].slice(1);
+//      var mlabel = '<b>'+ (m['label'] || m['ftag'])+ '</b>'; // tooltip
+//      if(!m['label']) MSTATIONS.filter(function(s){ return s[1] == m['ftag'] && s[3]; }).map(function(a){ mlabel = '<b>' + (a[3]||a[1]) + '</b>'});
+//      if(MLEGEND[rtype]) mlabel += '<br><br>' + MLEGEND[rtype] + ' ('+ rtype + ')';
+//    }
     o.paintCoords(dd);
-    infobox(ev, mlabel);
+//    infobox(ev, mlabel);
   },
   onclick: function(o, pts, ev) {
     if (o.m.pmap) {
-      if(stlist.class == 'selected'){
-        stlist2.class = 'selected';
-        stlist2.value = o.m.pmap;
-        stlist.class = '';
-      } else {
-        stlist.class = 'selected';
-        stlist.value = o.m.pmap;
-        stlist2.class = '';
+      if(stl.class == 'selected' && stl.value != o.m.pmap){
+        stl2.class = 'selected';
+        stl2.value = o.m.pmap;
+        stl.class = '';
+      } else if (stl2.value != o.m.pmap) {
+        stl.class = 'selected';
+        stl.value = o.m.pmap;
+        stl2.class = '';
       }
     }
     dw.draw();
@@ -423,15 +424,19 @@ function optfunc(o, k, v, disabled) {
   o.appendChild(el);
 };
   // fill station list
+optfunc(stl, '', 'Откуда...', true);
+optfunc(stl2, '', 'Куда...', true);
 [].slice.call(MSTATIONS).sort(function(a,b){
   return ((a[3]||a[1])>(b[3]||b[1])) ? -1 : 1;
 }).map(function(a){
   a[5] = true; // do ismap (show infobox)
-  optfunc(stlist,  a[0]+'_'+a[1], a[3]||a[1]);
-  optfunc(stlist2, a[0]+'_'+a[1], a[3]||a[1]);
+  optfunc(stl,  a[0]+'_'+a[1], a[3]||a[1]);
+  optfunc(stl2, a[0]+'_'+a[1], a[3]||a[1]);
 });
+stl.selectedIndex = 0;
+stl2.selectedIndex = 0;
   // inches
-optfunc(chinches, 'ch', 'Пересадки...', true);  
+optfunc(chinches, 'ch', 'Пересадки...', true);
 optfunc(chinches, 'inch', '\u2611 Метро');
 optfunc(chinches, 'inch_mn', '&emsp; Монорельс');
 optfunc(chinches, 'inch_mck', '&emsp; МЦК');

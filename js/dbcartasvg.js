@@ -679,7 +679,7 @@ function dbCartaSvg(cfg) {
       }
     },
     touchstart: function(ev) {
-      self.m.dotouch = true;
+//      self.m.dotouch = true;
       var touches = ev.changedTouches;
       for (var i=0; i<touches.length; i++)
         self.m.touches.push(touches[i]);
@@ -700,13 +700,13 @@ function dbCartaSvg(cfg) {
         self.mouseup(touches[touches.length - 1]);
     },
     onmousemove: function(ev) {
-      if (!self.m.dotouch) self.mousemove(ev);
+      self.mousemove(ev);
     },
     onmousedown: function(ev) {
-      if (!self.m.dotouch) self.mousedown(ev);
+      self.mousedown(ev);
     },
     onmouseup: function(ev) {
-      if (!self.m.dotouch) self.mouseup(ev);
+      self.mouseup(ev);
     }
   });
   self.root.addEventListener('wheel', self.root.mousewheel, false);
