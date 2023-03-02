@@ -644,7 +644,7 @@ function dbCartaSvg(cfg) {
       }
       delete self.m.mpts;
       delete self.m.mcenterof;
-    },
+    }
   });
   // - root events -----------------------------
   self.extend(self.root, {
@@ -669,8 +669,14 @@ function dbCartaSvg(cfg) {
       if (self.m.touches.length == 1) {
         self.mousemove(touches[touches.length - 1]);
       } else if (self.m.touches.length == 2) {
-        var a = self.canvasXY(touches[0]),
-            b = self.canvasXY(touches[touches.length - 1]);
+        for (var i=0; i<touches.length; i++) {
+          for (var j=0; j<self.m.touches.length; j++) {
+            if (self.m.touches[j].identifier == touches[i].identifier)
+              self.m.touches[j] = touches[i];
+          }
+        }
+        var a = self.canvasXY(self.m.touches[0]),
+            b = self.canvasXY(self.m.touches[1]);
         var d = Math.sqrt( Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2) );
         if (d && self.m.dtouch) {
           self.root.mousewheel(ev, d - self.m.dtouch);
@@ -679,7 +685,6 @@ function dbCartaSvg(cfg) {
       }
     },
     touchstart: function(ev) {
-//      self.m.dotouch = true;
       var touches = ev.changedTouches;
       for (var i=0; i<touches.length; i++)
         self.m.touches.push(touches[i]);
@@ -694,9 +699,10 @@ function dbCartaSvg(cfg) {
             self.m.touches.splice(j, 1);
         }
       }
-      if (self.m.touches.length)
+      if (self.m.touches.length) {
         self.m.touches = [];
-      else
+        self.m.dtouch = 0;
+      } else
         self.mouseup(touches[touches.length - 1]);
     },
     onmousemove: function(ev) {
