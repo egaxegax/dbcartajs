@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!--
-Moscow Metro map from wikipedia. SVG version.
+Moscow Metro map from Wikipedia. SVG version.
 View lines, stations and calc routes.
-egax@bk.ru, 2022.
+egax@bk.ru, 2022-23.
 -->
 <html lang="ru">
 <head>
@@ -656,8 +656,9 @@ upfunc({url:
     DC = new dbCartaSvg({ 
       svgRoot: root, 
       svgViewport: vp,
-      scalebg: 'rgba(50,100,0,0.2)',
-      sbarpos: 'left'
+      sbar: 0
+//      scalebg: 'rgba(50,100,0,0.2)',
+//      sbarpos: 'left'
     });
     DC.centerCarta([ svg_width/2, svg_height/2 ]);
     DC.scaleCarta( cont_width / svg_width );
