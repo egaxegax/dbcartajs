@@ -19,7 +19,7 @@ egax@bk.ru, 2015-22.
 <body>
 <table><tr>
 <td id="mcont">
-<select id="chinches" onchange="clchange(this)" style="position:fixed; top:10px; right:10px">
+<select id="chinches" onchange="clchange(this)" style="margin:0px; position:fixed; right:0px">
 <option disabled selected>Пересадки...</option>
 <option id="inch">&#9745; Метро</option>
 <option id="inch_mn">&emsp; Монорельс</option>
@@ -464,9 +464,10 @@ function calcRoute(fromid, toid){
 var DC = new dbCartaSvg({
   id: 'mcont',
   height: document.getElementById('mcont').offsetHeight,
-  sbarpos: 'right',
   bg: 'rgb(250,255,250)',
-  scalebg: 'rgba(100,200,100,0.3)'
+  sbar: 0
+//  sbarpos: 'right',
+//  scalebg: 'rgba(100,200,100,0.3)'
 });
   // events
 DC.extend(DC.root, {

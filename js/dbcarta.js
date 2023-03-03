@@ -2,7 +2,7 @@
 // HTML5 Canvas vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013. b230223.
+// egax@bk.ru, 2013. b230304.
 //
 function dbCarta(cfg) {
   // Constructor config {
@@ -10,7 +10,7 @@ function dbCarta(cfg) {
   //   width, height: canvas size
   //   draggable: move map by cursor
   //   viewportx, viewporty: offset limits for centerCarta in degrees
-  //   scalebg: bgcolor for paintBar
+  //   scalebg: bgcolor for right bar
   //   rbar: show right bar?
   //   mapbg: bgcolor for doMap
   // }
@@ -86,7 +86,8 @@ function dbCarta(cfg) {
       offset: [0, 0],
       scaleoff: [0, 0],
       doreload: true,
-      touches: []
+      touches: [],
+      dtouch: 0
       // marea tmap pmap bgimg mimg
     },
     // Keys store

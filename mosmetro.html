@@ -166,8 +166,12 @@ chinches.onchange = function(){
 };
   //
 var dw = new dbCarta({
-  id: 'mcol', height: document.getElementById('mcol').offsetHeight,
-  viewportx: 220, viewporty: 220, scalebg: 'rgba(100,200,100,0.3)'
+  id: 'mcol',
+  height: document.getElementById('mcol').offsetHeight,
+  viewportx: 220, 
+  viewporty: 220, 
+  rbar: 0,
+  scalebg: 'rgba(100,200,100,0.3)'
 });
 dw.style.backgroundColor = 'rgb(250,255,250)';
   // define new layers
