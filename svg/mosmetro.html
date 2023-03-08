@@ -8,7 +8,7 @@ egax@bk.ru, 2015-23.
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Схема метро Москвы с расчетом пути в 2022 году / SVG векторная карта</title>
+<title>Схема метро Москвы с расчетом пути в 2023 году / SVG векторная карта</title>
 <meta name="description" content="Схема метро Москвы c расчётом пути. Схема действующих и строящихся линий и станций московского метро в 2022 году. Векторная карта метро Москвы в SVG">
 <meta name="keywords" content="схема метро москвы, svg векторная карта метро, мцк, mosmetro">
 <link rel="icon" href="../img/fav.svg" type="image/svg+xml">
@@ -61,11 +61,11 @@ function draw() {
   function station(o)  { return DC.extend({class: 'station', bg: '#f5f5dc', size: 4, width: 1}, o||{}); };
   function st_mck(o)   { return station(DC.extend({size: 2, labelcolor: 'gray', bg: o['fg']}, o)); };
   function st_mcd(o)   { return station(DC.extend({size: 2, labelcolor: 'gray', bg: o['fg']}, o)); };
-  function inch_mck(o) { return inch(DC.extend({dash:[1,3], fg: '#aaa', width: 2}, o||{})); };
-  function inch_mcd(o) { return inch(DC.extend({dash:[1,3], fg: '#777', width: 1}, o||{})); };
-  function inch_out(o) { return inch(DC.extend({dash:[1,2], fg: 'black', width: 1}, o||{})); };
-  function inst_mck(o) { return st_mck(DC.extend({size: 3, labelcolor: o['fg']}, o)); };
-  function inst_mcd(o) { return st_mcd(DC.extend({size: 3, labelcolor: o['fg']}, o)); };
+  function inch_mck(o) { return inch(DC.extend({fg: '#ddd', width: 1}, o||{})); };
+  function inch_mcd(o) { return inch(DC.extend({fg: '#ccc', width: 1}, o||{})); };
+  function inch_out(o) { return inch(DC.extend({fg: '#aaa', width: 1}, o||{})); };
+  function inst_mck(o) { return st_mck(DC.extend({size: 2, labelcolor: o['fg']}, o)); };
+  function inst_mcd(o) { return st_mcd(DC.extend({size: 2, labelcolor: o['fg']}, o)); };
   function inst(o)     { return station(DC.extend({size: 4, labelcolor: o['fg'], bg: o['fg']}, o)); };
   function inst_d(o)   { return inst(DC.extend({size: 2, width: 2}, o||{})); };
     // lines
