@@ -18,9 +18,9 @@ egax@bk.ru, 2013-23.
 </head>
 <body>
 <table>
-<tr style="height: 1px; background-color: rgb(210, 224, 240);">
+<tr style="height:1px; background-color:rgb(210,224,240);">
 <td width="40%">
-  <h2 style="margin: 0px; line-height: 1;">Московское метро</h2>
+  <h2 style="margin:0px; line-height:1;">Московское метро</h2>
 </td>
 <td>
   <select id="stl"></select>
@@ -120,7 +120,7 @@ function calcRoute(fromid, toid){
       for(var j=0; j<routes.length; j++){
         var cc = routes[j],
             bInch = inches.filter(function(m){ return (inarray(m,cc[0]) && inarray(m,cc[cc.length-1])); }).length;
-        dw.mopt['selpath'] = {cls: 'Line', width: mds(bInch ? 4 : 12), join: 'round', cap: bInch ? 'butt' : 'round', dash: bInch ? [1,1] : false, fg: dw.mopt[sts[j][0]].fg};
+        dw.mopt['selpath'] = {cls: 'Line', width: mds(bInch ? 2 : 12), join: 'round', cap: bInch ? 'butt' : 'round', fg: dw.mopt[sts[j][0]].fg};
         dw.paintCarta(cc, 'selpath');
       }
         // draw stations with label above routes
@@ -175,7 +175,7 @@ function route(o)    { return dw.extend({cls: 'Line', width: mds(6), join: 'roun
 function route_ext(o){ return route(dw.extend({width: mds(4), dash: [mds(2),mds(4)]}, o||{})); };
 function inch(o)     { return route(dw.extend({fg: '#ccc', cap: 'round', width: mds(8)}, o||{})); };
 function inch_d(o)   { return inch(dw.extend({fg: '#fff', width: mds(5)}, o||{})); };
-function inch_ext(o) { return inch(dw.extend({width: mds(4), fg:'white', dash: [mds(4),mds(2)]}, o||{})); };
+function inch_ext(o) { return inch(dw.extend({width: mds(2), fg: '#eee'}, o||{})); };
 function river(o)    { return route(dw.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})); };
 function rail(o)     { return route(dw.extend({fg: '#ddd', width: mds(2), labelscale: 0}, o||{})); };
 function rail_d(o)   { return rail(dw.extend({fg: '#fff', dash: [mds(10),mds(10)]}, o||{})); };
@@ -188,7 +188,7 @@ function inch_mcd(o) { return inch(dw.extend({fg: '#ccc', width: mds(2)}, o||{})
 function inch_out(o) { return inch(dw.extend({fg: '#aaa', width: mds(2)}, o||{})); };
 function inst_mck(o) { return st_mck(dw.extend({size: mds(3), labelcolor: o['fg']}, o)); };
 function inst_mcd(o) { return st_mcd(dw.extend({size: mds(2), labelcolor: o['fg']}, o)); };
-function inst(o)     { return station(dw.extend({size: mds(4), labelcolor: o['fg'], bg: o['fg']}, o)); };
+function inst(o)     { return station(dw.extend({size: mds(5), labelcolor: o['fg'], bg: o['fg']}, o)); };
 function inst_d(o)   { return inst(dw.extend({size: mds(3), width: mds(1)}, o||{})); };
   // lines
 dw.extend(dw.mopt, {

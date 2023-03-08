@@ -53,7 +53,7 @@ function draw() {
   function route_ext(o){ return route(DC.extend({width: 3, cap: 'butt', dash: [6,4]}, o||{})); };
   function inch(o)     { return route(DC.extend({fg: '#ccc', cap: 'round', width: 11}, o||{})); };
   function inch_d(o)   { return inch(DC.extend({fg: '#fff', width: 7}, o||{})); };
-  function inch_ext(o) { return inch(DC.extend({width: 12, fg:'white'}, o||{})); };
+  function inch_ext(o) { return inch(DC.extend({width: 2, fg: '#eee'}, o||{})); };
   function river(o)    { return route(DC.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff'}, o||{})); };
   function rail(o)     { return route(DC.extend({width: 2, fg: '#ccc'}, o||{})); };
   function rail_d(o)   { return rail(DC.extend({fg: '#eee', dash: [8,7]}, o||{})); };
@@ -66,8 +66,8 @@ function draw() {
   function inch_out(o) { return inch(DC.extend({fg: '#aaa', width: 1}, o||{})); };
   function inst_mck(o) { return st_mck(DC.extend({size: 3, labelcolor: o['fg']}, o)); };
   function inst_mcd(o) { return st_mcd(DC.extend({size: 2, labelcolor: o['fg']}, o)); };
-  function inst(o)     { return station(DC.extend({size: 4, labelcolor: o['fg'], bg: o['fg']}, o)); };
-  function inst_d(o)   { return inst(DC.extend({size: 2, width: 2}, o||{})); };
+  function inst(o)     { return station(DC.extend({size: 5, labelcolor: o['fg'], bg: o['fg']}, o)); };
+  function inst_d(o)   { return inst(DC.extend({size: 3, width: 2}, o||{})); };
     // lines
   DC.extend(mopt, {
     r1:        route({fg: '#ed1b35'}),
@@ -439,7 +439,7 @@ function calcRoute(fromid, toid){
           path = ('M ' + pts).replace(/,/g, ' ');
       var bInch = inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length;
       DC.extend( 
-        DC.append('path', { class: 'selpath', d: path, stroke: DC.root.getElementById(makeid(st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-dasharray': bInch ? [3,2] : 'none', 'stroke-width': mds(bInch ? 4 : 8)}),
+        DC.append('path', { class: 'selpath', d: path, stroke: DC.root.getElementById(makeid(st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-width': mds(bInch ? 2 : 8)}),
           { onclick: clearRoute });
     } else {
       find('.route, .station, .label').map(function(o){ DC.attr(o, {opacity: '0.07'}); });
