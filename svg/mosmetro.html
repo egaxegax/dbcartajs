@@ -66,7 +66,7 @@ function draw() {
   function inch_out(o) { return inch(DC.extend({fg: '#aaa', width: 1}, o||{})); };
   function inst_mck(o) { return st_mck(DC.extend({size: 3, labelcolor: o['fg']}, o)); };
   function inst_mcd(o) { return st_mcd(DC.extend({size: 2, labelcolor: o['fg']}, o)); };
-  function inst(o)     { return station(DC.extend({size: 5, labelcolor: o['fg'], bg: o['fg']}, o)); };
+  function inst(o)     { return station(DC.extend({size: 4, labelcolor: o['fg'], bg: o['fg']}, o)); };
   function inst_d(o)   { return inst(DC.extend({size: 3, width: 2}, o||{})); };
     // lines
   DC.extend(mopt, {
