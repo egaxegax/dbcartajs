@@ -108,7 +108,7 @@ var MLINES=[
 ['inch',      'Petr_Razumovskaya',               [[-21.52,111.48]]],
 ['inch',      'Marina_Roshcha',                  [[4,85],[7,82]]],
 ['inch',      'Pechatniki',                      [[98,-89.5],[94.6,-94]]],
-['inch',      'Novatorskaya',                    [[-88,-113],[-85,-116]]],
+['inch_ext',  'Novatorskaya',                    [[-88,-113],[-85,-116]]],
 ['inch',      'Nizhegorodskaya',                 [[109.9,-40]]],
 ['inch_mck',  'Okruzhnaya',                      [[-24,117.57],[-20,115.2]]],
 ['inch_mck',  'Voykovskaya__Baltiiskaya',        [[-79.8,90],[-74,90.7]]],
@@ -510,7 +510,7 @@ var MSTATIONS=[
 var MLABELS=[
 ['moskvar_t', 'mr',        [], 'Москва-река',     [112,-149]],
 ['moskvac_t', 'mc',        [], 'Канал им. Москвы',[-98,111]],
-['yauza_t',   'yr',        [], 'река Яуза',       [58,98]],
+['yauza_t',   'yr',        [], 'река Яуза',       [61,93]],
 ['svo_t',     'svo',       [], 'Шереметьево',     [-25,162]],
 ['svo_d_t',   'svo',       [], 'Белорусский',     [-51,55]],
 ['vko_t',     'vko',       [], 'Внуково',         [-155,-128]],
