@@ -2,7 +2,7 @@
 // HTML5 Canvas vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013. b230304.
+// egax@bk.ru, 2013. b230308.
 //
 function dbCarta(cfg) {
   // Constructor config {
@@ -1004,6 +1004,12 @@ function dbCarta(cfg) {
       else // draw once
         this.draw();
     },
+    dblclick: function(){
+      if ('ondblclick' in this.clfunc)
+        this.clfunc.ondblclick(this);
+      else // draw once
+        this.draw();
+    },
     touchmove: function(ev) {
       ev.preventDefault();
       var touches = ev.changedTouches;
@@ -1047,6 +1053,9 @@ function dbCarta(cfg) {
     },
     onmouseup: function(ev) {
       this.mouseup(ev);
+    },
+    ondblclick: function(ev) {
+      this.dblclick(ev);
     }
   });
   dw.addEventListener('onmousemove', dw.mousemove, false);
@@ -1055,6 +1064,7 @@ function dbCarta(cfg) {
   dw.addEventListener('wheel', dw.mousewheel, false);
   dw.addEventListener('mousewheel', dw.mousewheel, false);
   dw.addEventListener('DOMMouseScroll', dw.mousewheel, false); // firefox
+  dw.addEventListener('ondblclick', dw.dblclick, false);
   dw.addEventListener('touchmove', dw.touchmove, false);
   dw.addEventListener('touchstart', dw.touchstart, false);
   dw.addEventListener('touchend', dw.touchend, false);

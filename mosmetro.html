@@ -26,7 +26,6 @@ egax@bk.ru, 2013-23.
   <select id="stl"></select>
   <select id="stl2"></select>
   <select id="chinches"></select>
-  <button id="btcalc" title="Calc Route">&emsp;&#9654;&emsp;</button>
 </td>
 </tr>
 <tr>
@@ -63,7 +62,7 @@ function maskMap(){
   dw.mopt['selpath'] = {cls: 'Polygon', bg: 'rgba(255,255,255,0.9)', fg: 'transparent'};
   dw.draw();
   dw.paintCarta(rect, 'selpath');
-  dw.paintBar();
+//  dw.paintBar();
 }
 // diagonal size
 function mds(o) { 
@@ -71,6 +70,7 @@ function mds(o) {
 }
   //
 function calcRoute(fromid, toid){
+  if (!fromid || !toid) { return; };
   var inches= [];
   [].slice.call(document.getElementById('chinches').options).map(function(o){
     if(o.innerHTML.indexOf('\u2611')>-1){ // checked
@@ -153,10 +153,6 @@ stl2.onchange = function(){
     dw.mopt['selstation'].bg = 'gold';
     dw.paintCarta(st[2], 'selstation', st[3]||st[1]);
   });
-};
-var btcalc = document.getElementById('btcalc');
-btcalc.onclick = function(){
-  calcRoute( stl.value, stl2.value );
 };
 var chinches = document.getElementById('chinches');
 chinches.onchange = function(){
@@ -418,6 +414,12 @@ dw.extend(dw.clfunc, {
         stl2.class = '';
       }
     }
+    dw.draw();
+    calcRoute( stl.value, stl2.value );
+  },
+  ondblclick: function() {
+    stl.selectedIndex = 0;
+    stl2.selectedIndex = 0;
     dw.draw();
   }
 });
