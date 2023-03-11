@@ -416,6 +416,16 @@ dw.extend(dw.clfunc, {
     }
     dw.draw();
     calcRoute( stl.value, stl2.value );
+    if (stl.value) {
+      dw.mopt['selstation'] = dw.extend({}, dw.mopt[dw.mflood[stl.value].ftype]);
+      dw.mopt['selstation'].bg = 'gold';
+      dw.paintCarta(dw.mflood[stl.value].coords, 'selstation');
+    }
+    if (stl2.value) {
+      dw.mopt['selstation'] = dw.extend({}, dw.mopt[dw.mflood[stl2.value].ftype]);
+      dw.mopt['selstation'].bg = 'gold';
+      dw.paintCarta(dw.mflood[stl2.value].coords, 'selstation');
+    }
   },
   ondblclick: function() {
     stl.selectedIndex = 0;
