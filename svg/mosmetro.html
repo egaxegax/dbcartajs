@@ -58,7 +58,7 @@ function draw() {
   function rail(o)     { return route(DC.extend({width: 2, fg: '#ccc'}, o||{})); };
   function rail_d(o)   { return rail(DC.extend({fg: '#eee', dash: [8,7]}, o||{})); };
   function label(o)    { return DC.extend({class: 'label', labelcolor: '#aaa', anchor: ['start', 'top']}, o||{}); };
-  function station(o)  { return DC.extend({class: 'station', bg: '#f5f5dc', size: 5, width: 1}, o||{}); };
+  function station(o)  { return DC.extend({class: 'station', bg: '#f5f5dc', size: 4, width: 1}, o||{}); };
   function st_mck(o)   { return station(DC.extend({size: 3, labelcolor: 'gray', bg: o['fg']}, o)); };
   function st_mcd(o)   { return station(DC.extend({size: 2, labelcolor: 'gray', bg: o['fg']}, o)); };
   function inch_mck(o) { return inch(DC.extend({fg: '#ddd', width: 1}, o||{})); };
@@ -168,7 +168,7 @@ function draw() {
     s5_3:      inst(    {fg: mopt['r5'].fg,    anchor: ['start', 'bottom']}),
     s6:        station( {fg: mopt['r6'].fg,    anchor: ['start', 'middle']}),
     s6_1:      station( {fg: mopt['r6'].fg,    anchor: ['end',   'middle']}),
-    s6_2:      inst(    {fg: mopt['r6'].fg,    anchor: ['start', 'middle']}),
+    s6_2:      inst(    {fg: mopt['r6'].fg}),
     s6_3:      inst(    {fg: mopt['r6'].fg,    anchor: ['end',   'bottom']}),
     s6_4:      inst(    {fg: mopt['r6'].fg,    anchor: ['start', 'top']}),
     s6_5:      inst(    {fg: mopt['r6'].fg,    anchor: ['end',   'middle']}),
@@ -180,7 +180,7 @@ function draw() {
     s7_3:      inst(    {fg: mopt['r7'].fg,    anchor: ['start', 'top']}),
     s7_4:      station( {fg: mopt['r7'].fg,    anchor: ['start', 'bottom']}),
     s7_5:      inst_d(  {fg: mopt['r7'].fg}),
-    s7_6:      station( {fg: mopt['r7'].fg,    anchor: ['start', 'middle']}),
+    s7_6:      station( {fg: mopt['r7'].fg}),
     s7_7:      station( {fg: mopt['r7'].fg,    anchor: ['middle','bottom']}),
     s7_8:      station( {fg: mopt['r7'].fg,    anchor: ['end',   'top']}),
     s7_9:      station( {fg: mopt['r7'].fg}),

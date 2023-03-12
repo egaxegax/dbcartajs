@@ -180,7 +180,7 @@ function river(o)    { return route(dw.extend({fg: '#daebf4', cap: 'round', labe
 function rail(o)     { return route(dw.extend({fg: '#ddd', width: mds(2), labelscale: 0}, o||{})); };
 function rail_d(o)   { return rail(dw.extend({fg: '#fff', dash: [mds(10),mds(10)]}, o||{})); };
 function label(o)    { return dw.extend({cls: 'Polygon', labelcolor:'#aaa', labelscale: 1, anchor: ['start', 'top']}, o||{}); };
-function station(o)  { return dw.extend({cls: 'Dot', bg: '#f5f5dc', size: mds(5), width: mds(2), scale: 1, labelscale: 1, labelpad: mds(4)}, o||{}); };
+function station(o)  { return dw.extend({cls: 'Dot', bg: '#f5f5dc', size: mds(5), width: mds(2), scale: 1, labelscale: 1, labelpad: mds(3)}, o||{}); };
 function st_mck(o)   { return station(dw.extend({size: mds(3), labelcolor: 'gray', bg: o['fg']}, o)); };
 function st_mcd(o)   { return station(dw.extend({size: mds(2), labelcolor: 'gray', bg: o['fg']}, o)); };
 function inch_mck(o) { return inch(dw.extend({fg: '#ddd', width: mds(2)}, o||{})); };
@@ -307,7 +307,7 @@ dw.extend(dw.mopt, {
   s7_3:      inst(    {fg: dw.mopt['r7'].fg,    anchor: ['start', 'top']}),
   s7_4:      station( {fg: dw.mopt['r7'].fg,    anchor: ['start', 'bottom']}),
   s7_5:      inst_d(  {fg: dw.mopt['r7'].fg}),
-  s7_6:      station( {fg: dw.mopt['r7'].fg,    anchor: ['start', 'middle']}),
+  s7_6:      station( {fg: dw.mopt['r7'].fg}),
   s7_7:      station( {fg: dw.mopt['r7'].fg,    anchor: ['center','bottom']}),
   s7_8:      station( {fg: dw.mopt['r7'].fg,    anchor: ['end',   'top']}),
   s7_9:      station( {fg: dw.mopt['r7'].fg}),
