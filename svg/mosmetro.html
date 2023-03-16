@@ -463,9 +463,7 @@ function calcRoute(fromid, toid){
       sts.map(function(st){ // station + label above route
         var ost = DC.root.getElementById(makeid(st));
         var t = DC.root.getElementById('t' + ost.getAttribute('id'));
-        DC.extend(
-          DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('stroke'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill: '#f5f5dc', 'stroke-width': mds(2), r: mds(4)}),
-            { onclick: clearRoute });
+        DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('stroke'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill: '#f5f5dc', 'stroke-width': mds(2), r: mds(4)});
         if(t){
           DC.append('text', {
             x: t.getAttribute('x'), y: t.getAttribute('y'), 
@@ -474,7 +472,7 @@ function calcRoute(fromid, toid){
             'text-anchor': t.getAttribute('text-anchor')
           }).innerHTML = t.innerHTML;
         }
-      });      
+      });
     }
   }).length || clearRoute();
 }
