@@ -79,6 +79,7 @@ function calcRoute(fromid, toid){
   });
   var pinches=[], proutes=[]; // paths founded
   BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
+//    console.log(st);
     if(i < sts.length-1){
       var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;
       MLINES.map(function(b){
@@ -122,7 +123,6 @@ function calcRoute(fromid, toid){
         dw.paintCarta(m.coords, 'selpath');
       });
       sts.map(function(st){ // draw stations with label above routes
-        console.log(st);
         dw.mopt['selstation'] = dw.extend({}, dw.mopt[st[0]]);
         dw.mopt['selstation'].bg = '#f5f5dc';
         dw.paintCarta(st[2], 'selstation', st[3]);

@@ -419,6 +419,7 @@ function calcRoute(fromid, toid){
   });
   var pinches=[], proutes=[];
   BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
+//    console.log(st);
     if(i < sts.length-1){
       var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;
       MLINES.map(function(b){
