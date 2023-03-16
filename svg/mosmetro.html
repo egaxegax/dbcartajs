@@ -60,7 +60,7 @@ function draw() {
   function route(o)    { return DC.extend({class: 'route', bg: 'none', join: 'round', cap: 'round', width: 7, anchor: ['start', 'middle']}, o||{}); };
   function route_ext(o){ return route(DC.extend({width: 3, cap: 'butt', dash: [6,4]}, o||{})); };
   function river(o)    { return route(DC.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff'}, o||{})); };
-  function rail(o)     { return route(DC.extend({width: 2, fg: '#ccc'}, o||{})); };
+  function rail(o)     { return route(DC.extend({fg: '#ccc', width: 2}, o||{})); };
   function rail_d(o)   { return rail(DC.extend({fg: '#eee', dash: [8,7]}, o||{})); };
   function label(o)    { return DC.extend({class: 'label', labelcolor: '#aaa', anchor: ['start', 'top']}, o||{}); };
   function station(o)  { return DC.extend({class: 'station', bg: '#f5f5dc', size: 4, width: 1}, o||{}); };
