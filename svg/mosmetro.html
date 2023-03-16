@@ -324,7 +324,7 @@ function draw() {
         console.log(this.getAttribute('id'));
         find('.selected').map(function(a,i,all){
           if(all.length == 2 && i>0){
-            calcRoute(all[i-1].getAttribute('id'), all[i].getAttribute('id'));
+            calcRoute(all[i].getAttribute('id'), all[i-1].getAttribute('id'));
           };
         });
       },
