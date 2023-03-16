@@ -173,9 +173,6 @@ dw.style.backgroundColor = 'rgb(250,255,250)';
   // define new layers
 function route(o)    { return dw.extend({cls: 'Line', width: mds(6), join: 'round', anchor: ['start', 'middle'], labelscale: 1}, o||{}); };
 function route_ext(o){ return route(dw.extend({width: mds(4), dash: [mds(2),mds(4)]}, o||{})); };
-function inch(o)     { return route(dw.extend({fg: '#ccc', cap: 'round', width: mds(8)}, o||{})); };
-function inch_d(o)   { return inch(dw.extend({fg: '#fff', width: mds(5)}, o||{})); };
-function inch_ext(o) { return inch(dw.extend({width: mds(2), fg: '#eee'}, o||{})); };
 function river(o)    { return route(dw.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})); };
 function rail(o)     { return route(dw.extend({fg: '#ddd', width: mds(2), labelscale: 0}, o||{})); };
 function rail_d(o)   { return rail(dw.extend({fg: '#fff', dash: [mds(10),mds(10)]}, o||{})); };
@@ -183,9 +180,12 @@ function label(o)    { return dw.extend({cls: 'Polygon', labelcolor:'#aaa', labe
 function station(o)  { return dw.extend({cls: 'Dot', bg: '#f5f5dc', size: mds(5), width: mds(2), scale: 1, labelscale: 1, labelpad: mds(3)}, o||{}); };
 function st_mck(o)   { return station(dw.extend({size: mds(3), labelcolor: 'gray', bg: o['fg']}, o)); };
 function st_mcd(o)   { return station(dw.extend({size: mds(2), labelcolor: 'gray', bg: o['fg']}, o)); };
-function inch_mck(o) { return inch(dw.extend({fg: '#ddd', width: mds(2)}, o||{})); };
+function inch(o)     { return route(dw.extend({fg: '#ccc', cap: 'round', width: mds(8)}, o||{})); };
+function inch_d(o)   { return inch(dw.extend({fg: '#fff', width: mds(5)}, o||{})); };
+function inch_ext(o) { return inch(dw.extend({fg: '#eee', dash:[mds(2),mds(2)], width: mds(2)}, o||{})); };
+function inch_mck(o) { return inch(dw.extend({fg: '#ccc', width: mds(2)}, o||{})); };
 function inch_mcd(o) { return inch(dw.extend({fg: '#ccc', width: mds(2)}, o||{})); };
-function inch_out(o) { return inch(dw.extend({fg: '#aaa', width: mds(2)}, o||{})); };
+function inch_out(o) { return inch(dw.extend({fg: '#ccc', width: mds(2)}, o||{})); };
 function inst_mck(o) { return st_mck(dw.extend({size: mds(3), labelcolor: o['fg']}, o)); };
 function inst_mcd(o) { return st_mcd(dw.extend({size: mds(2), labelcolor: o['fg']}, o)); };
 function inst(o)     { return station(dw.extend({size: mds(4), labelcolor: o['fg'], bg: o['fg']}, o)); };
