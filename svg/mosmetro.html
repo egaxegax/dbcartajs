@@ -411,12 +411,13 @@ function clearRoute(){
 }
   //
 function calcRoute(fromid, toid){
-  var inches= [];
+  var inches=[];
   [].slice.call(document.getElementById('chinches').options).map(function(o){
     if(o.innerHTML.indexOf('\u2611')>-1){ // checked
       inches = inches.concat(makecrds(MLINES.filter(function(a){ return a[0]==o.id; })));
     }
   });
+  var pinches=[], proutes=[];
   BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
     if(i < sts.length-1){
       var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;
@@ -445,12 +446,20 @@ function calcRoute(fromid, toid){
       }
       var pts = DC.interpolateCoords(cc, true),
           path = ('M ' + pts).replace(/,/g, ' ');
-      var bInch = inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length;
-      DC.extend( 
-        DC.append('path', { class: 'selpath', d: path, stroke: DC.root.getElementById(makeid(st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-width': mds(bInch ? 2 : 8)}),
-          { onclick: clearRoute });
+      if (inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length) {
+        pinches.push( {path: path, st: st} );  // inches paths
+      } else {
+        proutes.push ( {path: path, st: st} ); // routes paths
+      }
     } else {
       find('.route, .station, .label').map(function(o){ DC.attr(o, {opacity: '0.07'}); });
+      proutes.map(function(m){ // routes
+        DC.append('path', { class: 'selpath', d: m.path, stroke: DC.root.getElementById(makeid(m.st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-width': mds(8)});
+      });
+      pinches.map(function(m){ // interchanges above route
+        DC.append('path', { class: 'selpath', d: m.path, stroke: '#fafffa', fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-width': mds(4)});
+        DC.append('path', { class: 'selpath', d: m.path, stroke: DC.root.getElementById(makeid(m.st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-width': mds(2)});
+      });
       sts.map(function(st){ // station + label above route
         var ost = DC.root.getElementById(makeid(st));
         var t = DC.root.getElementById('t' + ost.getAttribute('id'));

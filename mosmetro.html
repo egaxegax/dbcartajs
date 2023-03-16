@@ -64,20 +64,20 @@ function maskMap(){
   dw.paintCarta(rect, 'selpath');
 //  dw.paintBar();
 }
-// diagonal size
+// diagonal size for ratio
 function mds(o) { 
   return Math.sqrt(dw.sizeOf()[2]*dw.sizeOf()[2]+dw.sizeOf()[3]*dw.sizeOf()[3])/15*o/100;
 }
   //
 function calcRoute(fromid, toid){
   if (!fromid || !toid) { return; };
-  var inches= [];
+  var inches=[]; // interchanges coords
   [].slice.call(document.getElementById('chinches').options).map(function(o){
     if(o.innerHTML.indexOf('\u2611')>-1){ // checked
       inches = inches.concat(makecrds(MLINES.filter(function(a){ return a[0]==o.value; })));
     }
   });
-  var routes=[];
+  var pinches=[], proutes=[]; // paths founded
   BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
     if(i < sts.length-1){
       var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;
@@ -104,31 +104,29 @@ function calcRoute(fromid, toid){
         if(!inarray(cc,d)) cc.unshift(d);
         if(!inarray(cc,e)) cc.push(e);
       }
-      routes.push( cc );
+      if (inches.filter(function(m){ return (inarray(m,cc[0]) && inarray(m,cc[cc.length-1])); }).length) {
+        pinches.push( {coords: cc, st: st} );
+      } else {
+        proutes.push( {coords: cc, st: st} );
+      }
     } else { // draw founded routes and stations
-        // center route in map
-      var minx, maxx, miny, maxy;
-      sts.map(function(st){
-        if(st[2][0][0] < minx || !minx) minx = st[2][0][0];
-        if(st[2][0][0] > maxx || !maxx) maxx = st[2][0][0];
-        if(st[2][0][1] < miny || !miny) miny = st[2][0][1];
-        if(st[2][0][1] > maxy || !maxy) maxy = st[2][0][1];
-      });
-//      centerMap([(minx + maxx)/2.0, (miny + maxy)/2.0]);
       maskMap();
-        // draw routes
-      for(var j=0; j<routes.length; j++){
-        var cc = routes[j],
-            bInch = inches.filter(function(m){ return (inarray(m,cc[0]) && inarray(m,cc[cc.length-1])); }).length;
-        dw.mopt['selpath'] = {cls: 'Line', width: mds(bInch ? 2 : 12), join: 'round', cap: bInch ? 'butt' : 'round', fg: dw.mopt[sts[j][0]].fg};
-        dw.paintCarta(cc, 'selpath');
-      }
-        // draw stations with label above routes
-      for(var j=0; j<sts.length; j++){
-        dw.mopt['selstation'] = dw.extend({}, dw.mopt[sts[j][0]]);
+      proutes.map(function(m){ // draw routes
+        dw.mopt['selpath'] = {cls: 'Line', width: 12, join: 'round', cap: 'round', fg: dw.mopt[m.st[0]].fg};
+        dw.paintCarta(m.coords, 'selpath');
+      });
+      pinches.map(function(m){ // draw pinches
+        dw.mopt['selpath'] = {cls: 'Line', width: 6, join: 'round', cap: 'round', fg: '#fafffa'};
+        dw.paintCarta(m.coords, 'selpath');
+        dw.mopt['selpath'] = {cls: 'Line', width: 2, join: 'round', cap: 'round', fg: dw.mopt[m.st[0]].fg};
+        dw.paintCarta(m.coords, 'selpath');
+      });
+      sts.map(function(st){ // draw stations with label above routes
+        console.log(st);
+        dw.mopt['selstation'] = dw.extend({}, dw.mopt[st[0]]);
         dw.mopt['selstation'].bg = '#f5f5dc';
-        dw.paintCarta(sts[j][2], 'selstation', sts[j][3]);
-      }
+        dw.paintCarta(st[2], 'selstation', st[3]);
+      });
     }
   });
 }
