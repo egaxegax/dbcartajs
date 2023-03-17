@@ -361,20 +361,20 @@ function draw(){
     ['a2_1', 'Bryansk', genkrug(-23, 30, 1.5), 'Брянск', [-27,30], 1]
   ];
   // --------------------------------------
-  var dw = new dbCarta({
+  var DV = new dbCarta({
     id: 'mcont',
     viewportx: 220,
     viewporty: 220,
     height: document.getElementById('mcont').offsetHeight,
     scalebg: 'rgba(100,200,100,0.2)'
   });
-  dw.style.backgroundColor = 'white';
+  DV.style.backgroundColor = 'white';
   // создаем слои
-  var route = function(o){ return dw.extend({cls: 'Line', cap: 'round', join: 'bevel', width: 5, labelscale: 1}, o||{}) },
-      krug = function(o){ return dw.extend({cls: 'Polygon', fg: 'black', bg: 'white', width: 3, labelcolor: 'black', labelscale: 1}, o||{}) },
-      gorod = function(o){ return krug(dw.extend({cls: 'Dot'}, o||{})) };
+  var route = function(o){ return DV.extend({cls: 'Line', cap: 'round', join: 'bevel', width: 5, labelscale: 1}, o||{}) },
+      krug = function(o){ return DV.extend({cls: 'Polygon', fg: 'black', bg: 'white', width: 3, labelcolor: 'black', labelscale: 1}, o||{}) },
+      gorod = function(o){ return krug(DV.extend({cls: 'Dot'}, o||{})) };
   // трассы
-  dw.extend(dw.mopt, {
+  DV.extend(DV.mopt, {
     'r1': route({fg: 'rgb(0,160,227)'}),
     'r2': route({fg: 'rgb(174,74,132)'}),
     'r3': route({fg: 'rgb(0,152,70)'}),
@@ -388,35 +388,35 @@ function draw(){
     'legend': {cls: 'Polygon', fg: 'rgba(63,152,170,0.1)', bg: 'rgba(103,152,170,0.1)'}
   });
   // цветные круги
-  dw.extend(dw.mopt, {
+  DV.extend(DV.mopt, {
     's1': krug({fg: 'rgb(210,205,231)', bg: 'rgb(210,205,231)'}),
     's1_1': krug({fg: 'rgb(245,178,182)', bg: 'rgb(245,178,182)'}),
     's2': krug({fg: 'rgb(198,198,198)', bg: 'rgb(218,218,218)'}),
     's3': krug({fg: 'rgb(162,217,247)', bg: 'rgb(162,217,247)'}),
     's4': krug({fg: 'rgb(206,130,181)', bg: 'rgb(206,130,181)'}),
     's5': krug({fg: 'rgb(168,212,175)', bg: 'rgb(168,212,175)'}),
-    's5_1': krug({fg: dw.mopt['r3'].fg, bg: 'rgb(168,212,175)'}),
+    's5_1': krug({fg: DV.mopt['r3'].fg, bg: 'rgb(168,212,175)'}),
     's6': krug({fg: 'rgb(246,176,150)', bg: 'rgb(246,176,150)'}),
     's7': krug({fg: 'rgb(218,218,218)', bg: 'rgb(218,218,218)'}),
     's8': krug({fg: 'rgb(240,134,131)', bg: 'rgb(240,134,131)'}),
-    's8_1': krug({fg: dw.mopt['r9'].fg, bg: 'white'}),
+    's8_1': krug({fg: DV.mopt['r9'].fg, bg: 'white'}),
     's9': krug({fg: 'rgb(126,113,177)', bg: 'rgb(126,113,177)'})
   });
   // белые круги
-  dw.extend(dw.mopt, {
+  DV.extend(DV.mopt, {
     'a1': krug({labelcolor: 'white', anchor: ['center', 'middle']}),
     'a2': krug({anchor: ['left', 'middle']}),
     'a2_1': krug({anchor: ['right', 'middle']})
   });
   // выводим последовательно
-  dw.loadCarta(MKRUG_a);
-  dw.loadCarta(MLINES_a);
-  dw.loadCarta(MCITIES_a);
-  dw.loadCarta(MLINES_b);
-  dw.loadCarta(MKRUG_b);
-  dw.loadCarta(MCITIES_b);
-  dw.loadCarta(MLEGEND);
-  dw.draw();
+  DV.loadCarta(MKRUG_a);
+  DV.loadCarta(MLINES_a);
+  DV.loadCarta(MCITIES_a);
+  DV.loadCarta(MLINES_b);
+  DV.loadCarta(MKRUG_b);
+  DV.loadCarta(MCITIES_b);
+  DV.loadCarta(MLEGEND);
+  DV.draw();
 }
 if(window.addEventListener) {
   window.addEventListener('load', draw, false);

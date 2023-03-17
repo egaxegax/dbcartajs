@@ -27,12 +27,12 @@ function draw(opt) {
     m.centerof = eval('[' + opt.target.value + ']');
     m.coords = [m.centerof];
     m.label = opt.target.innerHTML;
-    dw.reload(m);
-    dw.centerCarta(m.centerofpts[0][0] + dw.m.offset[0], m.centerofpts[0][1] + dw.m.offset[1]);
-    dw.scaleCarta(1);
-    dw.scaleCarta(parseInt(m.label.length/3 + 0.5));
-    dw.draw();
-    dw.paintCartaPts(m.centerofpts, 'DotPort', m.label, m.centerofpts);
+    DV.reload(m);
+    DV.centerCarta(m.centerofpts[0][0] + DV.m.offset[0], m.centerofpts[0][1] + DV.m.offset[1]);
+    DV.scaleCarta(1);
+    DV.scaleCarta(parseInt(m.label.length/3 + 0.5));
+    DV.draw();
+    DV.paintCartaPts(m.centerofpts, 'DotPort', m.label, m.centerofpts);
   }
 }
 function refresh() {
@@ -89,16 +89,16 @@ function init() {
   citylist.style.height = col.offsetHeight + 'px';
   citylist.style.overflow = 'auto';
 
-  dw = new dbCarta({id:'mcol', height:col.offsetHeight});
-  dw.extend(dw.mopt['DotPort'], {labelcolor:'white', scale: 1, labelscale: 1});
+  DV = new dbCarta({id:'mcol', height:col.offsetHeight});
+  DV.extend(DV.mopt['DotPort'], {labelcolor:'white', scale: 1, labelscale: 1});
   // worldmap img
   var im = new Image();
   im.src = IMGMAP['wrld_small'];
   im.onload = function() {
-    dw.loadCarta([{0:'.Image', 1:'wrld', 2:[[-180,90],[180,-90]], 6:this}]);
-    dw.m.bgimg = dw.mflood['.Image_wrld']; // mark as bg
-    dw.loadCarta(dw.createMeridians());
-    dw.draw();
+    DV.loadCarta([{0:'.Image', 1:'wrld', 2:[[-180,90],[180,-90]], 6:this}]);
+    DV.m.bgimg = DV.mflood['.Image_wrld']; // mark as bg
+    DV.loadCarta(DV.createMeridians());
+    DV.draw();
   };
   for (var cntryname in CITIES) {
     var el = document.createElement('dt');
@@ -115,15 +115,15 @@ function init() {
   };
   delete CITIES;
   // curr. object
-  dw.clfunc.onmousemove = function(dw, sd, dd) {
+  DV.clfunc.onmousemove = function(DV, sd, dd) {
     var mcoord = document.getElementById('tcoords');
     var label = '';
-    if (dw.m.pmap) {
-       var o = dw.mflood[dw.m.pmap];
+    if (DV.m.pmap) {
+       var o = DV.mflood[DV.m.pmap];
        label = o['label'] + ' : ' + o['coords'];
     }
     mcoord.innerHTML = label;
-    dw.paintCoords(dd);
+    DV.paintCoords(dd);
   }
 };
 

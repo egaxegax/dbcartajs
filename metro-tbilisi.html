@@ -24,7 +24,7 @@ egax@bk.ru, 2013-21.
 </td></tr></table>
 <script>
   // diag.size ratio
-function mds(o){ return Math.sqrt(dw.sizeOf()[2]*dw.sizeOf()[2]+dw.sizeOf()[3]*dw.sizeOf()[3])/15*o/100; }
+function mds(o){ return Math.sqrt(DV.sizeOf()[2]*DV.sizeOf()[2]+DV.sizeOf()[3]*DV.sizeOf()[3])/15*o/100; }
   //
 function draw(){
   var MLINES = [
@@ -94,24 +94,24 @@ function draw(){
 //
   ];
   // -------------------------------------------
-  dw = new dbCarta({
+  DV = new dbCarta({
     id: 'mcont',
     height: document.getElementById('mcont').offsetHeight,
     scalebg: 'rgba(200,100,50,0.2)'
   });
-  dw.style.backgroundColor = 'white';
+  DV.style.backgroundColor = 'white';
   // define new layers
-  var route = function(o){ return dw.extend({cls: 'Line', width: mds(5), anchor: ['start', 'middle'], labelscale: 1}, o||{}); },
-      station = function(o){ return dw.extend({cls: 'Dot', size: mds(8), width: mds(6), bg: dw.style.backgroundColor, labelscale: 1, labelpad: mds(3)}, o||{}); },
-      redst = function(o){ return station(dw.extend({fg: 'rgb(193,41,22)'}, o||{})); },
-      bluest = function(o){ return station(dw.extend({fg: 'rgb(25,74,103)'}, o||{})); };
+  var route = function(o){ return DV.extend({cls: 'Line', width: mds(5), anchor: ['start', 'middle'], labelscale: 1}, o||{}); },
+      station = function(o){ return DV.extend({cls: 'Dot', size: mds(8), width: mds(6), bg: DV.style.backgroundColor, labelscale: 1, labelpad: mds(3)}, o||{}); },
+      redst = function(o){ return station(DV.extend({fg: 'rgb(193,41,22)'}, o||{})); },
+      bluest = function(o){ return station(DV.extend({fg: 'rgb(25,74,103)'}, o||{})); };
   // lines
-  dw.extend(dw.mopt, {
+  DV.extend(DV.mopt, {
     r1: route({fg: 'rgb(236,66,45)'}),
     r2: route({fg: 'rgb(180,215,233)'})
   });
   // stations
-  dw.extend(dw.mopt, {
+  DV.extend(DV.mopt, {
     s1: redst({anchor: ['end', 'middle']}),
     s1_1: redst({anchor: ['start', 'middle']}),
     s1_2: redst({anchor: ['center', 'bottom']}),
@@ -125,10 +125,10 @@ function draw(){
     s2_3: bluest({anchor: ['center', 'bottom']}),
     s2s: bluest({bg: bluest().fg, size: mds(5), width: mds(1)})
   });
-  dw.loadCarta(MLINES);
-  dw.loadCarta(MSTATIONS);
-  dw.scaleCarta(dw.sizeOf()[3]/dw.sizeOf()[2]*2);
-  dw.draw();
+  DV.loadCarta(MLINES);
+  DV.loadCarta(MSTATIONS);
+  DV.scaleCarta(DV.sizeOf()[3]/DV.sizeOf()[2]*2);
+  DV.draw();
   //
   MSTATIONS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1;});
   MSTATIONS.map(function(a){
@@ -141,18 +141,18 @@ function draw(){
   // station list
   document.getElementById('stationlist').onchange = function(){
     if(this.options[this.selectedIndex]){
-      var centerofpts = dw.mflood[this.value]['pts'];
-      dw.centerCarta(centerofpts[0][0] + dw.m.offset[0], centerofpts[0][1] + dw.m.offset[1]);
-      dw.draw();
+      var centerofpts = DV.mflood[this.value]['pts'];
+      DV.centerCarta(centerofpts[0][0] + DV.m.offset[0], centerofpts[0][1] + DV.m.offset[1]);
+      DV.draw();
        // drawcrosshair
-      var ctx = dw.getContext('2d');
+      var ctx = DV.getContext('2d');
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.beginPath();
-      ctx.moveTo(dw.width/2.0, 0);
-      ctx.lineTo(dw.width/2.0, dw.height);
-      ctx.moveTo(0, dw.height/2.0);
-      ctx.lineTo(dw.width, dw.height/2.0);
+      ctx.moveTo(DV.width/2.0, 0);
+      ctx.lineTo(DV.width/2.0, DV.height);
+      ctx.moveTo(0, DV.height/2.0);
+      ctx.lineTo(DV.width, DV.height/2.0);
       ctx.lineWidth = 15;
       ctx.strokeStyle = 'rgba(100,100,200,0.2)';
       ctx.stroke();

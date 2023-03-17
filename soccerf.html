@@ -160,7 +160,7 @@ allmaps.push(function(){
     ['fs', 'de', 
         circle2poly(-40.5, 0, 0.3, 100, 0, 360)
     ],
-    ['fs', 'dw', 
+    ['fs', 'DV', 
         circle2poly(40.5, 0, 0.3, 100, 0, 360)
     ]
   ];
@@ -227,16 +227,16 @@ allmaps.push(function(){
     }()
   };
   // --------------------------------------
-  var dw = new dbCarta({
+  var DV = new dbCarta({
     id: 'cont-soccf',
     scalebg: 'rgba(100,200,100,0.2)'
   });
-  dw.style.backgroundColor = 'white';
-  dw.style.border = '1px dashed lightgray';
+  DV.style.backgroundColor = 'white';
+  DV.style.border = '1px dashed lightgray';
   // создаем слои
-  var ls = function(o){ return dw.extend({cls: 'Line', fg: 'white', width: 3}, o||{}) },
-      ps = function(o){ return ls(dw.extend({cls: 'Polygon', bg: 'white'}, o||{})) };
-  dw.extend(dw.mopt, {
+  var ls = function(o){ return DV.extend({cls: 'Line', fg: 'white', width: 3}, o||{}) },
+      ps = function(o){ return ls(DV.extend({cls: 'Polygon', bg: 'white'}, o||{})) };
+  DV.extend(DV.mopt, {
   // полосы
     'ps1': ps({fg: 'rgb(50,170,50)', bg: 'rgb(50,170,50)'}),
     'ps2': ps({fg: 'rgb(50,150,50)', bg: 'rgb(50,150,50)'}),
@@ -251,11 +251,11 @@ allmaps.push(function(){
     'pl3': ps({fg: 'black', bg: 'rgb(255,13,13)'})
   });
   // выводим последовательно
-  dw.loadCarta(MPS);
-  dw.loadCarta(MLS);
-  dw.loadCarta(MSC['4-4-2']);
-  dw.scaleCarta(2);
-  dw.draw();
+  DV.loadCarta(MPS);
+  DV.loadCarta(MLS);
+  DV.loadCarta(MSC['4-4-2']);
+  DV.scaleCarta(2);
+  DV.draw();
 });
 </script>
 </body>

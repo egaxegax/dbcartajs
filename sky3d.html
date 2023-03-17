@@ -107,7 +107,7 @@ function initMap() {
     var mtext = cam.length().toFixed(2);
     var tcoord = document.getElementById('tcoord');
     tcoord.innerHTML = mtext+' km';
-    dw.render(scene, camera);
+    DV.render(scene, camera);
   };
 
   var addGeometry = function(coords, opt, s) {
@@ -509,24 +509,24 @@ function initMap() {
     var w = mcol.offsetWidth, h = mcol.offsetHeight;
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    dw.setSize( w, h );
-    dw.domElement.style.width = '100%';
-    dw.domElement.style.height = '100%';
+    DV.setSize( w, h );
+    DV.domElement.style.width = '100%';
+    DV.domElement.style.height = '100%';
     render();
   };
 
   if (Detector.webgl) { // require webgl support
-    var dw = new THREE.WebGLRenderer( { antialias: false } );
+    var DV = new THREE.WebGLRenderer( { antialias: false } );
   } else {
-    var dw = new THREE.CanvasRenderer();
+    var DV = new THREE.CanvasRenderer();
   }
 
-  dw.setClearColor( 0x070741 );
+  DV.setClearColor( 0x070741 );
 
   var camera = new THREE.PerspectiveCamera( 25, 1, 50, 1e15 );
   camera.position.x = radius * 6;
 
-  var controls = new THREE.OrbitControls( camera, dw.domElement );
+  var controls = new THREE.OrbitControls( camera, DV.domElement );
   controls.addEventListener( 'change', render );
   controls.rotateSpeed = 1.0;
   controls.zoomSpeed = 5;
@@ -576,7 +576,6 @@ function initMap() {
 
   var col = document.createElement('td');
   col.width = '10%';
-  col.style.whiteSpace = 'nowrap';
   var el = document.createElement('h2');
   el.appendChild(document.createTextNode('Звезды 3d'));
   el.style.padding = '0';
@@ -715,7 +714,7 @@ function initMap() {
   ss.onchange = function() { update(); };
 
   // events
-  mcol.appendChild(dw.domElement);
+  mcol.appendChild(DV.domElement);
   resize();
 
   setSelTime();

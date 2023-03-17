@@ -23,13 +23,12 @@ egax@bk.ru, 2013-22.
 <script src="js/data/citiesd.js"></script>
 <script>
 function rotate() {
-  var tval = parseFloat(document.getElementById('tvalue').value);
-  dw.rotateCarta(tval);
-  dw.draw();
+  DV.rotateCarta(10);
+  DV.draw();
 }
 function proj() {
-  dw.changeProject(document.getElementById('projlist').value);
-  dw.draw();
+  DV.changeProject(document.getElementById('projlist').value);
+  DV.draw();
 }
 // density color by country
 function densityColor(cntryname) {
@@ -45,7 +44,7 @@ function densityColor(cntryname) {
 // tooltip under cursor
 function infobox(ev, label) {
   var mtip = document.getElementById('maptooltip');
-  if(dw.m.pmap && label) {
+  if(DV.m.pmap && label) {
     mtip.innerHTML = label;
     mtip.style.display = 'block';
     mtip.style.left = ev.clientX + window.pageXOffset + 'px';
@@ -55,54 +54,54 @@ function infobox(ev, label) {
   }
 }
 // click to zoom one
-function zoomOne(dw, pts, ev) {
-  if(dw.m.pmap) {
-    var m = dw.mflood[dw.m.pmap];
-    dw.tmp_mflood = dw.mflood;
-    dw.tmp_marea = dw.marea;
+function zoomOne(DV, pts, ev) {
+  if(DV.m.pmap) {
+    var m = DV.mflood[DV.m.pmap];
+    DV.tmp_mflood = DV.mflood;
+    DV.tmp_marea = DV.marea;
     // reset obj and area store
-    dw.mflood = {}; dw.marea = {}; dw.m.pmap = undefined;
-    if(dw.isTurnable()) {
-      var dst = dw.fromPoints(pts, true);
-      if(dst) dw.initProj(' +lon_0=' + dst[0] + ' +lat_0=' + dst[1]);
+    DV.mflood = {}; DV.marea = {}; DV.m.pmap = undefined;
+    if(DV.isTurnable()) {
+      var dst = DV.fromPoints(pts, true);
+      if(dst) DV.initProj(' +lon_0=' + dst[0] + ' +lat_0=' + dst[1]);
     } else
-      dw.centerCarta(pts[0], pts[1], true);
-    dw.scaleCarta(1); // scale twice to fix bug with labels
-    dw.scaleCarta(5);
-    dw.mopt['DotPort'].labelcolor = 'green';
+      DV.centerCarta(pts[0], pts[1], true);
+    DV.scaleCarta(1); // scale twice to fix bug with labels
+    DV.scaleCarta(5);
+    DV.mopt['DotPort'].labelcolor = 'green';
     // load selected country
-    dw.loadCarta([[m['ftype'], m['ftag'], m['coords'], m['label'], m['centerof']]]);
-    dw.loadCarta(dw.createMeridians());
+    DV.loadCarta([[m['ftype'], m['ftag'], m['coords'], m['label'], m['centerof']]]);
+    DV.loadCarta(DV.createMeridians());
     // load cities in selected country
     for(var i in CITIES[m['label']]) {
       var o = CITIES[m['label']][i];
-      dw.loadCarta([['DotPort', o[0], o[1], o[0]]]);
+      DV.loadCarta([['DotPort', o[0], o[1], o[0]]]);
     }
     // help message
     var mcoord = document.getElementById('tcoords');
     mcoord.innerHTML = 'Кликните для возврата к обзорной карте';
-    dw.clfunc.afterclick = zoomBack;
-    dw.draw();
+    DV.clfunc.afterclick = zoomBack;
+    DV.draw();
   }
 }
 // click to restore full view
-function zoomBack(dw, pts, ev) {
-  dw.mflood = dw.tmp_mflood;
-  dw.marea = dw.tmp_marea;
-  delete dw.tmp_mflood;
-  delete dw.tmp_marea;
-  dw.scaleCarta(1);
-  dw.scaleCarta(1);
-  dw.m.doreload = true; // recalc points for obj in mflood
-  if(!dw.isTurnable()) {
-    var centerof = dw.centerOf();
-    dw.centerCarta(centerof[0] + dw.m.offset[0] - dw.m.scaleoff[0], 
-                   centerof[1] + dw.m.offset[1] - dw.m.scaleoff[1], true);
+function zoomBack(DV, pts, ev) {
+  DV.mflood = DV.tmp_mflood;
+  DV.marea = DV.tmp_marea;
+  delete DV.tmp_mflood;
+  delete DV.tmp_marea;
+  DV.scaleCarta(1);
+  DV.scaleCarta(1);
+  DV.m.doreload = true; // recalc points for obj in mflood
+  if(!DV.isTurnable()) {
+    var centerof = DV.centerOf();
+    DV.centerCarta(centerof[0] + DV.m.offset[0] - DV.m.scaleoff[0], 
+                   centerof[1] + DV.m.offset[1] - DV.m.scaleoff[1], true);
   }
   var mcoord = document.getElementById('tcoords');
-  mcoord.innerHTML = 'Кликните по стране для показа городов';
-  dw.clfunc.afterclick = zoomOne;
-  dw.draw();
+  mcoord.innerHTML = 'Кликните для показа городов';
+  DV.clfunc.afterclick = zoomOne;
+  DV.draw();
 }
 function init() {
   var mtab = document.createElement('table');
@@ -113,7 +112,7 @@ function init() {
   mtab.appendChild(row);
 
   var col = document.createElement('td');
-  col.width = '20%';
+  col.width = '40%';
   var el = document.createElement('h2');
   el.appendChild(document.createTextNode('Население мира'));
   el.style.padding = '0';
@@ -124,34 +123,23 @@ function init() {
 
   var col = document.createElement('td');
   col.width = '20%';
-  col.align = 'center';
-  var el = document.createElement('input');
-  el.type = 'text';
-  el.size= '3';
-  el.id = 'tvalue';
-  el.value= '10';
+  var projlist = el = document.createElement('select');
+  el.id = 'projlist';
   col.appendChild(el);
   col.appendChild(document.createTextNode(' '));
   var el = document.createElement('button')
   el.title = 'Rotate';
-  el.style.padding = '0 10px';
   el.onclick = rotate;
   el.appendChild(document.createTextNode('\u21A9'));
   col.appendChild(el);
   row.appendChild(col);
 
-  var col = document.createElement('td');
-  col.width = '20%';
-  col.align = 'center';
-    var projlist = el = document.createElement('select');
-  el.id = 'projlist';
-  col.appendChild(el);
   row.appendChild(col);
 
   var col = document.createElement('td');
   col.align = 'center';
   col.id = 'tcoords';
-  col.innerHTML = 'Кликните по стране для показа городов';
+  col.innerHTML = 'Кликните для показа городов';
   row.appendChild(col);
   document.body.appendChild(mtab);
 
@@ -181,23 +169,23 @@ function init() {
   el.onmousemove = function(){ this.innerHTML = ''; };
   document.body.appendChild(el);
 
-  dw = new dbCarta({
+  DV = new dbCarta({
     id: 'mcol', 
     height: col.offsetHeight,
     mapbg: 'rgb(255,127,0)', // map bgcolor
     mapfg: 'white',
     scalebg: 'rgba(19,64,117,0.2)'
   });
-  dw.style.backgroundColor = '#ffffff';
+  DV.style.backgroundColor = '#ffffff';
   // callbacks
-  dw.extend(dw.clfunc, {
-    onmousemove: function(dw, sd, dd, ev) {
+  DV.extend(DV.clfunc, {
+    onmousemove: function(DV, sd, dd, ev) {
       var mcoord = document.getElementById('tcoords');
       var mtip, label = '';
-      if(dw.m.pmap) {
-        var m = dw.mflood[dw.m.pmap];
+      if(DV.m.pmap) {
+        var m = DV.mflood[DV.m.pmap];
         // abbr
-        label = m['label'] + ' : ' + dw.m.pmap.split('_')[1];
+        label = m['label'] + ' : ' + DV.m.pmap.split('_')[1];
         // tooltip
         mtip = '<b><i>' + m['label'] + '</i></b>';
         if(INFOCNT[m['label']][1]) // rusname
@@ -210,7 +198,7 @@ function init() {
       // text
       mcoord.innerHTML = label;
       infobox(ev, mtip);
-      dw.paintCoords(dd);
+      DV.paintCoords(dd);
     },
     afterclick: zoomOne
   });
@@ -222,13 +210,13 @@ function init() {
         mcoords = mpart[2];
     var dclr = densityColor(mcntryname);
     // add new layers
-    if(!dw.mopt[dclr]) dw.mopt[dclr] = {cls: 'Polygon', fg: 'transparent', bg: dclr};
-    dw.loadCarta([[dclr, mabbr, mcoords, mcntryname, undefined, true]]);
+    if(!DV.mopt[dclr]) DV.mopt[dclr] = {cls: 'Polygon', fg: 'transparent', bg: dclr};
+    DV.loadCarta([[dclr, mabbr, mcoords, mcntryname, undefined, true]]);
   };
   delete COUNTRIES;
   // projlist
-  for(var i in dw.projlist) {
-    var projname = dw.projlist[i].split(' ')[0].split('=')[1];
+  for(var i in DV.projlist) {
+    var projname = DV.projlist[i].split(' ')[0].split('=')[1];
     el = document.createElement('option');
     el.value = i;
     el.appendChild(document.createTextNode(projname));

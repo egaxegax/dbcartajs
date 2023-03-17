@@ -209,7 +209,7 @@ function init() {
   }
   
   // curr. object
-  var clfunc = function(dw, src, dst, ev) {
+  var clfunc = function(DV, src, dst, ev) {
     var mcoord = document.getElementById('tcoords');
     var label = '';
     if (ev.target.m.pmap) {
@@ -219,10 +219,10 @@ function init() {
     mcoord.innerHTML = label;
     ev.target.paintCoords(dst);
   }
-  dw1.clfunc.onmousemove = function(dw, src, dst, ev){ clfunc(dw, src, dst, ev); };
-  dw2.clfunc.onmousemove = function(dw, src, dst, ev){ clfunc(dw, src, dst, ev); };
-  dw3.clfunc.onmousemove = function(dw, src, dst, ev){ clfunc(dw, src, dst, ev); };
-  dw4.clfunc.onmousemove = function(dw, src, dst, ev){ clfunc(dw, src, dst, ev); };
+  dw1.clfunc.onmousemove = function(DV, src, dst, ev){ clfunc(DV, src, dst, ev); };
+  dw2.clfunc.onmousemove = function(DV, src, dst, ev){ clfunc(DV, src, dst, ev); };
+  dw3.clfunc.onmousemove = function(DV, src, dst, ev){ clfunc(DV, src, dst, ev); };
+  dw4.clfunc.onmousemove = function(DV, src, dst, ev){ clfunc(DV, src, dst, ev); };
 };
 
 init();
