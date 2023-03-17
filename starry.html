@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <!--
-Starry Sky Canvas map r4.
+Starry Sky on Canvas.
 View stars, constellations, planets, sattelites on Earth background.
-egax@bk.ru, 2013.
+egax@bk.ru, 2013. b230317
 -->
 <html lang="ru">
 <head>
@@ -474,6 +474,12 @@ function init() {
   var dd = el = document.createElement('select');
   dd.id = 'dd';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
+  var el = document.createElement('button');
+  el.title = 'Повернуть карту';
+  el.onclick = rotate;
+  el.appendChild(document.createTextNode('\u21A9'));
+  col.appendChild(el);
   row.appendChild(col);
   
   var col = document.createElement('td');
@@ -488,21 +494,13 @@ function init() {
   var ss = el = document.createElement('select');
   ss.id = 'ss';
   col.appendChild(el);
-  row.appendChild(col);
-
-  var col = document.createElement('td');
+  col.appendChild(document.createTextNode(' '));
   el = document.createElement('button');
   el.id = 'btauto';
   col.appendChild(el);
   el.onclick = setAutoTime;
-  el.title = 'Обновлять по таймеру';
+  el.title = 'Запустить таймер';
   el.appendChild(document.createTextNode('▶'));
-  col.appendChild(el);
-  col.appendChild(document.createTextNode(' '));
-  var el = document.createElement('button');
-  el.title = 'Rotate';
-  el.onclick = rotate;
-  el.appendChild(document.createTextNode('\u21A9'));
   col.appendChild(el);
   row.appendChild(col);
 
