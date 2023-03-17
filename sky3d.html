@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <!--
-Starry Sky 3D r2. 
+Starry Sky 3D. 
 It uses WebGL rendering by Three.js framework.
 View stars, constellations, planets, sattelites bodies and orbits in motion.
-egax@bk.ru, 2014.
+egax@bk.ru, 2014. b230318
 -->
 <html lang="ru">
 <head>
@@ -325,7 +325,7 @@ function initMap() {
             // pos
             var pv = satellite.propagate(satrec, gmtime[0], gmtime[1], gmtime[2], gmtime[3], gmtime[4], gmtime[5]);
             if (!pv['position']){
-              console.log(name, j);
+//              console.log(name, j);
               continue;
             }
             var sprite = new THREE.Sprite(new THREE.SpriteMaterial({map: (tledata[name][j][0] == 'ISS (ZARYA)' ? issTexture : satelliteTexture), color: layer.bg}));
@@ -525,12 +525,12 @@ function initMap() {
   DV.setClearColor( 0x070741 );
 
   var camera = new THREE.PerspectiveCamera( 25, 1, 50, 1e15 );
-  camera.position.x = radius * 6;
+  camera.position.x = radius * 20;
 
   var controls = new THREE.OrbitControls( camera, DV.domElement );
   controls.addEventListener( 'change', render );
   controls.rotateSpeed = 1.0;
-  controls.zoomSpeed = 5;
+  controls.zoomSpeed = 0.9;
   controls.panSpeed = 1;
   controls.noZoom = false;
   controls.noPan = false;
