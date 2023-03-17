@@ -508,11 +508,11 @@ function initMap() {
 
   var resize = function() {
     var w = mcol.offsetWidth, h = mcol.offsetHeight;
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    DV.setSize( w, h );
     DV.domElement.style.width = '100%';
     DV.domElement.style.height = '100%';
+    DV.setSize( w, h );
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
     render();
   };
 
@@ -576,7 +576,7 @@ function initMap() {
   mtab.appendChild(row);
 
   var col = document.createElement('td');
-  col.width = '10%';
+  col.width = '20%';
   var el = document.createElement('h2');
   el.appendChild(document.createTextNode('Звезды 3d'));
   el.style.padding = '0';
@@ -586,7 +586,6 @@ function initMap() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '20%';
   var layerlist = el = document.createElement('select');
   el.id = 'layerlist';
   col.appendChild(el);
@@ -594,10 +593,13 @@ function initMap() {
   var satlist = el = document.createElement('select');
   el.id = 'satlist';
   col.appendChild(el);
+  col.appendChild(document.createTextNode(' '));
+  var el = document.createElement('span');
+  el.id = 'tcoord';
+  col.appendChild(el);
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '20%';
   var yy = el = document.createElement('select');
   yy.id = 'yy';
   col.appendChild(el);
@@ -612,7 +614,6 @@ function initMap() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '19%';
   var hh = el = document.createElement('select');
   hh.id = 'hh';
   col.appendChild(el);
@@ -627,21 +628,12 @@ function initMap() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '1%';
   el = document.createElement('button');
   el.id = 'btauto';
   col.appendChild(el);
   el.onclick = setAutoTime;
-  el.title = 'Обновлять по таймеру';
+  el.title = 'Запустить таймер';
   el.appendChild(document.createTextNode('\u25B6'));
-  col.appendChild(el);
-  row.appendChild(col);
-
-  var col = document.createElement('td');
-  col.width = '10%';
-  col.align = 'center';
-  var el = document.createElement('div');
-  el.id = 'tcoord';
   col.appendChild(el);
   row.appendChild(col);
 

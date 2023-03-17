@@ -1431,11 +1431,11 @@ function initMap() {
 
   function resize() {
     var w = mcol.offsetWidth, h = mcol.offsetHeight;
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
-    DV.setSize( w, h );
     DV.domElement.style.width = '100%';
     DV.domElement.style.height = '100%';
+    DV.setSize( w, h );
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
   }
 
   function rotateXY(x, y){
@@ -1544,7 +1544,7 @@ function initMap() {
 
   var DV = new THREE.WebGLRenderer();
 
-  DV.setClearColor( 0xeeeeee );
+  DV.setClearColor( 0xfafffa );
 
   DV.domElement.addEventListener('mousedown', mousedown, false);
   DV.domElement.addEventListener('mousemove', mousemove, false);
@@ -1576,7 +1576,7 @@ function initMap() {
   mtab.appendChild(row);
 
   var col = document.createElement('td');
-  col.width = '10%';
+  col.width = '20%';
   var el = document.createElement('h2');
   el.appendChild(document.createTextNode('Атлас 3d'));
   el.style.padding = '0';
@@ -1586,7 +1586,6 @@ function initMap() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '40%';
   var layerlist = el = document.createElement('select');
   el.id = 'layerlist';
   col.appendChild(el);
@@ -1601,7 +1600,6 @@ function initMap() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '20%';
   var yy = el = document.createElement('select');
   yy.id = 'yy';
   col.appendChild(el);
@@ -1613,7 +1611,9 @@ function initMap() {
   var dd = el = document.createElement('select');
   dd.id = 'dd';
   col.appendChild(el);
-  col.appendChild(document.createTextNode(' '));
+  row.appendChild(col);
+
+  var col = document.createElement('td');
   var hh = el = document.createElement('select');
   hh.id = 'hh';
   col.appendChild(el);
@@ -1625,25 +1625,13 @@ function initMap() {
   var ss = el = document.createElement('select');
   ss.id = 'ss';
   col.appendChild(el);
-  row.appendChild(col);
-
-  var col = document.createElement('td');
-  col.width = '1%';
+  col.appendChild(document.createTextNode(' '));
   el = document.createElement('button');
   el.id = 'btauto';
   col.appendChild(el);
   el.onclick = setAutoTime;
-  el.title = 'Обновлять по таймеру';
+  el.title = 'Запустить таймер';
   el.appendChild(document.createTextNode('\u25B6'));
-  col.appendChild(el);
-  row.appendChild(col);
-
-  var col = document.createElement('td');
-  col.width = '10%';
-  col.align = 'center';
-  var el = document.createElement('div');
-  el.id = 'tcoord';
-  el.style.fontSize = 'larger';
   col.appendChild(el);
   row.appendChild(col);
 
@@ -1679,7 +1667,7 @@ function initMap() {
   // list sat
   optfunc(satlist, 'Аппараты...');
   satlist.options[satlist.selectedIndex].disabled = 'true';
-  for(var i in TLEDATA.GLONASS) optfunc(satlist, TLEDATA.GLONASS[i][0]);
+  for(var i in TLEDATA.GLONASS) optfunc(satlist, TLEDATA.GLONASS[i][0], i);
 
   satlist.onchange = function() {
     msat[this.value] = (!msat[this.value]);
@@ -1749,6 +1737,7 @@ function initMap() {
   // events
   mcol.appendChild(DV.domElement);
   resize();
+  projlist.value = 'buildStereographic()';
   buildStereographic();
   setSelTime();
   init();
