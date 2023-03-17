@@ -36,13 +36,13 @@ egax@bk.ru, 2013-23.
 <script src="js/data/mosmetro.js"></script>
 <script src="js/alg/bfs.js"></script>
 <script>
-// center map
+// Center map
 function centerMap(coords){
   var pts = DV.toPoints(coords);
   DV.centerCarta(pts[0] + DV.m.offset[0], pts[1] + DV.m.offset[1]);
   DV.draw();
 }
-// draw tranparent rect above viewmap
+// Draw transparent rect above viewmap
 function maskMap(){
   var vs = DV.viewsizeOf(),
       rect = [[vs[0], vs[1]], [vs[2], vs[1]], [vs[2], vs[3]], [vs[0], vs[3]]]; 
@@ -51,11 +51,11 @@ function maskMap(){
   DV.paintCarta(rect, 'selpath');
 //  DV.paintBar();
 }
-// diagonal size for ratio
+// Diagonal size for ratio
 function mds(o) { 
   return Math.sqrt(DV.sizeOf()[2]*DV.sizeOf()[2]+DV.sizeOf()[3]*DV.sizeOf()[3])/15*o/100;
 }
-  //
+// BFS func
 function calcRoute(fromid, toid){
   if (!fromid || !toid) { return; };
   var inches=[]; // interchanges coords
@@ -152,9 +152,9 @@ var DV = new dbCarta({
   viewportx: 220, 
   viewporty: 220, 
   rbar: 0,
+  bg: 'rgb(250,255,250)',
   scalebg: 'rgba(100,200,100,0.3)'
 });
-DV.style.backgroundColor = 'rgb(250,255,250)';
   // define new layers
 function route(o)    { return DV.extend({cls: 'Line', width: mds(6), join: 'round', anchor: ['start', 'middle'], labelscale: 1}, o||{}); };
 function route_ext(o){ return route(DV.extend({width: mds(4), dash: [mds(2),mds(4)]}, o||{})); };

@@ -70,10 +70,10 @@ var DV = new dbCarta({
   height: document.getElementById('mcol').offsetHeight,
   viewportx: 300,
   viewporty: 400,
-  sbar:0,
+  rbar:0,
+  bg: 'rgb(246,251,255)',
   scalebg: 'rgba(100,200,100,0.2)'
 });
-DV.style.backgroundColor = 'rgb(246,251,255)';
  // define new layers
 function route(o)  { return DV.extend({cls: 'Line', width: mds(6), anchor: ['start', 'middle'], labelscale: 1}, o||{}); };
 function route_d(o){ return route(DV.extend({width: mds(1), fg: 'white', dash: [4,2]}, o||{})); };

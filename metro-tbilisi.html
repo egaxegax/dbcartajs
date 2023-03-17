@@ -97,9 +97,9 @@ function draw(){
   DV = new dbCarta({
     id: 'mcont',
     height: document.getElementById('mcont').offsetHeight,
+    bg: 'white',
     scalebg: 'rgba(200,100,50,0.2)'
   });
-  DV.style.backgroundColor = 'white';
   // define new layers
   var route = function(o){ return DV.extend({cls: 'Line', width: mds(5), anchor: ['start', 'middle'], labelscale: 1}, o||{}); },
       station = function(o){ return DV.extend({cls: 'Dot', size: mds(8), width: mds(6), bg: DV.style.backgroundColor, labelscale: 1, labelpad: mds(3)}, o||{}); },

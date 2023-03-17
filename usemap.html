@@ -22,15 +22,17 @@ egax@bk.ru, 2013-22.
 <script src="js/data/countries_info.js"></script>
 <script src="js/data/citiesd.js"></script>
 <script>
+// Rotate map
 function rotate() {
   DV.rotateCarta(10);
   DV.draw();
 }
+// Reproject map
 function proj() {
   DV.changeProject(document.getElementById('projlist').value);
   DV.draw();
 }
-// density color by country
+// Density color by country
 function densityColor(cntryname) {
   var ds = INFOCNT[cntryname] ? INFOCNT[cntryname][0] : 0;
   return (
@@ -41,7 +43,7 @@ function densityColor(cntryname) {
     (ds < 300) ? 'rgb(113,140,172)' :
     (ds < 1000) ? 'rgb(66,102,145)' : 'rgb(19,64,117)');
 }
-// tooltip under cursor
+// Show tooltip under cursor
 function infobox(ev, label) {
   var mtip = document.getElementById('maptooltip');
   if(DV.m.pmap && label) {
@@ -53,7 +55,7 @@ function infobox(ev, label) {
     mtip.style.display = 'none';
   }
 }
-// click to zoom one
+// Click to zoom one
 function zoomOne(DV, pts, ev) {
   if(DV.m.pmap) {
     var m = DV.mflood[DV.m.pmap];
@@ -84,7 +86,7 @@ function zoomOne(DV, pts, ev) {
     DV.draw();
   }
 }
-// click to restore full view
+// Click to restore full view
 function zoomBack(DV, pts, ev) {
   DV.mflood = DV.tmp_mflood;
   DV.marea = DV.tmp_marea;
@@ -103,6 +105,7 @@ function zoomBack(DV, pts, ev) {
   DV.clfunc.afterclick = zoomOne;
   DV.draw();
 }
+  //
 function init() {
   var mtab = document.createElement('table');
   mtab.style.borderCollapse = 'collapse';
@@ -134,8 +137,6 @@ function init() {
   col.appendChild(el);
   row.appendChild(col);
 
-  row.appendChild(col);
-
   var col = document.createElement('td');
   col.align = 'center';
   col.id = 'tcoords';
@@ -148,7 +149,7 @@ function init() {
   col.id = 'mcol';
   col.colSpan = 10;
   col.style.padding = 0;
-  col.style.backgroundColor = '#fff';
+  col.style.backgroundColor = '#fafffa';
   row.appendChild(col);
   mtab.appendChild(row);
   col.style.paddingLeft = col.offsetWidth/15 + 'px';
@@ -174,9 +175,9 @@ function init() {
     height: col.offsetHeight,
     mapbg: 'rgb(255,127,0)', // map bgcolor
     mapfg: 'white',
+    bg: 'white',
     scalebg: 'rgba(19,64,117,0.2)'
   });
-  DV.style.backgroundColor = '#ffffff';
   // callbacks
   DV.extend(DV.clfunc, {
     onmousemove: function(DV, sd, dd, ev) {
