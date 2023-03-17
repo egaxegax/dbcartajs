@@ -98,7 +98,7 @@ function proj() {
   DV.centerCarta(centerof[0] + DV.m.offset[0], centerof[1] + DV.m.offset[1]);
   DV.style.backgroundColor = DV.isTurnable() ? 'rgb(17,17,96)' : 'rgb(186,196,205)';
   freeImg();
-  document.getElementById('chkbg').checked ? loadImg() : draw();
+  loadImg();
 }
 // Tooltip under cursor
 function infobox(ev) {
@@ -457,18 +457,6 @@ function init() {
   var projlist = el = document.createElement('select');
   el.id = 'projlist';
   col.appendChild(el);
-  col.appendChild(document.createTextNode(' '));
-  var el = document.createElement('input');
-  el.type = 'checkbox';
-  el.id = 'chkbg';
-  el.checked = true;
-  el.style.whiteSpace = 'nowrap';
-  el.onclick = function(o) {
-    freeImg();
-    o.target.checked ? loadImg() : draw();
-  };
-  col.appendChild(el);
-  col.appendChild(document.createTextNode('Фон'));
   row.appendChild(col);
 
   var col = document.createElement('td');
@@ -561,7 +549,7 @@ function init() {
   // list nsper proj height
   optfunc(projh, 'Высота...');
   projh.options[projh.selectedIndex].disabled = 'true';
-  for(var i=1000; i<103000; i+=3000) optfunc(projh, i);
+  for(var i=1000; i<103000; i+=3000) optfunc(projh, i, (i/1000) +',000 км');
   projh.value = 40000;
   // list proj
   optfunc(projlist, 'Проекции...');
