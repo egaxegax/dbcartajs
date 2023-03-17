@@ -474,7 +474,9 @@ function init() {
   var dd = el = document.createElement('select');
   dd.id = 'dd';
   col.appendChild(el);
-  col.appendChild(document.createTextNode(' '));
+  row.appendChild(col);
+  
+  var col = document.createElement('td');
   var hh = el = document.createElement('select');
   hh.id = 'hh';
   col.appendChild(el);
@@ -489,7 +491,6 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '10%';
   el = document.createElement('button');
   el.id = 'btauto';
   col.appendChild(el);
