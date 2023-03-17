@@ -618,7 +618,11 @@ function init() {
   DV.loadCarta(CONTINENTS);
   //delete CONTINENTS;
   DV.loadCarta([{0:'.Image', 1:'wrld'}]);
-  DV.loadCarta(DV.createMeridians());
+  var merids = DV.createMeridians();
+  for(var i=0; i<merids.length; i++){
+    merids[i] = merids[i].slice(0,3); // -labels
+  }
+  DV.loadCarta(merids);
   DV.loadCarta([['DotPort', 'Moscow', [[37.700,55.750]], 'Москва', null, 1]]);
   // center pov
   var pov = DV.mflood['DotPort_Moscow']['coords'][0],
