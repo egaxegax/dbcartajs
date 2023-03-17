@@ -1707,7 +1707,7 @@ function initMap() {
   optfunc(projlist, 'buildCollignon()', 'Collignon');
   optfunc(projlist, 'buildHEALPix()', 'HEALPix');
   optfunc(projlist, 'buildLambertConic()', 'Conformal Conic');
-//  optfunc(projlist, 'buildAlbersConic()', 'Albers Conic');
+  optfunc(projlist, 'buildAlbersConic()', 'Albers Conic');
   optfunc(projlist, 'buildAzimuthal()', 'Azimuthal');
   optfunc(projlist, 'buildLambertAzimuthal()', 'Lambert azimuthal');
   optfunc(projlist, 'buildButterfly()', 'Butterfly');
@@ -1737,8 +1737,8 @@ function initMap() {
   // events
   mcol.appendChild(DV.domElement);
   resize();
-  projlist.value = 'buildBehrmann()';
-  buildBehrmann();
+  projlist.value = 'buildHEALPix()';
+  buildHEALPix();
   setSelTime();
   init();
   setAutoTime();
