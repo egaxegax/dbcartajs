@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <!--
-Projection map 3D r1.
+Map Projections 3D.
 It uses WebGL rendering by Three.js framework.
 View maps in different projections.
 Ported from Spinnable World Maps at http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/
-egax@bk.ru, 2015.
+egax@bk.ru, 2015. b230317
 -->
 <html lang="ru">
 <head>
@@ -1737,8 +1737,8 @@ function initMap() {
   // events
   mcol.appendChild(DV.domElement);
   resize();
-  projlist.value = 'buildOrthographic()';
-  buildOrthographic();
+  projlist.value = 'buildBehrmann()';
+  buildBehrmann();
   setSelTime();
   init();
   setAutoTime();
