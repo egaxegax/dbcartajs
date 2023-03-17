@@ -436,12 +436,15 @@ function init() {
   mtab.appendChild(row);
 
   var col = document.createElement('td');
+  col.width = '10%';
   var el = document.createElement('h2');
   el.appendChild(document.createTextNode('Звезды'));
   el.style.display = 'inline';
-  el.style.margin = '0 40px 0 0';
   el.style.lineHeight = '1';
   col.appendChild(el);
+  row.appendChild(col);
+
+  var col = document.createElement('td');
   var layerlist = el = document.createElement('select');
   el.id = 'layerlist';
   col.appendChild(el);
@@ -500,11 +503,6 @@ function init() {
   el.onclick = rotate;
   el.appendChild(document.createTextNode('\u21A9'));
   col.appendChild(el);
-  col.appendChild(document.createTextNode(' '));
-  var el = document.createElement('span');
-  el.id = 'tcoord';
-  el.style.fontSize = '10px';
-  col.appendChild(el);
   row.appendChild(col);
 
   var row = document.createElement('tr');
@@ -545,7 +543,7 @@ function init() {
   // list sat
   optfunc(satlist, 'Аппараты...');
   satlist.options[satlist.selectedIndex].disabled = 'true';
-  for(var i in TLEDATA.GLONASS) optfunc(satlist, TLEDATA.GLONASS[i][0]);
+  for(var i in TLEDATA.GLONASS) optfunc(satlist, TLEDATA.GLONASS[i][0], i);
   // list nsper proj height
   optfunc(projh, 'Высота...');
   projh.options[projh.selectedIndex].disabled = 'true';
@@ -598,23 +596,18 @@ function init() {
   DV.clfunc.onclick = draw;
   // curr. coords
   DV.clfunc.onmousemove = function(DV, sd, dd, ev) {
-    var scoords, tcoord = document.getElementById('tcoord');
-    tcoord.innerHTML = '';
+    var scoords;
     if (DV.isTurnable()) {
       if (scoords = calcSpheric(sd, getSelTime())) {
-        // in radians
-        tcoord.innerHTML = 'ra: ' + scoords[0].toFixed(1) + ' de: ' + scoords[1].toFixed(1);
-        // in hms, dms
-//        var ra = MUtil.deg2hms(scoords[0] * 180/Math.PI).join(':'),
-//            dec scoords= MUtil.deg2dms(scoords[1] * 180/Math.PI).join(':');
-//        tcoord.innerHTML = 'Ra: ' + ra + ' Dec: ' + dec;
+//        var ra_hms = MUtil.deg2hms(scoords[0] * 180/Math.PI).join(':'),
+//            de_dms = MUtil.deg2dms(scoords[1] * 180/Math.PI).join(':');
+        DV.paintCoords(scoords);
       }
     } else if (dd) {
-      tcoord.innerHTML = ' x: ' + dd[0].toFixed(1) + ' y: ' + dd[1].toFixed(1);
+      DV.paintCoords(dd);
     }
     infobox(ev);
   };
-  // draw
   DV.loadCarta(CONTINENTS);
   //delete CONTINENTS;
   DV.loadCarta([{0:'.Image', 1:'wrld'}]);
