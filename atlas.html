@@ -124,7 +124,6 @@ function init() {
   row.appendChild(col);
 
   var col = document.createElement('td');
-  col.width = '40%';
   var projlist = el = document.createElement('select');
   el.id = 'projlist';
   col.appendChild(el);
@@ -144,7 +143,9 @@ function init() {
   el2.appendChild(document.createTextNode(el2.value));
   el.appendChild(el2);
   col.appendChild(el);
-  col.appendChild(document.createTextNode(' '));
+  row.appendChild(col);
+
+  var col = document.createElement('td');
   el = document.createElement('input');
   el.type = 'text';
   el.id = 'getcoords';
@@ -156,16 +157,16 @@ function init() {
   el.onclick = draw;
   el.appendChild(document.createTextNode('\u25B6'));
   col.appendChild(el);
-  row.appendChild(col);
-
-  var col = document.createElement('td');
+  col.appendChild(document.createTextNode(' '));
   var el = document.createElement('button');
   el.title = 'Rotate';
   el.style.padding = '0 10px';
   el.onclick = rotate;
   el.appendChild(document.createTextNode('\u21A9'));
   col.appendChild(el);
-  col.appendChild(document.createTextNode(' '));
+  row.appendChild(col);
+
+  var col = document.createElement('td');
   var el = document.createElement('input');
   el.type = 'checkbox';
   el.id = 'chkbg';
@@ -176,11 +177,6 @@ function init() {
   };
   col.appendChild(el);
   col.appendChild(document.createTextNode('Фон'));
-  row.appendChild(col);
-
-  var col = document.createElement('td');
-  col.align = 'right';
-  col.id = 'tcoords';
   row.appendChild(col);
 
   var row = document.createElement('tr');
@@ -217,9 +213,6 @@ function init() {
   projlist.onchange = proj;
   // curr. coords
   DV.clfunc.onmousemove = function(DV, sd, dd, ev) {
-    var tcoords = document.getElementById('tcoords');
-    tcoords.innerHTML = ' X Y ';
-    if (dd) tcoords.innerHTML = 'X ' + dd[0].toFixed(2) + ' Y ' + dd[1].toFixed(2);
     infobox(ev);
     DV.paintCoords(dd);
   }
