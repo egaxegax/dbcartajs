@@ -273,7 +273,7 @@ function draw() {
     a11_9:  ost({anchor: ['end', 'bottom']})
   });
     // lines
-  RLINES.map(function(line,i){
+  RLNS.map(function(line,i){
     var ftype = line[0], abbr = line[1], coords = line[2];
     var pts = DC.interpolateCoords(coords, true),
         path = ('M ' + pts).replace(/,/g, ' ');
