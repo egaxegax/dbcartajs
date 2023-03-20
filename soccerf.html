@@ -2,6 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Футбольное поле / Canvas векторная карта</title>
 <link rel="icon" href="img/fav.svg" type="image/svg+xml">
 <link rel="canonical" href="soccerf.html">
@@ -101,7 +102,7 @@ allmaps.push(function(){
     return pts;
   };
   // разметка
-  var MLS = [
+  var MLNS = [
   // лицевая
     ['ls', 'll', [
         [-50,37],[0,37],[0,-37],[-50,-37],[-50,37]
@@ -226,7 +227,31 @@ allmaps.push(function(){
       return ls.concat(ret);
     }()
   };
+  var loadSchema = function(o){
+    DV.mflood = {}; // clear all objs
+    DV.loadCarta(MPS);
+    DV.loadCarta(MLNS);
+    DV.loadCarta(MSC[o.target.value]);  
+    DV.draw();    
+  };
   // --------------------------------------
+  var mcont = document.getElementById('cont-soccf');
+  mcont.style.textAlign = 'center';
+  
+  var k=1;
+  for (var i in MSC){
+    var el = document.createElement('input');
+    mcont.appendChild(el);
+    el.type = 'button';
+    el.value = i;
+    el.style.backgroundColor = 'gold';
+    el.style.position = 'fixed';
+    el.style.top = k*50+'px';
+    el.style.right = '1%';
+    el.onclick = loadSchema;
+    k++;
+  }
+  //
   var DV = new dbCarta({
     id: 'cont-soccf',
     scalebg: 'rgba(100,200,100,0.2)'
@@ -234,8 +259,8 @@ allmaps.push(function(){
   DV.style.backgroundColor = 'white';
   DV.style.border = '1px dashed lightgray';
   // создаем слои
-  var ls = function(o){ return DV.extend({cls: 'Line', fg: 'white', width: 3}, o||{}) },
-      ps = function(o){ return ls(DV.extend({cls: 'Polygon', bg: 'white'}, o||{})) };
+  var ls = function(o){ return DV.extend({cls: 'Line', fg: 'white', width: 3}, o||{}); },
+      ps = function(o){ return ls(DV.extend({cls: 'Polygon', bg: 'white'}, o||{})); };
   DV.extend(DV.mopt, {
   // полосы
     'ps1': ps({fg: 'rgb(50,170,50)', bg: 'rgb(50,170,50)'}),
@@ -250,10 +275,7 @@ allmaps.push(function(){
     'pl2': ps({fg: 'black', bg: 'rgb(255,255,0)'}),
     'pl3': ps({fg: 'black', bg: 'rgb(255,13,13)'})
   });
-  // выводим последовательно
-  DV.loadCarta(MPS);
-  DV.loadCarta(MLS);
-  DV.loadCarta(MSC['4-4-2']);
+  loadSchema({target:{value:'4-4-2'}});
   DV.scaleCarta(2);
   DV.draw();
 });

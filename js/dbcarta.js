@@ -2,7 +2,7 @@
 // HTML5 Canvas vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013. b230308.
+// egax@bk.ru, 2013. b230320.
 //
 function dbCarta(cfg) {
   // Constructor config {
@@ -15,17 +15,17 @@ function dbCarta(cfg) {
   //   mapbg: bgcolor for doMap
   // }
   cfg = cfg||{};
-  var dw = document.createElement('canvas'),
+  var canvas = document.createElement('canvas'),
       el = document.getElementById(cfg.id);
-  if (el) el.appendChild(dw);
+  if (el) el.appendChild(canvas);
   // styles
-  dw.style.border = 'none';
-  dw.style.backgroundColor = cfg.bg||'rgb(186,196,205)';
-  if (!cfg.width) dw.style.width = '100%';
-  dw.width = (cfg.width ? cfg.width : dw.offsetWidth);
-  dw.height = (cfg.height ? cfg.height : dw.offsetWidth / 2.0);
+  canvas.style.border = 'none';
+  canvas.style.backgroundColor = cfg.bg||'rgb(186,196,205)';
+  if (!cfg.width) canvas.style.width = '100%';
+  canvas.width = (cfg.width ? cfg.width : canvas.offsetWidth);
+  canvas.height = (cfg.height ? cfg.height : canvas.offsetWidth / 2.0);
   // set key/value
-  dw.extend = function(dst, src) {
+  canvas.extend = function(dst, src){
     if (!src) {
       src = dst;
       dst = this;
@@ -35,7 +35,7 @@ function dbCarta(cfg) {
         dst[prop] = src[prop];
     return dst;
   };
-  dw.extend({
+  canvas.extend({
     cfg: {
       draggable: cfg.draggable == undefined ? true : cfg.draggable,
       viewportx: cfg.viewportx || 300.0,
@@ -78,9 +78,9 @@ function dbCarta(cfg) {
     },
     // Internal vars
     m: {
-      delta: dw.width / 360.0,
-      halfX: dw.width / 2.0,
-      halfY: dw.height / 2.0,
+      delta: canvas.width / 360.0,
+      halfX: canvas.width / 2.0,
+      halfY: canvas.height / 2.0,
       rotate: 0,
       scale: 1,
       offset: [0, 0],
@@ -114,7 +114,7 @@ function dbCarta(cfg) {
     projload: {},
     project: 0,
     // Canvas context 2d
-    ctx: dw.getContext('2d'),
+    ctx: canvas.getContext('2d'),
     //
     // Convert pixels to points
     //
@@ -1020,7 +1020,7 @@ function dbCarta(cfg) {
             b = this.canvasXY(touches[touches.length - 1]);
         var d = Math.sqrt( Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2) );
         if (d && this.m.dtouch) {
-          dw.mousewheel(ev, d - this.m.dtouch);
+          canvas.mousewheel(ev, d - this.m.dtouch);
         }
         this.m.dtouch = d;
       }
@@ -1058,16 +1058,16 @@ function dbCarta(cfg) {
       this.dblclick(ev);
     }
   });
-  dw.addEventListener('onmousemove', dw.mousemove, false);
-  dw.addEventListener('onmousedown', dw.mousedown, false);
-  dw.addEventListener('onmouseup', dw.mouseup, false);
-  dw.addEventListener('wheel', dw.mousewheel, false);
-  dw.addEventListener('mousewheel', dw.mousewheel, false);
-  dw.addEventListener('DOMMouseScroll', dw.mousewheel, false); // firefox
-  dw.addEventListener('ondblclick', dw.dblclick, false);
-  dw.addEventListener('touchmove', dw.touchmove, false);
-  dw.addEventListener('touchstart', dw.touchstart, false);
-  dw.addEventListener('touchend', dw.touchend, false);
-  dw.addEventListener("touchleave", dw.touchend, false);
-  return dw;
+  canvas.addEventListener('onmousemove', canvas.mousemove, false);
+  canvas.addEventListener('onmousedown', canvas.mousedown, false);
+  canvas.addEventListener('onmouseup', canvas.mouseup, false);
+  canvas.addEventListener('wheel', canvas.mousewheel, false);
+  canvas.addEventListener('mousewheel', canvas.mousewheel, false);
+  canvas.addEventListener('DOMMouseScroll', canvas.mousewheel, false); // firefox
+  canvas.addEventListener('ondblclick', canvas.dblclick, false);
+  canvas.addEventListener('touchmove', canvas.touchmove, false);
+  canvas.addEventListener('touchstart', canvas.touchstart, false);
+  canvas.addEventListener('touchend', canvas.touchend, false);
+  canvas.addEventListener("touchleave", canvas.touchend, false);
+  return canvas;
 }

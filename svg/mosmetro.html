@@ -23,7 +23,7 @@ egax@bk.ru, 2015-23.
   <h2 style="margin:0px; line-height:1;">Метро Москвы</h2>
 </td>
 <td align="right">
-  <select id="chinches" onchange="clchange(this)">
+  <select id="cInches" onchange="clchange(this)">
   <option disabled selected>Пересадки...</option>
   <option id="inch">&#9745; Метро</option>
   <option id="inch_out">&emsp; Внешние</option>
@@ -264,8 +264,8 @@ function draw() {
     smcd2:     st_mcd(  {fg: mopt['rmcd2'].fg, anchor: ['start', 'middle']}),
     smcd2_1:   inst_mcd({fg: mopt['rmcd2'].fg})
   });
-    //
-  MLINES.map(function(line){
+    // draw routes 
+  MLNS.map(function(line){
     var ftype = line[0], abbr = line[1], coords = line[2];
     var pts = DC.interpolateCoords(coords, true),
         path = ('M ' + pts).replace(/,/g, ' ');
@@ -309,8 +309,8 @@ function draw() {
       }
     });
   });
-    //
-  MSTATIONS.map(function(station){
+    // draw stations
+  MSTS.map(function(station){
     var ftype = station[0], abbr = station[1], coords = station[2][0], label = station[3],
         pts = DC.toPoints(coords, true);
     var station = DC.append('circle', {
@@ -321,10 +321,9 @@ function draw() {
     DC.extend(station, {
       onclick: function(){
         DC.attr(this, {class: 'selected', fill: 'gold'});
-        console.log(this.getAttribute('id'));
         find('.selected').map(function(a,i,all){
           if(all.length == 2 && i>0){
-            calcRoute(all[i].getAttribute('id'), all[i-1].getAttribute('id'));
+            calcRoute(all[i-1].getAttribute('id'), all[i].getAttribute('id'));
           };
         });
       },
@@ -373,8 +372,8 @@ function draw() {
       }
     });
   });
-    //
-  MLABELS.map(function(label){
+    // draw other labels
+  MLBS.map(function(label){
     var ftype = label[0], t = label[3], coords = label[4],
         a, dx = 10, dy = 0;
     var pts = DC.toPoints(coords, true);
@@ -411,18 +410,26 @@ function clearRoute(){
 }
   //
 function calcRoute(fromid, toid){
+  console.log(fromid, toid);
   var inches=[];
-  [].slice.call(document.getElementById('chinches').options).map(function(o){
+  [].slice.call(document.getElementById('cInches').options).map(function(o){
     if(o.innerHTML.indexOf('\u2611')>-1){ // checked
-      inches = inches.concat(makecrds(MLINES.filter(function(a){ return a[0]==o.id; })));
+      inches = inches.concat(makecrds(MLNS.filter(function(a){ return a[0]==o.id; })));
     }
   });
   var pinches=[], proutes=[];
-  BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
-//    console.log(st);
+  BFS(MSTS, inches, makeind(MSTS, fromid), makeind(MSTS, toid),
+    [ // stop stations
+      makeind(MSTS, 's5_Suvorovskaya'),
+      makeind(MSTS, 's5_3_Rossyskaya'),
+      makeind(MSTS, 's8_3_Dorogomilovskaya'),
+      makeind(MSTS, 's8_4_Plyushchikha'),
+      makeind(MSTS, 's8_1_Volkhonka')
+    ]).map(function(st,i,sts)
+  {
     if(i < sts.length-1){
       var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;
-      MLINES.map(function(b){
+      MLNS.map(function(b){
         if((maketipn(b) == maketipn(sts[i])) && (maketipn(b) == maketipn(sts[i+1]))){
           b[2].map(function(c,j){ // find coords between stations
             r0 = Math.sqrt(Math.pow(d[0]-c[0],2)+Math.pow(d[1]-c[1],2));

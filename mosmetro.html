@@ -25,7 +25,7 @@ egax@bk.ru, 2013-23.
 <td>
   <select id="stl"></select>
   <select id="stl2"></select>
-  <select id="chinches"></select>
+  <select id="cInches"></select>
 </td>
 </tr>
 <tr>
@@ -59,17 +59,24 @@ function mds(o) {
 function calcRoute(fromid, toid){
   if (!fromid || !toid) { return; };
   var inches=[]; // interchanges coords
-  [].slice.call(document.getElementById('chinches').options).map(function(o){
+  [].slice.call(document.getElementById('cInches').options).map(function(o){
     if(o.innerHTML.indexOf('\u2611')>-1){ // checked
-      inches = inches.concat(makecrds(MLINES.filter(function(a){ return a[0]==o.value; })));
+      inches = inches.concat(makecrds(MLNS.filter(function(a){ return a[0]==o.value; })));
     }
   });
   var pinches=[], proutes=[]; // paths founded
-  BFS(MSTATIONS, inches, makeind(MSTATIONS, fromid), makeind(MSTATIONS, toid)).map(function(st,i,sts){
-//    console.log(st);
+  BFS(MSTS, inches, makeind(MSTS, fromid), makeind(MSTS, toid),
+    [ // stop stations
+      makeind(MSTS, 's5_Suvorovskaya'),
+      makeind(MSTS, 's5_3_Rossyskaya'),
+      makeind(MSTS, 's8_3_Dorogomilovskaya'),
+      makeind(MSTS, 's8_4_Plyushchikha'),
+      makeind(MSTS, 's8_1_Volkhonka')
+    ]).map(function(st,i,sts)
+  {
     if(i < sts.length-1){
       var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;
-      MLINES.map(function(b){
+      MLNS.map(function(b){
         if((maketipn(b) == maketipn(sts[i])) && (maketipn(b) == maketipn(sts[i+1]))){
           b[2].map(function(c,j){ // find coords between stations
             r0 = Math.sqrt(Math.pow(d[0]-c[0],2)+Math.pow(d[1]-c[1],2));
@@ -120,7 +127,7 @@ function calcRoute(fromid, toid){
 var stl = document.getElementById('stl');
 stl.onchange = function(){
   var v = this.value;
-  MSTATIONS.filter(function(s){ return makeid(s) == v; }).map(function(st){ 
+  MSTS.filter(function(s){ return makeid(s) == v; }).map(function(st){ 
     centerMap(st[2][0]);
     maskMap();
     DV.mopt['selstation'] = DV.extend({}, DV.mopt[st[0]]);
@@ -131,7 +138,7 @@ stl.onchange = function(){
 var stl2 = document.getElementById('stl2');
 stl2.onchange = function(){
   var v = this.value;
-  MSTATIONS.filter(function(s){ return makeid(s) == v; }).map(function(st){ 
+  MSTS.filter(function(s){ return makeid(s) == v; }).map(function(st){ 
     centerMap(st[2][0]);
     maskMap();
     DV.mopt['selstation'] = DV.extend({}, DV.mopt[st[0]]);
@@ -139,8 +146,8 @@ stl2.onchange = function(){
     DV.paintCarta(st[2], 'selstation', st[3]||st[1]);
   });
 };
-var chinches = document.getElementById('chinches');
-chinches.onchange = function(){
+var cInches = document.getElementById('cInches');
+cInches.onchange = function(){
   var o=this.options[this.selectedIndex], s=o.innerHTML; 
   o.innerHTML = (s.indexOf('\u2611')>-1 ? '&emsp;' : '\u2611')+' '+s.slice(s.search(' '));
   this.selectedIndex = 0;
@@ -369,9 +376,9 @@ DV.extend(DV.mopt, {
   smcd2_1:   inst_mcd({fg: DV.mopt['rmcd2'].fg})
 });
   // add lines dashed
-[].slice.call(MLINES).map(function(a){
+[].slice.call(MLNS).map(function(a){
   if(DV.mopt[a[0]+'_d']){
-    MLINES.push( [a[0]+'_d'].concat(a.slice(1)) );
+    MLNS.push( [a[0]+'_d'].concat(a.slice(1)) );
   }
 });
   // callbacks
@@ -381,8 +388,8 @@ DV.extend(DV.clfunc, {
 //      var m = o.mflood[o.m.pmap];
 //      var rtype = 'r' + m['ftype'].split('_')[0].slice(1);
 //      var mlabel = (m['label'] || m['ftag']); // tooltip
-//      if(!m['label']) MSTATIONS.filter(function(s){ return s[1] == m['ftag'] && s[3]; }).map(function(a){ mlabel = '<b>' + (a[3]||a[1]) + '</b>'});
-//      if(MLEGEND[rtype]) mlabel += '\n' + MLEGEND[rtype] + ' ('+ rtype + ')';
+//      if(!m['label']) MSTS.filter(function(s){ return s[1] == m['ftag'] && s[3]; }).map(function(a){ mlabel = '<b>' + (a[3]||a[1]) + '</b>'});
+//      if(MLGN[rtype]) mlabel += '\n' + MLGN[rtype] + ' ('+ rtype + ')';
 //      console.log(mlabel);
 //    }
     o.paintCoords(dd);
@@ -429,7 +436,7 @@ function optfunc(o, k, v, disabled) {
   // fill station list
 optfunc(stl, '', 'Откуда...', true);
 optfunc(stl2, '', 'Куда...', true);
-[].slice.call(MSTATIONS).sort(function(a,b){
+[].slice.call(MSTS).sort(function(a,b){
   return ((a[3]||a[1])>(b[3]||b[1])) ? -1 : 1;
 }).map(function(a){
   a[5] = true; // do ismap (show infobox)
@@ -439,23 +446,23 @@ optfunc(stl2, '', 'Куда...', true);
 stl.selectedIndex = 0;
 stl2.selectedIndex = 0;
   // inches
-optfunc(chinches, 'ch', 'Пересадки...', true);
-optfunc(chinches, 'inch', '\u2611 Метро');
-optfunc(chinches, 'inch_out', '&emsp; Внешние');
-optfunc(chinches, 'inch_mck', '&emsp; МЦК');
-optfunc(chinches, 'inch_mcd', '&emsp; МЦД');
-optfunc(chinches, 'inch_ext', '&emsp; Строящиеся');
-chinches.selectedIndex = 0;
+optfunc(cInches, 'ch', 'Пересадки...', true);
+optfunc(cInches, 'inch', '\u2611 Метро');
+optfunc(cInches, 'inch_out', '&emsp; Внешние');
+optfunc(cInches, 'inch_mck', '&emsp; МЦК');
+optfunc(cInches, 'inch_mcd', '&emsp; МЦД');
+optfunc(cInches, 'inch_ext', '&emsp; Строящиеся');
+cInches.selectedIndex = 0;
 
-DV.loadCarta(MLINES);
-DV.loadCarta(MLABELS);
-DV.loadCarta(MSTATIONS);
+DV.loadCarta(MLNS);
+DV.loadCarta(MLBS);
+DV.loadCarta(MSTS);
 DV.scaleCarta( DV.sizeOf()[2]>DV.sizeOf()[3] ? 1 : 1.5 );
 DV.draw();
 
-delete MLINES;
-delete MLABELS;
-delete MSTATIONS;
+delete MLNS;
+delete MLBS;
+delete MSTS;
 
 </script>
 </body>

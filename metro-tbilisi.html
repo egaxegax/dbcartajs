@@ -27,7 +27,7 @@ egax@bk.ru, 2013.
 function mds(o){ return Math.sqrt(DV.sizeOf()[2]*DV.sizeOf()[2]+DV.sizeOf()[3]*DV.sizeOf()[3])/15*o/100; }
   //
 function draw(){
-  var MLINES = [
+  var MLNS = [
     ['r1', '1', [
         [32,60],[20,50],[14,37],[7,21],
         [-1,8],[2,0],[12,-8],[12,-18],[11,-32],
@@ -41,7 +41,7 @@ function draw(){
       ]
     ]
   ];
-  var MSTATIONS = [
+  var MSTS = [
     ['s1','AKHMETELI THEATRE',[[32,60]],'АХМЕТЕЛИС ТЕАТРИ'],
     ['s1_1','SARAJISHVILI',[[20,50]],'САРАДЖИШВИЛИ'],
     ['s1_1','GURAMISHVILI',[[14,37]],'ГУРАМИШВИЛИ'],
@@ -112,26 +112,26 @@ function draw(){
   });
   // stations
   DV.extend(DV.mopt, {
-    s1: redst({anchor: ['end', 'middle']}),
-    s1_1: redst({anchor: ['start', 'middle']}),
-    s1_2: redst({anchor: ['center', 'bottom']}),
-    s1_3: redst({anchor: ['center', 'top']}),
-    s1_4: redst({anchor: ['start', 'top']}),
-    s1_5: redst({anchor: ['start', 'bottom']}),
-    s1s: redst({bg: redst().fg, size: mds(5), width: mds(1)}),
-    s2: bluest({anchor: ['start', 'top']}),
-    s2_1: bluest({anchor: ['center', 'top']}),
-    s2_2: bluest({anchor: ['end', 'bottom']}),
-    s2_3: bluest({anchor: ['center', 'bottom']}),
-    s2s: bluest({bg: bluest().fg, size: mds(5), width: mds(1)})
+    s1:   redst( {anchor: ['end',   'middle']}),
+    s1_1: redst( {anchor: ['start', 'middle']}),
+    s1_2: redst( {anchor: ['center','bottom']}),
+    s1_3: redst( {anchor: ['center','top']}),
+    s1_4: redst( {anchor: ['start', 'top']}),
+    s1_5: redst( {anchor: ['start', 'bottom']}),
+    s1s:  redst( {bg: redst().fg, size: mds(5), width: mds(1)}),
+    s2:   bluest({anchor: ['start', 'top']}),
+    s2_1: bluest({anchor: ['center','top']}),
+    s2_2: bluest({anchor: ['end',   'bottom']}),
+    s2_3: bluest({anchor: ['center','bottom']}),
+    s2s:  bluest({bg: bluest().fg, size: mds(5), width: mds(1)})
   });
-  DV.loadCarta(MLINES);
-  DV.loadCarta(MSTATIONS);
+  DV.loadCarta(MLNS);
+  DV.loadCarta(MSTS);
   DV.scaleCarta(DV.sizeOf()[3]/DV.sizeOf()[2]*2);
   DV.draw();
   //
-  MSTATIONS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1;});
-  MSTATIONS.map(function(a){
+  MSTS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1;});
+  MSTS.map(function(a){
     if (!a[3]) return;
     var el = document.createElement('option');
     el.value = a[0] + '_' + a[1];

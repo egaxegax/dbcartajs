@@ -306,8 +306,8 @@ DV.extend(DV.clfunc, {
 });
  // fill station list
 var stationlist = document.getElementById('stationlist');
-RSTATIONS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1});
-RSTATIONS.map(function(a){
+RSTS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1});
+RSTS.map(function(a){
   a[5] = true; // do ismap (onmousemove call)
   if (!a[3]) return;
   var el = document.createElement('option');
@@ -315,7 +315,7 @@ RSTATIONS.map(function(a){
   el.appendChild(document.createTextNode(a[3]+ ' ('+a[0].split('_')[0].slice(1)+ ')'));
   stationlist.appendChild(el);
 });
-MSTATIONS.map(function(a){
+MSTS.map(function(a){
   a[5] = true; // do ismap (onmousemove call)
 });
 stationlist.onchange = function(){
@@ -339,16 +339,16 @@ stationlist.onchange = function(){
   }
 };
 
-DV.loadCarta(RLINES);
-DV.loadCarta(RLABEL);
-DV.loadCarta(MSTATIONS);
-DV.loadCarta(RSTATIONS);
+DV.loadCarta(RLNS);
+DV.loadCarta(RLBS);
+DV.loadCarta(MSTS);
+DV.loadCarta(RSTS);
 DV.scaleCarta(0.7);
 DV.draw();
 
-delete RLINES;
-delete MSTATIONS;
-delete RSTATIONS;
+delete RLNS;
+delete MSTS;
+delete RSTS;
 
 </script>
 </body>

@@ -287,14 +287,14 @@ function draw() {
     });
   });
     // add stations
-  RSTATIONS.concat(MSTATIONS).concat(RLABEL).map(function(st){
+  RSTS.concat(MSTS).concat(RLBS).map(function(st){
     var ftype = st[0], abbr = st[1], coords = st[2][0] || st[4], label = st[3];
     var pts = DC.toPoints(coords, true);
     var tip = ftype.split('_')[0].slice(1),
         mlabel = '<b>' + (label) + '</b>';
      // legend
-    if(ftype[0] == 'a' && RLEGEND['t'+tip]) mlabel += '<br><br>' + RLEGEND['t'+tip] + ' ('+ tip + ')';
-    if(ftype[0] == 's' && MLEGEND['r'+tip]) mlabel += '<br><br>' + MLEGEND['r'+tip] + ' ('+ tip + ')';
+    if(ftype[0] == 'a' && RLGN['t'+tip]) mlabel += '<br><br>' + RLGN['t'+tip] + ' ('+ tip + ')';
+    if(ftype[0] == 's' && MLGN['r'+tip]) mlabel += '<br><br>' + MLGN['r'+tip] + ' ('+ tip + ')';
     var station = DC.append('circle', {
       id: ftype +'_'+ abbr, class: mlabel,
       cx: pts[0], cy: pts[1], r: mds(mopt[ftype].size),
