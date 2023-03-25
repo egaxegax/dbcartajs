@@ -1,98 +1,139 @@
 # dbcartajs
-Canvas+SVG vector map and image viewer javascript library.
-> JavaScript библиотеки для просмотра векторных карт и изображений.
+Canvas+SVG vector map and image viewer javascript library.  
+*JavaScript библиотеки для просмотра векторных карт и изображений*.
 
-Примеры использования
+*Примеры*
 
-> Интерактивные схемы метро Москвы со строящимися линиями и станциями и Петербурга в <i>2023</i> году, 
+Интерактивные схемы метро Москвы со строящимися линиями и станциями и Петербурга в <i>2023</i> году, 
 пригородного ж/д транспорта Москвы и МО в <i>2015</i> году.
 По выбранным станциям рассчитывается кратчайший путь по алгоритму <i>BFS</i>.
 Выбор станций возможен по клику, сброс маршрута - по двойному клику.
 
-**Moscow Metro**  
-*Схема метро Москвы*  
-[Canvas](https://egaxegax.github.io/dbcartajs/mosmetro.html) &emsp; &emsp; 
-[SVG](https://egaxegax.github.io/dbcartajs/svg/mosmetro.html) &emsp; &emsp; 
-[SVG(Википедия)](https://egaxegax.github.io/dbcartajs/svg/mosmetro2.html)
+<table>
+ <tr>
+  <td> Moscow Metro </td>
+  <td> <i>Схема метро Москвы</i> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/mosmetro.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/mosmetro.html"> SVG </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/mosmetro2.html"> SVG(Википедия) </a> </td>
+ </tr>
+ <tr>
+  <td> Moscow Railroad </td>
+  <td> <i>Схема ж/д Москвы и МО</i> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/mosrails.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/mosrails.html"> SVG </a> </td>
+ </tr>
+ <tr>
+  <td> St. Petersburg Metro </td>
+  <td> <i>Схема метро Петербурга</i> </td>
+  <td> - </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/metrospb.html"> SVG </a> </td>
+ </tr>
+ <tr>
+  <td> Tbilisi Metro  </td>
+  <td> <i>Схема метро Тбилиси</i> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/metro-tbilisi.html"> Canvas </a> </td>
+  <td> - </td>
+ </tr>
+</table>
 
-**Moscow Railroad**  
-*Схема ж/д Москвы и МО*  
-[Canvas](https://egaxegax.github.io/dbcartajs/mosrails.html) &emsp; &emsp; 
-[SVG](https://egaxegax.github.io/dbcartajs/svg/mosrails.html)
+Просмотр *jpeg* и *svg* картинок с возможностью масштабирования.
 
-**St. Petersburg Metro**  
-*Схема метро Петербурга*  
-[SVG](https://egaxegax.github.io/dbcartajs/svg/metrospb.html) &emsp; &emsp;
+<table>
+ <tr>
+  <td> Image Viewer </td>
+  <td> <i>Просмотровщик картинок</i> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/imgviewer.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/imgviewer.html"> SVG </a> </td>
+ </tr>
+ <tr>
+  <td> Pan Zoom </td>
+  <td> <i>Масштабирование SVG-изображения</i> </td>
+  <td> - </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/panzoom.html"> SVG </a> </td>
+ </tr>
+</table>
 
-**Tbilisi Metro**  
-*Схема метро Тбилиси*  
-[Canvas](https://egaxegax.github.io/dbcartajs/metro-tbilisi.html)
-
-> Просмотр *jpeg* и *svg* картинок с возможностью масштабирования.
-
-**Image Viewer**  
-*Просмотровщик картинок*  
-[Canvas](https://egaxegax.github.io/dbcartajs/imgviewer.html) &emsp; &emsp; 
-[SVG](https://egaxegax.github.io/dbcartajs/svg/imgviewer.html)  
-
-**Pan Zoom**  
-*Масштабирование SVG-изображения*  
-[SVG](https://egaxegax.github.io/dbcartajs/svg/panzoom.html) &emsp; &emsp; 
-
-> Примеры использования градиента и *svg*-анимации с эффектом движения.
-
-**Wall Clock**  
-*Настенные часы*  
-[SVG](https://egaxegax.github.io/dbcartajs/svg/clock.html) &emsp; &emsp;
-
-**Roller Ball**  
-*Анимация движения*  
-[SVG](https://egaxegax.github.io/dbcartajs/svg/rollerball.html) &emsp; &emsp;  
-
-> Интерактивные карты мира со списками городов и стран в различных проекциях. 
+Интерактивные карты мира со списками городов и стран в различных проекциях. 
 Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
 
-**Atlas**  
-*Атлас мира*  
-[Canvas](https://egaxegax.github.io/dbcartajs/atlas.html) &emsp; &emsp; 
-[SVG](https://egaxegax.github.io/dbcartajs/svg/atlas.html)
+<table>
+ <tr>
+  <td> Atlas </td>
+  <td> <i>Атлас мира</i> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/atlas.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/atlas.html"> SVG </a> </td>
+ </tr>
+ <tr>
+  <td> Population </td>
+  <td> <i>Население мира</i> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/usemap.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/usemap.html"> SVG </a> </td>
+ </tr>
+ <tr>
+  <td> Population USA </td>
+  <td> <i>Население США</i> </td>
+  <td> - </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/us.html"> SVG </a> </td>
+ </tr>
+ <tr>
+  <td> Cities </td>
+  <td> <i>Города мира</i> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/cities.html"> Canvas </a> </td>
+  <td> - </td>
+ </tr>
+ <tr>
+  <td> Russian Cities </td>
+  <td> <i>Города России без расстояний</i> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/russ.html"> Canvas </a> </td>
+  <td> - </td>
+ </tr>
+ <tr>
+  <td> Countries </td>
+  <td> <i>Страны мира</i> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/countries.html"> Canvas </a> </td>
+  <td> - </td>
+ </tr>
+ <tr>
+  <td> Routes </td>
+  <td> <i>Маршруты на карте</i> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/merc.html"> Canvas </a> </td>
+  <td> - </td>
+ </tr>
+</table>
 
-**Population**  
-*Население мира*  
-[Canvas](https://egaxegax.github.io/dbcartajs/usemap.html) &emsp; &emsp; 
-[SVG](https://egaxegax.github.io/dbcartajs/svg/usemap.html)
+Примеры использования градиента и *svg*-анимации с эффектом движения.
 
-**Population USA**  
-*Население США*  
-[SVG](https://egaxegax.github.io/dbcartajs/svg/us.html) &emsp; &emsp; 
+<table>
+ <tr>
+  <td> Wall Clock </td>
+  <td> <i>Настенные часы</i> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/clock.html"> SVG </a> </td>
+ </tr>
+ <tr>
+  <td> Roller Ball </td>
+  <td> <i>Анимация движения</i> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/rollerball.html"> SVG </a> </td>
+ </tr>
+</table>
 
-**Cities**  
-*Города мира*  
-[Canvas](https://egaxegax.github.io/dbcartajs/cities.html)
+Отрисовка картинки в канвасе <i>3d</i> с пересчетом проекции отображения через шейдеры <i>WebGL</i> на основе примеров с с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
+Звездное небо в канвасе <i>2d</i> и <i>3d</i> с использованием скриптов <a href="https://github.com/mrdoob/three.js">three.js</a>.
 
-**Russian Cities**  
-*Города России без расстояний*  
-[Canvas](https://egaxegax.github.io/dbcartajs/russ.html)
-
-**Countries**  
-*Страны мира*  
- [Canvas](https://egaxegax.github.io/dbcartajs/countries.html)
-
-**Routes**  
-*Маршруты на карте*  
-[Canvas](https://egaxegax.github.io/dbcartajs/merc.html)
-
-> Отрисовка картинки в канвасе <i>3d</i> с пересчетом проекции отображения через шейдеры <i>WebGL</i> на основе примеров с с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
-> Звездное небо в канвасе <i>2d</i> и <i>3d</i> с использованием скриптов <a href="https://github.com/mrdoob/three.js">three.js</a>.
-
-**Atlas 3D**  
-*Атлас 3D*  
-[Canvas](https://egaxegax.github.io/dbcartajs/map3d.html)
-
-**Starry Sky**  
-*Звездное небо*  
-[Canvas](https://egaxegax.github.io/dbcartajs/starry.html)
-
-**Sky 3D**  
-*Звездное небо 3D*  
-[Canvas](https://egaxegax.github.io/dbcartajs/sky3d.html)
+<table>
+ <tr>
+  <td> Atlas 3D </td>
+  <td> <i>Атлас 3D</i> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/map3d.html"> Canvas </a> </td>
+ </tr>
+ <tr>
+  <td> Starry Sky </td>
+  <td> <i>Звездное небо</i> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/starry.html"> Canvas </a> </td>
+ </tr>
+ <tr>
+  <td> Sky 3D </td>
+  <td> <i>Звездное небо 3D</i> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/sky3d.html"> Canvas </a> </td>
+ </tr>
+</table>
