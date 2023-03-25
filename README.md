@@ -11,8 +11,8 @@ Canvas+SVG vector map and image viewer javascript library.
 
 <table>
  <tr>
-  <td> Moscow Metro </td>
-  <td> <i>Схема метро Москвы</i> </td>
+  <td width="200px"> Moscow Metro </td>
+  <td width="350px"> <i>Схема метро Москвы</i> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/mosmetro.html"> Canvas </a> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/mosmetro.html"> SVG </a> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/mosmetro2.html"> SVG(Википедия) </a> </td>
@@ -41,8 +41,8 @@ Canvas+SVG vector map and image viewer javascript library.
 
 <table>
  <tr>
-  <td> Image Viewer </td>
-  <td> <i>Просмотровщик картинок</i> </td>
+  <td width="200px"> Image Viewer </td>
+  <td width="350px"> <i>Просмотровщик картинок</i> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/imgviewer.html"> Canvas </a> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/imgviewer.html"> SVG </a> </td>
  </tr>
@@ -59,8 +59,8 @@ Canvas+SVG vector map and image viewer javascript library.
 
 <table>
  <tr>
-  <td> Atlas </td>
-  <td> <i>Атлас мира</i> </td>
+  <td width="200px"> Atlas </td>
+  <td width="350px"> <i>Атлас мира</i> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/atlas.html"> Canvas </a> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/atlas.html"> SVG </a> </td>
  </tr>
@@ -106,13 +106,15 @@ Canvas+SVG vector map and image viewer javascript library.
 
 <table>
  <tr>
-  <td> Wall Clock </td>
-  <td> <i>Настенные часы</i> </td>
+  <td width="200px"> Wall Clock </td>
+  <td width="350px"> <i>Настенные часы</i> </td>
+  <td> - </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/clock.html"> SVG </a> </td>
  </tr>
  <tr>
   <td> Roller Ball </td>
   <td> <i>Анимация движения</i> </td>
+  <td width="80px"> - </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/rollerball.html"> SVG </a> </td>
  </tr>
 </table>
@@ -122,8 +124,8 @@ Canvas+SVG vector map and image viewer javascript library.
 
 <table>
  <tr>
-  <td> Atlas 3D </td>
-  <td> <i>Атлас 3D</i> </td>
+  <td width="200px"> Atlas 3D </td>
+  <td width="350px"> <i>Атлас 3D</i> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/map3d.html"> Canvas </a> </td>
  </tr>
  <tr>
