@@ -21,19 +21,19 @@ Canvas+SVG vector map and image viewer javascript library.
   <td> Moscow Railroad </td>
   <td> <i>Схема ж/д Москвы и МО</i> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/mosrails.html"> Canvas </a> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/mosrails.html"> SVG </a> </td>
+  <td colspan=2> <a href="https://egaxegax.github.io/dbcartajs/svg/mosrails.html"> SVG </a> </td>
  </tr>
  <tr>
   <td> St. Petersburg Metro </td>
   <td> <i>Схема метро Петербурга</i> </td>
   <td> - </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/metrospb.html"> SVG </a> </td>
+  <td colspan=2> <a href="https://egaxegax.github.io/dbcartajs/svg/metrospb.html"> SVG </a> </td>
  </tr>
  <tr>
   <td> Tbilisi Metro  </td>
   <td> <i>Схема метро Тбилиси</i> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/metro-tbilisi.html"> Canvas </a> </td>
-  <td> - </td>
+  <td colspan=2> - </td>
  </tr>
 </table>
 
