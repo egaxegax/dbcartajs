@@ -2,11 +2,12 @@
 // HTML5 Canvas vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013. b230320.
+// egax@bk.ru, 2013. b230404.
 //
 function dbCarta(cfg) {
   // Constructor config {
-  //   id: parent id
+  //   id: container id
+  //   root: existing canvas element
   //   width, height: canvas size
   //   draggable: move map by cursor
   //   viewportx, viewporty: offset limits for centerCarta in degrees
@@ -15,15 +16,18 @@ function dbCarta(cfg) {
   //   mapbg: bgcolor for doMap
   // }
   cfg = cfg||{};
-  var canvas = document.createElement('canvas'),
-      el = document.getElementById(cfg.id);
-  if (el) el.appendChild(canvas);
-  // styles
-  canvas.style.border = 'none';
-  canvas.style.backgroundColor = cfg.bg||'rgb(186,196,205)';
-  if (!cfg.width) canvas.style.width = '100%';
-  canvas.width = (cfg.width ? cfg.width : canvas.offsetWidth);
-  canvas.height = (cfg.height ? cfg.height : canvas.offsetWidth / 2.0);
+  var canvas = cfg.root;
+  if (!canvas){
+    canvas = document.createElement('canvas');
+    var el = document.getElementById(cfg.id);
+    if (el) el.appendChild(canvas);
+    // styles
+    canvas.style.border = 'none';
+    canvas.style.backgroundColor = cfg.bg||'rgb(186,196,205)';
+    if (!cfg.width) canvas.style.width = '100%';
+    canvas.width = (cfg.width ? cfg.width : canvas.offsetWidth);
+    canvas.height = (cfg.height ? cfg.height : canvas.offsetWidth / 2.0);
+  }
   // set key/value
   canvas.extend = function(dst, src){
     if (!src) {
