@@ -154,7 +154,7 @@ function init() {
   var bgcntry = 'rgb(' + parseInt(Math.random()*255) + ',' + parseInt(Math.random()*255) + ',' + parseInt(Math.random()*255) + ')';
 
   dw1 = new dbCarta({id:'canvasmap1', height: dcol.offsetHeight/2.0*0.98});
-  dw1.extend(dw1.mopt['Area'], { fg: 'yellow', bg: bgcntry, labelcolor: 'white'} );
+  dw1.extend(dw1.mopt['Area'], { fg: 'yellow', bg: bgcntry, labelcolor: 'beige'} );
   dw1.cfg.mapbg = undefined; // no draw map area
   // worldmap image
   var im = new Image();
@@ -166,20 +166,20 @@ function init() {
     dw1.draw();
   };
   dw2 = new dbCarta({id:'canvasmap2', height: dcol.offsetHeight/2.0*0.98});
-  dw2.extend(dw2.mopt['Area'], { fg: 'yellow', bg: bgcntry, labelcolor: 'white'} );
+  dw2.extend(dw2.mopt['Area'], { fg: 'yellow', bg: bgcntry, labelcolor: 'beige'} );
   dw2.changeProject(203);
   dw2.scaleCarta(1.5);
   dw2.loadCarta(CONTINENTS);
   dw2.loadCarta(dw2.createMeridians());
   dw2.draw();
   dw3 = new dbCarta({id:'canvasmap3', height: dcol.offsetHeight/2.0*0.98});
-  dw3.extend(dw3.mopt['Area'], { fg: 'yellow', bg: bgcntry, labelcolor: 'white'} );
+  dw3.extend(dw3.mopt['Area'], { fg: 'yellow', bg: bgcntry, labelcolor: 'beige'} );
   dw3.changeProject(204);
   dw3.loadCarta(CONTINENTS);
   dw3.loadCarta(dw3.createMeridians());
   dw3.draw();
   dw4 = new dbCarta({id:'canvasmap4', height: dcol.offsetHeight/2.0*0.98});
-  dw4.extend(dw4.mopt['Area'], { fg: 'yellow', bg: bgcntry, labelcolor: 'white'} );
+  dw4.extend(dw4.mopt['Area'], { fg: 'yellow', bg: bgcntry, labelcolor: 'beige'} );
   dw4.changeProject(102);
   // worldmap image
   var im4 = new Image();
@@ -218,7 +218,7 @@ function init() {
     }
     mcoord.innerHTML = label;
     ev.target.paintCoords(dst);
-  }
+  };
   dw1.clfunc.onmousemove = function(DV, src, dst, ev){ clfunc(DV, src, dst, ev); };
   dw2.clfunc.onmousemove = function(DV, src, dst, ev){ clfunc(DV, src, dst, ev); };
   dw3.clfunc.onmousemove = function(DV, src, dst, ev){ clfunc(DV, src, dst, ev); };
