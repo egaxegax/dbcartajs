@@ -2,7 +2,7 @@
 // HTML5 Canvas vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013. b230404.
+// egax@bk.ru, 2013. b230409.
 //
 function dbCarta(cfg) {
   // Constructor config {
@@ -73,8 +73,8 @@ function dbCarta(cfg) {
       '.Mainland':  {cls: 'Polygon', fg: 'rgb(135,159,103)', bg: 'rgb(135,159,103)'},
       '.Water':     {cls: 'Polygon', fg: 'rgb(90,140,190)', bg: 'rgb(90,140,190)'},
       '.WaterLine': {cls: 'Line', fg: 'rgb(186,196,205)'},
-      '.Latitude':  {cls: 'Line', fg: 'rgb(164,164,164)', anchor: ['start', 'bottom']},
-      '.Longtitude':{cls: 'Line', fg: 'rgb(164,164,164)', anchor: ['start', 'top']},
+      '.Latitude':  {cls: 'Line', fg: 'rgb(180,180,180)', anchor: ['start', 'bottom']},
+      '.Longtitude':{cls: 'Line', fg: 'rgb(180,180,180)', anchor: ['start', 'top']},
       'DotPort':    {cls: 'Dot', fg: 'rgb(240,220,0)', anchor: ['start', 'middle'], size: 2, labelcolor: 'rgb(255,155,128)'},
       'Area':       {cls: 'Polygon', fg: 'rgb(0,80,170)', bg: 'rgb(0,80,170)'},
       'Line':       {cls: 'Line', fg: 'rgb(0,130,200)'},
@@ -111,7 +111,7 @@ function dbCarta(cfg) {
           202: '+proj=nsper +units=m +h=40000000',
           203: '+proj=ortho +units=m',
           204: '+proj=moll +units=m'
-        }
+        };
       }
       return {};
     }(),
@@ -162,9 +162,9 @@ function dbCarta(cfg) {
         var y = -90;
         while (y <= 90) {
           lon.push([x, y]);
-          y += (y == -90 || y == 84 ? 6 : 84); // mercator fix
+          y += (y == -90 || y == 85 ? 5 : 85); // mercator fix
         }
-        lonlat.push( ['.Longtitude', [x, y].toString(), lon, x.toString(), lon[0]] );
+        lonlat.push( ['.Longtitude', [x, y].toString(), lon] );
         x += 30;
       }
       var y = -90;
@@ -176,7 +176,7 @@ function dbCarta(cfg) {
           x += 90;
           var lat = [prev, [x, y]],
               prev = [x, y];
-          lonlat.push( ['.Latitude', [x, y].toString(), lat, label, centerof] );
+          lonlat.push( ['.Latitude', [x, y].toString(), lat] );
           label = centerof = undefined;
         }
         y += 30;
@@ -193,7 +193,7 @@ function dbCarta(cfg) {
       // current view
       var rect = this.viewsizeOf();
       var left = rect[0], top = rect[1], right = rect[2], bottom = rect[3];
-      var xlimit = -179.999, ylimit = (this.project == 101 ? 84 : 90);
+      var xlimit = -179.999, ylimit = (this.project == 101 ? 85 : 90);
       if (left < xlimit) left = xlimit;
       if (top > ylimit) top = ylimit;
       for (var i in this.mflood) {

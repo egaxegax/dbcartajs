@@ -2,7 +2,7 @@
 <!--
 Starry Sky on Canvas.
 View stars, constellations, planets, sattelites on Earth background.
-egax@bk.ru, 2013. b230317
+egax@bk.ru, 2013. b230409
 -->
 <html lang="ru">
 <head>
@@ -76,7 +76,7 @@ function loadImg() {
     if (DV.project == 0)
       DV.loadCarta([{0:'.Image', 1:'wrld', 2:[[-180,90],[180,-90]], 6:this}]);
     else if (DV.project == 101)
-      DV.loadCarta([{0:'.Image', 1:'wrld', 2:[[-179.99,168],[179.99,-168]], 6:this}]);
+      DV.loadCarta([{0:'.Image', 1:'wrld', 2:[[-179.99,180],[179.99,-180]], 6:this}]);
     else if (DV.project == 102)
       DV.loadCarta([{0:'.Image', 1:'wrld', 2:[[-179.99,132],[179.99,-132]], 6:this}]);
     else if (DV.project == 204)
@@ -171,7 +171,7 @@ function terminator(time, h, cx, cy) {
   } else {
     var s = MGeo.bigcircle1spheric(sgeo[0], sgeo[1], 5),
         isnight = MGeo.isnight(srect, 179.99, ylimit),
-        ylimit = (DV.project == 101 ? 84 : 89.99);
+        ylimit = (DV.project == 101 ? 85.02 : 89.99);
     if (DV.project !== 201) {
       if (isnight) s.push([179.99,ylimit]); else s.push([179.99,-ylimit]);
       if (isnight) s.push([-179.99,ylimit]); else s.push([-179.99,-ylimit]);

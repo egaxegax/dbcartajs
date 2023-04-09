@@ -2,7 +2,7 @@
 <!--
 Atlas. SVG version.
 Draw background images in diff. projections.
-egax@bk.ru, 2015-22.
+egax@bk.ru, 2015-23.
 -->
 <html lang="ru">
 <head>
@@ -20,6 +20,7 @@ egax@bk.ru, 2015-22.
 <script src="../js/proj4js-combined.js"></script>
 <script src="../js/dbcartasvg.js"></script>
 <script src="../js/data/continents.js"></script>
+<script src="../js/data/countriesd.js"></script>
 <script src="../js/data/imgmap.js"></script>
 <script src="../js/alg/starry.js"></script>
 <table><tr><td id="mcont"></td></tr></table>
@@ -48,7 +49,7 @@ function draw(ev) {
   var crds, src;
   switch(String(DC.project)){
     case '0'  : src = 'wrld_small';      crds = [[-180,90],[180,-90]]; break;
-    case '101': src = 'wrld_small_merc'; crds = [[-179.99,168],[179.99,-168]]; break;
+    case '101': src = 'wrld_small_merc'; crds = [[-179.99,180],[179.99,-180]]; break;
     case '102': src = 'wrld_small_mill'; crds = [[-179.99,132],[179.99,-132]]; break;
     case '204': src = 'wrld_small_moll'; crds = [[-162,81],[162,-81]]; break;
   }
@@ -93,14 +94,25 @@ function draw(ev) {
       onmousemove: function(ev){ DC.doMap(ev, { fill: 'rgb(255,127,0)' }); }
     }));
   });
+    // countries
+  [[2, 'Norway'],
+   [1, 'Italy'],
+   [0, 'South Africa']
+  ].map(function(cnt){  
+    childs.push( DC.append('polygon', {
+      points: DC.interpolateCoords(COUNTRIES[cnt[1]][cnt[0]][1], true, 10).join(' '),
+      fill: 'transparent',
+      stroke: 'orange'
+    }));
+  });
 };
 
 // change to perspective view without using proj4
 function TransferCoords(){
   DC.initProj(0, '+lon_0=0 +lat_0=0'); //lonlat proj.
-   //
+    //
   childs = childs.filter(function(child){ DC.vp.removeChild(child); });
-   // conts
+    // conts
   CONTINENTS.map(function(cont){
     childs.push( DC.append('polygon', {
       points: cont[2].map(function(c){ return DC.toPoints(MGeo.transferPoint(c, [[180,90],[-180,-90]], [[-180,-90],[-80,90],[80,90],[180,-90]] )); }).join(' '),
@@ -108,7 +120,7 @@ function TransferCoords(){
       stroke: 'rgb(135,159,103)'
     }) );
   });
-   // meridians
+    // meridians
   DC.createMeridians().map(function(lonlat){
     var pts = lonlat.map(function(c){ return DC.toPoints(MGeo.transferPoint(c, [[180,90],[-180,-90]], [[-180,-90],[-80,90],[80,90],[180,-90]] )); }),
         path = ('M ' + pts[0] + ' L ' + pts).replace(/,/g, ' ');
@@ -116,7 +128,7 @@ function TransferCoords(){
       fill: 'transparent', stroke: '#aaa', 'stroke-dasharray': '4', d: path
     }));
   });
-   //cities
+    //cities
   [[[-73.905,40.708], 'Нью-Йорк'],
    [[-118.25,34],     'Лос-Анджелес'],
    [[-0.178,51.488],  'Лондон'],
@@ -138,6 +150,17 @@ function TransferCoords(){
       class: city[1], cx: pts[0], cy: pts[1], r: 3, fill: 'rgb(240,220,0)'
     }), {
       onmousemove: function(ev){ DC.doMap(ev, { fill: 'rgb(255,127,0)' }); }
+    }));
+  });
+    // countries
+  [[2, 'Norway'],
+   [1, 'Italy'],
+   [0, 'South Africa']
+  ].map(function(cnt){
+    var pts = COUNTRIES[cnt[1]][cnt[0]][1].map(function(c){ return DC.toPoints(MGeo.transferPoint(c, [[180,90],[-180,-90]], [[-180,-90],[-80,90],[80,90],[180,-90]] )); }),
+        path = ('M ' + pts[0] + ' L ' + pts).replace(/,/g, ' ');
+    childs.push( DC.append('path', {
+      fill: 'transparent', stroke: 'orange', d: path
     }));
   });
 }

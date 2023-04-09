@@ -158,7 +158,7 @@ function dbCartaSvg(cfg) {
         var y = -90;
         while (y <= 90) {
           lon.push([x, y]);
-          y += (y == -90 || y == 84 ? 6 : 84); // mercator fix
+          y += (y == -90 || y == 85 ? 5 : 85); // mercator fix
         }
         lonlat.push( lon );
         x += 30;
