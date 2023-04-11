@@ -995,6 +995,8 @@ function dbCarta(cfg) {
         delta = ev.wheelDelta / 150;
       } else if (ev.detail) { // Firefox
         delta = -ev.detail / 6;
+      } else if (ev.deltaY) { // Firefox 84
+        delta = -ev.deltaY / 6;
       } else if (dlt) { // touched
         delta = dlt / 30;
       }
