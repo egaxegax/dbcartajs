@@ -83,7 +83,7 @@ function draw(ev) {
     var pts = DC.toPoints(city[0], true);
     if(!DC.chkPts(pts)) return;
     var label = DC.append('text', {
-      x: pts[0], y: pts[1], dx: 4, dy: 3, fill: 'rgb(15,15,15)', 
+      x: pts[0], y: pts[1], dx: 4, dy: 3, fill: 'beige', 
       'font-family': 'sans-serif', 'font-size': '10px'
     });
     label.appendChild(document.createTextNode(city[1]));
@@ -97,6 +97,7 @@ function draw(ev) {
     // countries
   [[2, 'Norway'],
    [1, 'Italy'],
+   [0, 'Iceland'],
    [0, 'South Africa']
   ].map(function(cnt){  
     childs.push( DC.append('polygon', {
@@ -141,7 +142,7 @@ function TransferCoords(){
     var pts = DC.toPoints(MGeo.transferPoint(city[0], [[180,90],[-180,-90]], [[-180,-90],[-80,90],[80,90],[180,-90]] ));
     if(!DC.chkPts(pts)) return;
     var label = DC.append('text', {
-      x: pts[0], y: pts[1], dx: 4, dy: 3, fill: 'rgb(255,155,128)', 
+      x: pts[0], y: pts[1], dx: 4, dy: 3, fill: 'beige', 
       'font-family': 'sans-serif', 'font-size': '10px'
     });
     label.appendChild(document.createTextNode(city[1]));
@@ -155,6 +156,7 @@ function TransferCoords(){
     // countries
   [[2, 'Norway'],
    [1, 'Italy'],
+   [0, 'Iceland'],
    [0, 'South Africa']
   ].map(function(cnt){
     var pts = COUNTRIES[cnt[1]][cnt[0]][1].map(function(c){ return DC.toPoints(MGeo.transferPoint(c, [[180,90],[-180,-90]], [[-180,-90],[-80,90],[80,90],[180,-90]] )); }),
@@ -238,7 +240,7 @@ var DC = new dbCartaSvg({
   id: 'mcont',
   height: document.getElementById('mcont').offsetHeight,
   bg:'white',
-  sbarpos: 'left', scalebg: 'rgba(55,255,255,0.2)'
+  sbarpos: 'left', scalebg: 'rgba(200,200,200,0.2)'
 });
 
 var ptext = DC.append(DC.root, 'text', {

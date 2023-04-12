@@ -50,7 +50,7 @@ function init() {
 
   DV = new dbCarta({id:'mcol', height:col.offsetHeight});
   DV.initProj(101, '+lon_0=0 +lat_0=0');
-  DV.scaleCarta(1.4);
+//  DV.scaleCarta(1.4);
 
   // worldmap img
   var im = new Image();
@@ -81,6 +81,7 @@ function init() {
       }
     ];
     DV.extend(DV.mopt['Line'], {fg:'orange'});
+    DV.extend(DV.mopt['Area'], {labelcolor:'beige'});
     for(var ii=0; ii<clist.length; ii++) {
       var cntrylist = clist[ii];
       var route = [];
