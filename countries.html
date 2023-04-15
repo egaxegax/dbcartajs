@@ -12,7 +12,7 @@ egax@bk.ru, 2013.
 <link rel="icon" href="img/fav.svg" type="image/svg+xml">
 <link rel="canonical" href="countries.html">
 <style>html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
-<style>dd{cursor:default;margin:0;border:2px transparent solid} dd:hover{background:#ade;}</style>
+<style>dd{cursor:pointer;margin:0;border:2px transparent solid} dd:hover{background:#ade;}</style>
 <script src="/static/js/metrics.js"></script>
 </head>
 <body>
@@ -47,7 +47,7 @@ function draw(opt) {
         dw2.loadCarta([{0:'.Image', 1: m.abbr + m.mpart, 2:[m.centerof], 6:this}], 1);
         dw3.loadCarta([{0:'.Image', 1: m.abbr + m.mpart, 2:[m.centerof], 6:this}], 1);
         dw4.loadCarta([{0:'.Image', 1: m.abbr + m.mpart, 2:[m.centerof], 6:this}], 1);
-      }
+      };
     }
   }
   // draw on centre
@@ -71,9 +71,6 @@ function draw(opt) {
   dw3.paintCartaPts(m.centerofpts, 'Area', m.cntryname, m.centerofpts);
   dw4.reload(m);
   dw4.paintCartaPts(m.centerofpts, 'Area', m.cntryname, m.centerofpts);
-}
-function refresh() {
-  window.location.reload(false);
 }
 function init() {
   var mtab = document.createElement('table');
@@ -208,7 +205,7 @@ function init() {
     }
   }
   
-  // curr. object
+  // curr. coords
   var clfunc = function(DV, src, dst, ev) {
     var mcoord = document.getElementById('tcoords');
     var label = '';

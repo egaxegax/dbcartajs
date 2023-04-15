@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<!--
+World's countrires and flags. SVG version
+egax@bk.ru, 2023.
+-->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Страны мира / SVG векторная карта</title>
+<meta name="description" content="Страны мира на карте">
+<meta name="keywords" content="страны мира, countries, maps">
+<link rel="icon" href="img/fav.svg" type="image/svg+xml">
+<link rel="canonical" href="countries.html">
+<style>html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
+<style>dd{cursor:pointer;margin:0;color:gray;font-size:smaller;} dd:hover{background:#ade;}</style>
+<script src="/static/js/metrics.js"></script>
+</head>
+<body>
+<script src="../js/proj4js-combined.js"></script>
+<script src="../js/dbcartasvg.js"></script>
+<script src="../js/data/continents.js"></script>
+<script src="../js/data/countriesd.js"></script>
+<script src="../js/data/countries_info.js"></script>
+<script src="../js/data/flags.js"></script>
+<script src="../js/data/imgmap.js"></script>
+<script>
+var DC;
+  
+function draw(ev) {
+  var cntry = ev.target.value;
+  for(var part in COUNTRIES[cntry]){
+    var poly = DC.append('polygon', {
+      points: DC.interpolateCoords(COUNTRIES[cntry][part][1], true, 10).join(' '),
+      fill: 'orange',
+      stroke: 'orange',
+      title: cntry
+    });
+    DC.centerCarta(DC.toPoints(COUNTRIES[cntry][part][1][0], 1));
+    DC.append(poly, 'title', {}).textContent = INFOCNT[cntry][1]||cntry;
+  }
+}
+function init() {
+  var mtab = document.createElement('table');
+  mtab.style.borderCollapse = 'collapse';
+  var row = document.createElement('tr');
+  mtab.appendChild(row);
+
+  var col = document.createElement('td');
+  col.width = '15%';
+  col.style.padding = '0';
+  col.style.verticalAlign = 'top';
+
+  var cntrylist = el = document.createElement('dl');
+  el.id = 'cntrylist';
+  el.style.margin = '0';
+  el.style.padding = '0';
+  el.style.fontSize = 'larger';
+  el.style.fontFamily = 'Arial';
+  el.style.backgroundColor = 'white';
+  col.appendChild(el);
+  row.appendChild(col);
+
+  var col = document.createElement('td');
+  col.id = 'mcol';
+  col.style.padding = '0';
+  col.style.verticalAlign = 'top';
+  row.appendChild(col);
+  document.body.appendChild(mtab);
+
+  cntrylist.style.height = col.offsetHeight + 'px';
+  cntrylist.style.overflow = 'auto';
+
+  DC = new dbCartaSvg({
+    id: 'mcol',
+    height: document.getElementById('mcol').offsetHeight,
+    bg:'rgb(186,196,205)',
+    sbarpos: 'left', scalebg: 'rgba(200,200,200,0.2)'
+  });
+
+  DC.changeProject('101'); // mercator
+
+  CONTINENTS.map(function(cont){
+    DC.append('polygon', {
+      points: DC.interpolateCoords(cont[2], true, 10).join(' '),
+      fill: 'silver',
+      stroke: 'silver'
+    });
+  });
+
+  var crds, src;
+  switch(String(DC.project)){
+    case '0'  : src = 'wrld_small';      crds = [[-180,90],[180,-90]]; break;
+    case '101': src = 'wrld_small_merc'; crds = [[-179.99,180],[179.99,-180]]; break;
+    case '102': src = 'wrld_small_mill'; crds = [[-179.99,132],[179.99,-132]]; break;
+    case '204': src = 'wrld_small_moll'; crds = [[-162,81],[162,-81]]; break;
+  }
+  if(src){ // if img exists load it
+    var pts = [DC.toPoints(crds[1]), DC.toPoints(crds[0])];
+    var img = DC.append('image', {
+      width:  pts[0][0]-pts[1][0], height: pts[0][1]-pts[1][1], x: pts[1][0], y: pts[1][1],
+      preserveAspectRatio:'none'
+    });
+    img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../' + IMGMAP[src]);
+  }
+   // meridians
+  DC.createMeridians().map(function(lonlat){
+    var pts = DC.interpolateCoords(lonlat, true, 10),
+        path = ('M ' + pts[0] + ' L ' + pts).replace(/,/g, ' ');
+    DC.append('path', {
+      fill: 'transparent', stroke: '#aaa', 'stroke-dasharray': '4', d: path
+    });    
+  });
+
+  // fill list
+  for (var cntryname in COUNTRIES) {
+    var el = document.createElement('dt');
+    el.value = cntryname;
+    el.style.backgroundColor = '#ddd';
+    el.appendChild(document.createTextNode(cntryname));
+    el.onclick = draw;
+    cntrylist.appendChild(el);
+    var el2 = document.createElement('dd');
+    el2.value = cntryname;
+    el2.innerHTML = INFOCNT[cntryname][1];
+    el2.onclick = draw;
+    cntrylist.appendChild(el2);
+  }
+
+};
+
+init();
+
+</script>
+</body>
+</html>
