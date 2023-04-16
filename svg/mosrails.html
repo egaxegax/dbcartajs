@@ -266,8 +266,8 @@ function draw() {
     var tip = ftype.split('_')[0].slice(1),
         mlabel = label;
      // legend
-    if(ftype[0] == 'a' && RLGN['t'+tip]) mlabel += ' ,' + RLGN['t'+tip] + ' ('+ tip + ')';
-    if(ftype[0] == 's' && MLGN['r'+tip]) mlabel += ' ,' + MLGN['r'+tip] + ' ('+ tip + ')';
+    if(ftype[0] == 'a' && RLGN['t'+tip]) mlabel += ', ' + RLGN['t'+tip] + ' ('+ tip + ')';
+    if(ftype[0] == 's' && MLGN['r'+tip]) mlabel += ', ' + MLGN['r'+tip] + ' ('+ tip + ')';
     var station = DC.append('circle', {
       id: ftype +'_'+ abbr, class: mlabel,
       cx: pts[0], cy: pts[1], r: mds(mopt[ftype].size),
