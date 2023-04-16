@@ -71,6 +71,21 @@ function init() {
   cntrylist.style.height = col.offsetHeight + 'px';
   cntrylist.style.overflow = 'auto';
 
+  // fill cntry list
+  for (var cntryname in COUNTRIES) {
+    var el = document.createElement('dt');
+    el.value = cntryname;
+    el.style.backgroundColor = '#ddd';
+    el.appendChild(document.createTextNode(cntryname));
+    el.onclick = draw;
+    cntrylist.appendChild(el);
+    var el2 = document.createElement('dd');
+    el2.value = cntryname;
+    el2.innerHTML = INFOCNT[cntryname][1];
+    el2.onclick = draw;
+    cntrylist.appendChild(el2);
+  }
+
   DC = new dbCartaSvg({
     id: 'mcol',
     height: document.getElementById('mcol').offsetHeight,
@@ -111,21 +126,6 @@ function init() {
       fill: 'transparent', stroke: '#aaa', 'stroke-dasharray': '4', d: path
     });    
   });
-
-  // fill list
-  for (var cntryname in COUNTRIES) {
-    var el = document.createElement('dt');
-    el.value = cntryname;
-    el.style.backgroundColor = '#ddd';
-    el.appendChild(document.createTextNode(cntryname));
-    el.onclick = draw;
-    cntrylist.appendChild(el);
-    var el2 = document.createElement('dd');
-    el2.value = cntryname;
-    el2.innerHTML = INFOCNT[cntryname][1];
-    el2.onclick = draw;
-    cntrylist.appendChild(el2);
-  }
 
 };
 
