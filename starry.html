@@ -30,19 +30,20 @@ egax@bk.ru, 2013. b230409
 <script>
 // list layers in order
 var mopt = {
-  'cntlines': {cls: 'Line', fg: 'rgba(200,200,170,0.3)', labelcolor: 'rgb(200,200,170)'},
+  'cntlines': {cls: 'Line', fg: 'rgba(230,230,200,0.3)', labelcolor: 'rgb(230,230,200)'},
   'cntpos': {cls: 'Dot', fg: 'rgb(17,17,96)', labelcolor: 'rgb(0,200,0)'},
   'stars': {cls: 'Dot', fg: 'rgb(255,255,255)', labelcolor: 'rgb(155,155,200)'},
   'sun': {cls: 'Dot', fg: 'rgb(255,255,0)', labelcolor: 'rgb(255,255,0)'},
   'moon': {cls: 'Dot', fg: 'rgb(200,200,200)', labelcolor: 'rgb(200,200,200)'},
   'planets': {cls: 'Dot', fg: 'rgb(220,200,200)', labelcolor: 'rgb(255,155,128)'},
   'earth': {},
-  'sattrac': {cls: 'Line', fg: 'rgba(100,100,220,0.4)'},    
+  'sattrac': {cls: 'Line', fg: 'rgba(255,188,0,0.5)'},    
   'satsurface': {cls: 'Dot', fg: 'rgba(255,255,220,0.9)', size: '2'},
   'sattrace': {cls: 'Line', fg: 'rgb(255,255,0)'},
   'satsector': {cls: 'Polygon', fg: 'rgba(200,200,170,0.1)', bg: 'rgba(200,200,170,0.1)', width: '0.1'},
   'satpos':  {cls: 'Dot', fg: 'rgb(200,200,170)', labelcolor: 'rgb(200,200,170)'},
-  'terminator': {cls: 'Polygon', fg: 'rgba(0,0,0,0.3)', bg: 'rgba(0,0,0,0.3)'}
+  'terminator': {cls: 'Polygon', fg: 'rgba(0,0,0,0.3)', bg: 'rgba(0,0,0,0.3)'},
+  '.Water':     {cls: 'Polygon', fg: 'rgb(64,80,80)', bg: 'rgb(64,80,80)'}
 };
 // list sat
 var msat = {};
@@ -96,7 +97,7 @@ function proj() {
   // reset map
   var centerof = DV.toPoints([0, 0], false);
   DV.centerCarta(centerof[0] + DV.m.offset[0], centerof[1] + DV.m.offset[1]);
-  DV.style.backgroundColor = DV.isTurnable() ? 'rgb(17,17,96)' : 'rgb(186,196,205)';
+  DV.style.backgroundColor = DV.isTurnable() ? 'rgb(22,22,38)' : 'rgb(186,196,205)';
   freeImg();
   loadImg();
 }

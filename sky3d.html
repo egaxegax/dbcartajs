@@ -32,14 +32,14 @@ function initMap() {
 
   // layers
   var mopt = {
-    cntlines: {text: 'Созвездия', fg: 0x28285a, opacity: 0.9, labelcolor: 0x00c800},
+    cntlines: {text: 'Созвездия', fg: 0xe6e6c8, opacity: 0.3, labelcolor: 0x00c800},
     stars: {text: 'Звезды', bg: 0xffffff, labelcolor: 0x8282b4},
     sun: {text: 'Солнце', bg: 0xe8c800, labelcolor: 0xffff00},
     moon: {text: 'Луна', bg: 0xd8d8d8, fg: 0x236e77, opacity: 0.8, labelcolor: 0xc8c8c8},
     planets: {text: 'Планеты', bg: 0xffc8c8, fg: 0x323c96, opacity: 0.8, labelcolor: 0xff9b80},
     earth: {text: 'Земля', bg: 0xffc8c8, fg: 0xc86400, opacity: 0.8},
     meridians: {text: 'Коорд.сетка', fg: 0x8a8a8a, opacity: 0.8},
-    sattrac: {text: 'Орбиты КА', bg: 0xfa1e3c, fg: 0x646478, opacity: 0.5}
+    sattrac: {text: 'Орбиты КА', bg: 0xffbc00, fg: 0xffbc00, opacity: 0.5}
   };
 
   var radius = 6378.136,  // ea radius
@@ -522,7 +522,7 @@ function initMap() {
     var DV = new THREE.CanvasRenderer();
   }
 
-  DV.setClearColor( 0x070741 );
+  DV.setClearColor( 0x161626 );
 
   var camera = new THREE.PerspectiveCamera( 25, 1, 50, 1e15 );
   camera.position.x = radius * 20;
