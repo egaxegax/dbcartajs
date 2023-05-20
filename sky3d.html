@@ -217,7 +217,7 @@ function initMap() {
       window.autotime = setInterval(function() {
         setSelTime(500*20);
         update();
-      }, 200);
+      }, 500);
       document.getElementById('btauto').textContent = '\u23F8';
     }
   };
@@ -712,8 +712,10 @@ function initMap() {
 
   setSelTime();
   init();
-  update();
-  setAutoTime();
+  setTimeout(function(){
+    update();
+    setAutoTime();
+  }, 100);
 
 };
 
