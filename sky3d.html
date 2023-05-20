@@ -325,7 +325,7 @@ function initMap() {
             // pos
             var pv = satellite.propagate(satrec, gmtime[0], gmtime[1], gmtime[2], gmtime[3], gmtime[4], gmtime[5]);
             if (!pv['position']){
-//              console.log(name, j);
+              console.log('no position', name, tledata[name][j][0]);
               continue;
             }
             var sprite = new THREE.Sprite(new THREE.SpriteMaterial({map: (tledata[name][j][0] == 'ISS (ZARYA)' ? issTexture : satelliteTexture), color: layer.bg}));
