@@ -2,7 +2,7 @@
 // HTML5 Canvas vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013. b230409.
+// egax@bk.ru, 2013. b230521.
 //
 function dbCarta(cfg) {
   // Constructor config {
@@ -71,7 +71,7 @@ function dbCarta(cfg) {
       '.ZoomRect':  {cls: 'Polygon', fg: 'rgb(50,150,255)', bg: 'transparent'},
       '.Arctic':    {cls: 'Polygon', fg: 'rgb(210,221,195)', bg: 'rgb(210,221,195)'},
       '.Mainland':  {cls: 'Polygon', fg: 'rgb(135,159,103)', bg: 'rgb(135,159,103)'},
-      '.Water':     {cls: 'Polygon', fg: 'rgb(90,140,190)', bg: 'rgb(90,140,190)'},
+      '.Water':     {cls: 'Polygon', fg: 'rgb(64,80,80)', bg: 'rgb(64,80,80)'},
       '.WaterLine': {cls: 'Line', fg: 'rgb(186,196,205)'},
       '.Latitude':  {cls: 'Line', fg: 'rgb(180,180,180)', anchor: ['start', 'bottom']},
       '.Longtitude':{cls: 'Line', fg: 'rgb(180,180,180)', anchor: ['start', 'top']},

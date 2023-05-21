@@ -40,8 +40,8 @@ function draw(ev) {
     CONTINENTS.map(function(cont){
       childs.push( DC.append('polygon', {
         points: DC.interpolateCoords(cont[2], true, 10).join(' '),
-        fill: 'silver',
-        stroke: 'silver'
+        fill: 'rgb(135,159,103)',
+        stroke: 'rgb(135,159,103)'
       }) );
     });
   }

@@ -29,8 +29,8 @@ function draw(opt) {
     m.label = opt.target.innerHTML;
     DV.reload(m);
     DV.centerCarta(m.centerofpts[0][0] + DV.m.offset[0], m.centerofpts[0][1] + DV.m.offset[1]);
-    DV.scaleCarta(1);
-    DV.scaleCarta(parseInt(m.label.length/3 + 0.5));
+//    DV.scaleCarta(1);
+//    DV.scaleCarta(parseInt(m.label.length/3 + 0.5));
     DV.draw();
     DV.paintCartaPts(m.centerofpts, 'DotPort', m.label, m.centerofpts);
   }

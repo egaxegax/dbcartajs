@@ -2,7 +2,7 @@
 // HTML5 SVG vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2015. b230303.
+// egax@bk.ru, 2015. b230522.
 //
 function dbCartaSvg(cfg) {
   var SVG_NS = 'http://www.w3.org/2000/svg',
@@ -93,7 +93,7 @@ function dbCartaSvg(cfg) {
   self.extend(self, {
     cfg: {
       draggable: cfg.draggable == undefined ? true : cfg.draggable,
-      boundbg: cfg.boundbg || 'rgb(90,140,190)',
+      boundbg: cfg.boundbg || 'rgb(64,80,80)',
       scalebg: cfg.scalebg || 'rgba(200,200,200,0.3)',
       sbar: cfg.sbar == undefined ? true : cfg.sbar,
       sbarpos: cfg.sbarpos || 'right',
