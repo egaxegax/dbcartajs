@@ -19,6 +19,7 @@ b,i,em { color:#aaa; }
 .gray { color:#787878; font-size: smaller; }
 .nowrap { white-space:nowrap; }
 .main { margin:0px auto 7px auto; font-size:larger; max-width:700px; }
+.inl { display:inline; }
 .stripe { padding:10px; background-color:#333; border:1px solid #404040; }
 .stripe2 { color:#eee; }
 .footer { font-size:medium; text-align:center; vertical-align:middle; }
@@ -28,13 +29,15 @@ b,i,em { color:#aaa; }
 <script src="js/data/continents.js"></script>
 </head>
 <body>
-<div id="demo1" class="main" style="text-align: center;"></div>
-<div class="main" style="text-align: center;">
-  <div style="font-size: x-large; color: #fff">Pan, zoom vector map and images (Canvas, SVG)</div>
-  <div class="gray">
-    <i> Просмотр векторных карт и изображений с навигацией в JavaScript </i>
-  </div>
-</div>
+<table class="main" style="border-collapse:collapse"><tr>
+  <td id="demo1"></td>
+  <td>
+    <div style="font-size: x-large; color: #fff">Pan, zoom vector map and images (Canvas, SVG)</div>
+    <div class="gray">
+      <i> Просмотр векторных карт и изображений с навигацией в JavaScript </i>
+    </div>
+  </td></tr>
+</table>
 <div class="main stripe">
   Интерактивные схемы метро Москвы со строящимися линиями и станциями и Петербурга в <i>2023</i> году, 
   пригородного ж/д транспорта Москвы и МО в <i>2015</i> году.
@@ -220,7 +223,7 @@ b,i,em { color:#aaa; }
 <div class="main stripe" style="text-align: center">
  Проект <a href="https://github.com/egaxegax/dbcartajs" target="_blank">GitHub</a>
    &emsp; &emsp; 
-   <a title="Home" href="/" style="font-size: larger; font-weight: bolder;" > &#8962; </a>
+   <a title="Home" href="/" > / </a>
 </div>
 
 <div class="main footer">
@@ -234,6 +237,7 @@ b,i,em { color:#aaa; }
   var cx = Math.random() * 360,
       cy = Math.random() * 180;
   var dw1 = new dbCarta({id:'demo1', width:150, rbar:false, bg:'transparent'});
+  dw1.clfunc.onmousemove = null;
   dw1.mopt['.Mainland'] = {cls: 'Polygon', fg: '#ffbc00', bg: '#ffbc00'};
   dw1.mopt['.Water'] = {cls: 'Polygon', fg: '#787878', bg: '#787878'};
   dw1.initProj(203, ' +lon_0=' + cx + ' +lat_0=' + cy);
