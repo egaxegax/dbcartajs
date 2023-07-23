@@ -495,7 +495,7 @@ function calcRoute(fromid, toid){
   //
 var DC = new dbCartaSvg({
   id: 'mcont',
-  height: document.getElementById('mcont').offsetHeight-document.getElementById('yandex_rtb_R-A-2277013-1').offsetHeight,
+  height: document.getElementById('mcont').offsetHeight-(window.yaContextCb ? 90:0),
   bg: 'rgb(250,255,250)',
   sbar: 0
 //  sbarpos: 'right',
