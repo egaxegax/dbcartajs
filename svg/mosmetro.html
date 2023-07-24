@@ -504,12 +504,10 @@ var DC = new dbCartaSvg({
   // events
 DC.extend(DC.root, {
   ondblclick: function(){ clearRoute(); }
-//  ondblclick: function(){ DC.savetoimage(); }
 });
-if(window.addEventListener) 
-  window.addEventListener('load', draw, false);
-else 
-  window.attachEvent('onload', draw);
+
+draw();
+
 </script>
 </body>
 </html>

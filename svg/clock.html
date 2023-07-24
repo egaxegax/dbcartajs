@@ -91,12 +91,8 @@ var DC = new dbCartaSvg({
   sbar: 0,
   bg: 'white',
   scalebg: 'rgba(100,200,100,0.2)'
-});  
-if(window.addEventListener) {
-  window.addEventListener('load', function(){ setInterval(timerfunc, 1000); timerfunc(); }, false);
-} else {
-  window.attachEvent('onload', function(){ setInterval(timerfunc, 1000); timerfunc(); });
-}
+});
+setInterval(timerfunc, 1000); timerfunc();
 </script>
 </body>
 </html>
