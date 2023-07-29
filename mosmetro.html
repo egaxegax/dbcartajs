@@ -29,7 +29,9 @@ egax@bk.ru, 2013-23.
 </td>
 </tr>
 <tr>
-  <td colspan="2" id="mcol"></td>
+  <td colspan="2" id="mcol">
+    <div id="yandex_rtb_R-A-2277013-1" style="max-height:50px"></div>
+  </td>
 </tr>
 </table>
 <script src="js/dbcarta.js"></script>
@@ -124,6 +126,13 @@ function calcRoute(fromid, toid){
     }
   });
 }
+  // reklama size
+function Ya_Rtb1_Height(){
+  return window.yaContextCb ? 60:0;
+}
+  //
+document.getElementById('yandex_rtb_R-A-2277013-1').style.height = Ya_Rtb1_Height() + "px";
+  //
 var stl = document.getElementById('stl');
 stl.onchange = function(){
   var v = this.value;
@@ -155,7 +164,7 @@ cInches.onchange = function(){
   //
 var DV = new dbCarta({
   id: 'mcol',
-  height: document.getElementById('mcol').offsetHeight,
+  height: document.getElementById('mcol').offsetHeight-Ya_Rtb1_Height(),
   viewportx: 220, 
   viewporty: 220, 
   rbar: 0,
