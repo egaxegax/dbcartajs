@@ -38,13 +38,13 @@ egax@bk.ru, 2013-23.
 <script src="js/data/mosmetro.js"></script>
 <script src="js/alg/bfs.js"></script>
 <script>
-// Center map
+  // Center map
 function centerMap(coords){
   var pts = DV.toPoints(coords);
   DV.centerCarta(pts[0] + DV.m.offset[0], pts[1] + DV.m.offset[1]);
   DV.draw();
 }
-// Draw transparent rect above viewmap
+  // Draw transparent rect above viewmap
 function maskMap(){
   var vs = DV.viewsizeOf(),
       rect = [[vs[0], vs[1]], [vs[2], vs[1]], [vs[2], vs[3]], [vs[0], vs[3]]]; 
@@ -53,11 +53,11 @@ function maskMap(){
   DV.paintCarta(rect, 'selpath');
 //  DV.paintBar();
 }
-// Diagonal size for ratio
+  // Diagonal size for ratio
 function mds(o) { 
   return Math.sqrt(DV.sizeOf()[2]*DV.sizeOf()[2]+DV.sizeOf()[3]*DV.sizeOf()[3])/15*o/100;
 }
-// BFS func
+  // BFS func
 function calcRoute(fromid, toid){
   if (!fromid || !toid) { return; };
   var inches=[]; // interchanges coords
