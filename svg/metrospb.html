@@ -2,14 +2,14 @@
 <!--
 St. Petersburg Metro map. SVG version.
 View lines and stations and calc routes.
-egax@bk.ru, 2022.
+egax@bk.ru, 2022-23.
 -->
 <html lang="ru">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Карта метро Санкт-Петербурга в 2022 году / SVG векторная карта</title>
-<meta name="description" content="Схема метро Санкт-Петербурга c расчётом пути. Схема действующих линий и станций петербургского метро в 2022 году">
+<title>Карта метро Санкт-Петербурга в 2023 году / SVG векторная карта</title>
+<meta name="description" content="Схема метро Санкт-Петербурга c расчётом пути. Схема действующих линий и станций петербургского метро в 2023 году">
 <meta name="keywords" content="схема метро питера, svg векторная карта петербурга, metrospb">
 <link rel="icon" href="../img/fav.svg" type="image/svg+xml">
 <link rel="canonical" href="metrospb.html">
@@ -17,7 +17,13 @@ egax@bk.ru, 2022.
 <script src="/static/js/metrics.js"></script>
 </head>
 <body>
-<table><tr><td id="mcont"></td></tr></table>
+<table>
+<tr>
+  <td id="mcont">
+    <div id="yandex_rtb_R-A-2277013-1" style="max-height:60px"></div>
+  </td>
+</tr>
+</table>
 <script src="../js/dbcartasvg.js"></script>
 <script src="../js/alg/bfs.js"></script>
 <script>
@@ -168,8 +174,10 @@ var MLBS=[
 ['neva_river3', 'nr', [], 'Большая Нева', [-94,50]]
 ];
 var msel, mopt = {}; // define new layers
-  // diag. size ratio
-function mds(o){ return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*o/100; }
+  // proportional for mobile diag. size ratio
+function mds(o) { 
+  return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*o/100;
+}
   // 
 function draw(){
   var route = function(o){ return DC.extend({class: 'route', bg: 'none', join: 'round', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}); },
@@ -313,11 +321,11 @@ function draw(){
     }
     text.appendChild(document.createTextNode(t));    
   });
-   //
-  var ys = 180,    // needed height of map in degrees
-      mpts = DC.viewsizeOf(), // visible size of map in degrees 
-      scaley = (mpts[1]-mpts[3])/ys;
-  DC.scaleCarta(scaley);
+    //
+  var mpts = DC.viewsizeOf(), // visible size of map in degrees 
+      scalex = (mpts[2]-mpts[0])/180,
+      scaley = (mpts[1]-mpts[3])/180;
+  DC.scaleCarta(scalex > scaley ? scaley : scalex);
 }
   //
 function clearRoute(){
@@ -391,13 +399,20 @@ function calcRoute(fromid, toid){
     }
   });
 }
+  // reklama size
+function Ya_Rtb1_Height(){
+  return window.yaContextCb ? 60:0;
+}
+  //
+document.getElementById('yandex_rtb_R-A-2277013-1').style.height = Ya_Rtb1_Height() + 'px';
   //
 var DC = new dbCartaSvg({
   id: 'mcont',
-  height: document.getElementById('mcont').offsetHeight,
+  height: document.getElementById('mcont').offsetHeight-Ya_Rtb1_Height(),
   bg: 'white',
-  sbarpos: 'left',
-  scalebg: 'rgba(100,200,100,0.2)'
+  sbar: 0
+//  sbarpos: 'left',
+//  scalebg: 'rgba(100,200,100,0.2)'
 });
   // events
 DC.extend(DC.root, {
