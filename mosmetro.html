@@ -246,8 +246,10 @@ DV.extend(DV.mopt, {
   t_d:       rail_d(),
   rmcd1:     rail(     {fg: '#fa842f'}),
   rmcd1_d:   rail_d(),
-  rmcd2:     rail(     {fg: '#29c0d3'}),
+  rmcd2:     rail(     {fg: '#e29ec0'}),
   rmcd2_d:   rail_d(),
+  rmcd3:     rail(     {fg: '#e17a4b'}),
+  rmcd3_d:   rail_d(),
   svo_t:     label(    {anchor: ['end',   'middle']}),
   svo_d_t:   label(    {anchor: ['end',   'top']}),
   vko_t:     label(    {anchor: ['start', 'middle']}),
@@ -385,7 +387,9 @@ DV.extend(DV.mopt, {
   smcd1:     st_mcd(  {fg: DV.mopt['rmcd1'].fg, anchor: ['start', 'middle']}),
   smcd1_1:   inst_mcd({fg: DV.mopt['rmcd1'].fg}),
   smcd2:     st_mcd(  {fg: DV.mopt['rmcd2'].fg, anchor: ['start', 'middle']}),
-  smcd2_1:   inst_mcd({fg: DV.mopt['rmcd2'].fg})
+  smcd2_1:   inst_mcd({fg: DV.mopt['rmcd2'].fg}),
+  smcd3:     st_mcd(  {fg: DV.mopt['rmcd3'].fg, anchor: ['start', 'middle']}),
+  smcd3_1:   inst_mcd({fg: DV.mopt['rmcd3'].fg})
 });
   // add lines dashed
 [].slice.call(MLNS).map(function(a){
