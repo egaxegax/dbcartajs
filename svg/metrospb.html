@@ -292,9 +292,23 @@ function draw(){
       id: 't'+ ftype +'_'+ abbr, class: mopt[ftype].class,
       x: pts[0] + mds(dx), y: pts[1] + mds(dy), fill: mopt[stype].labelcolor || 'black',
       'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
-      'text-anchor': a ? a[0] : ''
+      'text-anchor': a ? a[0] : '', cursor: 'pointer'
     });
     text.appendChild(document.createTextNode(label));
+    DC.extend(text, {
+      onclick: function(){
+        var station = document.getElementById(text.getAttribute('id').slice(1));
+        text.setAttribute('font-size', DC.root.getAttribute('width')/125);
+        station.onclick({target: station});
+      },
+      onmousemove: function(){
+        var ts = [], tsattr =[];
+        ts.push( {target: text} );
+        tsattr.push( {'font-size': DC.root.getAttribute('width')/80} );
+         // highlight label
+        DC.doMap(ts, tsattr);
+      }
+    });
   });
   MLBS.map(function(label){
     var ftype = label[0], t = label[3], coords = label[4],
