@@ -19,13 +19,16 @@ egax@bk.ru, 2015-23.
 <body>
 <table>
 <tr style="height:1px; background-color:rgb(210,224,240);">
-<td width="60%" valign="top">
+<td width="60%">
   <h2 style="margin:0; line-height:1;">
     <a href="/dbcartajs" style="text-decoration:none;color:#000;">Метро Москвы</a>
   </h2>
 </td>
 <td>
-  <input type="button" onclick="DC.savetoimage()" title="Сохранить файл..." value="&nbsp;&darr;&nbsp;">
+  <input type="button" onclick="alert('Выберите две станции для построения маршрута. \nОчистить путь можно по двойному клику')" value="&nbsp;?&nbsp;">
+</td>
+<td>
+  <input type="button" onclick="DC.savetoimage()" title="Сохранить скриншот..." value="&nbsp;&darr;&nbsp;">
 </td>
 <td>
   &nbsp; 
@@ -40,9 +43,12 @@ egax@bk.ru, 2015-23.
   <option id="inch_ext">&emsp; Строящиеся</option>
   </select> 
 </td>
+<td>
+  &nbsp; 
+</td>
 </tr>
 <tr>
-  <td colspan="5" id="mcont" valign="bottom">
+  <td colspan="6" id="mcont" valign="bottom">
     <div id="yandex_rtb_R-A-2277013-1" style="max-height:60px"></div>
   </td>
 </tr>
@@ -91,7 +97,6 @@ function draw() {
     r1:        route(    {fg: '#ed1b35'}),
     r1_ext:    route_ext({fg: '#ed1b35'}),
     r2:        route(    {fg: '#44b85c'}),
-    r2_ext:    route_ext({fg: '#44b85c'}),
     r3:        route(    {fg: '#0078bf'}),
     r3_ext:    route_ext({fg: '#0078bf'}),
     r4:        route(    {fg: '#19c1f3'}),
@@ -100,17 +105,13 @@ function draw() {
     r6:        route(    {fg: '#f58631'}),
     r6_ext:    route_ext({fg: '#f58631'}),
     r7:        route(    {fg: '#8e479c'}),
-    r7_ext:    route_ext({fg: '#8e479c'}),
     r8:        route(    {fg: '#ffcb31'}),
     r8_ext:    route_ext({fg: '#ffcb31'}),
     r9:        route(    {fg: '#a1a2a3'}),
     r10:       route(    {fg: '#b3d445'}),
-    r10_ext:   route_ext({fg: '#b3d445'}),
     r11:       route(    {fg: '#79cdcd'}),
-    r11_ext:   route_ext({fg: '#79cdcd'}),
     r11A:      route(    {fg: '#79cdcd'}),
     r12:       route(    {fg: '#acbfe1'}),
-    r12_ext:   route_ext({fg: '#acbfe1'}),
     r13:       route(    {fg: '#2c87c5', width: 2}),
     r14:       rail(     {fg: '#f76093', width: 2}),
     r14_d:     rail_d(   {width:2}),
