@@ -1,0 +1,4 @@
+.bg { background-color:#404040; color:#eee; margin:0; font: 16px tahoma,arial; }
+a, a:active, a:focus { color:#eee; outline:none; text-decoration: none; }
+input[type=text], input[type=password], input[type=number], input[type=button], textarea, select, button { 
+  border-radius:4px; border:1px solid #afafaf; background-color:#333; color:#ffbc00; }
