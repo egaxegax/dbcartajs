@@ -499,16 +499,12 @@ function calcRoute(fromid, toid){
     }
   }).length || clearRoute();
 }
-  // reklama size
-function Ya_Rtb1_Height(){
-  return window.yaContextCb ? 90:0;
-}
   //
-document.getElementById('yandex_rtb_R-A-2277013-1').style.height = Ya_Rtb1_Height() + 'px';
+document.getElementById('yandex_rtb_R-A-2277013-1').style.height = (isLocalhost() ? 0 : 90) + 'px';
   //
 var DC = new dbCartaSvg({
   id: 'mcont',
-  height: document.getElementById('mcont').offsetHeight-Ya_Rtb1_Height(),
+  height: document.getElementById('mcont').offsetHeight-document.getElementById('yandex_rtb_R-A-2277013-1').offsetHeight,
   bg: 'rgb(250,255,250)',
   sbar: 0
 //  sbarpos: 'right',

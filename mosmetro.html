@@ -128,12 +128,8 @@ function calcRoute(fromid, toid){
     }
   });
 }
-  // reklama size
-function Ya_Rtb1_Height(){
-  return window.yaContextCb ? 90:0;
-}
   //
-document.getElementById('yandex_rtb_R-A-2277013-1').style.height = Ya_Rtb1_Height() + "px";
+document.getElementById('yandex_rtb_R-A-2277013-1').style.height = (isLocalhost() ? 0 : 90) + 'px';
   //
 var stl = document.getElementById('stl');
 stl.onchange = function(){
@@ -166,7 +162,7 @@ cInches.onchange = function(){
   //
 var DV = new dbCarta({
   id: 'mcol',
-  height: document.getElementById('mcol').offsetHeight-Ya_Rtb1_Height(),
+  height: document.getElementById('mcol').offsetHeight-document.getElementById('yandex_rtb_R-A-2277013-1').offsetHeight,
   viewportx: 220, 
   viewporty: 220, 
   rbar: 0,
