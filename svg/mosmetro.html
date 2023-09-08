@@ -500,7 +500,7 @@ function calcRoute(fromid, toid){
   }).length || clearRoute();
 }
   //
-document.getElementById('yandex_rtb_R-A-2277013-1').style.height = (isLocalhost() ? 0 : 90) + 'px';
+document.getElementById('yandex_rtb_R-A-2277013-1').style.height = ((!String(window.location).match(/file:|localhost|127.0.0.1/)) ? 0 : 90) + 'px';
   //
 var DC = new dbCartaSvg({
   id: 'mcont',
