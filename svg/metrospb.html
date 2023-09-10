@@ -14,7 +14,6 @@ egax@bk.ru, 2022-23.
 <link rel="icon" href="../img/fav.svg" type="image/svg+xml">
 <link rel="canonical" href="metrospb.html">
 <style>html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
-<script defer src="/static/js/metrics.js" data-dark="0" data-floor="1"></script>
 </head>
 <body>
 <table>
@@ -414,11 +413,9 @@ function calcRoute(fromid, toid){
   });
 }
   //
-document.getElementById('yandex_rtb_R-A-2277013-1').style.height = ((String(window.location).match(/file:|localhost|127.0.0.1/)) ? 0 : 60) + 'px';
-  //
 var DC = new dbCartaSvg({
   id: 'mcont',
-  height: document.getElementById('mcont').offsetHeight-document.getElementById('yandex_rtb_R-A-2277013-1').offsetHeight,
+  height: document.getElementById('mcont').offsetHeight-((String(window.location).match(/file:|localhost|127.0.0.1/)) ? 0 : 60),
   bg: 'white',
   sbar: 0
 //  sbarpos: 'left',
