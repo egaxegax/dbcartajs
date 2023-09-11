@@ -32,7 +32,7 @@ egax@bk.ru, 2013-23.
 </td>
 </tr>
 <tr>
-  <td colspan="2" valign="center">
+  <td colspan="2" id="mcont" valign="center">
     <div id="yandex_rtb_R-A-2277013-1" style="max-height:60px"></div>
     <div id="mcol"></div>
     <div id="yandex_rtb_R-A-2277013-2" style="max-height:60px"></div>
@@ -163,7 +163,7 @@ cInches.onchange = function(){
   //
 var DV = new dbCarta({
   id: 'mcol',
-  height: document.getElementById('mcol').offsetHeight-((String(window.location).match(/file:|localhost|127.0.0.1/)) ? 0 : 60*2),
+  height: document.getElementById('mcont').offsetHeight-((String(window.location).match(/file:|localhost|127.0.0.1/)) ? 0 : 60*2),
   viewportx: 220, 
   viewporty: 220, 
   rbar: 0,
