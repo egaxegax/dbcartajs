@@ -35,7 +35,7 @@ table{height:98.8%}
 </td>
 </tr>
 <tr>
-  <td colspan="2" id="mcont" valign="top">
+  <td colspan="2" id="mcont">
     <div id="yandex_rtb_R-A-2277013-1" style="max-height:60px"></div>
     <div id="mcol"></div>
     <div id="yandex_rtb_R-A-2277013-2" style="max-height:60px"></div>
@@ -163,10 +163,17 @@ cInches.onchange = function(){
   o.innerHTML = (s.indexOf('\u2611')>-1 ? '&emsp;' : '\u2611')+' '+s.slice(s.search(' '));
   this.selectedIndex = 0;
 };
+  // rtb fix height
+if(!(String(window.location).match(/file:|localhost|127.0.0.1/))){
+  document.getElementById('yandex_rtb_R-A-2277013-1').style.height = document.getElementById('yandex_rtb_R-A-2277013-1').style.maxHeight;
+  document.getElementById('yandex_rtb_R-A-2277013-2').style.height = document.getElementById('yandex_rtb_R-A-2277013-2').style.maxHeight;
+}
   //
 var DV = new dbCarta({
   id: 'mcol',
-  height: document.getElementById('mcont').offsetHeight-((String(window.location).match(/file:|localhost|127.0.0.1/)) ? 0 : 60*2),
+  height: document.getElementById('mcont').offsetHeight-
+          document.getElementById('yandex_rtb_R-A-2277013-1').offsetHeight-
+          document.getElementById('yandex_rtb_R-A-2277013-2').offsetHeight,
   viewportx: 220, 
   viewporty: 220, 
   rbar: 0,
