@@ -108,7 +108,7 @@ var route = function(o){ return DV.extend({cls: 'Line', width: mds(5), anchor: [
     river = function(o){ return route(DV.extend({fg: "#e2fcfc", join: 'round', cap: 'round', labelcolor: '#5555FF', labelscale: 0}, o||{})); },
     inch = function(o){ return route(DV.extend({fg: '#aaa', join: 'round', cap: 'round', width: mds(8)}, o||{})); },
     inch_d = function(o) { return inch(DV.extend({fg: '#eee', width: mds(7)}, o||{})); },
-    station = function(o){ return DV.extend({cls: 'Dot', bg: 'white', size: mds(4), width: mds(2), labelscale: 1, labelpad: mds(3)}, o||{}); };
+    station = function(o){ return DV.extend({cls: 'Rect', bg: 'white', size: mds(7), width: mds(2), labelscale: 1, labelpad: mds(3)}, o||{}); };
 // lines
 DV.extend(DV.mopt, {
   dnepr_river: river({width: mds(80), rotate: 90}),
