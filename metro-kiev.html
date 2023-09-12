@@ -83,7 +83,7 @@ var MSTS = [
 ['s5','Nivki',[[-60,62]],'Нивки',null,1],
 ['s5','Beresteiskaya',[[-60,58]],'Берестейская',null,1],
 ['s5','Shulyavskaya',[[-60,54]],'Шулявская',null,1],
-['s5','Politehnicheskiy_Institut',[[-60,50]],'Политехнический интститут',null,1],
+['s5','Politehnicheskiy_Institut',[[-60,50]],'Политехнический институт',null,1],
 ['s5','Vokzalnaya',[[-60,46]],'Вокзальная',null,1],
 ['s5','Universitet',[[-60,42]],'Университет',null,1],
 ['s5_2','Teatralnaya',[[-31.76,10]],'Театральная',null,1],
@@ -105,16 +105,16 @@ var DV = new dbCarta({
 });
 // define new layers
 var route = function(o){ return DV.extend({cls: 'Line', width: mds(5), anchor: ['start', 'middle'], labelscale: 1}, o||{}); },
-    river = function(o){ return route(DV.extend({fg: "#E2FCFC", join: 'round', cap: 'round', labelcolor: '#5555FF', labelscale: 0}, o||{})); },
-    inch = function(o){ return route(DV.extend({fg: '#000000', join: 'round', cap: 'round', width: mds(8)}, o||{})); },
-    inch_d = function(o) { return inch(DV.extend({fg: '#FFFFFF', width: mds(7)}, o||{})); },
+    river = function(o){ return route(DV.extend({fg: "#e2fcfc", join: 'round', cap: 'round', labelcolor: '#5555FF', labelscale: 0}, o||{})); },
+    inch = function(o){ return route(DV.extend({fg: '#aaa', join: 'round', cap: 'round', width: mds(8)}, o||{})); },
+    inch_d = function(o) { return inch(DV.extend({fg: '#eee', width: mds(7)}, o||{})); },
     station = function(o){ return DV.extend({cls: 'Dot', bg: 'white', size: mds(4), width: mds(2), labelscale: 1, labelpad: mds(3)}, o||{}); };
 // lines
 DV.extend(DV.mopt, {
   dnepr_river: river({width: mds(80), rotate: 90}),
-  r1: route({fg: '#44B85C'}),
-  r3: route({fg: '#0078BF'}),
-  r5: route({fg: '#ED1B35'}),
+  r1: route({fg: '#44b85c'}),
+  r3: route({fg: '#0078bf'}),
+  r5: route({fg: '#ed1b35'}),
   inch: inch(),
   inch_d: inch_d()
 });
