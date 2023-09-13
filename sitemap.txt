@@ -3,6 +3,7 @@ https://egaxegax.github.io/dbcartajs/mosmetro.html
 https://egaxegax.github.io/dbcartajs/merc.html
 https://egaxegax.github.io/dbcartajs/atlas.html
 https://egaxegax.github.io/dbcartajs/countries.html
+https://egaxegax.github.io/dbcartajs/metro-kiev.html
 https://egaxegax.github.io/dbcartajs/metro-tbilisi.html
 https://egaxegax.github.io/dbcartajs/starry.html
 https://egaxegax.github.io/dbcartajs/soccerf.html
