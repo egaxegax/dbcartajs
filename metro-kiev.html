@@ -19,10 +19,15 @@ egax@bk.ru, 2023.
 <script defer src="/static/js/metrics.js" data-floor="1"></script>
 </head>
 <body>
-<table><tr><td id="mcont">
-<select id="stationlist" style="position:fixed; top:10px; right:10px; width:100px">
-<option disabled selected>Выберите...</option></select>
-</td></tr></table>
+<table>
+<tr>
+<td id="mcont">
+  <select id="stationlist" style="position:fixed; top:10px; right:10px; width:100px">
+  <option disabled selected>Выберите...</option></select>
+  <div id="yandex_rtb_R-A-2277013-1" style="max-height:60px"></div>
+</td>
+</tr>
+</table>
 <script>
   // proportional for mobile diag. size ratio
 function mds(o){ return Math.sqrt(DV.sizeOf()[2]*DV.sizeOf()[2]+DV.sizeOf()[3]*DV.sizeOf()[3])/15*o/100; }
@@ -99,7 +104,7 @@ var MSTS = [
 // -------------------------------------------
 var DV = new dbCarta({
   id: 'mcont',
-  height: document.getElementById('mcont').offsetHeight,
+  height: document.getElementById('mcont').offsetHeight-((String(window.location).match(/file:|localhost|127.0.0.1/)) ? 0 : 60),
   bg: 'white',
   scalebg: 'rgba(0,10,10,0.05)'
 });
