@@ -103,7 +103,7 @@ function draw(){
     height: document.getElementById('mcont').offsetHeight-
             ((String(window.location).match(/file:|localhost|127.0.0.1/)) ? 0 : 60),
     bg: 'white',
-    scalebg: 'rgba(200,100,50,0.2)'
+    scalebg: 'rgba(100,100,50,0.08)'
   });
   // define new layers
   var route = function(o){ return DV.extend({cls: 'Line', width: mds(5), anchor: ['start', 'middle'], labelscale: 1}, o||{}); },
