@@ -19,8 +19,8 @@ egax@bk.ru, 2022-23.
 <body>
 <table>
 <tr>
-  <td id="mcont">
-    <div id="yandex_rtb_R-A-2277013-1" style="max-height:60px"></div>
+  <td id="mcont" valign="bottom">
+    <div id="yandex_rtb_R-A-2277013-2" style="max-height:60px"></div>
   </td>
 </tr>
 </table>
@@ -416,7 +416,8 @@ function calcRoute(fromid, toid){
   //
 var DC = new dbCartaSvg({
   id: 'mcont',
-  height: document.getElementById('mcont').offsetHeight-((String(window.location).match(/file:|localhost|127.0.0.1/)) ? 0 : 60),
+  height: document.getElementById('mcont').offsetHeight-
+          ((String(window.location).match(/file:|localhost|127.0.0.1/)) ? 0 : 60),
   bg: 'white',
   sbar: 0
 //  sbarpos: 'left',

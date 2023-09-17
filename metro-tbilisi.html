@@ -2,7 +2,7 @@
 <!--
 Tbilisi Georgia.
 Metro lines and stations map.
-egax@bk.ru, 2013.
+egax@bk.ru, 2013-23.
 -->
 <html lang="ru">
 <head>
@@ -19,10 +19,16 @@ egax@bk.ru, 2013.
 <script defer src="/static/js/metrics.js" data-floor="1"></script>
 </head>
 <body>
-<table><tr><td id="mcont">
-<select id="stationlist" style="position:fixed; top:10px; left:10px; width:150px">
-<option disabled selected>Выберите...</option></select>
-</td></tr></table>
+<table>
+<tr>
+<td id="mcont" valign="bottom">
+  <select id="stationlist" style="position:fixed; bottom:10px; left:10px; width:150px">
+  <option disabled selected>Выберите...</option>
+  </select>
+  <div id="yandex_rtb_R-A-2277013-2" style="max-height:60px"></div>
+</td>
+</tr>
+</table>
 <script>
   // diag.size ratio
 function mds(o){ return Math.sqrt(DV.sizeOf()[2]*DV.sizeOf()[2]+DV.sizeOf()[3]*DV.sizeOf()[3])/15*o/100; }
@@ -97,7 +103,8 @@ function draw(){
   // -------------------------------------------
   DV = new dbCarta({
     id: 'mcont',
-    height: document.getElementById('mcont').offsetHeight,
+    height: document.getElementById('mcont').offsetHeight-
+            ((String(window.location).match(/file:|localhost|127.0.0.1/)) ? 0 : 60),
     bg: 'white',
     scalebg: 'rgba(200,100,50,0.2)'
   });
