@@ -167,7 +167,7 @@ cInches.onchange = function(){
   //
 var DV = new dbCarta({
   id: 'mcol',
-  height: document.getElementById('mcont').offsetHeight-adjustRtbHeight(),
+  height: document.getElementById('mcont').offsetHeight-('adjustRtbHeight' in window ? adjustRtbHeight() : 0),
   viewportx: 220, 
   viewporty: 220, 
   rbar: 0,

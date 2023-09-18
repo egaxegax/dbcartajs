@@ -100,7 +100,7 @@ var MSTS = [
 // -------------------------------------------
 var DV = new dbCarta({
   id: 'mcont',
-  height: document.getElementById('mcont').offsetHeight-adjustRtbHeight(),
+  height: document.getElementById('mcont').offsetHeight-('adjustRtbHeight' in window ? adjustRtbHeight() : 0),
   bg: 'white',
   scalebg: 'rgba(100,100,50,0.08)',
   mapbg: 'white'
