@@ -18,6 +18,7 @@ egax@bk.ru, 2015-23.
 html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}
 table{height:98.8%}
 </style>
+<script src="/static/js/updater.js"></script>
 <script defer src="/static/js/metrics.js"></script>
 </head>
 <body>
@@ -495,17 +496,10 @@ function calcRoute(fromid, toid){
     }
   }).length || clearRoute();
 }
-  // rtb fix height
-if(!(String(window.location).match(/file:|localhost|127.0.0.1/))){
-  document.getElementById('yandex_rtb_R-A-2277013-1').style.height = document.getElementById('yandex_rtb_R-A-2277013-1').style.maxHeight;
-  document.getElementById('yandex_rtb_R-A-2277013-2').style.height = document.getElementById('yandex_rtb_R-A-2277013-2').style.maxHeight;
-}
   //
 var DC = new dbCartaSvg({
   id: 'mcol',
-  height: document.getElementById('mcont').offsetHeight-
-          document.getElementById('yandex_rtb_R-A-2277013-1').offsetHeight-
-          document.getElementById('yandex_rtb_R-A-2277013-2').offsetHeight,
+  height: document.getElementById('mcont').offsetHeight-adjustRtbHeight(),
   bg: 'rgb(250,255,250)',
   sbar: 0
 //  sbarpos: 'right',
