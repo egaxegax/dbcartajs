@@ -293,18 +293,12 @@ DC.extend(mopt, {
 DC.extend(DC.root, {
   ondblclick: function(){ clearRoute(); }
 });
-var ptext = DC.append(DC.root, 'text', {
-  x: DC.root.getAttribute('width')-10, y: DC.root.getAttribute('height')-5,
-  fill: 'black', 'font-size': '10px', 'text-anchor': 'end'
-});
 // events
 DC.extend(DC.root, {
   onmousemove: function(ev){
     DC.mousemove(ev);
-    for(var i=0; i<ptext.childNodes.length; i++)
-      ptext.removeChild(ptext.childNodes[i]);
     var pts = DC.fromPoints( DC.canvasXY(ev), true );
-    if (pts) ptext.appendChild(document.createTextNode('X '+ pts[0].toFixed(1) + ' Y ' + pts[1].toFixed(1)));
+    if (pts) console.log(document.createTextNode('X '+ pts[0].toFixed(1) + ' Y ' + pts[1].toFixed(1)));
   }
 });
   // draw routes 
