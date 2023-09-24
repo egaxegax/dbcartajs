@@ -294,13 +294,13 @@ DC.extend(DC.root, {
   ondblclick: function(){ clearRoute(); }
 });
 // events
-DC.extend(DC.root, {
-  onmousemove: function(ev){
-    DC.mousemove(ev);
-    var pts = DC.fromPoints( DC.canvasXY(ev), true );
-    if (pts) console.log(document.createTextNode('X '+ pts[0].toFixed(1) + ' Y ' + pts[1].toFixed(1)));
-  }
-});
+//DC.extend(DC.root, {
+//  onmousemove: function(ev){
+//    DC.mousemove(ev);
+//    var pts = DC.fromPoints( DC.canvasXY(ev), true );
+//    if (pts) console.log('X '+ pts[0].toFixed(1) + ' Y ' + pts[1].toFixed(1));
+//  }
+//});
   // draw routes 
 MLNS.map(function(line){
   var ftype = line[0], abbr = line[1], coords = line[2];
