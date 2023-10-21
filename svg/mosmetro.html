@@ -84,6 +84,91 @@ function inst_mcd(o) { return st_mcd(DC.extend({size: 2, labelcolor: o['fg']}, o
 function inst(o)     { return station(DC.extend({size: 4, labelcolor: o['fg'], bg: o['fg']}, o)); };
 function inst_d(o)   { return inst(DC.extend({size: 3, width: 2}, o||{})); };
   //
+function clearRoute(){
+  find('.selpath').map(function(o){ DC.vp.removeChild(o); });
+  find('.selected').map(function(o){
+    var m = o.getAttribute('mclass');
+    DC.attr(o, {class: mopt[m].class, fill: mopt[m].bg, r: mds(mopt[m].size), 'stroke-width': mds(mopt[m].width)});
+  });
+  find('.route, .station, .label').map(function(o){ DC.attr(o, {opacity: '1'}); });
+}
+  //
+function calcRoute(fromid, toid){
+  console.log(fromid, toid);
+  var inches=[];
+  [].slice.call(document.getElementById('cInches').options).map(function(o){
+    if(o.innerHTML.indexOf('\u2611')>-1){ // checked
+      inches = inches.concat(makecrds(MLNS.filter(function(a){ return a[0]==o.id; })));
+    }
+  });
+  var pinches=[], proutes=[];
+  BFS(MSTS, inches, makeind(MSTS, fromid), makeind(MSTS, toid),
+    [ // stop stations
+      makeind(MSTS, 's5_Suvorovskaya'),
+      makeind(MSTS, 's5_3_Rossyskaya'),
+      makeind(MSTS, 's8_3_Dorogomilovskaya'),
+      makeind(MSTS, 's8_4_Plyushchikha'),
+      makeind(MSTS, 's8_1_Volkhonka')
+    ]).map(function(st,i,sts)
+  {
+    if(i < sts.length-1){
+      var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;
+      MLNS.map(function(b){
+        if((maketipn(b) == maketipn(sts[i])) && (maketipn(b) == maketipn(sts[i+1]))){
+          b[2].map(function(c,j){ // find coords between stations
+            r0 = Math.sqrt(Math.pow(d[0]-c[0],2)+Math.pow(d[1]-c[1],2));
+            r1 = Math.sqrt(Math.pow(e[0]-c[0],2)+Math.pow(e[1]-c[1],2));
+            rr = Math.sqrt(Math.pow(d[0]-e[0],2)+Math.pow(d[1]-e[1],2));
+            if((r0 <= rr) && (r1 <= rr)){
+              if(!inarray(cc,c)) cc.push(c);
+            }
+          });
+        }
+      });
+      if(cc.length<3) cc = cc.map(function(a){ return a.slice(0,2); }); //remove Q flag bezier without L
+      if(cc.length &&   //rotate first with last if indirect
+         (Math.sqrt(Math.pow(d[0]-cc[0][0],2)+Math.pow(d[1]-cc[0][1],2)))>=
+         (Math.sqrt(Math.pow(d[0]-cc[cc.length-1][0],2)+Math.pow(d[1]-cc[cc.length-1][1],2))))
+      {
+        if(!inarray(cc,e)) cc.unshift(e); 
+        if(!inarray(cc,d)) cc.push(d);
+      } else {
+        if(!inarray(cc,d)) cc.unshift(d);
+        if(!inarray(cc,e)) cc.push(e);
+      }
+      var pts = DC.interpolateCoords(cc, true),
+          path = ('M ' + pts).replace(/,/g, ' ');
+      if (inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length) {
+        pinches.push( {path: path, st: st} );  // inches paths
+      } else {
+        proutes.push ( {path: path, st: st} ); // routes paths
+      }
+    } else {
+      find('.route, .station, .label').map(function(o){ DC.attr(o, {opacity: '0.07'}); });
+      proutes.map(function(m){ // routes
+        DC.append('path', { class: 'selpath', d: m.path, stroke: DC.root.getElementById(makeid(m.st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-width': mds(8)});
+      });
+      pinches.map(function(m){ // interchanges above route
+        DC.append('path', { class: 'selpath', d: m.path, stroke: '#fafffa', fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-width': mds(4)});
+        DC.append('path', { class: 'selpath', d: m.path, stroke: DC.root.getElementById(makeid(m.st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-width': mds(2)});
+      });
+      sts.map(function(st){ // station + label above route
+        var ost = DC.root.getElementById(makeid(st));
+        var t = DC.root.getElementById('t' + ost.getAttribute('id'));
+        DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('stroke'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill: '#f5f5dc', 'stroke-width': mds(2), r: mds(4)});
+        if(t){
+          DC.append('text', {
+            x: t.getAttribute('x'), y: t.getAttribute('y'), 
+            class: 'selpath',  fill: t.getAttribute('fill'),
+            'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
+            'text-anchor': t.getAttribute('text-anchor')
+          }).innerHTML = t.innerHTML;
+        }
+      });
+    }
+  }).length || clearRoute();
+}
+  //
 var DC = new dbCartaSvg({
   id: 'mcol',
   height: document.getElementById('mcol').offsetHeight,
@@ -430,91 +515,6 @@ MLBS.map(function(label){
   text.appendChild(document.createTextNode(t));
 });
 //DC.scaleCarta(0.8);
-  //
-function clearRoute(){
-  find('.selpath').map(function(o){ DC.vp.removeChild(o); });
-  find('.selected').map(function(o){
-    var m = o.getAttribute('mclass');
-    DC.attr(o, {class: mopt[m].class, fill: mopt[m].bg, r: mds(mopt[m].size), 'stroke-width': mds(mopt[m].width)});
-  });
-  find('.route, .station, .label').map(function(o){ DC.attr(o, {opacity: '1'}); });
-}
-  //
-function calcRoute(fromid, toid){
-  console.log(fromid, toid);
-  var inches=[];
-  [].slice.call(document.getElementById('cInches').options).map(function(o){
-    if(o.innerHTML.indexOf('\u2611')>-1){ // checked
-      inches = inches.concat(makecrds(MLNS.filter(function(a){ return a[0]==o.id; })));
-    }
-  });
-  var pinches=[], proutes=[];
-  BFS(MSTS, inches, makeind(MSTS, fromid), makeind(MSTS, toid),
-    [ // stop stations
-      makeind(MSTS, 's5_Suvorovskaya'),
-      makeind(MSTS, 's5_3_Rossyskaya'),
-      makeind(MSTS, 's8_3_Dorogomilovskaya'),
-      makeind(MSTS, 's8_4_Plyushchikha'),
-      makeind(MSTS, 's8_1_Volkhonka')
-    ]).map(function(st,i,sts)
-  {
-    if(i < sts.length-1){
-      var cc=[], d=sts[i][2][0], e=sts[i+1][2][0], r0, r1, rr;
-      MLNS.map(function(b){
-        if((maketipn(b) == maketipn(sts[i])) && (maketipn(b) == maketipn(sts[i+1]))){
-          b[2].map(function(c,j){ // find coords between stations
-            r0 = Math.sqrt(Math.pow(d[0]-c[0],2)+Math.pow(d[1]-c[1],2));
-            r1 = Math.sqrt(Math.pow(e[0]-c[0],2)+Math.pow(e[1]-c[1],2));
-            rr = Math.sqrt(Math.pow(d[0]-e[0],2)+Math.pow(d[1]-e[1],2));
-            if((r0 <= rr) && (r1 <= rr)){
-              if(!inarray(cc,c)) cc.push(c);
-            }
-          });
-        }
-      });
-      if(cc.length<3) cc = cc.map(function(a){ return a.slice(0,2); }); //remove Q flag bezier without L
-      if(cc.length &&   //rotate first with last if indirect
-         (Math.sqrt(Math.pow(d[0]-cc[0][0],2)+Math.pow(d[1]-cc[0][1],2)))>=
-         (Math.sqrt(Math.pow(d[0]-cc[cc.length-1][0],2)+Math.pow(d[1]-cc[cc.length-1][1],2))))
-      {
-        if(!inarray(cc,e)) cc.unshift(e); 
-        if(!inarray(cc,d)) cc.push(d);
-      } else {
-        if(!inarray(cc,d)) cc.unshift(d);
-        if(!inarray(cc,e)) cc.push(e);
-      }
-      var pts = DC.interpolateCoords(cc, true),
-          path = ('M ' + pts).replace(/,/g, ' ');
-      if (inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length) {
-        pinches.push( {path: path, st: st} );  // inches paths
-      } else {
-        proutes.push ( {path: path, st: st} ); // routes paths
-      }
-    } else {
-      find('.route, .station, .label').map(function(o){ DC.attr(o, {opacity: '0.07'}); });
-      proutes.map(function(m){ // routes
-        DC.append('path', { class: 'selpath', d: m.path, stroke: DC.root.getElementById(makeid(m.st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-width': mds(8)});
-      });
-      pinches.map(function(m){ // interchanges above route
-        DC.append('path', { class: 'selpath', d: m.path, stroke: '#fafffa', fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-width': mds(4)});
-        DC.append('path', { class: 'selpath', d: m.path, stroke: DC.root.getElementById(makeid(m.st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': 'round', 'stroke-width': mds(2)});
-      });
-      sts.map(function(st){ // station + label above route
-        var ost = DC.root.getElementById(makeid(st));
-        var t = DC.root.getElementById('t' + ost.getAttribute('id'));
-        DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('stroke'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill: '#f5f5dc', 'stroke-width': mds(2), r: mds(4)});
-        if(t){
-          DC.append('text', {
-            x: t.getAttribute('x'), y: t.getAttribute('y'), 
-            class: 'selpath',  fill: t.getAttribute('fill'),
-            'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
-            'text-anchor': t.getAttribute('text-anchor')
-          }).innerHTML = t.innerHTML;
-        }
-      });
-    }
-  }).length || clearRoute();
-}
 
 </script>
 </body>
