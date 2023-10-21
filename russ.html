@@ -370,9 +370,9 @@ function draw(){
   });
   DV.style.backgroundColor = 'white';
   // создаем слои
-  var route = function(o){ return DV.extend({cls: 'Line', cap: 'round', join: 'bevel', width: 5, labelscale: 1}, o||{}) },
-      krug = function(o){ return DV.extend({cls: 'Polygon', fg: 'black', bg: 'white', width: 3, labelcolor: 'black', labelscale: 1}, o||{}) },
-      gorod = function(o){ return krug(DV.extend({cls: 'Dot'}, o||{})) };
+  var route = function(o){ return DV.extend({cls: 'Line', cap: 'round', join: 'bevel', width: 5, labelscale: 1}, o||{}); },
+      krug = function(o){ return DV.extend({cls: 'Polygon', fg: 'black', bg: 'white', width: 3, labelcolor: 'black', labelscale: 1}, o||{}); },
+      gorod = function(o){ return krug(DV.extend({cls: 'Dot'}, o||{})); };
   // трассы
   DV.extend(DV.mopt, {
     'r1': route({fg: 'rgb(0,160,227)'}),
