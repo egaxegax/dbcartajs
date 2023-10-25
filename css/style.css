@@ -2,3 +2,4 @@
 a, a:active, a:focus { color:#ffbc00; outline:none; text-decoration: none; }
 input[type=text], input[type=password], input[type=number], input[type=button], textarea, select, button { 
   border-radius:4px; border:1px solid #afafaf; background-color:#555; color:#eee; }
+.rtb1 { margin:0 auto; max-height:100px; position:fixed; }
