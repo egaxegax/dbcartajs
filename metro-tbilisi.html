@@ -16,7 +16,7 @@ egax@bk.ru, 2013-23.
 <link rel="stylesheet" href="css/style.css">
 <style>html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
 <script src="js/dbcarta.js"></script>
-<script defer src="/static/js/metrics.js" data-floor="1"></script>
+<script src="/static/js/metrics.js" data-floor="1"></script>
 </head>
 <body>
 <table>
@@ -61,7 +61,6 @@ var MSTS = [
   ['s1_2','ISANI',[[46,-54]],'ИСАНИ'],
   ['s1_4','SAMGORI',[[56,-56]],'САМГОРИ'],
   ['s1_2','VARKETILI',[[69,-49]],'ВАРКЕТИЛИ'],
-//
   ['s2_3','STATE UNIVERSITY',[[-68,-9]],'САХЕЛМЦИПО УНИВЕРСИТЕТИ'],
   ['s2_1','VAZHA-PSHAVELA',[[-51,-18]],'ВАЖНА-ПШАВЕЛА'],
   ['s2_1','DELISI',[[-30,-15]],'ДЕЛИСИ'],
@@ -69,7 +68,6 @@ var MSTS = [
   ['s2_1','TECHNICAL UNIVERSITY',[[-5,-22]],'ТЕКНИКУРИ УНИВЕРСИТЕТИ'],
   ['s2_3','TSERETELI',[[3,-15]],'ЦЕРЕТЕЛИ'],
   ['s2','STATION SQUARE II',[[12,-18]],'САДГУРИС МОЭДАНИ II'],
-//
   ['s1s','AKHMETELI THEATRE',[[32,60]],'',null,1],
   ['s1s','SARAJISHVILI',[[20,50]],'',null,1],
   ['s1s','GURAMISHVILI',[[14,37]],'',null,1],
@@ -86,15 +84,13 @@ var MSTS = [
   ['s1s','ISANI',[[46,-54]],'',null,1],
   ['s1s','SAMGORI',[[56,-56]],'',null,1],
   ['s1s','VARKETILI',[[69,-49]],'',null,1],
-//
   ['s2s','STATE UNIVERSITY',[[-68,-9]],'',null,1],
   ['s2s','VAZHA-PSHAVELA',[[-51,-18]],'',null,1],
   ['s2s','DELISI',[[-30,-15]],'',null,1],
   ['s2s','MEDICAL UNIVERSITY',[[-13,-13]],'',null,1],
   ['s2s','TECHNICAL UNIVERSITY',[[-5,-22]],'',null,1],
   ['s2s','TSERETELI',[[3,-15]],'',null,1],
-  ['s2s','STATION SQUARE II',[[12,-18]],'',null,1],
-//
+  ['s2s','STATION SQUARE II',[[12,-18]],'',null,1]
 ];
 // -------------------------------------------
 var DV = new dbCarta({
@@ -133,8 +129,10 @@ DV.loadCarta(MLNS);
 DV.loadCarta(MSTS);
 DV.scaleCarta(DV.sizeOf()[3]/DV.sizeOf()[2]*2);
 DV.draw();
-//
+  //
 MSTS.sort(function(a,b){return (a[3]>b[3]) ? 1 : -1;});
+  //
+if(window.addYaRTB_Block) addYaRTB_Block(YA_RTB[4]);
 </script>
 </body>
 </html>

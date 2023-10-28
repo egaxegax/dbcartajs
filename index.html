@@ -24,7 +24,7 @@ b,i,em { color:#aaa; }
 .stripe2 { color:#eee; }
 .footer { font-size:medium; text-align:center; vertical-align:middle; }
 </style>
-<script defer src="/static/js/metrics.js" data-floor="1" data-dark="1"></script>
+<script src="/static/js/metrics.js" data-floor="1"></script>
 <script src="js/proj4js-combined.js"></script>
 <script src="js/dbcarta.js"></script>
 <script src="js/data/continents.js"></script>
@@ -45,7 +45,7 @@ b,i,em { color:#aaa; }
   По выбранным станциям рассчитывается кратчайший путь по алгоритму <i>BFS</i>.
   Выбор станций - по клику, сброс маршрута - по двойному клику.
 </div>
-<div class="main"><div id="yandex_rtb_9" style="max-height:200px"></div></div>
+<div class="main"><div id="yandex_rtb_9" style="max-height:300px"></div></div>
 <div class="main stripe2">
   &ensp; Схема метро Москвы &ensp; <br>
   <div class="gray nowrap en"><i>&ensp; Moscow Metro</i></div>
@@ -244,18 +244,18 @@ b,i,em { color:#aaa; }
 </div>
 
 <script>
-  // animate
-  var cx = Math.random() * 360,
-      cy = Math.random() * 180;
-  var dw1 = new dbCarta({id:'demo1', width:150, rbar:false, bg:'transparent'});
-  dw1.clfunc.onmousemove = null;
-  dw1.mopt['.Mainland'] = {cls: 'Polygon', fg: '#ffbc00', bg: '#ffbc00'};
-  dw1.mopt['.Water'] = {cls: 'Polygon', fg: '#787878', bg: '#787878'};
-  dw1.initProj(203, ' +lon_0=' + cx + ' +lat_0=' + cy);
-  dw1.loadCarta(CONTINENTS);
-  dw1.loadCarta(dw1.createMeridians().map(function(a){ return a.slice(0,4); }));
-  dw1.scaleCarta(1.4);
-  dw1.draw();
+   // animate
+  var DV = new dbCarta({id:'demo1', width:150, rbar:false, bg:'transparent'});
+  DV.clfunc.onmousemove = null;
+  DV.mopt['.Mainland'] = {cls: 'Polygon', fg: '#ffbc00', bg: '#ffbc00'};
+  DV.mopt['.Water'] = {cls: 'Polygon', fg: '#787878', bg: '#787878'};
+  DV.initProj(203, ' +lon_0=' + (Math.random()*360) + ' +lat_0=' + (Math.random()*180));
+  DV.loadCarta(CONTINENTS);
+  DV.loadCarta(DV.createMeridians().map(function(a){ return a.slice(0,4); }));
+  DV.scaleCarta(1.4);
+  DV.draw();
+   // reklama
+  if(window.addYaRTB_Block) addYaRTB_Block(YA_RTB[4], true, YA_RTB[4]);
 </script>
 </body>
 </html>
