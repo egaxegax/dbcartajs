@@ -254,10 +254,9 @@ b,i,em { color:#aaa; }
   DV.loadCarta(DV.createMeridians().map(function(a){ return a.slice(0,4); }));
   DV.scaleCarta(1.4);
   DV.draw();
-   //
-  if(window.location.search == '?deb') window.setTimeout(function(){ window.location.reload(); }, (Math.random()*(10-5)+5)*1000);
    // reklama
   if(window.addYaRTB_Block) addYaRTB_Block(YA_RTB[4], true, YA_RTB[4]);
+  if(window.addTimeReload) window.addTimeReload(10,5);
 </script>
 </body>
 </html>
