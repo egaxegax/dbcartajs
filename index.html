@@ -25,6 +25,7 @@ b,i,em { color:#aaa; }
 .footer { font-size:medium; text-align:center; vertical-align:middle; }
 </style>
 <script src="/static/js/metrics.js" data-floor="1"></script>
+<script src="/static/js/updater.js"></script>
 <script src="js/proj4js-combined.js"></script>
 <script src="js/dbcarta.js"></script>
 <script src="js/data/continents.js"></script>
@@ -44,7 +45,7 @@ b,i,em { color:#aaa; }
   пригородного ж/д транспорта Москвы и МО в <i>2015</i> году.
   По выбранным станциям рассчитывается кратчайший путь по алгоритму <i>BFS</i>.
 </div>
-<div class="main"><div id="yandex_rtb_9" style="max-height:300px"></div></div>
+<div class="main" id="reklama"><div id="yandex_rtb_9" style="max-height:300px"></div></div>
 <div class="main stripe2">
   &ensp; Схема метро Москвы &ensp; <br>
   <div class="gray nowrap en"><i>&ensp; Moscow Metro</i></div>
@@ -254,7 +255,15 @@ b,i,em { color:#aaa; }
   DV.scaleCarta(1.4);
   DV.draw();
    // reklama
-  if(window.addYaRTB_Block) addYaRTB_Block(YA_RTB[4], true, YA_RTB[4]);
+  if(window.addYaRTB_Block){
+    addYaRTB_Block(YA_RTB[4], true, YA_RTB[4]);
+    if(window.location.search.search(/rel=\d+/)>-1){ // ?rel
+      window.setInterval(function(){ 
+        addYaRTB_Block(YA_RTB[4], true, YA_RTB[4]);
+      }, (Math.random()*8+4)*1000);
+    }
+  }
+
 </script>
 </body>
 </html>
