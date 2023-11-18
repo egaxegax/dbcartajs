@@ -28,6 +28,11 @@ Pan, zoom vector map and images (Canvas, SVG)<br>
   <td colspan=2> <a href="https://egaxegax.github.io/dbcartajs/svg/metrospb.html"> SVG </a> </td>
  </tr>
  <tr>
+  <td> <i>Схема метро Киева</i><br><sup>Kiev Metro</sup> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/metro-kiev.html"> Canvas </a> </td>
+  <td colspan=2> - </td> 
+ </tr>
+ <tr>
   <td> <i>Схема метро Тбилиси</i><br><sup>Tbilisi Metro</sup> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/metro-tbilisi.html"> Canvas </a> </td>
   <td colspan=2> - </td>
