@@ -139,6 +139,7 @@ stl.onchange = function(){
     DV.mopt['selstation'] = DV.extend({}, DV.mopt[st[0]]);
     DV.mopt['selstation'].bg = 'gold';
     DV.paintCarta(st[2], 'selstation', st[3]||st[1]);
+    calcRoute( stl.value, stl2.value );
   });
 };
 var stl2 = document.getElementById('stl2');
@@ -150,6 +151,7 @@ stl2.onchange = function(){
     DV.mopt['selstation'] = DV.extend({}, DV.mopt[st[0]]);
     DV.mopt['selstation'].bg = 'gold';
     DV.paintCarta(st[2], 'selstation', st[3]||st[1]);
+    calcRoute( stl.value, stl2.value );
   });
 };
 var cInches = document.getElementById('cInches');
