@@ -11,7 +11,7 @@
 <meta name="yandex-verification" content="bf07f0af8e739c66">
 <link rel="icon" href="img/fav.svg" type="image/svg+xml">
 <style>
-body { background-color:#262626; color:#eee; margin:0; font: 16px tahoma,arial; }
+body { background-color:#222; margin:0; font: 16px tahoma,arial; }
 a, a:active, a:focus { color:#ffbc00; outline:none; text-decoration: none; }
 b,i,em { color:#aaa; }
 .en { float:left; width:300px; }
@@ -20,9 +20,11 @@ b,i,em { color:#aaa; }
 .nowrap { white-space:nowrap; }
 .main { margin:0px auto 7px auto; font-size:large; max-width:900px; }
 .inl { display:inline; }
-.stripe { padding:10px; background-color:#404040; border:1px solid #333; border-radius:4px; }
+.stripe { padding:10px; background-color:#404040; border:1px solid #454545; border-radius:4px; }
 .stripe2 { color:#eee; }
 .footer { font-size:medium; text-align:center; vertical-align:middle; }
+#root { min-height:100%; }
+#root { background:#262626; color:#eee; }
 </style>
 <script src="/static/js/metrics.js" data-floor="1"></script>
 <script src="js/proj4js-combined.js"></script>
@@ -30,16 +32,17 @@ b,i,em { color:#aaa; }
 <script src="js/data/continents.js"></script>
 </head>
 <body>
+<div id="root" class="main">
 <table class="main" style="border-collapse:collapse"><tr>
   <td id="demo1"></td>
   <td>
-    <div style="font-size:x-large; color:#fff">Pan, zoom vector map and images (Canvas, SVG)</div>
+    <div style="font-size:x-large">Pan, zoom vector map and images (Canvas, SVG)</div>
     <div class="gray">
       <i> Просмотр векторных карт и изображений с навигацией в JavaScript </i>
     </div>
   </td></tr>
 </table>
-<div class="main" id="reklama"><div id="yandex_rtb_9" style="max-height:300px"></div></div>
+<div class="main"><div id="yandex_rtb_9" style="max-height:300px"></div></div>
 <div class="main stripe">
   Интерактивные схемы метро Москвы со строящимися линиями и станциями и Петербурга в <i>2023</i> году, 
   пригородного ж/д транспорта Москвы и МО в <i>2015</i> году.
@@ -113,19 +116,19 @@ b,i,em { color:#aaa; }
 </div>
 
 <div class="main stripe2">
-  &ensp; Настенные часы <br>
-  <div class="gray nowrap en"><i>&ensp; Wall Clock</i></div>
-  <span class="nowrap"> &ensp;
-    <span class="disabled">Canvas</span> &emsp; 
-    <a href="svg/clock.html">SVG</a>
-  </span>
-</div>
-<div class="main stripe2">
   &ensp; Анимация движения <br>
   <div class="gray nowrap en"><i>&ensp; Roller Ball</i></div>
   <span class="nowrap"> &ensp;
     <span class="disabled">Canvas</span> &emsp; 
     <a href="svg/rollerball.html">SVG</a>  
+  </span>
+</div>
+<div class="main stripe2">
+  &ensp; Настенные часы <br>
+  <div class="gray nowrap en"><i>&ensp; Wall Clock</i></div>
+  <span class="nowrap"> &ensp;
+    <span class="disabled">Canvas</span> &emsp; 
+    <a href="svg/clock.html">SVG</a>
   </span>
 </div>
 <div class="main stripe2">
@@ -151,22 +154,6 @@ b,i,em { color:#aaa; }
   </span>
 </div>
 <div class="main stripe2">
-  &ensp; Население мира <br>
-  <div class="gray nowrap en"><i>&ensp; Population</i></div>
-  <span class="nowrap"> &ensp;
-    <a href="usemap.html">Canvas</a> &emsp; 
-    <a href="svg/usemap.html">SVG</a> 
-  </span>
-</div>
-<div class="main stripe2">
-  &ensp; Население США <br>
-  <div class="gray nowrap en"><i>&ensp; Population USA</i></div>
-  <span class="nowrap"> &ensp;
-    <span class="disabled">Canvas</span> &emsp; 
-    <a href="svg/us.html">SVG</a> 
-  </span>
-</div>
-<div class="main stripe2">
   &ensp; Города мира <br>
   <div class="gray nowrap en"><i>&ensp; Cities</i></div>
   <span class="nowrap"> &ensp;
@@ -188,6 +175,22 @@ b,i,em { color:#aaa; }
   <span class="nowrap"> &ensp;
     <a href="countries.html">Canvas</a> &emsp; 
     <a href="svg/countries.html">SVG</a> 
+  </span>
+</div>
+<div class="main stripe2">
+  &ensp; Население мира <br>
+  <div class="gray nowrap en"><i>&ensp; Population</i></div>
+  <span class="nowrap"> &ensp;
+    <a href="usemap.html">Canvas</a> &emsp; 
+    <a href="svg/usemap.html">SVG</a> 
+  </span>
+</div>
+<div class="main stripe2">
+  &ensp; Население США <br>
+  <div class="gray nowrap en"><i>&ensp; Population USA</i></div>
+  <span class="nowrap"> &ensp;
+    <span class="disabled">Canvas</span> &emsp; 
+    <a href="svg/us.html">SVG</a> 
   </span>
 </div>
 <div class="main stripe2">
@@ -241,7 +244,7 @@ b,i,em { color:#aaa; }
     <img src="https://informer.yandex.ru/informer/65044687/3_1_FFFFFFFF_EFEFEFFF_0_pageviews" style="width:88px; height:31px; border:0;" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" class="ym-advanced-informer" data-cid="65044687" data-lang="ru" />
   </a>
 </div>
-
+</div>
 <script>
    // animate
   var DV = new dbCarta({id:'demo1', width:150, rbar:false, bg:'transparent'});

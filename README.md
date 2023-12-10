@@ -64,16 +64,6 @@ Pan, zoom vector map and images (Canvas, SVG)<br>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/atlas.html"> SVG </a> </td>
  </tr>
  <tr>
-  <td> <i>Население мира</i><br><sup>Population</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/usemap.html"> Canvas </a> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/usemap.html"> SVG </a> </td>
- </tr>
- <tr>
-  <td> <i>Население США</i><br><sup>Population USA</sup> </td>
-  <td> - </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/us.html"> SVG </a> </td>
- </tr>
- <tr>
   <td> <i>Города мира</i><br><sup>Cities</sup> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/cities.html"> Canvas </a> </td>
   <td> - </td>
@@ -89,6 +79,16 @@ Pan, zoom vector map and images (Canvas, SVG)<br>
   <td> - </td>
  </tr>
  <tr>
+  <td> <i>Население мира</i><br><sup>Population</sup> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/usemap.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/usemap.html"> SVG </a> </td>
+ </tr>
+ <tr>
+  <td> <i>Население США</i><br><sup>Population USA</sup> </td>
+  <td> - </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/us.html"> SVG </a> </td>
+ </tr>
+ <tr>
   <td> <i>Маршруты на карте</i><br><sup>Routes</sup> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/merc.html"> Canvas </a> </td>
   <td> - </td>
@@ -99,14 +99,19 @@ Pan, zoom vector map and images (Canvas, SVG)<br>
 
 <table>
  <tr>
+  <td> <i>Анимация движения</i><br><sup>Roller Ball</sup> </td>
+  <td width="80px"> - </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/rollerball.html"> SVG </a> </td>
+ </tr>
+ <tr>
   <td width="320px"> <i>Настенные часы</i><br><sup>Wall Clock</sup> </td>
   <td> - </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/clock.html"> SVG </a> </td>
  </tr>
  <tr>
-  <td> <i>Анимация движения</i><br><sup>Roller Ball</sup> </td>
-  <td width="80px"> - </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/rollerball.html"> SVG </a> </td>
+  <td width="320px"> <i>Футбольные схемы</i><br><sup>Soccer Schemes</sup> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/soccerf.html"> Canvas </a> </td>
+  <td> - </td>
  </tr>
 </table>
 
