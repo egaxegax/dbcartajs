@@ -529,7 +529,7 @@ function init() {
   el.onmousemove = function(){ this.innerHTML = ''; };
   document.body.appendChild(el);
 
-  DV = new dbCarta({id:'mcol', height:col.offsetHeight});
+  DV = new dbCarta({id:'mcol', height:col.offsetHeight, rbar:0});
   // define new layers
   DV.extend(DV.mopt, layers());
   var optfunc = function(o, k, v) {

@@ -97,8 +97,8 @@ var DV = new dbCarta({
   id: 'mcont',
   height: document.getElementById('mcont').offsetHeight,
   bg: 'white',
-  scalebg: 'rgba(100,100,50,0.08)',
-  mapbg: 'white'
+  mapbg: 'white',
+  rbar:0
 });
 // define new layers
 var route = function(o){ return DV.extend({cls: 'Line', width: mds(5), anchor: ['start', 'middle'], labelscale: 1}, o||{}); },
