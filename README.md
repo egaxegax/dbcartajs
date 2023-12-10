@@ -110,7 +110,7 @@ Pan, zoom vector map and images (Canvas, SVG)<br>
  </tr>
  <tr>
   <td width="320px"> <i>Футбольные схемы</i><br><sup>Soccer Schemes</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/soccerf.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/soccerf.html"> Canvas </a> </td>
   <td> - </td>
  </tr>
 </table>
