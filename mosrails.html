@@ -19,9 +19,11 @@ egax@bk.ru, 2013-22.
 </head>
 <body>
 <table style="border-collapse: collapse">
-<tr style="height: 1px; background-color: rgb(210,224,240);">
+<tr class="bg" style="height:1px">
 <td width="40%">
-  <h2 style="margin: 0px; line-height: 1;">МЖД</h2>
+  <a style="font-size:larger; line-height:1" href="/dbcartajs" title="Московская Железная Дорога (на главную)">
+    МЖД
+  </a>
 </td>
 <td>
   <select id="stationlist"></select>
@@ -29,7 +31,7 @@ egax@bk.ru, 2013-22.
 </tr>
 <tr>
   <td colspan="2" id="mcol" style="position:relative">
-    <div id="yandex_rtb_9" class="mh_f"></div>
+    <div id="yandex_rtb_0" class="mh_f"></div>
   </td>
 </tr>
 </table>
@@ -353,7 +355,7 @@ delete RLNS;
 delete MSTS;
 delete RSTS;
 
-if(window.addYaRTB_Block) addYaRTB_Block(YA_RTB[4]);
+if(window.addYaRTB_Block) addYaRTB_Block(0, false, YA_RTB[4]);
 
 </script>
 </body>
