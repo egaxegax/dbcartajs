@@ -14,17 +14,16 @@
 body { background-color:#222; margin:0; font: 16px tahoma,arial; }
 a, a:active, a:focus { color:#ffbc00; outline:none; text-decoration: none; }
 b,i,em { color:#aaa; }
+#root { min-height:100%; background:#262626; color:#eee; }
+#footer { font-size:medium; text-align:center; vertical-align:middle; }
 .en { float:left; width:300px; }
 .disabled { color:#262626; }
 .gray { color:#787878; font-size: smaller; }
 .nowrap { white-space:nowrap; }
 .main { margin:0px auto 7px auto; font-size:large; max-width:900px; }
-.inl { display:inline; }
 .stripe { padding:10px; background-color:#404040; border:1px solid #454545; border-radius:4px; }
 .stripe2 { color:#eee; }
-.footer { font-size:medium; text-align:center; vertical-align:middle; }
-#root { min-height:100%; }
-#root { background:#262626; color:#eee; }
+.mh { max-height:220px; }
 </style>
 <script src="/static/js/metrics.js" data-dark="1" data-floor="1"></script>
 <script src="js/proj4js-combined.js"></script>
@@ -42,7 +41,7 @@ b,i,em { color:#aaa; }
     </div>
   </td></tr>
 </table>
-<div class="main"><div id="yandex_rtb_0" style="max-height:240px"></div></div>
+<div class="main"><div id="yandex_rtb_0" class="mh"></div></div>
 <div class="main stripe">
   Интерактивные схемы метро Москвы со строящимися линиями и станциями и Петербурга в <i>2024</i> году, 
   пригородного ж/д транспорта Москвы и МО в <i>2015</i> году.
@@ -140,6 +139,7 @@ b,i,em { color:#aaa; }
   </span>
 </div>
 
+<div class="main"><div id="yandex_rtb_1" class="mh"></div></div>
 <div class="main stripe">
   Интерактивные карты мира со списками городов и стран в различных проекциях. 
   Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
@@ -238,8 +238,8 @@ b,i,em { color:#aaa; }
    <a title="Home" href="/" > / </a>
 </div>
 
-<div class="main footer">
-  <a class="nodecor" href="//metrika.yandex.ru/stat/?id=65044687&amp;from=informer" target="_blank" rel="nofollow">
+<div id="footer" class="main">
+  <a href="//metrika.yandex.ru/stat/?id=65044687&amp;from=informer" target="_blank" rel="nofollow">
     <img src="//informer.yandex.ru/informer/65044687/3_1_FFFFFFFF_EFEFEFFF_0_pageviews" alt="Яндекс.Метрика" title="Яндекс.Метрика: данные за сегодня (просмотры, визиты и уникальные посетители)" class="ym-advanced-informer" data-cid="65044687" data-lang="ru" />
   </a>
 </div>
@@ -257,6 +257,12 @@ b,i,em { color:#aaa; }
   DV.draw();
    // reklama
   if(window.addYaRTB_Block) addYaRTB_Block(0, true, YA_RTB[6]);
+  if(window.addYaRTB_Block) 
+    (new IntersectionObserver(function(es){
+      es.forEach((e)=>{
+        if(e.isIntersecting) addYaRTB_Block(1, true, YA_RTB[6]);
+      });
+    }, {threshold:0.5}).observe(document.getElementById('chordcont')));
 </script>
 </body>
 </html>
