@@ -139,8 +139,8 @@ b,i,em { color:#aaa; }
   </span>
 </div>
 
-<div class="main"><div id="yandex_rtb_1" class="mh"></div></div>
-<div id="hd2" class="main stripe">
+<div class="main"><div id="yandex_rtb_1" class="mwh"></div></div>
+<div class="main stripe">
   Интерактивные карты мира со списками городов и стран в различных проекциях. 
   Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
 </div>
@@ -262,7 +262,7 @@ b,i,em { color:#aaa; }
       es.forEach((e)=>{
         if(e.isIntersecting) addYaRTB_Block(1, true, YA_RTB[6]);
       });
-    }, {threshold:0.5}).observe(document.getElementById('hd2')));
+    }, {threshold:1.0}).observe(document.getElementById('yandex_rtb_1')));
 </script>
 </body>
 </html>
