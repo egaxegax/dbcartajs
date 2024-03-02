@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!--
+Novosibirsk Metro Map.
+egax@bk.ru, 2024.
+-->
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Карта метро Новосибирска / Canvas векторная карта</title>
+<meta name="description" content="Схема метро Новосибирска">
+<meta name="keywords" content="Схема метро Новосибирска, Карта метро Новосибирска">
+<link rel="icon" href="img/fav.svg" type="image/svg+xml">
+<link rel="canonical" href="metro-tbilisi.html">
+<link rel="stylesheet" href="css/style.css">
+<style>html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
+<script src="js/dbcarta.js"></script>
+<script src="/static/js/metrics.js" data-floor="1"></script>
+</head>
+<body>
+<table>
+<tr>
+<td id="mcont" valign="bottom" style="position:relative">
+  <div id="yandex_rtb_0" class="mh_f"></div>
+</td>
+</tr>
+</table>
+<script>
+  // diag.size ratio
+function mds(o){ return Math.sqrt(DV.sizeOf()[2]*DV.sizeOf()[2]+DV.sizeOf()[3]*DV.sizeOf()[3])/15*o/100; }
+  //
+function centerMap(coords){
+  var pts = DV.toPoints(coords);
+  DV.centerCarta(pts[0] + DV.m.offset[0], pts[1] + DV.m.offset[1]);
+  DV.draw();
+}
+  //
+var MLINES = [
+  ['ob_river','1',[[-140,70,'Q'],[-130,8,''],[10,-70,'']],'река Обь',[-61,-21]],
+  ['r1','1',[[-50,20],[-40,27,'Q'],[-36,30,'Q'],[-34,30,'Q'],[15,30,'Q'],[18,30,'Q'],[22,28,'Q'],[58,12]]],
+  ['r5','1',[[-18,70],[-18,-16,'Q'],[-18,-21,'Q'],[-21,-23,'Q'],[-73,-60]]],
+  ['interchange','Sibirskaya-Krasniy_Prospekt', [[-14,30],[-18,30]]],
+  ['interchange_d','Sibirskaya-Krasniy_Prospekt', [[-14,30],[-18,30]]]
+];
+var MSTATIONS = [
+  ['s1','Ploschad_Garina_Mihaylovskogo',[[-50,20]],'Площадь Гарина-Михайловского',null,1],
+  ['s1_1','Sibirskaya',[[-14,30]],'Сибирская',null,1],
+  ['s1_1','Marshala_Pokryshkina',[[8,30]],'Маршала Покрышкина',null,1],
+  ['s1_2','Berezovaya_Roscha',[[22,28]],'Березовая Роща',null,1],
+  ['s1_2','Zolotaya_Niva',[[58,12]],'Золотая Нива',null,1],
+  ['s5','Zaeltsovskaya',[[-18,70]],'Заельцовская',null,1],
+  ['s5','Gagarinskaya',[[-18,56]],'Гагаринская',null,1],
+  ['s5_1','Krasniy_Prospekt',[[-18,30]],'Красный проспект',null,1],
+  ['s5','Ploschad_Lenina',[[-18,-2]],'Площадь Ленина',null,1],
+  ['s5','Oktyabrskaya',[[-18,-6]],'Октябрьская',null,1],
+  ['s5_2','Rechnoy_Vokzal',[[-28,-27.98]],'Речной вокзал',null,1],
+  ['s5','Studencheskaya',[[-60,-50.75]],'Студенческая',null,1],
+  ['s5','Ploschad_Marksa',[[-73,-60]],'Площадь Маркса',null,1]
+];
+  // -------------------------------------------
+var DV = new dbCarta({
+  id: 'mcont',
+  height: document.getElementById('mcont').offsetHeight,
+  bg: 'white',
+  rbar:0
+});
+DV.style.backgroundColor = 'white';
+DV.style.border = '1px dashed lightgray';
+// define new layers
+var route = function(o){ return DV.extend({cls: 'Line', width: mds(5), anchor: ['start', 'middle'], labelscale: 1}, o||{}); },
+    river = function(o){ return route(DV.extend({fg: "#E2FCFC", join: 'round', cap: 'round', labelcolor: '#5555FF', labelscale: 0}, o||{})); },
+    interchange = function(o){ return route(DV.extend({fg: '#000000', join: 'round', cap: 'round', width: mds(8)}, o||{})); },
+    interchange_d = function(o) { return interchange(DV.extend({fg: '#FFFFFF', width: mds(7)}, o||{})); },
+    station = function(o){ return DV.extend({cls: 'Dot', bg: 'white', size: mds(3), width: mds(5), labelscale: 1, labelpad: mds(3)}, o||{}); };
+// lines
+DV.extend(DV.mopt, {
+  ob_river: river({width: 70, rotate: 38}),
+  r1: route({fg: '#44B85C'}),
+  r5: route({fg: '#ED1B35'})
+});
+// interchanges
+DV.extend(DV.mopt, {
+  interchange: interchange(),
+  interchange_d: interchange_d()
+});
+// stations
+DV.extend(DV.mopt, {
+  s1: station({fg: DV.mopt['r1'].fg, anchor: ['end', 'middle']}),
+  s1_1: station({fg: DV.mopt['r1'].fg, anchor: ['start', 'bottom']}),
+  s1_2: station({fg: DV.mopt['r1'].fg, anchor: ['start', 'middle']}),
+  s5: station({fg: DV.mopt['r5'].fg, anchor: ['end', 'middle']}),
+  s5_1: station({fg: DV.mopt['r5'].fg, anchor: ['end', 'bottom']}),
+  s5_2: station({fg: DV.mopt['r5'].fg, anchor: ['start', 'middle']})
+});
+DV.loadCarta(MLINES);
+DV.loadCarta(MSTATIONS);
+DV.scaleCarta(DV.sizeOf()[3]/DV.sizeOf()[2]*2);
+centerMap([-20,0]);
+  //
+if(window.addYaRTB_Block) addYaRTB_Block(0, false, YA_RTB[6]);
+</script>
+</body>
+</html>

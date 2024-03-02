@@ -10,21 +10,21 @@
 <meta name="google-site-verification" content="eWwGSnvveM7GniusD-nYN2KXBDPtXBHmhKRezn_TBg8">
 <meta name="yandex-verification" content="bf07f0af8e739c66">
 <link rel="canonical" href="index.html">
+<link rel="stylesheet" href="css/style.css">
 <link rel="icon" href="img/fav.svg" type="image/svg+xml">
 <style>
-body { background-color:#222; margin:0; font: 16px tahoma,arial; }
-a, a:active, a:focus { color:#ffbc00; outline:none; text-decoration: none; }
-b,i,em { color:#aaa; }
+body { background-color:#222; margin:0; font:16px tahoma,arial; }
 #root { min-height:100%; background:#262626; color:#eee; }
 #footer { text-align:center; vertical-align:middle; }
-.en { float:left; width:300px; }
-.disabled { color:#262626; }
-.gray { color:#787878; font-size: smaller; }
-.nowrap { white-space:nowrap; }
 .main { margin:0px auto 7px auto; font-size:large; max-width:900px; }
+.en { float:left; width:300px; }
+.inlbl { display:inline-block; vertical-align:top; }
+.disabled { color:#262626; }
+.gray { color:#787878; font-size:smaller; }
+.nowrap { white-space:nowrap; }
 .stripe { padding:10px; background-color:#404040; border:1px solid #454545; border-radius:4px; }
 .stripe2 { color:#eee; }
-.mwh { max-height:220px; }
+.mwh { margin:0 10px 7px 10px; max-width:240px; }
 </style>
 <script src="/static/js/metrics.js" data-dark="1" data-floor="1"></script>
 <script src="js/proj4js-combined.js"></script>
@@ -42,12 +42,13 @@ b,i,em { color:#aaa; }
     </div>
   </td></tr>
 </table>
-<div class="main"><div id="yandex_rtb_0" class="mwh"></div></div>
 <div class="main stripe">
   Интерактивные схемы метро Москвы со строящимися линиями и станциями и Петербурга в <i>2024</i> году, 
   пригородного ж/д транспорта Москвы и МО в <i>2015</i> году.
   По выбранным станциям рассчитывается кратчайший путь по алгоритму <i>BFS</i>.
 </div>
+
+<div class="inlbl">
 <div class="main stripe2">
   &ensp; Схема метро Москвы &ensp; <br>
   <div class="gray nowrap en"><i>&ensp; Moscow Metro</i></div>
@@ -74,6 +75,14 @@ b,i,em { color:#aaa; }
   </span>
 </div>
 <div class="main stripe2">
+  &ensp; Схема метро Новосибирска <br>
+  <div class="gray nowrap en"><i>&ensp; Novosibirsk Metro</i></div>
+  <span class="nowrap"> &ensp;
+    <a href="metro-novosib.html">Canvas</a> &emsp; 
+    <span class="disabled">SVG</span> &emsp;
+  </span>
+</div>
+<div class="main stripe2">
   &ensp; Схема метро Киева <br>
   <div class="gray nowrap en"><i>&ensp; Kiev Metro</i></div>
   <span class="nowrap"> &ensp;
@@ -89,6 +98,8 @@ b,i,em { color:#aaa; }
     <span class="disabled">SVG</span> &emsp;
   </span>
 </div>
+</div>
+<div id="yandex_rtb_0" class="inlbl mwh"></div>
 
 <div class="main stripe">
   Просмотр <i>jpeg</i>  и <i>svg</i> картинок с возможностью масштабирования.
@@ -111,7 +122,6 @@ b,i,em { color:#aaa; }
   </span>
 </div>
 
-<div class="main"><div id="yandex_rtb_1" class="mwh"></div></div>
 <div class="main stripe">
   Примеры использования цветов в канвасе, градиента и анимации в <i>svg</i>.
 </div>
@@ -202,8 +212,8 @@ b,i,em { color:#aaa; }
     <span class="disabled">SVG</span>
   </span>
 </div>
+<div id="yandex_rtb_1" class="inlbl mwh"></div>
 
-<div class="main"><div id="yandex_rtb_2" class="mwh"></div></div>
 <div class="main stripe">
   Отрисовка картинки в канвасе <i>3d</i> с пересчетом проекции отображения через шейдеры <i>WebGL</i> на основе примеров с с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
   Звездное небо в канвасе <i>2d</i> и <i>3d</i> с использованием скриптов <a href="//github.com/mrdoob/three.js">three.js</a>.
@@ -252,9 +262,8 @@ b,i,em { color:#aaa; }
   DV.scaleCarta(1.4);
   DV.draw();
    // reklama
-  if(window.addYaRTB_Block) addYaRTB_Block(0, true, YA_RTB[6]);
-  if(window.addYaRTB_Block) addYaRTB_Block(1, true, YA_RTB[6]);
-  if(window.addYaRTB_Block) addYaRTB_Block(2, false, YA_RTB[6]);
+  if(window.addYaRTB_Block) addYaRTB_Block(0, false, YA_RTB[6]);
+  if(window.addYaRTB_Block) addYaRTB_Block(1, false, YA_RTB[6]);
 </script>
 </body>
 </html>
