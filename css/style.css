@@ -3,4 +3,4 @@ b,i,em { color:#aaa; }
 input[type=text], input[type=password], input[type=number], input[type=button], textarea, select, button { 
   border-radius:4px; border:1px solid #afafaf; background-color:#555; color:#eee; }
 .bg { background-color:#404040; color:#eee; margin:0; font: 16px tahoma,arial; }
-.mh_f { max-height:100px; position:fixed; }
+.mh_f { max-height:90px; position:fixed; }
