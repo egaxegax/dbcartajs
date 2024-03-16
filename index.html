@@ -24,7 +24,7 @@ body { background-color:#222; margin:0; font:16px tahoma,arial; }
 .nowrap { white-space:nowrap; }
 .stripe { padding:10px; background-color:#404040; border:1px solid #454545; border-radius:4px; }
 .stripe2 { color:#eee; }
-.mwh { margin:0 10px 7px 10px; max-width:250px; max-height:290px; }
+.mw { margin:0 10px 7px 10px; max-width:250px; }
 </style>
 <script src="/static/js/metrics.js" data-dark="1" data-floor="1"></script>
 <script src="js/proj4js-combined.js"></script>
@@ -99,12 +99,13 @@ body { background-color:#222; margin:0; font:16px tahoma,arial; }
   </span>
 </div>
 </div>
-<div id="yandex_rtb_0" class="inlbl mwh"></div>
+<div id="yandex_rtb_0" class="inlbl mw" style="max-height:290px"></div>
 
 <div class="main stripe">
   Просмотр <i>jpeg</i>  и <i>svg</i> картинок с возможностью масштабирования.
 </div>
 
+<div class="inlbl">
 <div class="main stripe2">
   &ensp; Просмотровщик картинок <br>
   <div class="gray nowrap en"><i>&ensp; Image Viewer</i></div>
@@ -121,11 +122,14 @@ body { background-color:#222; margin:0; font:16px tahoma,arial; }
     <a href="svg/panzoom.html">SVG</a> 
   </span>
 </div>
+</div>
+<div id="yandex_rtb_1" class="inlbl mw" style="max-height:90px"></div>
 
 <div class="main stripe">
   Примеры использования цветов в канвасе, градиента и анимации в <i>svg</i>.
 </div>
 
+<div class="inlbl">
 <div class="main stripe2">
   &ensp; Анимация движения <br>
   <div class="gray nowrap en"><i>&ensp; Roller Ball</i></div>
@@ -150,6 +154,8 @@ body { background-color:#222; margin:0; font:16px tahoma,arial; }
     <span class="disabled">SVG</span>  
   </span>
 </div>
+</div>
+<div id="yandex_rtb_2" class="inlbl mw" style="max-height:120px"></div>
 
 <div class="main stripe">
   Интерактивные карты мира со списками городов и стран в различных проекциях. 
@@ -215,13 +221,14 @@ body { background-color:#222; margin:0; font:16px tahoma,arial; }
   </span>
 </div>
 </div>
-<div id="yandex_rtb_1" class="inlbl mwh"></div>
+<div id="yandex_rtb_3" class="inlbl mw" style="max-height:290px"></div>
 
 <div class="main stripe">
   Отрисовка картинки в канвасе <i>3d</i> с пересчетом проекции отображения через шейдеры <i>WebGL</i> на основе примеров с с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
   Звездное небо в канвасе <i>2d</i> и <i>3d</i> с использованием скриптов <a href="//github.com/mrdoob/three.js">three.js</a>.
 </div>
 
+<div class="inlbl">
 <div class="main stripe2">
   &ensp; Атлас 3D <br>
   <div class="gray nowrap en"><i>&ensp; Atlas 3D</i></div>
@@ -246,6 +253,8 @@ body { background-color:#222; margin:0; font:16px tahoma,arial; }
     <span class="disabled">SVG</span>
   </span>
 </div>
+</div>
+<div id="yandex_rtb_4" class="inlbl mw" style="max-height:120px"></div>
 
 <div id="footer" class="main stripe">
   Проект <a href="//github.com/egaxegax/dbcartajs" target="_blank">GitHub</a> &emsp; &emsp; 
@@ -267,6 +276,9 @@ body { background-color:#222; margin:0; font:16px tahoma,arial; }
    // reklama
   if(window.addYaRTB_Block) addYaRTB_Block(0, false, YA_RTB[6]);
   if(window.addYaRTB_Block) addYaRTB_Block(1, false, YA_RTB[6]);
+  if(window.addYaRTB_Block) addYaRTB_Block(2, false, YA_RTB[6]);
+  if(window.addYaRTB_Block) addYaRTB_Block(3, true, YA_RTB[6]);
+  if(window.addYaRTB_Block) addYaRTB_Block(4, true, YA_RTB[6]);
 </script>
 </body>
 </html>
