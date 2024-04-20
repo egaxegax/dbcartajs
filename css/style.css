@@ -1,8 +1,11 @@
 body { font: 16px tahoma,arial; }
 a,a:active,a:focus { color:#31708f; outline:none; text-decoration:none; }
-b,i,em { color:#aaa; }
+b,i,em { color:#777; }
 input, select, button { border-radius:4px; border:1px solid #afafaf; }
+.wrap { padding:5px 10px 2px 10px; margin:0 0px 10px 0px; border-radius:4px; }
+/*dark theme*/
 .bg input, .bg select, .bg button { background-color:#555; color:#eee; }
 .bg a,.bg a:active,.bg a:focus { color:#ffbc00; }
 .bg { background-color:#404040; color:#eee; }
+/**/
 .mh_f { max-height:90px; position:fixed; }

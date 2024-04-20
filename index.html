@@ -13,17 +13,20 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="icon" href="img/fav.svg" type="image/svg+xml">
 <style>
-body { background-color:#222; margin:0; font:16px tahoma,arial; }
-#root { min-height:100%; background:#262626; color:#eee; }
+body { background-color:#f5f5f5; margin:0; }
+a { text-decoration:underline; }
+#root { min-height:100%; background:#eee; color:#333; }
+#header { background-color:#d2e0f0; width:100%; line-height:1.1; }
 #footer { text-align:center; vertical-align:middle; }
-.main { margin:0px auto 7px auto; text-align:left; font-size:large; max-width:900px; }
-.en { float:left; width:300px; }
+.tcell { display:table-cell; vertical-align: middle; font-size:large; }
+.main { margin:0px auto 7px auto; text-align:left; max-width:900px; }
 .inlbl { display:inline-block; vertical-align:top; text-align:center; }
-.disabled { color:#262626; }
-.gray { color:#787878; font-size:smaller; }
+.disabled { color:#eee; }
+.gray { font-size:90%; }
 .nowrap { white-space:nowrap; }
-.stripe { padding:10px; background-color:#404040; border:1px solid #454545; border-radius:4px; }
-.stripe2 { color:#eee; }
+.en { float:left; width:300px; }
+.stripe { padding:15px; background-color:#fff; border:1px solid #ddd; border-radius:4px; }
+.stripe2 { font-size:large; }
 .mw { margin:0 10px 7px 10px; max-width:250px; }
 </style>
 <script src="/static/js/metrics.js" data-dark="1" data-floor="1"></script>
@@ -33,15 +36,13 @@ body { background-color:#222; margin:0; font:16px tahoma,arial; }
 </head>
 <body>
 <div id="root" class="main">
-<table class="main" style="border-collapse:collapse"><tr>
-  <td id="demo1"></td>
-  <td>
-    <div style="font-size:x-large">Pan, zoom vector map and images (Canvas, SVG)</div>
-    <div class="gray">
-      <i> Просмотр векторных карт и изображений с навигацией в JavaScript </i>
-    </div>
-  </td></tr>
-</table>
+<div id="header" class="main">
+<div id="demo1" class="tcell" style="width:30%; text-align:right"></div>
+<div class="tcell">
+  <div style="font-size:x-large">Pan, zoom vector map and images (Canvas, SVG)</div>
+  <div class="gray"><i> Просмотр векторных карт и изображений с навигацией в JavaScript</i></div>
+</div>
+</div>
 <div class="main stripe">
   Интерактивные схемы метро Москвы со строящимися линиями и станциями и Петербурга в <i>2024</i> году, 
   пригородного ж/д транспорта Москвы и МО в <i>2015</i> году.

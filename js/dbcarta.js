@@ -2,7 +2,7 @@
 // HTML5 Canvas vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013. b230521.
+// egax@bk.ru, 2013. b240420.
 //
 function dbCarta(cfg) {
   // Constructor config {
@@ -23,7 +23,7 @@ function dbCarta(cfg) {
     if (el) el.appendChild(canvas);
     // styles
     canvas.style.border = 'none';
-    canvas.style.backgroundColor = cfg.bg||'rgb(186,196,205)';
+    canvas.style.backgroundColor = cfg.bg||'rgb(250,250,250)';
     if (!cfg.width) canvas.style.width = '100%';
     canvas.width = (cfg.width ? cfg.width : canvas.offsetWidth);
     canvas.height = (cfg.height ? cfg.height : canvas.offsetWidth / 2.0);
@@ -71,7 +71,7 @@ function dbCarta(cfg) {
       '.ZoomRect':  {cls: 'Polygon', fg: 'rgb(50,150,255)', bg: 'transparent'},
       '.Arctic':    {cls: 'Polygon', fg: 'rgb(210,221,195)', bg: 'rgb(210,221,195)'},
       '.Mainland':  {cls: 'Polygon', fg: 'rgb(135,159,103)', bg: 'rgb(135,159,103)'},
-      '.Water':     {cls: 'Polygon', fg: 'rgb(64,80,80)', bg: 'rgb(64,80,80)'},
+      '.Water':     {cls: 'Polygon', fg: 'rgb(164,200,200)', bg: 'rgb(174,200,200)'},
       '.WaterLine': {cls: 'Line', fg: 'rgb(186,196,205)'},
       '.Latitude':  {cls: 'Line', fg: 'rgb(180,180,180)', anchor: ['start', 'bottom']},
       '.Longtitude':{cls: 'Line', fg: 'rgb(180,180,180)', anchor: ['start', 'top']},
