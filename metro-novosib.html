@@ -11,7 +11,7 @@ egax@bk.ru, 2024.
 <meta name="description" content="Схема метро Новосибирска">
 <meta name="keywords" content="Схема метро Новосибирска, Карта метро Новосибирска">
 <link rel="icon" href="img/fav.svg" type="image/svg+xml">
-<link rel="canonical" href="metro-tbilisi.html">
+<link rel="canonical" href="metro-novosib.html">
 <link rel="stylesheet" href="css/style.css">
 <style>html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
 <script src="js/dbcarta.js"></script>
@@ -65,7 +65,6 @@ var DV = new dbCarta({
   rbar:0
 });
 DV.style.backgroundColor = 'white';
-DV.style.border = '1px dashed lightgray';
 // define new layers
 var route = function(o){ return DV.extend({cls: 'Line', width: mds(5), anchor: ['start', 'middle'], labelscale: 1}, o||{}); },
     river = function(o){ return route(DV.extend({fg: "#E2FCFC", join: 'round', cap: 'round', labelcolor: '#5555FF', labelscale: 0}, o||{})); },
