@@ -18,7 +18,7 @@ a { text-decoration:underline; }
 #header { background-color:#d2e0f0; }
 #footer { text-align:center; }
 .tcell { display:table-cell; vertical-align: middle; font-size:large; }
-.main { margin:0px auto 7px auto; text-align:left; max-width:900px; }
+.main { margin:0px auto 7px auto; text-align:left; max-width:750px; }
 .inlbl { display:inline-block; vertical-align:top; text-align:center; }
 .disabled { color:#eee; }
 .gray { font-size:90%; }
@@ -36,7 +36,7 @@ a { text-decoration:underline; }
 <body>
 <div id="root" class="main">
 <div id="header" class="main">
-<div id="demo1" class="tcell" style="width:30%; text-align:right"></div>
+<div id="demo1" class="tcell" style="width:20%; text-align:right"></div>
 <div class="tcell">
   <h1 style="font-size:x-large;padding:0;margin:0">Pan, zoom vector map and images (Canvas, SVG)</h1>
   <div class="gray"><i> Просмотр векторных карт и изображений с навигацией в JavaScript</i></div>
@@ -50,12 +50,15 @@ a { text-decoration:underline; }
 
 <div class="inlbl">
 <div class="main stripe2">
-  <div>&ensp; Схема метро Москвы </div>
+  <div class="nowrap en">&ensp; Схема метро Москвы </div>
+  <span class="nowrap"> &ensp;
+    <span class="disabled">Canvas</span> &emsp; 
+    <a href="svg/mosmetro.html" title="Векторная карта метро Москвы">SVG</a> &emsp; 
+  </span><br>
   <div class="gray nowrap en"><i>&ensp; Moscow Metro</i></div>
   <span class="nowrap"> &ensp;
     <a href="mosmetro.html">Canvas</a> &emsp; 
-    <a href="svg/mosmetro.html">SVG</a> &emsp; 
-    <a href="svg/mosmetro2.html">SVG (Википедия)</a>
+    <a href="svg/mosmetro2.html" title="SVG(Википедия)">SVG(W)</a>
   </span>
 </div>
 <div class="main stripe2">  
