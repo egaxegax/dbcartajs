@@ -17,11 +17,11 @@ a { text-decoration:underline; }
 #root { min-height:100%; background:#eee; color:#333; }
 #header { background-color:#d2e0f0; }
 #footer { text-align:center; }
-.tcell { display:table-cell; vertical-align: middle; }
-.main { margin:0px auto 7px auto; max-width:750px; }
-.inlbl { display:inline-block; vertical-align:top; }
-.disabled { color:#eee; }
+.dis { color:#eee; }
 .en { display:inline-block; width:290px; }
+.inlbl { display:inline-block; vertical-align:top; }
+.main { margin:0px auto 7px auto; max-width:750px; }
+.tcell { display:table-cell; vertical-align: middle; }
 .gray { font-size:90%; }
 .nowrap { white-space:nowrap; }
 .stripe { padding:15px; background-color:#fff; border:1px solid #ddd; border-radius:4px; }
@@ -69,7 +69,7 @@ a { text-decoration:underline; }
   <div>&ensp; Схема метро Петербурга </div>
   <div class="gray nowrap en"><i>&ensp; St. Petersburg Metro</i></div>
   <span class="nowrap"> &ensp;
-    <span class="disabled">Canvas</span> &emsp; 
+    <span class="dis">Canvas</span> &emsp; 
     <a href="svg/metrospb.html">SVG</a>
   </span>
 </div>
@@ -78,7 +78,7 @@ a { text-decoration:underline; }
   <div class="gray nowrap en"><i>&ensp; Novosibirsk Metro</i></div>
   <span class="nowrap"> &ensp;
     <a href="metro-novosib.html">Canvas</a> &emsp; 
-    <span class="disabled">SVG</span> &emsp;
+    <span class="dis">SVG</span> &emsp;
   </span>
 </div>
 <div class="main stripe2">
@@ -86,7 +86,7 @@ a { text-decoration:underline; }
   <div class="gray nowrap en"><i>&ensp; Kiev Metro</i></div>
   <span class="nowrap"> &ensp;
     <a href="metro-kiev.html">Canvas</a> &emsp; 
-    <span class="disabled">SVG</span> &emsp;
+    <span class="dis">SVG</span> &emsp;
   </span>
 </div>
 <div class="main stripe2">
@@ -94,7 +94,7 @@ a { text-decoration:underline; }
   <div class="gray nowrap en"><i>&ensp; Tbilisi Metro</i></div>
   <span class="nowrap"> &ensp;
     <a href="metro-tbilisi.html">Canvas</a> &emsp; 
-    <span class="disabled">SVG</span> &emsp;
+    <span class="dis">SVG</span> &emsp;
   </span>
 </div>
 </div>
@@ -116,7 +116,7 @@ a { text-decoration:underline; }
   <div>&ensp; Масштабирование картинки </div>
   <div class="gray nowrap en"><i>&ensp; Pan Zoom</i></div>
   <span class="nowrap"> &ensp;
-    <span class="disabled">Canvas</span> &emsp; 
+    <span class="dis">Canvas</span> &emsp; 
     <a href="svg/panzoom.html">SVG</a> 
   </span>
 </div>
@@ -130,7 +130,7 @@ a { text-decoration:underline; }
   <div>&ensp; Анимация движения </div>
   <div class="gray nowrap en"><i>&ensp; Roller Ball</i></div>
   <span class="nowrap"> &ensp;
-    <span class="disabled">Canvas</span> &emsp; 
+    <span class="dis">Canvas</span> &emsp; 
     <a href="svg/rollerball.html">SVG</a>  
     &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
   </span>
@@ -139,7 +139,7 @@ a { text-decoration:underline; }
   <div>&ensp; Настенные часы </div>
   <div class="gray nowrap en"><i>&ensp; Wall Clock</i></div>
   <span class="nowrap"> &ensp;
-    <span class="disabled">Canvas</span> &emsp; 
+    <span class="dis">Canvas</span> &emsp; 
     <a href="svg/clock.html">SVG</a>
   </span>
 </div>
@@ -148,7 +148,7 @@ a { text-decoration:underline; }
   <div class="gray nowrap en"><i>&ensp; Soccer Schemes</i></div>
   <span class="nowrap"> &ensp;
     <a href="soccerf.html">Canvas</a> &emsp; 
-    <span class="disabled">SVG</span>  
+    <span class="dis">SVG</span>  
   </span>
 </div>
 </div>
@@ -173,7 +173,7 @@ a { text-decoration:underline; }
   <div class="gray nowrap en"><i>&ensp; Cities</i></div>
   <span class="nowrap"> &ensp;
     <a href="cities.html">Canvas</a> &emsp; 
-    <span class="disabled">SVG</span>
+    <span class="dis">SVG</span>
   </span>
 </div>
 <div class="main stripe2">
@@ -181,7 +181,7 @@ a { text-decoration:underline; }
   <div class="gray nowrap en"><i>&ensp; Russian Cities</i></div>
   <span class="nowrap"> &ensp;
     <a href="russ.html">Canvas</a> &emsp; 
-    <span class="disabled">SVG</span>
+    <span class="dis">SVG</span>
   </span>
 </div>
 <div class="main stripe2">
@@ -204,7 +204,7 @@ a { text-decoration:underline; }
   <div>&ensp; Население США </div>
   <div class="gray nowrap en"><i>&ensp; Population USA</i></div>
   <span class="nowrap"> &ensp;
-    <span class="disabled">Canvas</span> &emsp; 
+    <span class="dis">Canvas</span> &emsp; 
     <a href="svg/us.html">SVG</a> 
   </span>
 </div>
@@ -213,11 +213,10 @@ a { text-decoration:underline; }
   <div class="gray nowrap en"><i>&ensp; Routes</i></div>
   <span class="nowrap"> &ensp;
     <a href="merc.html">Canvas</a> &emsp; 
-    <span class="disabled">SVG</span>
+    <span class="dis">SVG</span>
   </span>
 </div>
 </div>
-<div id="yandex_rtb_1" class="inlbl mw" style="max-height:270px"></div>
 
 <div class="main stripe">
   Отрисовка картинки в канвасе <i>3d</i> с пересчетом проекции отображения через шейдеры <i>WebGL</i> на основе примеров с с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
@@ -230,7 +229,7 @@ a { text-decoration:underline; }
   <div class="gray nowrap en"><i>&ensp; Atlas 3D</i></div>
   <span class="nowrap"> &ensp;
     <a href="map3d.html">Canvas</a> &emsp; 
-    <span class="disabled">SVG</span>
+    <span class="dis">SVG</span>
     &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
   </span>
 </div>
@@ -239,7 +238,7 @@ a { text-decoration:underline; }
   <div class="gray nowrap en"><i>&ensp; Starry Sky</i></div>
   <span class="nowrap"> &ensp;
     <a href="starry.html">Canvas</a> &emsp; 
-    <span class="disabled">SVG</span>
+    <span class="dis">SVG</span>
   </span>
 </div>
 <div class="main stripe2">
@@ -247,7 +246,7 @@ a { text-decoration:underline; }
   <div class="gray nowrap en"><i>&ensp; Sky 3D</i></div>
   <span class="nowrap"> &ensp;
     <a href="sky3d.html">Canvas</a> &emsp; 
-    <span class="disabled">SVG</span>
+    <span class="dis">SVG</span>
   </span>
 </div>
 </div>
@@ -271,7 +270,6 @@ a { text-decoration:underline; }
   DV.draw();
    // reklama
   if(window.addYaRTB_Block) addYaRTB_Block(0, false, YA_RTB[6]);
-  if(window.addYaRTB_Block) addYaRTB_Block(1, false, YA_RTB[6]);
 </script>
 </body>
 </html>
