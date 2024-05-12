@@ -21,7 +21,7 @@ a { text-decoration:underline; }
 .main { margin:0px auto 7px auto; text-align:left; max-width:750px; }
 .inlbl { display:inline-block; vertical-align:top; text-align:center; }
 .disabled { color:#eee; }
-.en { float:left; width:290px; }
+.en { display:inline-block; width:290px; }
 .gray { font-size:90%; }
 .nowrap { white-space:nowrap; }
 .stripe { padding:15px; background-color:#fff; border:1px solid #ddd; border-radius:4px; }
@@ -50,15 +50,11 @@ a { text-decoration:underline; }
 
 <div class="inlbl">
 <div class="main stripe2">
-  <div class="nowrap en">&ensp; Схема метро Москвы </div>
-  <span class="nowrap"> &ensp;
-    <span class="disabled">Canvas</span> &emsp; 
-    <a href="svg/mosmetro.html" title="Векторная карта метро Москвы">SVG</a> &emsp; 
-  </span><br>
+  <div>&ensp; Схема метро Москвы </div>
   <div class="gray nowrap en"><i>&ensp; Moscow Metro</i></div>
   <span class="nowrap"> &ensp;
     <a href="mosmetro.html">Canvas</a> &emsp; 
-    <a href="svg/mosmetro2.html" title="SVG(Википедия)">SVG(W)</a>
+    <a href="svg/mosmetro.html" title="Векторная карта метро Москвы">SVG</a> &emsp; 
   </span>
 </div>
 <div class="main stripe2">  
