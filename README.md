@@ -1,7 +1,7 @@
 ## dbcartajs
 
-Pan, zoom vector map and images (Canvas, SVG)<br>
-*Просмотр векторных карт и изображений с навигацией в JavaScript*
+Просмотр векторных карт и изображений с навигацией в JavaScript  
+*Pan, zoom vector map and images (Canvas, SVG)*
 
 #### Примеры (demos)
 
