@@ -34,9 +34,10 @@ a { text-decoration:underline; }
 <script src="js/data/continents.js"></script>
 </head>
 <body>
-<div id="root" class="main">
+<div id="demo1" style="width:150px; text-align:right; margin:0 auto;"></div>
+  <div id="root" class="main">
 <div id="header" class="main">
-<div id="demo1" class="tcell" style="width:150px; text-align:right"></div>
+
 <div class="tcell larger">
   <h1 style="font-size:120%;margin:0">Просмотр векторных карт и изображений с навигацией в JavaScript (Canvas, SVG)</h1>
   <div class="gray"><i> Pan, zoom vector map and images (Canvas, SVG)</i></div>
@@ -257,7 +258,7 @@ a { text-decoration:underline; }
 </div>
 <script>
    // animate
-  var DV = new dbCarta({id:'demo1', width:150, rbar:false, bg:'transparent'});
+  var DV = new dbCarta({id:'demo1', width:150, rbar:1, bg:'transparent'});
   DV.clfunc.onmousemove = null;
   DV.mopt['.Mainland'] = {cls: 'Polygon', fg: '#ffbc00', bg: '#ffbc00'};
   DV.mopt['.Water'] = {cls: 'Polygon', fg: '#787878', bg: '#787878'};

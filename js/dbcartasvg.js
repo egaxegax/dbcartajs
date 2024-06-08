@@ -2,7 +2,7 @@
 // HTML5 SVG vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2015. b230522.
+// egax@bk.ru, 2015. b240608.
 //
 function dbCartaSvg(cfg) {
   var SVG_NS = 'http://www.w3.org/2000/svg',
@@ -64,6 +64,7 @@ function dbCartaSvg(cfg) {
   //   svgRoot: svg root node (not transform)
   //   svgViewport: g viewport node (rotate, scale, translate)
   if(cfg.svgRoot && cfg.svgViewport) { // use exists svg container
+    self.cont = cfg.svgRoot.parentElement;
     self.root = cfg.svgRoot;
     self.vp = cfg.svgViewport;
     self.attr(self.root, { 
@@ -71,10 +72,10 @@ function dbCartaSvg(cfg) {
       height: cfg.height
     });
   } else { // add new
-    var cont = document.createElement('div'),
-        el = document.getElementById(cfg.id);
-    if (el) el.appendChild(cont);
-    self.root = self.append(cont, 'svg', {
+    self.cont = document.createElement('div');
+    var el = document.getElementById(cfg.id);
+    if (el) el.appendChild(self.cont);
+    self.root = self.append(self.cont, 'svg', {
       version: '1.1',
       xlmns: SVG_NS,
       width: cfg.width ? cfg.width : el.offsetWidth,
@@ -133,7 +134,7 @@ function dbCartaSvg(cfg) {
     // Convert pixels to points
     //
     canvasXY: function(ev) {
-      var node = cont,
+      var node = self.cont,
           pts = [ev.clientX, ev.clientY];
       if (!/WebKit/.test(navigator.userAgent)) {
         pts[0] += window.pageXOffset;
@@ -375,6 +376,7 @@ function dbCartaSvg(cfg) {
     //
     chkBar: function(pts, doaction) {
       if (!self.cfg.sbar) return;
+//      console.log('chkbar', pts);
       var sz = self.sizeOf(),
           cw = sz[2],
           ch = sz[3];
@@ -396,7 +398,7 @@ function dbCartaSvg(cfg) {
           if (zoom > -18) zoom -= 0.5;
         }
         zoom = (zoom > 1 ? zoom : 1/(2-zoom));
-        self.scaleCarta(zoom);
+        setTimeout(function(){ self.scaleCarta(zoom); }, 150);
 //        if (zoom == 1) {
 //          self.centerCarta(self.centerOf());
 //        }
