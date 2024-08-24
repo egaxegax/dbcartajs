@@ -1577,10 +1577,11 @@ function initMap() {
 
   var col = document.createElement('td');
   col.width = '20%';
+  var el2 = document.createElement('h1');
+  el2.appendChild(document.createTextNode('Атлас 3d'));
   var el = document.createElement('a');
-  el.appendChild(document.createTextNode('Атлас 3d'));
+  el.appendChild(el2);
   el.href = '/dbcartajs';
-  el.style.fontSize = 'larger';
   el.style.lineHeight = '1';
   col.appendChild(el);
   row.appendChild(col);

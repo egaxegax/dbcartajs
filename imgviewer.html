@@ -60,10 +60,11 @@ function init() {
 
   var col = document.createElement('td');
   col.colSpan = '10';
+  var el2 = document.createElement('h1');
+  el2.appendChild(document.createTextNode("Просмотровщик"));
   var el = document.createElement('a');
-  el.appendChild(document.createTextNode("Просмотровщик"));
+  el.appendChild(el2);
   el.href = '/dbcartajs';
-  el.style.fontSize = 'larger';
   col.appendChild(el);
   row.appendChild(col);
 
@@ -105,11 +106,13 @@ function init() {
 
   // urls img
   var imgurls = [
-    '/foto/Москва/Варшавские пруды.jpg',
-    '/foto/Москва/Кировоградские пруды.jpg',
+    '/foto/Природа/Цветочек синенький. Июль 2016г.jpg',
+    '/foto/Природа/Рыбак на Захарьинском пруда.Сентябрь 2023г.jpg',
     '/foto/Церкви/Кижи. Карелия.jpg',
     '/foto/Церкви/Родионово. Ленинградская область.jpg',
-    '/foto/Природа/Цветочек синенький. Июль 2016г.jpg'
+    '/foto/Москва/Варшавские пруды.jpg',
+    '/foto/Москва/Кировоградские пруды.jpg',
+    '/foto/Москва/Ландшафтный парк в Ю.Бутово. Июнь 24г.jpg',
   ];
   if(window.location.protocol == 'file:'){
     imgurls = [

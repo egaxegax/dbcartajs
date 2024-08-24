@@ -10,9 +10,10 @@ egax@bk.ru, 2023.
 <title>Страны мира / SVG векторная карта</title>
 <meta name="description" content="Страны мира на карте">
 <meta name="keywords" content="страны мира, countries, maps">
-<link rel="icon" href="img/fav.svg" type="image/svg+xml">
+<link rel="icon" href="../img/fav.svg" type="image/svg+xml">
+<link rel="stylesheet" href=".../css/style.css">
 <style>html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
-<style>dd{cursor:pointer;margin:0;color:gray;font-size:smaller;} dd:hover{background:#ade;}</style>
+<style>dd{cursor:pointer;margin:0;color:gray;} dd:hover{background:#ade;}</style>
 <script src="/static/js/metrics.js" data-floor="1"></script>
 </head>
 <body>
@@ -54,7 +55,6 @@ function init() {
   el.id = 'cntrylist';
   el.style.margin = '0';
   el.style.padding = '0';
-  el.style.fontSize = 'larger';
   el.style.fontFamily = 'Arial';
   el.style.backgroundColor = 'white';
   col.appendChild(el);

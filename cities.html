@@ -49,10 +49,11 @@ function init() {
   var col = document.createElement('td');
   col.width = '15%';
   col.style.whiteSpace = 'nowrap';
+  var el2 = document.createElement('h1');
+  el2.appendChild(document.createTextNode('Города мира'));
   var el = document.createElement('a');
-  el.appendChild(document.createTextNode('Города мира'));
+  el.appendChild(el2);
   el.href = '/dbcartajs';
-  el.style.fontSize = 'larger';
   col.appendChild(el);
   row.appendChild(col);
 
