@@ -23,7 +23,8 @@ a { text-decoration:underline; }
 .main { margin:0px auto 7px auto; max-width:750px; }
 .tcell { display:table-cell; vertical-align: middle; }
 .nowrap { white-space:nowrap; }
-.stripe { padding:15px; background-color:#fff; border:1px solid #ddd; border-radius:4px; }
+.stripe { padding:15px; background-color:#fff; }
+.nostripe { padding:15px; }
 .mw { margin:0 10px 7px 10px; max-width:250px; }
 </style>
 <script src="/static/js/metrics.js" data-floor="1"></script>
@@ -33,20 +34,20 @@ a { text-decoration:underline; }
 </head>
 <body>
 <div id="root" class="main">
-<div id="header" class="main">
+<div id="header">
 <div id="demo1" class="tcell" style="width:150px; text-align:right"></div>
 <div class="tcell">
   <h1>Просмотр векторных карт и изображений с навигацией в JavaScript (Canvas, SVG)</h1>
   <div class="gray"><i> Pan, zoom vector map and images (Canvas, SVG)</i></div>
 </div>
 </div>
-<div class="main stripe">
+<div class="nostripe">
   Интерактивные схемы метро Москвы со строящимися линиями и станциями и Петербурга в <i>2024</i> году, 
   пригородного ж/д транспорта Москвы и МО в <i>2015</i> году.
   По выбранным станциям рассчитывается кратчайший путь по алгоритму <i>BFS</i>.
 </div>
 
-<div class="inlbl">
+<div class="inlbl stripe">
 <div class="main">
   <div>&ensp; Схема метро Москвы </div>
   <div class="gray nowrap en"><i>&ensp; Moscow Metro</i></div>
@@ -98,10 +99,11 @@ a { text-decoration:underline; }
 </div>
 <div id="ya_rtb_0" class="inlbl mw" style="max-height:280px"></div>
 
-<div class="main stripe">
+<div class="nostripe">
   Просмотр <i>jpeg</i> и <i>svg</i> картинок с возможностью масштабирования.
 </div>
 
+<div class="stripe">
 <div class="main">
   <div>&ensp; Просмотровщик картинок </div>
   <div class="gray nowrap en"><i>&ensp; Image Viewer</i></div>
@@ -118,12 +120,13 @@ a { text-decoration:underline; }
     <a href="svg/panzoom.html">SVG</a> 
   </span>
 </div>
+</div>
 
-<div class="main stripe">
+<div class="nostripe">
   Примеры использования цветов в канвасе, градиента и анимации в <i>svg</i>.
 </div>
 
-<div class="inlbl">
+<div class="stripe">
 <div class="main">
   <div>&ensp; Анимация движения </div>
   <div class="gray nowrap en"><i>&ensp; Roller Ball</i></div>
@@ -150,12 +153,12 @@ a { text-decoration:underline; }
 </div>
 </div>
 
-<div class="main stripe">
+<div class="nostripe">
   Интерактивные карты мира со списками городов и стран в различных проекциях. 
   Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
 </div>
 
-<div class="inlbl">
+<div class="inlbl stripe">
 <div class="main">
   <div>&ensp; Атлас мира </div>
   <div class="gray nowrap en"><i>&ensp; Atlas</i></div>
@@ -215,12 +218,12 @@ a { text-decoration:underline; }
 </div>
 <div id="ya_rtb_1" class="inlbl mw" style="max-height:270px"></div>
 
-<div class="main stripe">
+<div class="nostripe">
   Отрисовка картинки в канвасе <i>3d</i> с пересчетом проекции отображения через шейдеры <i>WebGL</i> на основе примеров с с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
   Звездное небо в канвасе <i>2d</i> и <i>3d</i> с использованием скриптов <a href="//github.com/mrdoob/three.js">three.js</a>.
 </div>
 
-<div class="inlbl">
+<div class="stripe">
 <div class="main">
   <div>&ensp; Атлас 3D </div>
   <div class="gray nowrap en"><i>&ensp; Atlas 3D</i></div>
@@ -247,7 +250,7 @@ a { text-decoration:underline; }
 </div>
 </div>
 
-<div id="footer" class="main stripe">
+<div id="footer" class="nostripe">
   Проект <a href="//github.com/egaxegax/dbcartajs" target="_blank">GitHub</a> &emsp; &emsp; 
   <a title="Home" href="/" > / </a>
 </div>
@@ -266,7 +269,7 @@ a { text-decoration:underline; }
   DV.draw();
    // reklama
   if(window.addYaRTB_Block) addYaRTB_Block('ya_rtb_0', false, YA_RTB[6]);
-//  if(window.addYaRTB_Block) addYaRTB_Block('ya_rtb_1', false, YA_RTB[6]);
+  if(window.addYaRTB_Block) addYaRTB_Block('ya_rtb_1', false, YA_RTB[6]);
 </script>
 </body>
 </html>
