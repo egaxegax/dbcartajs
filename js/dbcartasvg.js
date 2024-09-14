@@ -2,7 +2,7 @@
 // HTML5 SVG vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2015. b240608.
+// egax@bk.ru, 2015. v240914.
 //
 function dbCartaSvg(cfg) {
   var SVG_NS = 'http://www.w3.org/2000/svg',
@@ -88,9 +88,7 @@ function dbCartaSvg(cfg) {
     height: self.root.getAttribute('height')
   });
   self.root.style.backgroundColor = cfg.bg||'none';
-  //
-  // Add props
-  //
+  // - config -------------------
   self.extend(self, {
     cfg: {
       draggable: cfg.draggable == undefined ? true : cfg.draggable,
@@ -99,8 +97,10 @@ function dbCartaSvg(cfg) {
       sbar: cfg.sbar == undefined ? true : cfg.sbar,
       sbarpos: cfg.sbarpos || 'right',
       sbarsize: cfg.sbarsize||4
-    },
-    // Internal vars
+    }
+  });
+  // - Internal vars ----------------
+  self.extend(self, {
     m: {
       delta: self.root.getAttribute('width') / 360.0,
       halfX: self.root.getAttribute('width') / 2.0,
@@ -108,12 +108,13 @@ function dbCartaSvg(cfg) {
       rotate: 0,
       scale: 1,
       offset: [0, 0],
+      offscale: [0, 0],
       touches: [],
       dtouch: 0
-    },
-    //
-    // Proj4 defs
-    //
+    }
+  });
+  // - Proj4 defs -------------
+  self.extend(self, {
     projlist: function(){
       if ('Proj4js' in window){
         return {
@@ -129,24 +130,10 @@ function dbCartaSvg(cfg) {
       return {};
     }(),
     projload: {},
-    project: 0,
-    //
-    // Convert pixels to points
-    //
-    canvasXY: function(ev) {
-      var node = self.cont,
-          pts = [ev.clientX, ev.clientY];
-      if (!/WebKit/.test(navigator.userAgent)) {
-        pts[0] += window.pageXOffset;
-        pts[1] += window.pageYOffset;
-      }
-      while (node) {
-         pts[0] -= node.offsetLeft - node.scrollLeft;
-         pts[1] -= node.offsetTop - node.scrollTop;
-         node = node.offsetParent;
-      }
-      return pts;
-    },
+    project: 0
+  });
+  // - exports -----------------
+  self.extend(self, {
     //
     // Return meridians coords
     //
@@ -178,7 +165,42 @@ function dbCartaSvg(cfg) {
       }
       return lonlat;
     },
-    // - transforms ---------------------------------
+    savetoimage: function() {
+      if (self.cfg.sbar) self.cfg.sbar.setAttribute('fill', 'none');
+      var xml  = new XMLSerializer().serializeToString(self.root),
+          data = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(xml))),
+          img  = new Image();
+      if (self.cfg.sbar) self.cfg.sbar.setAttribute('fill', self.cfg.scalebg);
+      img.src = data;
+      img.onload = function() {
+        var a = document.createElement('a');
+        a.download = 'image.svg';
+        a.href = data;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      };
+    },
+  });
+  // - transforms ----------------------------
+  self.extend(self, {
+    //
+    // Convert pixels to points
+    //
+    canvasXY: function(ev) {
+      var node = self.cont,
+          pts = [ev.clientX, ev.clientY];
+      if (!/WebKit/.test(navigator.userAgent)) {
+        pts[0] += window.pageXOffset;
+        pts[1] += window.pageYOffset;
+      }
+      while (node) {
+         pts[0] -= node.offsetLeft - node.scrollLeft;
+         pts[1] -= node.offsetTop - node.scrollTop;
+         node = node.offsetParent;
+      }
+      return pts;
+    },
     //
     // Rotate map on ANGLE in degrees
     //
@@ -189,8 +211,8 @@ function dbCartaSvg(cfg) {
     //
     // Change map scale to SCALE
     //
-    scaleCarta: function(scale) {
-      var centerof = self.centerOf();
+    scaleCarta: function(scale, centerof) {
+      if (!centerof) centerof = self.centerOf();
       var cx = centerof[0]/scale - centerof[0],
           cy = centerof[1]/scale - centerof[1];
       var offx = self.m.offset[0] + cx,
@@ -199,32 +221,31 @@ function dbCartaSvg(cfg) {
         transform: 'rotate(' + self.m.rotate + ' ' + centerof[0] + ' ' + centerof[1] + ') scale(' + scale + ') translate(' + offx + ',' + offy + ')'
       });
       self.m.scale = scale;
+      self.m.centerof = centerof;
+      self.m.offscale = [ self.centerOf()[0] - centerof[0], self.centerOf()[1] - centerof[1] ];
       if('clscale' in window) clscale();
     },
     //
-    // Center map by points PTS
+    // Center map to points PTS
     //
-    centerCarta: function(pts) {
-      var scale = self.m.scale;
-      var centerof = self.centerOf();
-      var dx = centerof[0] - pts[0],
-          dy = centerof[1] - pts[1];
-      var offx = centerof[0]/scale - pts[0],
-          offy = centerof[1]/scale - pts[1];
+    centerCarta: function(pts, centerof) {
+      if (!centerof) centerof = self.centerOf();
       var mx = (self.m.mpts ? self.m.mpts[0] : 0),
           my = (self.m.mpts ? self.m.mpts[1] : 1);
-      offx -= mx;
-      offy -= my;
+      var dx = centerof[0] - pts[0] - mx,
+          dy = centerof[1] - pts[1] - my;
+      var offx = centerof[0]/self.m.scale - pts[0] - mx,
+          offy = centerof[1]/self.m.scale - pts[1] - my;
       if(self.chkPts([ offx, offy ])) {
         self.attr(self.vp, {
-          transform: 'rotate(' + self.m.rotate + ' ' + centerof[0] + ' ' + centerof[1] + ') scale(' + scale + ') translate(' + offx + ',' + offy + ')'
+          transform: 'rotate(' + self.m.rotate + ' ' + centerof[0] + ' ' + centerof[1] + ') scale(' + self.m.scale + ') translate(' + offx + ',' + offy + ')'
         });
-        self.m.offset = [ dx - mx, dy - my ];
+        self.m.offset = [ dx, dy ];
+        self.m.offscale = [ self.centerOf()[0] - centerof[0], self.centerOf()[1] - centerof[1] ];
       }
     },
     //
-    // Select EV.TARGET obj under mouse cursor like html MAP-AREA
-    // with AT attributes
+    // Select EV.TARGET obj under mouse cursor like html MAP-AREA with AT attributes
     //
     doMap: function(ev, at) {
       self.mousemove(ev[0] || ev);
@@ -256,8 +277,10 @@ function dbCartaSvg(cfg) {
         };
       };
       self.m.pmap.i = 1; // set counter
-    },
-    // - paints ---------------------------------
+    }
+  });
+  // - paints ------------------------------
+  self.extend(self, {
     //
     // Draw Sphere bounds by radius
     //
@@ -326,8 +349,10 @@ function dbCartaSvg(cfg) {
         d: path,
         transform: 'translate (' + dx + ',' + dy + ')'
       });
-    },
-    // - sizes ----------------------------
+    }
+  });
+  // - sizes ----------------------------
+  self.extend(self, {
     //
     // Return sizes of map in pixels
     //
@@ -369,14 +394,15 @@ function dbCartaSvg(cfg) {
       var rect = self.viewsizeOf();
       return [ (rect[0] + rect[2]) / 2.0,
                (rect[1] + rect[3]) / 2.0 ];
-    },
-    // - checks ------------------------
+    }
+  });
+  // - checks ------------------------
+  self.extend(self, {
     //
     // Check click on scale bar and do action
     //
     chkBar: function(pts, doaction) {
       if (!self.cfg.sbar) return;
-//      console.log('chkbar', pts);
       var sz = self.sizeOf(),
           cw = sz[2],
           ch = sz[3];
@@ -398,18 +424,21 @@ function dbCartaSvg(cfg) {
           if (zoom > -18) zoom -= 0.5;
         }
         zoom = (zoom > 1 ? zoom : 1/(2-zoom));
-        setTimeout(function(){ self.scaleCarta(zoom); }, 150);
-//        if (zoom == 1) {
-//          self.centerCarta(self.centerOf());
-//        }
+        setTimeout(function(){
+          var pts = self.centerOf();
+          self.centerCarta(self.toPoints(self.fromPoints(pts)), [pts[0], pts[1]+1]);
+          self.scaleCarta(zoom, pts);
+        }, 150);
       }
     },
     chkPts: function(pts) {
       return (pts && !isNaN(pts[0]) && !isNaN(pts[1]));
-    },
-    // - reproject ------------------------
+    }
+  });
+  // - reproject ------------------------
+  self.extend(self, {
     //
-    // Change project to NEW_PROJECT and center by visible centre
+    // Change project to NEW_PROJECT and center
     //
     changeProject: function(new_project) {
       // curr. centerof
@@ -427,7 +456,7 @@ function dbCartaSvg(cfg) {
         self.initProj(new_project, ' +lon_0=0 +lat_0=0');
         var centerof = self.toPoints(viewcenterof, true);
         if (!self.chkPts(centerof)) centerof = self.centerOf();
-        self.centerCarta(centerof);
+        self.centerCarta([centerof[0], centerof[1]-1]);
       }
     },
     //
@@ -486,8 +515,8 @@ function dbCartaSvg(cfg) {
         var coords = [ (pts[0] - self.m.halfX) / self.m.delta,
                       -(pts[1] - self.m.halfY) / self.m.delta ];
       } else {
-        var coords = [ (pts[0]/self.m.scale - self.m.halfX/self.m.scale - self.m.offset[0]) / self.m.delta,
-                      -(pts[1]/self.m.scale - self.m.halfY/self.m.scale - self.m.offset[1]) / self.m.delta ];
+        var coords = [ (pts[0]/self.m.scale - self.m.halfX/self.m.scale - self.m.offscale[0]/self.m.scale*(self.m.scale-1) - self.m.offset[0]) / self.m.delta,
+                      -(pts[1]/self.m.scale - self.m.halfY/self.m.scale - self.m.offscale[1]/self.m.scale*(self.m.scale-1) - self.m.offset[1]) / self.m.delta ];
       }
       if (dotransform && self.project != 0 && coords[0] != 0 && coords[1] != 0) {
         if (!(coords = self.transformCoords(String(self.project), 'epsg:4326', coords))) return;
@@ -562,8 +591,7 @@ function dbCartaSvg(cfg) {
         return coords;
     },
     //
-    // Return new PTS rotated around Z-axis with ANGLE relative to CENTEROF
-    // used for mouse events
+    // Return rotated points PTS around Z-axis with ANGLE relative to CENTEROF (for mouse events)
     //
     rotatePts: function(pts, angle, centerof) {
       var roll = angle * Math.PI/180,
@@ -576,30 +604,16 @@ function dbCartaSvg(cfg) {
                   cy + r * Math.sin(roll + a) ];
       }
       return pts;
-    },
-    savetoimage: function() {
-      if (self.cfg.sbar) self.cfg.sbar.setAttribute('fill', 'none');
-      var xml  = new XMLSerializer().serializeToString(self.root),
-          data = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(xml))),
-          img  = new Image();
-      if (self.cfg.sbar) self.cfg.sbar.setAttribute('fill', self.cfg.scalebg);
-      img.src = data;
-      img.onload = function() {
-        var a = document.createElement('a');
-        a.download = 'image.svg';
-        a.href = data;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      };
-    },
-    // - handlers -----------------------------
+    }
+  });
+  // - event handlers -----------------------------
+  self.extend(self, {
     mousemove: function(ev) {
       var spts = self.canvasXY(ev),
           pts = self.rotatePts(spts, self.m.rotate, self.centerOf());
       if (self.m.mpts && self.cfg.draggable && !self.isTurnable()) {
-        var centerof = self.centerOf();
-        self.centerCarta([ centerof[0] - pts[0]/self.m.scale, centerof[1] - pts[1]/self.m.scale ]);
+        var centerof = (self.m.centerof || self.centerOf());
+        self.centerCarta([ centerof[0] - pts[0]/self.m.scale, centerof[1] - pts[1]/self.m.scale ], centerof);
       }
       if (self.m.pmap) {
         if (self.m.pmap.i === 0) {
@@ -634,24 +648,22 @@ function dbCartaSvg(cfg) {
           pts = self.rotatePts(spts, self.m.rotate, self.centerOf());
       if (self.m.mbar) { // bar
         self.chkBar(spts, true);
-      } else { //turn
-        if (self.m.mcenterof && self.isTurnable()) {
-          var centerof = self.centerOf();
-          var mpts = [
-            centerof[0] - pts[0] + (self.m.mpts ? self.m.mpts[0] : 0),
-            centerof[1] - pts[1] + (self.m.mpts ? self.m.mpts[1] : 0) ];
-          var dst = self.fromPoints(mpts, false, self.isTurnable());
-          self.initProj(' +h=' + self.m.mcenterof[2] + ' +lon_0=' + (self.m.mcenterof[0] + dst[0]) + ' +lat_0=' + (self.m.mcenterof[1] + dst[1]));
-          if ('draw' in window) draw();
-        }
+      } else if (self.m.mcenterof && self.isTurnable()) { // turn
+        var centerof = self.centerOf();
+        var mpts = [
+          centerof[0] - pts[0] + (self.m.mpts ? self.m.mpts[0] : 0),
+          centerof[1] - pts[1] + (self.m.mpts ? self.m.mpts[1] : 0) ];
+        var dst = self.fromPoints(mpts, false, self.isTurnable());
+        self.initProj(' +h=' + self.m.mcenterof[2] + ' +lon_0=' + (self.m.mcenterof[0] + dst[0]) + ' +lat_0=' + (self.m.mcenterof[1] + dst[1]));
+        if ('draw' in window) draw();
       }
       delete self.m.mpts;
       delete self.m.mcenterof;
     }
   });
-  // - root events -----------------------------
+  // - root handlers -----------------------------
   self.extend(self.root, {
-    mousewheel: function(ev, dlt) {
+    mousewheel: function(ev, dlt, tpts) {
       ev.preventDefault();
       var delta = 0;
       if (ev.wheelDelta) { // WebKit / Opera / Explorer 9
@@ -666,7 +678,13 @@ function dbCartaSvg(cfg) {
       var zoom = (self.m.scale > 1 ? self.m.scale : 2-1/self.m.scale);
       zoom += delta * 0.25;
       zoom = (zoom > 1 ? zoom : 1/(2-zoom));
-      self.scaleCarta(zoom);
+      if (self.m.rotate) { // zoom by center
+        self.scaleCarta(zoom);
+      } else { // zoom by mouse point
+        var pts = (tpts || self.canvasXY(ev));
+        self.centerCarta(self.toPoints(self.fromPoints(pts)), [pts[0], pts[1]+1]);
+        self.scaleCarta(zoom, pts);
+      }
     },
     touchmove: function(ev) {
       ev.preventDefault(); // prevent window scroll
@@ -674,6 +692,7 @@ function dbCartaSvg(cfg) {
       if (self.m.touches.length == 1) {
         self.mousemove(touches[touches.length - 1]);
       } else if (self.m.touches.length == 2) {
+        self.mouseup(ev);
         for (var i=0; i<touches.length; i++) {
           for (var j=0; j<self.m.touches.length; j++) {
             if (self.m.touches[j].identifier == touches[i].identifier)
@@ -684,7 +703,7 @@ function dbCartaSvg(cfg) {
             b = self.canvasXY(self.m.touches[1]);
         var d = Math.sqrt( Math.pow(a[0] - b[0], 2) + Math.pow(a[1] - b[1], 2) );
         if (d && self.m.dtouch) {
-          self.root.mousewheel(ev, d - self.m.dtouch);
+          self.root.mousewheel(ev, d - self.m.dtouch, [(a[0] + b[0])/2, (a[1] + b[1])/2] );
         }
         self.m.dtouch = d;
       }
@@ -727,7 +746,6 @@ function dbCartaSvg(cfg) {
   self.root.addEventListener('touchstart', self.root.touchstart, false);
   self.root.addEventListener('touchend', self.root.touchend, false);
   self.root.addEventListener('touchleave', self.root.touchend, false);
-
   self.cfg.sbar = self.paintBar();
   return self;
 }
