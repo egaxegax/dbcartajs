@@ -52,6 +52,11 @@
   <td> - </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/panzoom.html"> SVG </a> </td>
  </tr>
+ <tr>
+  <td> <i>Ресайзинг SVG-карты</i><br><sup>Pan Map</sup> </td>
+  <td> - </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/panmap.html"> SVG </a> </td>
+ </tr>
 </table>
 
 Интерактивные карты мира со списками городов и стран в различных проекциях. 
