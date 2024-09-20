@@ -63,12 +63,12 @@ function mds(o) {
 function calcRoute(fromid, toid){
   if (!fromid || !toid) { return; };
   var inches=[]; // interchanges coords
+  var pinches=[], proutes=[]; // paths founded
   [].slice.call(document.getElementById('cInches').options).map(function(o){
     if(o.innerHTML.indexOf('\u2611')>-1){ // checked
       inches = inches.concat(makecrds(MLNS.filter(function(a){ return a[0]==o.value; })));
     }
   });
-  var pinches=[], proutes=[]; // paths founded
   BFS(MSTS, inches, makeind(MSTS, fromid), makeind(MSTS, toid),
     [ // stop stations
       makeind(MSTS, 's5_Suvorovskaya'),

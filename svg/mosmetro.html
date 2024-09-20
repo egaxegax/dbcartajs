@@ -95,12 +95,12 @@ function clearRoute(){
 function calcRoute(fromid, toid){
   console.log(fromid, toid);
   var inches=[];
+  var pinches=[], proutes=[];
   [].slice.call(document.getElementById('cInches').options).map(function(o){
     if(o.innerHTML.indexOf('\u2611')>-1){ // checked
       inches = inches.concat(makecrds(MLNS.filter(function(a){ return a[0]==o.id; })));
     }
   });
-  var pinches=[], proutes=[];
   BFS(MSTS, inches, makeind(MSTS, fromid), makeind(MSTS, toid),
     [ // stop stations
       makeind(MSTS, 's5_Suvorovskaya'),
