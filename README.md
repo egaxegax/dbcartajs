@@ -39,7 +39,7 @@
  </tr>
 </table>
 
-Просмотр *jpeg* и *svg* картинок с возможностью масштабирования.
+Масштабирование изображений, использование цветов в *canvas*, градиента, анимации в *svg*.
 
 <table>
  <tr>
@@ -56,6 +56,21 @@
   <td> <i>Ресайзинг SVG-карты</i><br><sup>Pan Map</sup> </td>
   <td> - </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/panmap.html"> SVG </a> </td>
+ </tr>
+  <tr>
+  <td> <i>Анимация движения</i><br><sup>Roller Ball</sup> </td>
+  <td width="80px"> - </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/rollerball.html"> SVG </a> </td>
+ </tr>
+ <tr>
+  <td width="320px"> <i>Настенные часы</i><br><sup>Wall Clock</sup> </td>
+  <td> - </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/clock.html"> SVG </a> </td>
+ </tr>
+ <tr>
+  <td width="320px"> <i>Футбольные схемы</i><br><sup>Soccer Schemes</sup> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/soccerf.html"> Canvas </a> </td>
+  <td> - </td>
  </tr>
 </table>
 
@@ -96,26 +111,6 @@
  <tr>
   <td> <i>Маршруты на карте</i><br><sup>Routes</sup> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/merc.html"> Canvas </a> </td>
-  <td> - </td>
- </tr>
-</table>
-
-Примеры использования градиента и *svg*-анимации с эффектом движения.
-
-<table>
- <tr>
-  <td> <i>Анимация движения</i><br><sup>Roller Ball</sup> </td>
-  <td width="80px"> - </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/rollerball.html"> SVG </a> </td>
- </tr>
- <tr>
-  <td width="320px"> <i>Настенные часы</i><br><sup>Wall Clock</sup> </td>
-  <td> - </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/clock.html"> SVG </a> </td>
- </tr>
- <tr>
-  <td width="320px"> <i>Футбольные схемы</i><br><sup>Soccer Schemes</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/soccerf.html"> Canvas </a> </td>
   <td> - </td>
  </tr>
 </table>
