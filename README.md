@@ -30,7 +30,7 @@
  <tr>
   <td> <i>Схема метро Новосибирска</i><br><sup>Novosib Metro</sup> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/metro-novosib.html"> Canvas </a> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/metro-novosib.html"> SVG </a> </td>
+  <td colspan=2> <a href="https://egaxegax.github.io/dbcartajs/svg/metro-novosib.html"> SVG </a> </td>
  </tr>
  <tr>
   <td> <i>Схема метро Киева</i><br><sup>Kiev Metro</sup> </td>
