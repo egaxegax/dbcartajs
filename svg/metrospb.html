@@ -28,67 +28,22 @@ egax@bk.ru, 2022-23.
 <script src="../js/alg/bfs.js"></script>
 <script>
 var MLNS = [
-['neva_river1', '1', [
-    [-108,0],[-103,0,'Q'],[-100,0,''],[-97,2.5,'L'],[-67,30]
-  ], 'река Большая Нева', [-93,-5]
-],
-['neva_river2', '1', [
-    [-68,30],[46,30,'Q'],[58,30,''],[58,20,'L'],[58,-61,'Q'],[58,-64,''],[60,-67,'L'],[72,-80]
-  ], 'река Нева', [-20,30]
-],
-['neva_river3', '1', [
-    [-108,54],[-103,54,'Q'],[-100,54,''],[-97,51.5,'L'],[-67,30]
-  ], 'река Малая Нева', [-100,62]
-],
-['r1', '1', [
-    [-94,60],[-94,38,'Q'],[-94,34,''],[-88,30,'L'],[-70,18,'Q'],[-67,16,''],[-64,16,'L'],[50,16,'Q'],[53,16,''],[53,13,'L'],[53,-80]
-  ], 'Невско-Василеостровская линия (зеленая)'
-],
-['r2', '1', [
-    [-60,70],[-60,30,'Q'],[-60,26,''],[-57,23,'L'],[10,-40,'Q'],[12,-42,''],[12,-46,'L'],[12,-80]
-  ], 'Фрунзенская линия (фиолетовая)'
-],
-['r3', '1', [
-    [-30,80],[-30,0],[-30,-80]
-  ], 'Московско-Петроградская линия (синяя)'
-],
-['r4', '1', [
-    [-27,-5],[56,-5,'Q'],[58,-5,''],[60,-7,'L'],[82,-26,'Q'],[84,-28,''],[84,-30,'L'],[84,-55]
-  ], 'Правобережная линия (желтая)'
-],
-['r5', '1', [
-    [20,80],[20,34,'Q'],[20,31,''],[17,28,'L'],[-55,-42,'Q'],[-58,-45,''],[-58,-48,'L'],[-58,-80]
-  ], 'Кировско-Выборгская линия (красная)'
-],
+['neva_river1', '1', [[-108,0],[-103,0,'Q'],[-100,0,''],[-97,2.5,'L'],[-67,30]], 'река Большая Нева', [-93,-5]],
+['neva_river2', '1', [[-68,30],[46,30,'Q'],[58,30,''],[58,20,'L'],[58,-61,'Q'],[58,-64,''],[60,-67,'L'],[72,-80]], 'река Нева', [-20,30]],
+['neva_river3', '1', [[-108,54],[-103,54,'Q'],[-100,54,''],[-97,51.5,'L'],[-67,30]], 'река Малая Нева', [-100,62]],
+['r1', '1', [[-94,60],[-94,38,'Q'],[-94,34,''],[-88,30,'L'],[-70,18,'Q'],[-67,16,''],[-64,16,'L'],[50,16,'Q'],[53,16,''],[53,13,'L'],[53,-80]], 'Невско-Василеостровская линия (зеленая)'],
+['r2', '1', [[-60,70],[-60,30,'Q'],[-60,26,''],[-57,23,'L'],[10,-40,'Q'],[12,-42,''],[12,-46,'L'],[12,-80]], 'Фрунзенская линия (фиолетовая)'],
+['r3', '1', [[-30,80],[-30,0],[-30,-80]], 'Московско-Петроградская линия (синяя)'],
+['r4', '1', [[-27,-5],[56,-5,'Q'],[58,-5,''],[60,-7,'L'],[82,-26,'Q'],[84,-28,''],[84,-30,'L'],[84,-55]], 'Правобережная линия (желтая)'],
+['r5', '1', [[20,80],[20,34,'Q'],[20,31,''],[17,28,'L'],[-55,-42,'Q'],[-58,-45,''],[-58,-48,'L'],[-58,-80]], 'Кировско-Выборгская линия (красная)'],
 //
-['inch', 'Nevskiy_Prospekt-Gostiniy_Dvor', [
-    [-30,20],[-30,16]
-  ]
-],
-['inch', 'Mayakovskaya-Ploschad_Vosstaniya', [
-    [-1,16],[2,13.42]
-  ]
-],
-['inch', 'Ploschad_Alexandra_Nevskogo', [
-    [53,-1],[53,-5]
-  ]
-],
-['inch', 'Sadovaya-Sennaya_Ploschad-Spasskaya', [
-    [-33,0.44],[-30,-2.38],[-27,-5]
-  ]
-],
-['inch', 'Pushkinskaya-Zvenigorodskaya', [
-    [-24.9,-12.73],[-19,-12.73]
-  ]
-],
-['inch', 'Dostoevskaya-Vladimirskaya', [
-    [-23,-5],[-20,-8]
-  ]
-],
-['inch', 'Tehnologicheskiy_Institut', [
-    [-30,-17.68],[-33,-20.6]
-  ]
-]
+['inch', 'Nevskiy_Prospekt-Gostiniy_Dvor', [[-30,20],[-30,16]]],
+['inch', 'Mayakovskaya-Ploschad_Vosstaniya', [[-1,16],[2,13.42]]],
+['inch', 'Ploschad_Alexandra_Nevskogo', [[53,-1],[53,-5]]],
+['inch', 'Sadovaya-Sennaya_Ploschad-Spasskaya', [[-33,0.44],[-30,-2.38],[-27,-5]]],
+['inch', 'Pushkinskaya-Zvenigorodskaya', [[-24.9,-12.73],[-19,-12.73]]],
+['inch', 'Dostoevskaya-Vladimirskaya', [[-23,-5],[-20,-8]]],
+['inch', 'Tehnologicheskiy_Institut', [[-30,-17.68],[-33,-20.6]]]
 ];
 var MSTS = [
 ['s1','Begovaya',[[-94,60]],'Беговая'],
@@ -175,189 +130,16 @@ var MLBS=[
 ];
 var msel, mopt = {}; // define new layers
   // proportional for mobile diag. size ratio
-function mds(o) { 
-  return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*o/100;
-}
-  // 
-function draw(){
-  var route = function(o){ return DC.extend({class: 'route', bg: 'none', join: 'round', width: 5, anchor: ['start', 'middle'], labelscale: 1}, o||{}); },
-      river = function(o){ return route(DC.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff', labelscale: 0}, o||{})); },
-      inch = function(o){ return route(DC.extend({fg: '#ddd', cap: 'round'}, o||{})); },
-      station = function(o){ return DC.extend({class: 'station', bg: 'white', size: 4, width: 1, labelscale: 1}, o||{}); };
-    // lines
-  DC.extend(mopt, {
-    neva_river1: river({width: 20, rotate: -43}),
-    neva_river2: river({width: 25, rotate: 0}),
-    neva_river3: river({width: 20, rotate: 36}),
-    r1: route({fg: '#44b85c'}),
-    r2: route({fg: '#8e479c'}),
-    r3: route({fg: '#0078bf'}),
-    r4: route({fg: '#ffcB31'}),
-    r5: route({fg: '#ed1b35'})
-  });
-    // inchs
-  DC.extend(mopt, {
-    inch: inch()
-  });
-    // stations
-  DC.extend(mopt, {
-    s1:   station({fg: mopt['r1'].fg, anchor: ['end',  'middle']}),
-    s1_1: station({fg: mopt['r1'].fg, anchor: ['start','top']}),
-    s1_2: station({fg: mopt['r1'].fg, anchor: ['start','bottom']}),
-    s1_3: station({fg: mopt['r1'].fg, anchor: ['start','middle']}),
-    s2:   station({fg: mopt['r2'].fg, anchor: ['end',  'middle']}),
-    s2_1: station({fg: mopt['r2'].fg, anchor: ['start','middle']}),
-    s3:   station({fg: mopt['r3'].fg, anchor: ['start','middle']}),
-    s3_1: station({fg: mopt['r3'].fg, anchor: ['end',  'middle']}),
-    s4:   station({fg: mopt['r4'].fg, anchor: ['end',  'middle']}),
-    s4_1: station({fg: mopt['r4'].fg, anchor: ['start','bottom']}),
-    s4_2: station({fg: mopt['r4'].fg, anchor: ['start','middle']}),
-    s5:   station({fg: mopt['r5'].fg, anchor: ['start','middle']}),
-    s5_1: station({fg: mopt['r5'].fg, anchor: ['end',  'middle']})
-  });
-  MLNS.map(function(line){
-    var ftype = line[0], abbr = line[1], coords = line[2];
-    var pts = DC.interpolateCoords(coords, true),
-        path = ('M ' + pts).replace(/,/g, ' ');
-    var route = DC.append('path', {
-      id: ftype + '_' + abbr, d: path,
-      class: mopt[ftype].class, mclass: ftype,
-      fill: mopt[ftype].bg, stroke: mopt[ftype].fg,
-      'stroke-dasharray': mopt[ftype].dash,
-      'stroke-linejoin': mopt[ftype].join,
-      'stroke-linecap': mopt[ftype].cap,
-      'stroke-width': mds(mopt[ftype].width)
-    });
-    DC.extend(route, {
-      onmousemove: function(ev){
-         // find lines by type
-        var rtype = this.getAttribute('mclass').slice(1);
-        var lns = [], lnsattr =[];
-        var pref = ['', '_ext'], suf = ['', '_1', '_2'];
-        for(var i=0; i<pref.length; i++){
-          for(var ii=0; ii<suf.length; ii++) {
-            var line = document.getElementById('r'+rtype+pref[i]+suf[ii]);
-            if(line){ // highlight line
-              lns.push( {target: line} );
-              lnsattr.push( {'stroke-width': mds(12)} );
-            }
-          }
-        }
-        DC.doMap(lns, lnsattr);
-      }
-    });
-  });
-  MSTS.map(function(station){
-    var ftype = station[0], abbr = station[1], coords = station[2][0], label = station[3],
-        stype = 's' + ftype.slice(1); // station type in mopt
-    var pts = DC.toPoints(coords, true);
-    var station = DC.append('circle', {
-      id: ftype +'_'+ abbr, class: mopt[ftype].class, mclass: stype,
-      fill: mopt[stype].bg, stroke: mopt[stype].fg, 'stroke-width': mds(mopt[stype].width), 
-      cx: pts[0], cy: pts[1], r: mds(mopt[stype].size)
-    });
-    DC.extend(station, {
-      onclick: function(ev){
-        DC.attr(ev.target, {class: 'selected', fill: 'gold', r: mds(6)});
-        if((msel = DC.root.querySelectorAll('.selected')).length == 2){
-          calcRoute(msel[0].getAttribute('id'), msel[1].getAttribute('id'));
-        }
-      },
-      onmousemove: function(ev){
-          // find text by id
-        var text = document.getElementById('t'+this.getAttribute('id'));
-        var ts = [], tsattr =[];
-        if(text){
-          ts.push( {target: text} );
-          tsattr.push( {'font-size': mds(DC.root.getAttribute('width')/80)} );
-        }
-        DC.doMap([ev].concat(ts), [{ // highlight station(ev) + label
-            r: mds(8)
-          }].concat(tsattr)
-        );
-      }
-    });
-    if(!label) return;
-     // text anchor
-    var a, dx = 10, dy = 0;
-    if(a = mopt[stype].anchor) {
-      if(a[0] == 'start')    dx = 8;
-      else if(a[0] == 'middle') dx = -5;
-      else if(a[0] == 'end') dx = -10;
-      if(a[1] == 'top') dy = 16;
-      else if(a[1] == 'middle') dy = 4;
-      else if(a[1] == 'bottom') dy = -8;
-    };
-    var text = DC.append('text', {
-      id: 't'+ ftype +'_'+ abbr, class: mopt[ftype].class,
-      x: pts[0] + mds(dx), y: pts[1] + mds(dy), fill: mopt[stype].labelcolor || 'black',
-      'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
-      'text-anchor': a ? a[0] : '', cursor: 'pointer'
-    });
-    text.appendChild(document.createTextNode(label));
-    DC.extend(text, {
-      onclick: function(){
-        var station = document.getElementById(text.getAttribute('id').slice(1));
-        text.setAttribute('font-size', DC.root.getAttribute('width')/125);
-        station.onclick({target: station});
-      },
-      onmousemove: function(){
-        var ts = [], tsattr =[];
-        ts.push( {target: text} );
-        tsattr.push( {'font-size': DC.root.getAttribute('width')/80} );
-         // highlight label
-        DC.doMap(ts, tsattr);
-      }
-    });
-  });
-  MLBS.map(function(label){
-    var ftype = label[0], t = label[3], coords = label[4],
-        a, dx = 10, dy = 0;
-    var pts = DC.toPoints(coords, true);
-    if(a = mopt[ftype].anchor) {
-      if(a[0] == 'start') dx = 10;
-      else if(a[0] == 'middle') dx = -5;
-      else if(a[0] == 'end') dx = -10;
-      if(a[1] == 'top') dy = 14;
-      else if(a[1] == 'middle') dy = 4;
-      else if(a[1] == 'bottom') dy = -8;
-    };
-    var text = DC.append('text', {
-      x: pts[0] + dx, y: pts[1] + dy, class: mopt[ftype].class,
-      fill: mopt[ftype].labelcolor || '',
-      'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
-      'text-anchor': a ? a[0] : ''
-    });
-    if('rotate' in mopt[ftype]){
-      DC.attr(text, {
-        transform: 'rotate(' + mopt[ftype].rotate + ',' + pts[0] + ',' + pts[1] + ')'
-      });
-    }
-    text.appendChild(document.createTextNode(t));    
-  });
-    //
-  var mpts = DC.viewsizeOf(), // visible size of map in degrees 
-      scalex = (mpts[2]-mpts[0])/180,
-      scaley = (mpts[1]-mpts[3])/180;
-  DC.scaleCarta(scalex > scaley ? scaley : scalex);
-}
+function mds(o) { return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*o/100; }
   //
 function clearRoute(){
-  while((msel = DC.root.querySelectorAll('.selpath')).length){
-    DC.vp.removeChild(msel[0]);
-  }
-  [].slice.call(DC.root.querySelectorAll('.selected')).map(function(o){
-    var m = o.getAttribute('mclass');
-    DC.attr(o, {class: mopt[m].class, fill: mopt[m].bg, r: mds(mopt[m].size)});
-  });
-  [].slice.call(DC.root.querySelectorAll('.route, .station')).map(function(o){
-    DC.attr(o, {opacity: '1'});
-  });
+  while((msel = DC.root.querySelectorAll('.selpath')).length){ DC.vp.removeChild(msel[0]); }
+  [].slice.call(DC.root.querySelectorAll('.selected')).map((o) => { DC.attr(o, {class: mopt[o.getAttribute('mclass')].class, fill: mopt[o.getAttribute('mclass')].bg, r: mds(mopt[o.getAttribute('mclass')].size)}); });
+  [].slice.call(DC.root.querySelectorAll('.route, .station')).map((o) => { DC.attr(o, {opacity: '1'}); });
 }
   //
 function calcRoute(fromid, toid){
-  var inches = [];
-  inches = inches.concat(makecrds(MLNS.filter(function(a){ return a[0]=='inch'; })));
+  var inches = [].concat(makecrds(MLNS.filter(function(a){ return a[0]=='inch'; })));
     //
   BFS(MSTS, inches, makeind(MSTS, fromid), makeind(MSTS, toid)).map(function(st,i,sts){
     if(i < sts.length-1){
@@ -368,9 +150,7 @@ function calcRoute(fromid, toid){
             r0 = Math.sqrt(Math.pow(d[0]-c[0],2)+Math.pow(d[1]-c[1],2));
             r1 = Math.sqrt(Math.pow(e[0]-c[0],2)+Math.pow(e[1]-c[1],2));
             rr = Math.sqrt(Math.pow(d[0]-e[0],2)+Math.pow(d[1]-e[1],2));
-            if((r0 <= rr) && (r1 <= rr)){
-              if(!inarray(cc,c)) cc.push(c);
-            }
+            if((r0 <= rr) && (r1 <= rr) && !inarray(cc,c)) cc.push(c);
           });
         }
       });
@@ -385,11 +165,10 @@ function calcRoute(fromid, toid){
         if(!inarray(cc,d)) cc.unshift(d);
         if(!inarray(cc,e)) cc.push(e);
       }
-      var pts = DC.interpolateCoords(cc, true),
-          path = ('M ' + pts).replace(/,/g, ' ');
+      var path = ('M ' + DC.interpolateCoords(cc, true)).replace(/,/g, ' ');
       var bInch = inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length;
       DC.extend( 
-        DC.append('path', { class: 'selpath', d: path, stroke: DC.root.getElementById(makeid(st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-dasharray': bInch ? [3,2] : 'none', 'stroke-width': mds(bInch ? 4 : 8)}),
+        DC.append('path', { class: 'selpath', d: path, stroke: DC.root.getElementById(makeid(st)).getAttribute('stroke'), fill: 'none', 'stroke-linejoin': 'round', 'stroke-linecap': bInch ? 'butt' : 'round', 'stroke-dasharray': bInch ? [1,1] : 'none', 'stroke-width': mds(bInch ? 4 : 8)}),
           { onclick: clearRoute });
     } else {
       [].slice.call(DC.root.querySelectorAll('.route, .station')).map(function(o){ // opacity map
@@ -403,9 +182,8 @@ function calcRoute(fromid, toid){
             { onclick: clearRoute });
         if(t){
           DC.append('text', {
-            x: t.getAttribute('x'), y: t.getAttribute('y'), 
-            class: 'selpath',  fill: t.getAttribute('fill'),
-            'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
+            x: t.getAttribute('x'), y: t.getAttribute('y'), class: 'selpath', fill: t.getAttribute('fill'),
+            'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125, 
             'text-anchor': t.getAttribute('text-anchor')
           }).innerHTML = t.innerHTML;
         }
@@ -413,6 +191,11 @@ function calcRoute(fromid, toid){
     }
   });
 }
+  //
+function route(o){ return DC.extend({class: 'route', bg: 'none', join: 'round', width: 5, anchor: ['start', 'middle']}, o||{}); }
+function river(o){ return route(DC.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff'}, o||{})); }
+function inch(o) { return route(DC.extend({fg: '#ddd', cap: 'round'}, o||{})); }
+function station(o){ return DC.extend({class: 'station', bg: 'white', size: mds(4), width: mds(1)}, o||{}); }
   //
 var DC = new dbCartaSvg({
   id: 'mcont',
@@ -426,11 +209,160 @@ var DC = new dbCartaSvg({
 DC.extend(DC.root, {
   ondblclick: function(){ clearRoute(); }
 });
-
-draw();
-
+  // lines
+DC.extend(mopt, {
+  neva_river1: river({width: 20, rotate: -43}),
+  neva_river2: river({width: 25, rotate: 0}),
+  neva_river3: river({width: 20, rotate: 36}),
+  r1: route({fg: '#44b85c'}),
+  r2: route({fg: '#8e479c'}),
+  r3: route({fg: '#0078bf'}),
+  r4: route({fg: '#ffcB31'}),
+  r5: route({fg: '#ed1b35'})
+});
+  // inchs
+DC.extend(mopt, {
+  inch: inch()
+});
+  // stations
+DC.extend(mopt, {
+  s1:   station({fg: mopt['r1'].fg, anchor: ['end',  'middle']}),
+  s1_1: station({fg: mopt['r1'].fg, anchor: ['start','top']}),
+  s1_2: station({fg: mopt['r1'].fg, anchor: ['start','bottom']}),
+  s1_3: station({fg: mopt['r1'].fg, anchor: ['start','middle']}),
+  s2:   station({fg: mopt['r2'].fg, anchor: ['end',  'middle']}),
+  s2_1: station({fg: mopt['r2'].fg, anchor: ['start','middle']}),
+  s3:   station({fg: mopt['r3'].fg, anchor: ['start','middle']}),
+  s3_1: station({fg: mopt['r3'].fg, anchor: ['end',  'middle']}),
+  s4:   station({fg: mopt['r4'].fg, anchor: ['end',  'middle']}),
+  s4_1: station({fg: mopt['r4'].fg, anchor: ['start','bottom']}),
+  s4_2: station({fg: mopt['r4'].fg, anchor: ['start','middle']}),
+  s5:   station({fg: mopt['r5'].fg, anchor: ['start','middle']}),
+  s5_1: station({fg: mopt['r5'].fg, anchor: ['end',  'middle']})
+});
+MLNS.map(function(line){
+  var ftype = line[0], abbr = line[1], coords = line[2];
+  var path = ('M ' + DC.interpolateCoords(coords, true)).replace(/,/g, ' ');
+  var route = DC.append('path', {
+    id: ftype + '_' + abbr, d: path,
+    class: mopt[ftype].class, mclass: ftype,
+    fill: mopt[ftype].bg, stroke: mopt[ftype].fg,
+    'stroke-dasharray': mopt[ftype].dash,
+    'stroke-linejoin': mopt[ftype].join,
+    'stroke-linecap': mopt[ftype].cap,
+    'stroke-width': mds(mopt[ftype].width)
+  });
+  DC.extend(route, {
+    onmousemove: function(ev){ // find lines by type
+      var rtype = this.getAttribute('mclass').slice(1);
+      var lns = [], lnsattr =[];
+      var pref = ['', '_ext'], suf = ['', '_1', '_2'];
+      for(var i=0; i<pref.length; i++){
+        for(var ii=0; ii<suf.length; ii++) {
+          var line = document.getElementById('r'+rtype+pref[i]+suf[ii]);
+          if(line){ // highlight line
+            lns.push( {target: line} );
+            lnsattr.push( {'stroke-width': mds(12)} );
+          }
+        }
+      }
+      DC.doMap(lns, lnsattr);
+    }
+  });
+});
+MSTS.map(function(station){
+  var ftype = station[0], abbr = station[1], coords = station[2][0], label = station[3],
+      stype = 's' + ftype.slice(1); // station type in mopt
+  var pts = DC.toPoints(coords, true);
+  var station = DC.append('circle', {
+    id: ftype +'_'+ abbr, class: mopt[ftype].class, mclass: stype,
+    fill: mopt[stype].bg, stroke: mopt[stype].fg, 'stroke-width': mds(mopt[stype].width), 
+    cx: pts[0], cy: pts[1], r: mds(mopt[stype].size)
+  });
+  DC.extend(station, {
+    onclick: function(ev){
+      DC.attr(ev.target, {class: 'selected', fill: 'gold', r: mds(6)});
+      if((msel = DC.root.querySelectorAll('.selected')).length == 2){
+        calcRoute(msel[0].getAttribute('id'), msel[1].getAttribute('id'));
+      }
+    },
+    onmousemove: function(ev){ // find text by id
+      var text = document.getElementById('t'+this.getAttribute('id'));
+      var ts = [], tsattr =[];
+      if(text){
+        ts.push( {target: text} );
+        tsattr.push( {'font-size': mds(DC.root.getAttribute('width')/80)} );
+      }
+      DC.doMap([ev].concat(ts), [{ // highlight station(ev) + label
+          r: mds(8)
+        }].concat(tsattr)
+      );
+    }
+  });
+  if(!label) return;
+    // text anchor
+  var a, dx = 10, dy = 0;
+  if(a = mopt[stype].anchor) {
+    if(a[0] == 'start')    dx = 8;
+    else if(a[0] == 'middle') dx = -5;
+    else if(a[0] == 'end') dx = -10;
+    if(a[1] == 'top') dy = 16;
+    else if(a[1] == 'middle') dy = 4;
+    else if(a[1] == 'bottom') dy = -8;
+  };
+  var text = DC.append('text', {
+    id: 't'+ ftype +'_'+ abbr, class: mopt[ftype].class,
+    x: pts[0] + mds(dx), y: pts[1] + mds(dy), fill: mopt[stype].labelcolor || 'black',
+    'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
+    'text-anchor': a ? a[0] : '', cursor: 'pointer'
+  });
+  text.appendChild(document.createTextNode(label));
+  DC.extend(text, {
+    onclick: function(){
+      var station = document.getElementById(text.getAttribute('id').slice(1));
+      text.setAttribute('font-size', DC.root.getAttribute('width')/125);
+      station.onclick({target: station});
+    },
+    onmousemove: function(){ // highlight label
+      var ts = [], tsattr =[];
+      ts.push( {target: text} );
+      tsattr.push( {'font-size': DC.root.getAttribute('width')/80} );
+      DC.doMap(ts, tsattr);
+    }
+  });
+});
+MLBS.map(function(label){
+  var ftype = label[0], t = label[3], coords = label[4],
+      a, dx = 10, dy = 0;
+  var pts = DC.toPoints(coords, true);
+  if(a = mopt[ftype].anchor) {
+    if(a[0] == 'start') dx = 10;
+    else if(a[0] == 'middle') dx = -5;
+    else if(a[0] == 'end') dx = -10;
+    if(a[1] == 'top') dy = 14;
+    else if(a[1] == 'middle') dy = 4;
+    else if(a[1] == 'bottom') dy = -8;
+  };
+  var text = DC.append('text', {
+    x: pts[0] + dx, y: pts[1] + dy, class: mopt[ftype].class,
+    fill: mopt[ftype].labelcolor || '',
+    'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
+    'text-anchor': a ? a[0] : ''
+  });
+  if('rotate' in mopt[ftype]){
+    DC.attr(text, {
+      transform: 'rotate(' + mopt[ftype].rotate + ',' + pts[0] + ',' + pts[1] + ')'
+    });
+  }
+  text.appendChild(document.createTextNode(t));    
+});
+  //
+var mpts = DC.viewsizeOf(), // visible size of map in degrees 
+    scalex = (mpts[2]-mpts[0])/180,
+    scaley = (mpts[1]-mpts[3])/180;
+DC.scaleCarta(scalex > scaley ? scaley : scalex);
+  //
 if(window.addYaRTB_Block) addYaRTB_Block('ya_rtb_0', false, YA_RTB[6]);
-
 </script>
 </body>
 </html>
