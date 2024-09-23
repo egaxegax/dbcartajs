@@ -32,9 +32,9 @@ function findchilds(m, inst, current, stops){
   var avails = [ current - 1, current + 1 ].concat(stItsi);
   var valids = avails.filter(function(cell){ return (cell >= 0 && cell < m.length); });
   var vertexes = valids.filter(function(cell){
-//      console.log(current, cell, makeid(m[current]), makeid(m[cell]), String(m[cell][2]), String(m[current][2]),
-//      stops.indexOf(cell) == -1, maketip(m[cell]) == maketip(m[current]), String(m[cell][2]) == String(m[current][2]),
-//      its.filter(function(a){ return a.indexOf(String(m[cell][2]))>-1 && a.indexOf(String(m[current][2]))>-1; }).length, its);
+      // console.log(current, cell, makeid(m[current]), makeid(m[cell]), String(m[cell][2]), String(m[current][2]),
+      //   stops.indexOf(cell) == -1, maketip(m[cell]) == maketip(m[current]), String(m[cell][2]) == String(m[current][2]),
+      //   its.filter(function(a){ return a.indexOf(String(m[cell][2]))>-1 && a.indexOf(String(m[current][2]))>-1; }).length, its);
       return stops.indexOf(cell) == -1 &&
              (maketip(m[cell]) == maketip(m[current])) || 
              String(m[cell][2]) == String(m[current][2]) ||

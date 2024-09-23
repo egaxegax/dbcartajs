@@ -49,19 +49,14 @@ egax@bk.ru, 2015-24.
 <script>
 var mopt = {};
 // peresadki click
-function clchange(sel){
-  var o=sel.options[sel.selectedIndex], s=o.innerHTML; 
-  o.innerHTML = (s.indexOf('\u2611')>-1 ? '&emsp;' : '\u2611')+' '+s.slice(s.search(' '));
-  sel.selectedIndex = 0;
+function clchange(o){
+  o.options[o.selectedIndex].innerHTML = (o.options[o.selectedIndex].innerHTML.indexOf('\u2611')>-1 ? '&emsp;' : '\u2611')+' '+o.options[o.selectedIndex].innerHTML.slice(o.options[o.selectedIndex].innerHTML.search(' '));
+  o.selectedIndex = 0;
 }
 // diagonal size
-function mds(o) { 
-  return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*o/100;
-}
+function mds(o) { return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*o/100; }
 // find nodes
-function find(str){
-  return [].slice.call(DC.root.querySelectorAll(str));  
-}
+function find(str){ return [].slice.call(DC.root.querySelectorAll(str)); }
 // layers draw
 function route(o)    { return DC.extend({class: 'route', bg: 'none', join: 'round', cap: 'round', width: 7, anchor: ['start', 'middle']}, o||{}); };
 function route_ext(o){ return route(DC.extend({width: 3, cap: 'butt', dash: [6,4]}, o||{})); };
@@ -85,17 +80,13 @@ function inst_d(o)   { return inst(DC.extend({size: 3, width: 2}, o||{})); };
   //
 function clearRoute(){
   find('.selpath').map(function(o){ DC.vp.removeChild(o); });
-  find('.selected').map(function(o){
-    var m = o.getAttribute('mclass');
-    DC.attr(o, {class: mopt[m].class, fill: mopt[m].bg, r: mds(mopt[m].size), 'stroke-width': mds(mopt[m].width)});
-  });
+  find('.selected').map(function(o){ DC.attr(o, {class: mopt[o.getAttribute('mclass')].class, fill: mopt[o.getAttribute('mclass')].bg, r: mds(mopt[o.getAttribute('mclass')].size), 'stroke-width': mds(mopt[o.getAttribute('mclass')].width)}); });
   find('.route, .station, .label').map(function(o){ DC.attr(o, {opacity: '1'}); });
 }
   //
 function calcRoute(fromid, toid){
   console.log(fromid, toid);
-  var inches=[];
-  var pinches=[], proutes=[];
+  var inches=[], pinches=[], proutes=[];
   [].slice.call(document.getElementById('cInches').options).map(function(o){
     if(o.innerHTML.indexOf('\u2611')>-1){ // checked
       inches = inches.concat(makecrds(MLNS.filter(function(a){ return a[0]==o.id; })));
@@ -118,9 +109,7 @@ function calcRoute(fromid, toid){
             r0 = Math.sqrt(Math.pow(d[0]-c[0],2)+Math.pow(d[1]-c[1],2));
             r1 = Math.sqrt(Math.pow(e[0]-c[0],2)+Math.pow(e[1]-c[1],2));
             rr = Math.sqrt(Math.pow(d[0]-e[0],2)+Math.pow(d[1]-e[1],2));
-            if((r0 <= rr) && (r1 <= rr)){
-              if(!inarray(cc,c)) cc.push(c);
-            }
+            if((r0 <= rr) && (r1 <= rr) && !inarray(cc,c)) cc.push(c);
           });
         }
       });
@@ -135,8 +124,7 @@ function calcRoute(fromid, toid){
         if(!inarray(cc,d)) cc.unshift(d);
         if(!inarray(cc,e)) cc.push(e);
       }
-      var pts = DC.interpolateCoords(cc, true),
-          path = ('M ' + pts).replace(/,/g, ' ');
+      var path = ('M ' + DC.interpolateCoords(cc, true)).replace(/,/g, ' ');
       if (inches.filter(function(m){ return (inarray(m,d) && inarray(m,e)); }).length) {
         pinches.push( {path: path, st: st} );  // inches paths
       } else {
@@ -157,8 +145,7 @@ function calcRoute(fromid, toid){
         DC.append('circle', {class: 'selpath', stroke: ost.getAttribute('stroke'), cx: ost.getAttribute('cx'), cy: ost.getAttribute('cy'), fill: '#f5f5dc', 'stroke-width': mds(2), r: mds(4)});
         if(t){
           DC.append('text', {
-            x: t.getAttribute('x'), y: t.getAttribute('y'), 
-            class: 'selpath',  fill: t.getAttribute('fill'),
+            x: t.getAttribute('x'), y: t.getAttribute('y'), class: 'selpath',  fill: t.getAttribute('fill'),
             'font-family': 'sans-serif', 'font-size': DC.root.getAttribute('width')/125,
             'text-anchor': t.getAttribute('text-anchor')
           }).innerHTML = t.innerHTML;
@@ -371,14 +358,13 @@ DC.extend(mopt, {
 DC.extend(DC.root, {
   ondblclick: function(){ clearRoute(); }
 });
-// events
-//DC.extend(DC.root, {
+// DC.extend(DC.root, {
 //  onmousemove: function(ev){
 //    DC.mousemove(ev);
 //    var pts = DC.fromPoints( DC.canvasXY(ev), true );
 //    if (pts) console.log('X '+ pts[0].toFixed(1) + ' Y ' + pts[1].toFixed(1));
 //  }
-//});
+// });
   // draw routes 
 MLNS.map(function(line){
   var ftype = line[0], abbr = line[1], coords = line[2];
