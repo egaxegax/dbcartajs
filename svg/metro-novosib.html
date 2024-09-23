@@ -37,7 +37,7 @@ var MLINES = [
 ['inch','Sibirskaya-Krasniy_Prospekt', [[-14,30],[-18,30]]],
 ];
 var MSTATIONS = [
-['s1','Ploschad_Garina_Mihaylovskogo',[[-50,20]],'Площадь Гарина-Михайловского',null,1],
+['s1','Ploschad_Garina_Mihaylovskogo',[[-50,20]],'Пл. Гарина-Михайловского',null,1],
 ['s1_1','Sibirskaya',[[-14,30]],'Сибирская',null,1],
 ['s1_1','Marshala_Pokryshkina',[[8,30]],'Маршала Покрышкина',null,1],
 ['s1_2','Berezovaya_Roscha',[[22,28]],'Березовая Роща',null,1],
@@ -45,11 +45,11 @@ var MSTATIONS = [
 ['s5','Zaeltsovskaya',[[-18,70]],'Заельцовская',null,1],
 ['s5','Gagarinskaya',[[-18,56]],'Гагаринская',null,1],
 ['s5_1','Krasniy_Prospekt',[[-18,30]],'Красный проспект',null,1],
-['s5','Ploschad_Lenina',[[-18,-2]],'Площадь Ленина',null,1],
+['s5','Ploschad_Lenina',[[-18,-2]],'Пл. Ленина',null,1],
 ['s5','Oktyabrskaya',[[-18,-6]],'Октябрьская',null,1],
 ['s5_2','Rechnoy_Vokzal',[[-28,-27.98]],'Речной вокзал',null,1],
 ['s5','Studencheskaya',[[-60,-50.75]],'Студенческая',null,1],
-['s5','Ploschad_Marksa',[[-73,-60]],'Площадь Маркса',null,1]
+['s5','Ploschad_Marksa',[[-73,-60]],'Пл. Маркса',null,1]
 ];
 var MLABELS=[
 ['ob_river', 'ob', [], 'река Обь', [-69,-20]]
@@ -259,6 +259,7 @@ MLABELS.map(function(label){
 var mpts = DC.viewsizeOf(), // visible size of map in degrees 
     scalex = (mpts[2]-mpts[0])/180,
     scaley = (mpts[1]-mpts[3])/180;
+DC.centerCarta(DC.toPoints([-10,10]));
 DC.scaleCarta(scalex > scaley ? scaley : scalex);
   //
 if(window.addYaRTB_Block) addYaRTB_Block('ya_rtb_0', false, YA_RTB[6]);
