@@ -255,6 +255,12 @@ MLABELS.map(function(label){
   }
   text.appendChild(document.createTextNode(t));    
 });
+  //
+var mpts = DC.viewsizeOf(), // visible size of map in degrees 
+    scalex = (mpts[2]-mpts[0])/180,
+    scaley = (mpts[1]-mpts[3])/180;
+DC.scaleCarta(scalex > scaley ? scaley : scalex);
+  //
 if(window.addYaRTB_Block) addYaRTB_Block('ya_rtb_0', false, YA_RTB[6]);
 </script>
 </body>
