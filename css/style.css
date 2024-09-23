@@ -10,4 +10,4 @@ svg { cursor:pointer; }
 .bg a,.bg a:active,.bg a:focus { color:#ffbc00; }
 .bg { background-color:#404040; color:#eee; }
 /**/
-.mh_f { max-height:65px; position:fixed; }
+.mh_f { max-height:65px; position:fixed; width:100%; }
