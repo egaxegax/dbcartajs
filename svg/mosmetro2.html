@@ -25,33 +25,22 @@ egax@bk.ru, 2022-23.
 <script src="../js/3rdparty/svgpath/svgpath.js"></script>
 <script src="../js/3rdparty/svgpath/path_parse.js"></script>
 <script>
-//
-// XmlHttpRequest updater
-//
-function upfunc(p, clfunc, id){
+ // XmlHttpRequest updater
+function upfunc(p, clfunc){
   var xhr = new XMLHttpRequest();
-  xhr.onreadystatechange = function() { 
-    if (xhr.readyState == 4) {
-      if (id) document.getElementById(id).innerHTML = xhr.responseText;
-      if (clfunc) clfunc(xhr.status == 404 ? '' : xhr.responseText, p, xhr.status);
-    }
-  };
-  xhr.open("GET", p.url, true);
   xhr.responseType = 'text';
+  xhr.onreadystatechange = () => { if (xhr.readyState == 4 && clfunc) clfunc(xhr.status == 404 ? '' : xhr.responseText, p, xhr.status); };
+  xhr.open('GET', p.url, true);
   xhr.send();
 }
-//
-// Peresadki vkl/vykl
-//
+ // Peresadki vkl/vykl
 function cbchange(sel, index){
   var o=sel.options[index||sel.selectedIndex], s=o.innerHTML; 
   o.innerHTML = (s.indexOf('\u2611')>-1 ? '&emsp;' : '\u2611')+' '+s.slice(s.search(' '));
   sel.selectedIndex = 0;
   clearRoute();
 }
-//
-// Translater func
-//
+ // Translater func
 function trans(s){
   var ru = {
     'а':'a', 'б':'b', 'в':'v', 'г':'g', 'д':'d', 'е':'e', 'ё':'yo', 'ж':'zh',
@@ -95,9 +84,7 @@ function trans(s){
 
   return s;
 }
-//
-// Parse points from Svg string
-//
+ // Parse points from Svg string
 function topoints(o){
   var s, tr, x, y, r,
       ret = {};
@@ -128,9 +115,7 @@ function topoints(o){
   }
   return ret;
 }
-//
-// Translate, rotate point by x,y
-//
+ // Translate, rotate point by x,y
 function trpoint(ptc, x, y, rot){
   var spt = [ptc.x+x, ptc.y+y];
   if(rot){
@@ -142,15 +127,9 @@ function trpoint(ptc, x, y, rot){
     rot: 0
   };
 }
-//
-// Find Svg nodes
-//
-function find(str){
-  return [].slice.call(DC.root.querySelectorAll(str));
-}
-//
-// Append station to selection
-//
+ // Find Svg nodes
+function find(str){ return [].slice.call(DC.root.querySelectorAll(str)); }
+ // Append station to selection
 function stsel(ev){
   if(!ev || !ev.target) return;
   [].slice.call((ev.target.getAttribute('xlink:href')||'').match(/(\d+)/)||[]).slice(1).map(function(s){
@@ -175,9 +154,7 @@ function stsel(ev){
     });
   }
 }
-//
-// Animate station/route under cursor
-//
+ // Animate station/route under cursor
 function stmove(ev){
   if(!ev || !ev.target) return;
   var o = ev.target, 
@@ -214,9 +191,7 @@ function stmove(ev){
 //  }
   DC.doMap(st, stattr );
 }
-//
-// Move event on text station
-//
+ // Move event on text station
 function tsmove(ev){
   if(!ev || !ev.target) return;
   var ts = [], tsattr = [];
@@ -225,9 +200,7 @@ function tsmove(ev){
   ev.target.setAttribute('font-size', '100%');
   DC.doMap(ts, tsattr );
 }
-//
-// Parses interchanges to array
-//
+ // Parses interchanges to array
 function getInches(){
   var s, rs = [];
     // interchanges
@@ -253,9 +226,7 @@ function getInches(){
   });
   return rs;
 }
-//
-// Parses out interchanges to array
-//
+ // Parses out interchanges to array
 function getInchesOut(){
   var rs = [];
   [['inch_out','Elektrozavodskaya_3','Elektrozavodskaya_14'],
@@ -296,9 +267,7 @@ function getInchesOut(){
   });
   return rs;
 }
-//
-// Parse stations to array
-//
+ // Parse stations to array
 function getStations(){
   var s, rnum, rs = [];
   mStations.map(function(o){
@@ -359,9 +328,7 @@ function getStations(){
   rs.splice(makeind(rs, 's14_Kutuzovskaya_14')+1, 0, ['s14', st[1]+' ', st[2]]);
   return rs;
 }
-//
-// Parse routes to array
-//
+ // Parse routes to array
 function getRoutes(){
   var s, rnum, rid, rs = [];
   mRoutes.map(function(o){
@@ -394,9 +361,7 @@ function getRoutes(){
   });  
   return rs;
 }
-//
-// Parse mck/out interchanges routes
-//
+ // Parse mck/out interchanges routes
 function getRoutesOut(){
   var s, rnum, rid, rs = [];
   mRoutesOut.map(function(o,i){
@@ -418,9 +383,7 @@ function getRoutesOut(){
   });  
   return rs;
 }
-//
-// Link labels to stations
-//
+ // Link labels to stations
 function makeLabels(){
   var rs = {};
   mLabels.filter(function(b){
@@ -434,9 +397,7 @@ function makeLabels(){
   });
   return rs;
 }
-//
-// Link captions to stations
-//
+ // Link captions to stations
 function makeCaptions(){
   var rs = {};
   mCaptions.filter(function(b){
@@ -449,9 +410,7 @@ function makeCaptions(){
   });
   return rs;
 }
-//
-// Under constructed (closed) stations list not search
-//
+ // Under constructed (closed) stations list not search
 function makeStopStations(){
   return [
     's11_Kakhovskaya_11',
@@ -476,9 +435,7 @@ function makeStopStations(){
     return makeind(Stations, st);
   });
 }
-//
-// Calc route by BFS
-//
+ // Calc route by BFS
 function calcRoute(fromid, toid, inst){
   var inches = makecrds(inst),
       stations = Stations,
@@ -606,9 +563,7 @@ function calcRoute(fromid, toid, inst){
     }
   });
 }
-//
-// Remove calc route
-//
+ // Remove calc route
 function clearRoute(){
   find('.selpath').map(function(o){ DC.vp.removeChild(o); });
   find('.selected').map(function(o){ o.removeAttribute('class'); });
