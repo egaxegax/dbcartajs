@@ -15,32 +15,31 @@
   <td width="320px"> <i>Схема метро Москвы</i><br><sup>Moscow Metro</sup> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/mosmetro.html"> Canvas </a> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/mosmetro.html"> SVG </a> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/mosmetro2.html"> SVG(Википедия) </a> </td>
  </tr>
  <tr>
   <td> <i>Схема ж/д Москвы и МО</i><br><sup>Moscow Railroad</sup> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/mosrails.html"> Canvas </a> </td>
-  <td colspan=2> <a href="https://egaxegax.github.io/dbcartajs/svg/mosrails.html"> SVG </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/mosrails.html"> SVG </a> </td>
  </tr>
  <tr>
   <td> <i>Схема метро Петербурга</i><br><sup>St. Petersburg Metro</sup> </td>
   <td> - </td>
-  <td colspan=2> <a href="https://egaxegax.github.io/dbcartajs/svg/metrospb.html"> SVG </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/metrospb.html"> SVG </a> </td>
  </tr>
  <tr>
   <td> <i>Схема метро Новосибирска</i><br><sup>Novosib Metro</sup> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/metro-novosib.html"> Canvas </a> </td>
-  <td colspan=2> <a href="https://egaxegax.github.io/dbcartajs/svg/metro-novosib.html"> SVG </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/svg/metro-novosib.html"> SVG </a> </td>
  </tr>
  <tr>
   <td> <i>Схема метро Киева</i><br><sup>Kiev Metro</sup> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/metro-kiev.html"> Canvas </a> </td>
-  <td colspan=2> - </td> 
+  <td> - </td> 
  </tr>
  <tr>
   <td> <i>Схема метро Тбилиси</i><br><sup>Tbilisi Metro</sup> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/metro-tbilisi.html"> Canvas </a> </td>
-  <td colspan=2> - </td>
+  <td> - </td>
  </tr>
 </table>
 

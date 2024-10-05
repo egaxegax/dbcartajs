@@ -216,6 +216,8 @@ DC.extend(mopt, {
   rmcd3_d:   rail_d(),
   rmcd4:     rail(     {fg: '#9cd9c0'}),
   rmcd4_d:   rail_d(),
+  rmcd4A:    rail(     {fg: '#9cd9c0'}),
+  rmcd4A_d:  rail_d(),
   svo_t:     label(    {anchor: ['end',   'middle']}),
   svo_d_t:   label(    {anchor: ['end',   'top']}),
   vko_t:     label(    {anchor: ['start', 'middle']}),
@@ -347,12 +349,13 @@ DC.extend(mopt, {
   s16_2:     inst_d(  {fg: mopt['r16'].fg,   anchor: ['start', 'top']}),
   smcd1:     st_mcd(  {fg: mopt['rmcd1'].fg, anchor: ['start', 'middle']}),
   smcd1_1:   inst_mcd({fg: mopt['rmcd1'].fg}),
-  smcd2:     st_mcd(  {fg: mopt['rmcd2'].fg, anchor: ['start', 'middle']}),
+  smcd2:     st_mcd(  {fg: mopt['rmcd2'].fg}),
   smcd2_1:   inst_mcd({fg: mopt['rmcd2'].fg}),
-  smcd3:     st_mcd(  {fg: mopt['rmcd3'].fg, anchor: ['start', 'middle']}),
+  smcd3:     st_mcd(  {fg: mopt['rmcd3'].fg}),
   smcd3_1:   inst_mcd({fg: mopt['rmcd3'].fg}),
-  smcd4:     st_mcd(  {fg: mopt['rmcd4'].fg, anchor: ['start', 'middle']}),
-  smcd4_1:   inst_mcd({fg: mopt['rmcd4'].fg})
+  smcd4:     st_mcd(  {fg: mopt['rmcd4'].fg}),
+  smcd4_1:   inst_mcd({fg: mopt['rmcd4'].fg}),
+  smcd4A:    st_mcd(  {fg: mopt['rmcd4A'].fg}),
 });
   // events
 DC.extend(DC.root, {
