@@ -1,6 +1,6 @@
 ## dbcartajs
 
-Просмотр векторных карт и изображений с навигацией в JavaScript  
+Просмотр векторных карт и изображений с навигацией (Canvas, SVG)  
 *Pan, zoom vector map and images (Canvas, SVG)*
 
 #### Примеры (demos)
