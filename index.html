@@ -18,7 +18,7 @@ a { text-decoration:underline; }
 #header { background-color:#d2e0f0; }
 #footer { text-align:center; }
 .dis { color:#fff; }
-.en { display:inline-block; min-width:200px; max-width:260px; }
+.en { display:inline-block; }
 .inlbl { display:inline-block; vertical-align:middle; }
 .main { margin:0px auto 7px auto; max-width:750px; }
 .tcell { display:table-cell; vertical-align: middle; }
@@ -26,7 +26,8 @@ a { text-decoration:underline; }
 .stripe { padding:15px; }
 .nostripe { padding:15px; background:#f0f0f0; }
 .mw:not(:empty) { margin:0 10px 7px 10px; }
-@media all and (min-width:800px) { .mw { max-width:280px; } }
+@media all and (min-width:0px) and (max-width:800px) { .en { width:200px; } }
+@media all and (min-width:800px) { .en { width:260px; } .mw { max-width:280px; } }
 </style>
 <script src="/static/js/metrics.js?241026" data-floor="1"></script>
 <script src="js/proj4js-combined.js"></script>
