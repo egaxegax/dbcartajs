@@ -23,8 +23,9 @@ a { text-decoration:underline; }
 .main { margin:0px auto 7px auto; max-width:750px; }
 .tcell { display:table-cell; vertical-align: middle; }
 .nowrap { white-space:nowrap; }
-.stripe { padding:15px; }
-.nostripe { padding:15px; background:#f0f0f0; }
+.scroll { overflow: auto; }
+.stripe { padding:10px 15px; }
+.nostripe { padding:10px 15px; background:#f0f0f0; }
 .mw:not(:empty) { margin:0 10px 7px 10px; }
 @media all and (min-width:0px) and (max-width:800px) { .en { width:160px; } }
 @media all and (min-width:800px) { .en { width:260px; } .mw { max-width:280px; } }
@@ -36,17 +37,17 @@ a { text-decoration:underline; }
 </head>
 <body>
 <div id="root" class="main">
-<div id="header" class="nowrap" style="overflow: auto">
+<div id="header" class="nowrap scroll">
 <div id="demo1" class="tcell" style="width:100px; text-align:center"></div>
 <div class="tcell">
   <h1>Просмотр векторных карт и изображений с навигацией (Canvas, SVG)</h1>
   <div class="gray"><i> Pan, zoom vector map and images (Canvas, SVG)</i></div>
 </div>
 </div>
-<div class="nostripe">
-  Интерактивные схемы метро Москвы со строящимися линиями и станциями и Петербурга в <i>2024</i> году, 
+<div class="nostripe nowrap scroll">
+  Интерактивные схемы метро Москвы и Петербурга со строящимися линиями и станциями, <br>
+  поиском кратчайшего пути между выбранными станциями в <i>2024</i> году, <br>
   пригородного ж/д транспорта Москвы и МО в <i>2015</i> году.
-  По выбранным станциям рассчитывается кратчайший путь по алгоритму <i>BFS</i>.
 </div>
 
 <div class="inlbl stripe">
@@ -54,7 +55,7 @@ a { text-decoration:underline; }
   <div>&ensp; Схема метро Москвы </div>
   <div class="gray en"><i>&ensp; Moscow Metro</i></div>
   <span class="nowrap"> &ensp;
-    <a href="mosmetro.html">Canvas</a> &emsp; 
+    <a href="nv/mosmetro.html">Canvas</a> &emsp; 
     <a href="svg/mosmetro.html" title="Векторная карта метро Москвы">SVG</a>
   </span>
 </div>
@@ -62,7 +63,7 @@ a { text-decoration:underline; }
   <div>&ensp; Схема ж/д Москвы и МО </div>
   <div class="gray en"><i>&ensp; Moscow Railroad </i></div> 
   <span class="nowrap"> &ensp;
-    <a href="mosrails.html">Canvas</a> &emsp; 
+    <a href="nv/mosrails.html">Canvas</a> &emsp; 
     <a href="svg/mosrails.html">SVG</a> 
   </span>
 </div>
@@ -78,7 +79,7 @@ a { text-decoration:underline; }
   <div>&ensp; Схема метро Новосибирска </div>
   <div class="gray en"><i>&ensp; Novosibirsk Metro</i></div>
   <span class="nowrap"> &ensp;
-    <a href="metro-novosib.html">Canvas</a> &emsp; 
+    <a href="nv/metro-novosib.html">Canvas</a> &emsp; 
     <a href="svg/metro-novosib.html">SVG</a>
   </span>
 </div>
@@ -86,7 +87,7 @@ a { text-decoration:underline; }
   <div>&ensp; Схема метро Киева </div>
   <div class="gray en"><i>&ensp; Kiev Metro</i></div>
   <span class="nowrap"> &ensp;
-    <a href="metro-kiev.html">Canvas</a> &emsp; 
+    <a href="nv/metro-kiev.html">Canvas</a> &emsp; 
     <span class="dis">SVG</span>
   </span>
 </div>
@@ -94,14 +95,14 @@ a { text-decoration:underline; }
   <div>&ensp; Схема метро Тбилиси </div>
   <div class="gray en"><i>&ensp; Tbilisi Metro</i></div>
   <span class="nowrap"> &ensp;
-    <a href="metro-tbilisi.html">Canvas</a> &emsp; 
+    <a href="nv/metro-tbilisi.html">Canvas</a> &emsp; 
     <span class="dis">SVG</span>
   </span>
 </div>
 </div>
 <div id="ya_rtb_0" class="inlbl mw" style="max-height:280px"></div>
 
-<div class="nostripe">
+<div class="nostripe nowrap scroll">
   Масштабирование изображений, использование цветов в <i>canvas</i>, градиента, анимации в <i>svg</i>.
 </div>
 
@@ -110,7 +111,7 @@ a { text-decoration:underline; }
   <div>&ensp; Просмотровщик картинок </div>
   <div class="gray en"><i>&ensp; Image Viewer</i></div>
   <span class="nowrap"> &ensp;
-    <a href="imgviewer.html">Canvas</a> &emsp; 
+    <a href="nv/imgviewer.html">Canvas</a> &emsp; 
     <a href="svg/imgviewer.html">SVG</a>
   </span>
 </div>
@@ -150,15 +151,15 @@ a { text-decoration:underline; }
   <div>&ensp; Футбольные схемы </div>
   <div class="gray en"><i>&ensp; Soccer Schemes</i></div>
   <span class="nowrap"> &ensp;
-    <a href="soccerf.html">Canvas</a> &emsp; 
+    <a href="nv/soccerf.html">Canvas</a> &emsp; 
     <span class="dis">SVG</span>  
   </span>
 </div>
 </div>
 <div id="ya_rtb_1" class="inlbl mw" style="max-height:280px"></div>
 
-<div class="nostripe">
-  Интерактивные карты мира со списками городов и стран в различных проекциях. 
+<div class="nostripe nowrap scroll">
+  Интерактивные карты мира со списками городов и стран в различных проекциях. <br>
   Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
 </div>
 
@@ -167,7 +168,7 @@ a { text-decoration:underline; }
   <div>&ensp; Атлас мира </div>
   <div class="gray en"><i>&ensp; Atlas</i></div>
   <span class="nowrap"> &ensp;
-    <a href="atlas.html">Canvas</a> &emsp; 
+    <a href="nv/atlas.html">Canvas</a> &emsp; 
     <a href="svg/atlas.html">SVG</a>
   </span>
 </div>
@@ -175,7 +176,7 @@ a { text-decoration:underline; }
   <div>&ensp; Города мира </div>
   <div class="gray en"><i>&ensp; Cities</i></div>
   <span class="nowrap"> &ensp;
-    <a href="cities.html">Canvas</a> &emsp; 
+    <a href="nv/cities.html">Canvas</a> &emsp; 
     <span class="dis">SVG</span>
   </span>
 </div>
@@ -183,7 +184,7 @@ a { text-decoration:underline; }
   <div>&ensp; Города России без расстояний </div>
   <div class="gray en"><i>&ensp; Russian Cities</i></div>
   <span class="nowrap"> &ensp;
-    <a href="russ.html">Canvas</a> &emsp; 
+    <a href="nv/russ.html">Canvas</a> &emsp; 
     <span class="dis">SVG</span>
   </span>
 </div>
@@ -191,7 +192,7 @@ a { text-decoration:underline; }
   <div>&ensp; Страны мира </div>
   <div class="gray en"><i>&ensp; Countries</i></div>
   <span class="nowrap"> &ensp;
-    <a href="countries.html">Canvas</a> &emsp; 
+    <a href="nv/countries.html">Canvas</a> &emsp; 
     <a href="svg/countries.html">SVG</a> 
   </span>
 </div>
@@ -199,7 +200,7 @@ a { text-decoration:underline; }
   <div>&ensp; Население мира </div>
   <div class="gray en"><i>&ensp; Population</i></div>
   <span class="nowrap"> &ensp;
-    <a href="usemap.html">Canvas</a> &emsp; 
+    <a href="nv/usemap.html">Canvas</a> &emsp; 
     <a href="svg/usemap.html">SVG</a> 
   </span>
 </div>
@@ -215,15 +216,16 @@ a { text-decoration:underline; }
   <div>&ensp; Маршруты на карте </div>
   <div class="gray en"><i>&ensp; Routes</i></div>
   <span class="nowrap"> &ensp;
-    <a href="merc.html">Canvas</a> &emsp; 
+    <a href="nv/merc.html">Canvas</a> &emsp; 
     <span class="dis">SVG</span>
   </span>
 </div>
 </div>
 <div id="ya_rtb_2" class="inlbl mw" style="max-height:280px"></div>
 
-<div class="nostripe">
-  Отрисовка картинки в канвасе <i>3d</i> с пересчетом проекции отображения через шейдеры <i>WebGL</i> на основе примеров с с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". 
+<div class="nostripe nowrap scroll">
+  Отрисовка картинки в канвасе <i>3d</i> с пересчетом проекции <br>
+  отображения через шейдеры <i>WebGL</i> на основе примеров с сайта "<a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>". <br>
   Звездное небо в канвасе <i>2d</i> и <i>3d</i> с использованием скриптов <a href="//github.com/mrdoob/three.js">three.js</a>.
 </div>
 
@@ -232,7 +234,7 @@ a { text-decoration:underline; }
   <div>&ensp; Атлас 3D </div>
   <div class="gray en"><i>&ensp; Atlas 3D</i></div>
   <span class="nowrap"> &ensp;
-    <a href="map3d.html">Canvas</a> &emsp; 
+    <a href="nv/map3d.html">Canvas</a> &emsp; 
     <span class="dis">SVG</span>
   </span>
 </div>
@@ -240,7 +242,7 @@ a { text-decoration:underline; }
   <div>&ensp; Звездное небо </div>
   <div class="gray en"><i>&ensp; Starry Sky</i></div>
   <span class="nowrap"> &ensp;
-    <a href="starry.html">Canvas</a> &emsp; 
+    <a href="nv/starry.html">Canvas</a> &emsp; 
     <span class="dis">SVG</span>
   </span>
 </div>
@@ -248,7 +250,7 @@ a { text-decoration:underline; }
   <div>&ensp; Звездное небо 3D </div>
   <div class="gray en"><i>&ensp; Sky 3D</i></div>
   <span class="nowrap"> &ensp;
-    <a href="sky3d.html">Canvas</a> &emsp; 
+    <a href="nv/sky3d.html">Canvas</a> &emsp; 
     <span class="dis">SVG</span>
   </span>
 </div>

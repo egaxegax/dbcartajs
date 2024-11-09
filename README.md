@@ -13,12 +13,12 @@
 <table>
  <tr>
   <td width="320px"> <i>Схема метро Москвы</i><br><sup>Moscow Metro</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/mosmetro.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/mosmetro.html"> Canvas </a> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/mosmetro.html"> SVG </a> </td>
  </tr>
  <tr>
   <td> <i>Схема ж/д Москвы и МО</i><br><sup>Moscow Railroad</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/mosrails.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/mosrails.html"> Canvas </a> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/mosrails.html"> SVG </a> </td>
  </tr>
  <tr>
@@ -28,17 +28,17 @@
  </tr>
  <tr>
   <td> <i>Схема метро Новосибирска</i><br><sup>Novosib Metro</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/metro-novosib.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/metro-novosib.html"> Canvas </a> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/metro-novosib.html"> SVG </a> </td>
  </tr>
  <tr>
   <td> <i>Схема метро Киева</i><br><sup>Kiev Metro</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/metro-kiev.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/metro-kiev.html"> Canvas </a> </td>
   <td> - </td> 
  </tr>
  <tr>
   <td> <i>Схема метро Тбилиси</i><br><sup>Tbilisi Metro</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/metro-tbilisi.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/metro-tbilisi.html"> Canvas </a> </td>
   <td> - </td>
  </tr>
 </table>
@@ -48,7 +48,7 @@
 <table>
  <tr>
   <td width="320px"> <i>Просмотровщик картинок</i><br><sup>Image Viewer</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/imgviewer.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/imgviewer.html"> Canvas </a> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/imgviewer.html"> SVG </a> </td>
  </tr>
  <tr>
@@ -73,7 +73,7 @@
  </tr>
  <tr>
   <td width="320px"> <i>Футбольные схемы</i><br><sup>Soccer Schemes</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/soccerf.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/soccerf.html"> Canvas </a> </td>
   <td> - </td>
  </tr>
 </table>
@@ -84,27 +84,27 @@
 <table>
  <tr>
   <td width="320px"> <i>Атлас мира</i><br><sup>Atlas</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/atlas.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/atlas.html"> Canvas </a> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/atlas.html"> SVG </a> </td>
  </tr>
  <tr>
   <td> <i>Города мира</i><br><sup>Cities</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/cities.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/cities.html"> Canvas </a> </td>
   <td> - </td>
  </tr>
  <tr>
   <td> <i>Города России без расстояний</i><br><sup>Russian Cities</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/russ.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/russ.html"> Canvas </a> </td>
   <td> - </td>
  </tr>
  <tr>
   <td> <i>Страны мира</i><br><sup>Countries</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/countries.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/countries.html"> Canvas </a> </td>
   <td> - </td>
  </tr>
  <tr>
   <td> <i>Население мира</i><br><sup>Population</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/usemap.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/usemap.html"> Canvas </a> </td>
   <td> <a href="https://egaxegax.github.io/dbcartajs/svg/usemap.html"> SVG </a> </td>
  </tr>
  <tr>
@@ -114,7 +114,7 @@
  </tr>
  <tr>
   <td> <i>Маршруты на карте</i><br><sup>Routes</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/merc.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/merc.html"> Canvas </a> </td>
   <td> - </td>
  </tr>
 </table>
@@ -125,14 +125,14 @@
 <table>
  <tr>
   <td width="320px"> <i>Атлас 3D</i><br><sup>Atlas 3D</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/map3d.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/map3d.html"> Canvas </a> </td>
  </tr>
  <tr>
   <td> <i>Звездное небо</i><br><sup>Starry Sky</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/starry.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/starry.html"> Canvas </a> </td>
  </tr>
  <tr>
   <td> <i>Звездное небо 3D</i><br><sup>Sky 3D</sup> </td>
-  <td> <a href="https://egaxegax.github.io/dbcartajs/sky3d.html"> Canvas </a> </td>
+  <td> <a href="https://egaxegax.github.io/dbcartajs/nv/sky3d.html"> Canvas </a> </td>
  </tr>
 </table>
