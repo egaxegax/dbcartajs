@@ -2,7 +2,7 @@
 <!--
 Atlas. SVG version.
 Draw background images in diff. projections.
-egax@bk.ru, 2015-23.
+egax@bk.ru, 2015-24.
 -->
 <html lang="ru">
 <head>
@@ -35,15 +35,15 @@ function draw(ev) {
   if(DC.isSpherical()){
     var o = DC.paintBound();
     if(o) childs.push( o );
-     // conts
-    CONTINENTS.map(function(cont){
-      childs.push( DC.append('polygon', {
-        points: DC.interpolateCoords(cont[2], true, 10).join(' '),
-        fill: 'rgb(135,159,103)',
-        stroke: 'rgb(135,159,103)'
-      }) );
-    });
   }
+   // conts
+  CONTINENTS.map(function(cont){
+    childs.push( DC.append('polygon', {
+      points: DC.interpolateCoords(cont[2], true, 10).join(' '),
+      fill: 'rgb(135,159,103)',
+      stroke: 'rgb(135,159,103)'
+    }) );
+  });
    // bg image
   var crds, src;
   switch(String(DC.project)){
@@ -58,7 +58,7 @@ function draw(ev) {
       width:  pts[0][0]-pts[1][0], height: pts[0][1]-pts[1][1], x: pts[1][0], y: pts[1][1],
       preserveAspectRatio:'none'
     });
-    img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '../' + IMGMAP[src]);
+    img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', IMGMAP[src]);
     childs.push( img );
   }
    // meridians
