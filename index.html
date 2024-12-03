@@ -42,9 +42,7 @@ body { background:#fafafa; }
   <div class="hdr">Просмотр и навигация векторных карт и изображений (Канвас, SVG)</div>
   <div class="gray smaller1"><i> Pan, zoom vector map and images (Canvas, SVG)</i></div>
 </div>
-<div id="demo1" class="tcell" style="width:100%; text-align:center">
-  <img src="img/fav.svg" width="36px" style="padding: 0 0 0 10px" />
-</div>
+<div id="demo1" class="tcell" style="width:100%; text-align:center"></div>
 </div>
 <div class="nostripe nowrap scroll">
   Схемы метро Москвы и Петербурга со строящимися линиями и станциями, <br>
@@ -102,7 +100,7 @@ body { background:#fafafa; }
   </span>
 </div>
 </div>
-<div id="ya_rtb_0" class="inlbl mw" style="max-height:260px"></div>
+<div id="ya_rtb_0" class="inlbl mw" style="max-height:260px; text-align:center"></div>
 
 <div class="nostripe nowrap scroll">
   Масштабирование изображений, использование цветов в <i>canvas</i>, градиента, анимации в <i>svg</i>.
@@ -158,7 +156,7 @@ body { background:#fafafa; }
   </span>
 </div>
 </div>
-<div id="ya_rtb_1" class="inlbl mw" style="max-height:260px"></div>
+<div id="ya_rtb_1" class="inlbl mw" style="max-height:260px; text-align:center"></div>
 
 <div class="nostripe nowrap scroll">
   Интерактивные карты мира со списками городов и стран в различных проекциях. <br>
@@ -223,7 +221,7 @@ body { background:#fafafa; }
   </span>
 </div>
 </div>
-<div id="ya_rtb_2" class="inlbl mw" style="max-height:260px"></div>
+<div id="ya_rtb_2" class="inlbl mw" style="max-height:260px; text-align:center"></div>
 
 <div class="nostripe nowrap scroll">
   Отрисовка картинки в канвасе <i>3d</i> с пересчетом проекции <br>
@@ -265,6 +263,17 @@ body { background:#fafafa; }
 
 </div>
 <script>
+   // animate
+  var DV = new dbCarta({id:'demo1', width:60, height:30, rbar:false, bg:'transparent'});
+  DV.clfunc.onmousemove = null;
+  DV.mopt['.Mainland'] = {cls: 'Polygon', fg: '#ffbc00', bg: '#ffbc00'};
+  DV.mopt['.Water'] = {cls: 'Polygon', fg: '#787878', bg: '#787878'};
+  DV.initProj(203, ' +lon_0=' + (Math.random()*360) + ' +lat_0=' + (Math.random()*180));
+  DV.loadCarta(CONTINENTS);
+  DV.loadCarta(DV.createMeridians().map(function(a){ return a.slice(0,4); }));
+  DV.scaleCarta(1.5);
+  DV.draw();
+   // reklama
   if(window.addYaRTB_Block) addYaRTB_Block('ya_rtb_0', YA_RTB[6]);
   if(window.addYaRTB_Block) addYaRTB_Block('ya_rtb_1', YA_RTB[6]);
   if(window.addYaRTB_Block) addYaRTB_Block('ya_rtb_2', YA_RTB[6]);
