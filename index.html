@@ -12,18 +12,19 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="icon" href="img/fav.svg" type="image/svg+xml">
 <style>
-body { background-color:#fafafa; }
+body { background:#fafafa; }
 #root { min-height:100%; background:#fff; color:#333; }
-#header { background-color:#d2e0f0; }
+#header { padding:5px 20px; background:#d2e0f0; }
 #footer { text-align:center; }
 .dis { color:#fff; }
 .en { display:inline-block; }
 .inlbl { display:inline-block; vertical-align:middle; }
 .main { margin:0px auto 7px auto; max-width:750px; }
-.tcell { display:table-cell; vertical-align: middle; }
+.tcell { display:table-cell; vertical-align:middle; }
 .nowrap { white-space:nowrap; }
 .scroll { overflow: auto; }
 .stripe { padding:10px 15px; }
+.smaller1 { font-size:93.75%; }
 .nostripe { padding:10px 15px; background:#f0f0f0; }
 .mw:not(:empty) { margin:5px; }
 @media all and (min-width:0px) and (max-width:800px) { .en { width:160px; } }
@@ -37,10 +38,12 @@ body { background-color:#fafafa; }
 <body>
 <div id="root" class="main">
 <div id="header" class="nowrap scroll">
-<div id="demo1" class="tcell" style="width:90px; text-align:center"></div>
-<div class="tcell">
+<div class="tcell main">
   <div class="hdr">Просмотр и навигация векторных карт и изображений (Канвас, SVG)</div>
-  <div class="gray"><i> Pan, zoom vector map and images (Canvas, SVG)</i></div>
+  <div class="gray smaller1"><i> Pan, zoom vector map and images (Canvas, SVG)</i></div>
+</div>
+<div id="demo1" class="tcell" style="width:100%; text-align:center">
+  <img src="img/fav.svg" width="36px" style="padding: 0 0 0 10px" />
 </div>
 </div>
 <div class="nostripe nowrap scroll">
@@ -49,7 +52,7 @@ body { background-color:#fafafa; }
   пригородного ж/д транспорта Москвы и МО в <i>2015</i> году.
 </div>
 
-<div class="inlbl stripe">
+<div class="inlbl stripe smaller1">
 <div class="main">
   <div>&nbsp; Схема метро Москвы </div>
   <div class="gray en"><i>&nbsp; Moscow Metro</i></div>
@@ -105,7 +108,7 @@ body { background-color:#fafafa; }
   Масштабирование изображений, использование цветов в <i>canvas</i>, градиента, анимации в <i>svg</i>.
 </div>
 
-<div class="inlbl stripe">
+<div class="inlbl stripe smaller1">
 <div class="main">
   <div>&nbsp; Просмотровщик картинок </div>
   <div class="gray en"><i>&nbsp; Image Viewer</i></div>
@@ -162,7 +165,7 @@ body { background-color:#fafafa; }
   Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a> 
 </div>
 
-<div class="inlbl stripe">
+<div class="inlbl stripe smaller1">
 <div class="main">
   <div>&nbsp; Атлас мира </div>
   <div class="gray en"><i>&nbsp; Atlas</i></div>
@@ -228,7 +231,7 @@ body { background-color:#fafafa; }
   Звездное небо в канвасе <i>2d</i> и <i>3d</i> с использованием скриптов <a href="//github.com/mrdoob/three.js">three.js</a>.
 </div>
 
-<div class="stripe">
+<div class="stripe smaller1">
 <div class="main">
   <div>&nbsp; Атлас 3D </div>
   <div class="gray en"><i>&nbsp; Atlas 3D</i></div>
@@ -262,17 +265,6 @@ body { background-color:#fafafa; }
 
 </div>
 <script>
-   // animate
-  var DV = new dbCarta({id:'demo1', width:80, height:50, rbar:false, bg:'transparent'});
-  DV.clfunc.onmousemove = null;
-  DV.mopt['.Mainland'] = {cls: 'Polygon', fg: '#ffbc00', bg: '#ffbc00'};
-  DV.mopt['.Water'] = {cls: 'Polygon', fg: '#787878', bg: '#787878'};
-  DV.initProj(203, ' +lon_0=' + (Math.random()*360) + ' +lat_0=' + (Math.random()*180));
-  DV.loadCarta(CONTINENTS);
-  DV.loadCarta(DV.createMeridians().map(function(a){ return a.slice(0,4); }));
-  DV.scaleCarta(1.5);
-  DV.draw();
-   // reklama
   if(window.addYaRTB_Block) addYaRTB_Block('ya_rtb_0', YA_RTB[6]);
   if(window.addYaRTB_Block) addYaRTB_Block('ya_rtb_1', YA_RTB[6]);
   if(window.addYaRTB_Block) addYaRTB_Block('ya_rtb_2', YA_RTB[6]);
