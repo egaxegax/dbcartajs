@@ -14,20 +14,19 @@
 <style>
 body { background:#fafafa; }
 #root { min-height:100%; background:#fff; color:#333; }
-#header { padding:5px 20px; background:#d2e0f0; }
-#footer { text-align:center; }
+#header { text-align:center; width:100%; background:#d2e0f0; }
+#footer { text-align:center; font-size:93.75%; }
 .dis { color:#fff; }
 .en { display:inline-block; }
 .inlbl { display:inline-block; vertical-align:middle; }
 .main { margin:0px auto 7px auto; max-width:750px; }
-.tcell { display:table-cell; vertical-align:middle; }
 .nowrap { white-space:nowrap; }
 .scroll { overflow: auto; }
 .stripe { padding:10px 15px; }
 .nostripe { padding:10px 15px; background:#f0f0f0; }
 .smaller1 { font-size:93.75%; }
 .mh { max-height:260px; }
-@media all and (min-width:0px) and (max-width:800px) { .en { width:160px; } .mw { width:100%; text-align: center; } }
+@media all and (max-width:800px) { .en { width:160px; } .mw { width:100%; text-align: center; } }
 @media all and (min-width:800px) { .en { width:260px; } .mw { max-width:280px; } }
 </style>
 <script src="/static/js/metrics.js?241026" data-floor="1" data-fullscr="1"></script>
@@ -38,11 +37,12 @@ body { background:#fafafa; }
 <body>
 <div id="root" class="main">
 <div id="header" class="nowrap scroll">
-<div class="tcell main">
-  <div class="hdr">Просмотр и навигация векторных карт и изображений</div>
-  <div class="gray smaller1"><i> Pan, zoom vector map and images (Canvas, SVG)</i></div>
-</div>
-<div id="demo1" class="tcell" style="width:100%; text-align:center"></div>
+<a title="Записки и сообщения" href="/"><img src="/static/img/vesti_b.svg" alt=""></a>
+<a title="Заметки и посты" href="/posts.html"><img src="/static/img/posts_b.svg" alt=""></a>
+<a title="Фотки и картинки" href="/foto.html"><img src="/static/img/fotki_b.svg" alt=""></a>
+<a title="Аккорды, песни, стихи" href="/songs.html"><img src="/static/img/songs_b.svg" alt=""></a>
+<a title="Книги для чтения" href="/books.html"><img src="/static/img/books_b.svg" alt=""></a>
+<a title="Мои карты" href="/dbcartajs"><img src="/static/img/dbcartajs.svg" onload="this.scrollIntoView()" alt="Просмотр и навигация векторных карт и изображений (Canvas, SVG)"></a>
 </div>
 <div class="nostripe nowrap scroll">
   Схемы метро Москвы и Петербурга со строящимися линиями и станциями, <br>
