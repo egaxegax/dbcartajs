@@ -20,7 +20,7 @@ egax@bk.ru, 2013-24.
 <table style="border-collapse:collapse">
 <tr style="height:1px; border-bottom:1px solid #f4f4f4">
 <td width="15%" valign="center">
-  <a href="/dbcartajs" title="Метро Москвы (на главную)">
+  <a href="../index.html" title="Метро Москвы (на главную)">
     <h1>Метро Москвы</h1>
   </a>
 </td>
@@ -165,9 +165,9 @@ var DV = new dbCarta({
   height: document.getElementById('mcol').offsetHeight,
   viewportx: 220, 
   viewporty: 220, 
-  rbar: 0,
+  rbar: 1,
   bg: 'rgb(250,255,250)',
-  scalebg: 'rgba(100,200,100,0.3)'
+  scalebg: 'rgba(100,100,100,0.1)'
 });
   // define new layers
 function route(o)    { return DV.extend({cls: 'Line', width: mds(6), join: 'round', anchor: ['start', 'middle'], labelscale: 1}, o||{}); };

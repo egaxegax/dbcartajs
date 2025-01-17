@@ -20,7 +20,7 @@ egax@bk.ru, 2015-24.
 <table style="border-collapse:collapse">
 <tr style="height:1px; border-bottom:1px solid #f4f4f4">
 <td width="15%">
-  <a href="/dbcartajs" title="Метро Москвы (на главную)">
+  <a href="../index.html" title="Метро Москвы (на главную)">
     <h1>Метро Москвы</h1>
   </a>
 </td>
@@ -159,9 +159,9 @@ var DC = new dbCartaSvg({
   id: 'mcol',
   height: document.getElementById('mcol').offsetHeight,
   bg: 'rgb(250,255,250)',
-  sbar: 0
-//  sbarpos: 'right',
-//  scalebg: 'rgba(100,200,100,0.3)'
+  sbar: 1,
+  sbarpos: 'right',
+  sbarsize: 6
 });
   // lines
 DC.extend(mopt, {

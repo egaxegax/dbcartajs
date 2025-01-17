@@ -2,7 +2,7 @@
 // HTML5 Canvas vector map and image viewer library with Proj4js transformations
 //
 // https://github.com/egaxegax/dbcartajs.git
-// egax@bk.ru, 2013. b240420.
+// egax@bk.ru, 2013. b240420+.
 //
 function dbCarta(cfg) {
   // Constructor config {
@@ -469,7 +469,7 @@ function dbCarta(cfg) {
       var sz = this.sizeOf(),
           cw = sz[2],
           ch = sz[3];
-      var h = ch/4,
+      var h = (cw>ch?ch:cw)/4,
           w = h/2,
           tleft = cw - w - w/10,
           ttop = ch/2 - h/2,
