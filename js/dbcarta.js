@@ -46,6 +46,7 @@ function dbCarta(cfg) {
       viewporty: cfg.viewporty || 150.0,
       scalebg: cfg.scalebg || 'rgba(255,255,255,0.3)',
       rbar: cfg.rbar == undefined ? true : cfg.rbar,
+      rbarsize: cfg.rbarsize||6,
       mapbg: cfg.mapbg || 'rgba(80,90,100,0.5)',
       mapfg: cfg.mapfg
     },
@@ -469,7 +470,7 @@ function dbCarta(cfg) {
       var sz = this.sizeOf(),
           cw = sz[2],
           ch = sz[3];
-      var h = (cw>ch?ch:cw)/4,
+      var h = ch/this.cfg.rbarsize,
           w = h/2,
           tleft = cw - w - w/10,
           ttop = ch/2 - h/2,
@@ -656,7 +657,7 @@ function dbCarta(cfg) {
       var sz = this.sizeOf(),
           cw = sz[2],
           ch = sz[3];
-      var h = ch/4,
+      var h = ch/this.cfg.rbarsize,
           w = h/2,
           tleft = cw - w - w/10,
           ttop = ch/2 - h/2,

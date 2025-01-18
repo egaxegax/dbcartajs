@@ -609,10 +609,7 @@ upfunc({url:
     root.removeAttribute('viewBox');
     DC = new dbCartaSvg({ 
       svgRoot: root, 
-      svgViewport: vp,
-      sbar: 0
-//      scalebg: 'rgba(50,100,0,0.2)',
-//      sbarpos: 'left'
+      svgViewport: vp
     });
     DC.centerCarta([ svg_width/2, svg_height/2 ]);
     DC.scaleCarta( cont_width / svg_width );
