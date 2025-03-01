@@ -14,7 +14,7 @@
 <style>
 body { background:#fafafa; }
 #root { min-height:100%; background:#fff; color:#333; }
-#header { text-align:center; width:100%; background:#d2e0f0; }
+#header { text-align:center; margin:0 auto; max-width:760px; background:#d2e0f0; }
 #footer { text-align:center; font-size:93.75%; }
 .dis { color:#fff; }
 .en { display:inline-block; }
@@ -35,7 +35,6 @@ body { background:#fafafa; }
 <script src="js/data/continents.js"></script>
 </head>
 <body>
-<div id="root" class="main">
 <div id="header" class="nowrap scroll">
 <a title="Записки и сообщения" href="/"><img src="/static/img/vesti_b.svg" alt=""></a>
 <a title="Заметки и посты" href="/posts.html"><img src="/static/img/posts_b.svg" alt=""></a>
@@ -44,6 +43,7 @@ body { background:#fafafa; }
 <a title="Книги для чтения" href="/books.html"><img src="/static/img/books_b.svg" alt=""></a>
 <a title="Мои карты" href="/dbcartajs"><img src="/static/img/dbcartajs.svg" onload="this.scrollIntoView()" alt="Просмотр и навигация векторных карт и изображений (Canvas, SVG)"></a>
 </div>
+<div id="root" class="main">
 <div class="nostripe nowrap scroll">
   Схемы метро Москвы и Петербурга со строящимися линиями и станциями, <br>
   поиском кратчайшего пути между выбранными станциями в <i>2025</i> году, <br>
