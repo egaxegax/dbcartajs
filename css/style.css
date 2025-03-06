@@ -4,7 +4,6 @@ a,a:active,a:focus { color:#3c677b; outline:none; text-decoration:none; }
 b,i,em { color:#777; }
 input, select, button { border-radius:4px; border:1px solid #afafaf; }
 svg { cursor:pointer; }
-.wrap { padding: 0px; margin:0 0px 7px 0px; border-radius:4px; }
 /*dark theme*/
 .bg input, .bg select, .bg button { background-color:#555; color:#eee; }
 .bg a,.bg a:active,.bg a:focus { color:#ffbc00; }
