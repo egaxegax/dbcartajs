@@ -1,4 +1,4 @@
-body,h1 { font: 16px arial; margin:0; }
+html,body,h1 { font: 16px arial; margin:0; }
 h1 { font-size: 112.5%; }
 a,a:active,a:focus { color:#3c677b; outline:none; text-decoration:none; }
 b,i,em { color:#777; }
