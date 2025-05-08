@@ -1,0 +1,13 @@
+/* light */
+body { background:rgb(50,53,57); color:#eee; }
+a, a:active, a:focus { color:#f4c430; }
+b,i,em { color: #aaa; }
+b em { color: #f4c430; }
+#root { background:rgb(52,55,60); }
+#header { background:rgb(52,55,60); }
+#header svg g { fill:#eee; stroke:#eee; }
+#header svg g.active { fill:#f4c430; stroke:#f4c430; }
+#header .yin { fill:#777; stroke:#777; }
+.dis { color:rgb(68,71,76); }
+.msgtext { background:rgb(68,71,76); }
+.stripe { background:rgb(68,71,76); }

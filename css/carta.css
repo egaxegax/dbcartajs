@@ -1,0 +1,12 @@
+/* light */
+body { background:#fafafa; color:#333; }
+#root { background:#f0f0f0; }
+#header { background:#d2e0f0; }
+#header svg g { fill:#777; stroke:#777; }
+#header svg g.active { fill:#3c677b; stroke:#3c677b; }
+#header .yin { fill:#fff; stroke:#fff; }
+.dis { color:#fff; }
+.msgtext { background:#fff; }
+.stripe { background:#fff; }
+.nostripe{ background:#f0f0f0; }
+
