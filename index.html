@@ -32,7 +32,7 @@
 </style>
 <script src="/static/js/metrics.js?250505" data-floor="1"></script>
 <script>function actionChStyle(p){ document.querySelectorAll("link[href^='css/"+p+"']").forEach(function(e){ localStorage.setItem('THEME_URL_'+window.location.pathname, e.href='css/'+p+(e.href.search(p+'.dark.css')>-1 ? '.css' : '.dark.css')+'?'+(+Date.now())); });}</script>
-<script>(function(t){ if(t=localStorage.getItem('THEME_URL_'+window.location.pathname)){ document.querySelectorAll("link[href^='"+t.slice(0,t.indexOf('.'))+"']").forEach(function(e){ e.href = t; }); }})()</script>
+<script>(function(t){ if(t=localStorage.getItem('THEME_URL_'+window.location.pathname)){ document.querySelectorAll("link[href^='"+t.slice(0,t.indexOf('.'))+"']").forEach(function(e){ if(e.href.slice(e.href.lastIndexOf('/'),e.href.indexOf('?')) != t.slice(t.lastIndexOf('/'),t.indexOf('?'))) e.href = t; }); }})()</script>
 </head>
 <body>
 <div id="header" class="nowrap scroll">
