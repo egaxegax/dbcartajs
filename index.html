@@ -28,7 +28,7 @@
 .smaller1 { font-size:93.75%; }
 .mh { max-height:260px; }
 @media all and (max-width:800px) { .en { width:160px; } .mw { width:100%; text-align: center; } }
-@media all and (min-width:800px) { .en { width:260px; } .mw { max-width:280px; } }
+@media all and (min-width:800px) { .en { width:260px; } .mw { max-width:280px; margin:0 0 0 20px; } }
 </style>
 <script src="/static/js/metrics.js?250505" data-floor="1"></script>
 <script>function actionChStyle(p){ document.querySelectorAll("link[href^='css/"+p+"']").forEach(function(e){ localStorage.setItem('THEME_URL_'+window.location.pathname, e.href='css/'+p+(e.href.search(p+'.dark.css')>-1 ? '.css' : '.dark.css')+'?'+(+Date.now())); });}</script>
@@ -269,8 +269,8 @@
 </div>
 <script>
    // reklama
-  if(window.addYaRTB_Block) ['ya_rtb_0','ya_rtb_1','ya_rtb_2'].map(function(elid){
-    document.getElementById(elid).className = 'inlbl mw mh'; 
+  if(window.addYaRTB_Block) ['ya_rtb_0'].map(function(elid){
+    document.getElementById(elid).className = 'inlbl mw mh';
     addYaRTB_Block(elid, YA_RTB[6]);
   });
 </script>
