@@ -22,7 +22,7 @@
 <td> <a href="https://egaxegax.github.io/dbcartajs/svg/mosrails.html"> SVG </a> </td>
 </tr>
 <tr>
-<td> <i>Схема метро Петербурга</i><br><sup>St. Petersburg Metro</sup> </td>
+<td> <i>Схема метро Петербурга</i><br><sup>St.Petersburg Metro</sup> </td>
 <td> - </td>
 <td> <a href="https://egaxegax.github.io/dbcartajs/svg/metrospb.html"> SVG </a> </td>
 </tr>
@@ -34,7 +34,7 @@
 <tr>
 <td> <i>Схема метро Киева</i><br><sup>Kiev Metro</sup> </td>
 <td> <a href="https://egaxegax.github.io/dbcartajs/nv/metro-kiev.html"> Canvas </a> </td>
-<td> - </td> 
+<td> <a href="https://egaxegax.github.io/dbcartajs/svg/metro-kiev.html"> SVG </a> </td>
 </tr>
 <tr>
 <td> <i>Схема метро Тбилиси</i><br><sup>Tbilisi Metro</sup> </td>

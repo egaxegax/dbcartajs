@@ -20,6 +20,7 @@ https://egaxegax.github.io/dbcartajs/svg/atlas.html
 https://egaxegax.github.io/dbcartajs/svg/clock.html
 https://egaxegax.github.io/dbcartajs/svg/countries.html
 https://egaxegax.github.io/dbcartajs/svg/imgviewer.html
+https://egaxegax.github.io/dbcartajs/svg/metro-kiev.html
 https://egaxegax.github.io/dbcartajs/svg/metro-novosib.html
 https://egaxegax.github.io/dbcartajs/svg/metrospb.html
 https://egaxegax.github.io/dbcartajs/svg/mosmetro.html
