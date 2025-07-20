@@ -12,7 +12,7 @@
 
 <table>
 <tr>
-<td width="320px"> <i>Схема метро Москвы</i><br><sup>Moscow Metro</sup> </td>
+<td width="350px"> <i>Схема метро Москвы</i><br><sup>Moscow Metro</sup> </td>
 <td> <a href="https://egaxegax.github.io/dbcartajs/nv/mosmetro.html"> Canvas </a> </td>
 <td> <a href="https://egaxegax.github.io/dbcartajs/svg/mosmetro.html"> SVG </a> </td>
 </tr>
@@ -47,7 +47,7 @@
 
 <table>
 <tr>
-<td width="320px"> <i>Просмотровщик картинок</i><br><sup>Image Viewer</sup> </td>
+<td width="350px"> <i>Просмотровщик картинок</i><br><sup>Image Viewer</sup> </td>
 <td> <a href="https://egaxegax.github.io/dbcartajs/nv/imgviewer.html"> Canvas </a> </td>
 <td> <a href="https://egaxegax.github.io/dbcartajs/svg/imgviewer.html"> SVG </a> </td>
 </tr>
@@ -67,12 +67,12 @@
 <td> <a href="https://egaxegax.github.io/dbcartajs/svg/rollerball.html"> SVG </a> </td>
 </tr>
 <tr>
-<td width="320px"> <i>Настенные часы</i><br><sup>Wall Clock</sup> </td>
+<td width="350px"> <i>Настенные часы</i><br><sup>Wall Clock</sup> </td>
 <td> - </td>
 <td> <a href="https://egaxegax.github.io/dbcartajs/svg/clock.html"> SVG </a> </td>
 </tr>
 <tr>
-<td width="320px"> <i>Футбольные схемы</i><br><sup>Soccer Schemes</sup> </td>
+<td width="350px"> <i>Футбольные схемы</i><br><sup>Soccer Schemes</sup> </td>
 <td> <a href="https://egaxegax.github.io/dbcartajs/nv/soccerf.html"> Canvas </a> </td>
 <td> - </td>
 </tr>
@@ -83,7 +83,7 @@
 
 <table>
 <tr>
-<td width="320px"> <i>Атлас мира</i><br><sup>Atlas</sup> </td>
+<td width="350px"> <i>Атлас мира</i><br><sup>Atlas</sup> </td>
 <td> <a href="https://egaxegax.github.io/dbcartajs/nv/atlas.html"> Canvas </a> </td>
 <td> <a href="https://egaxegax.github.io/dbcartajs/svg/atlas.html"> SVG </a> </td>
 </tr>
@@ -124,7 +124,7 @@
 
 <table>
 <tr>
-<td width="320px"> <i>Атлас 3D</i><br><sup>Atlas 3D</sup> </td>
+<td width="350px"> <i>Атлас 3D</i><br><sup>Atlas 3D</sup> </td>
 <td> <a href="https://egaxegax.github.io/dbcartajs/nv/map3d.html"> Canvas </a> </td>
 </tr>
 <tr>
