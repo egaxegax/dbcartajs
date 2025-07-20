@@ -26,10 +26,6 @@ egax@bk.ru, 2025.
 </tr>
 </table>
 <script>
-var mopt = {};
-// diag.size ratio
-function mds(o) { return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*o/100; }
-  //
 var MLNS = [
 ['dnepr_river', '1', [[26,80],[26,0],[26,-80]]],
 ['r1', '1', [[-40,44],[-40,21,'Q'],[-40,18,''],[-37,15,'L'],[5,-25,'Q'],[8,-28,''],[8,-31,'L'],[8,-57,'Q'],[8,-60,''],[11,-60,'L'],[44,-60,'Q'],[47,-60,''],[47,-57,'L'],[47,-28]]],
@@ -101,13 +97,14 @@ var MSTS = [
 var MLBS=[
 ['dnepr_river', 'dnepr', [], 'река Днепр', [26,38]]
 ];
+var mopt = {};
   //
+function mds(o) { return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*o/100; }
 function clearRoute(){
   while((msel = DC.root.querySelectorAll('.selpath')).length){ DC.vp.removeChild(msel[0]); }
   [].slice.call(DC.root.querySelectorAll('.selected')).map((o) => { DC.attr(o, {class: mopt[o.getAttribute('mclass')].class, fill: mopt[o.getAttribute('mclass')].bg, r: mds(mopt[o.getAttribute('mclass')].size)}); });
   [].slice.call(DC.root.querySelectorAll('.route, .station')).map((o) => { DC.attr(o, {opacity: '1'}); });
 }
-  //
 function calcRoute(fromid, toid){
   var inches = [].concat(makecrds(MLNS.filter(function(a){ return a[0]=='inch'; })));
     //
@@ -174,12 +171,10 @@ var DC = new dbCartaSvg({
   bg: 'white',
   sbar:1
 });
-  // events
-DC.extend(DC.root, {
+DC.extend(DC.root, { // events
   ondblclick: function(){ clearRoute(); }
 });
-  // lines
-DC.extend(mopt, {
+DC.extend(mopt, { // lines
   dnepr_river: river({width: mds(80), rotate: 90}),
   r1: route({fg: '#44b85c'}),
   r3: route({fg: '#0078bf'}),
@@ -187,8 +182,7 @@ DC.extend(mopt, {
   inch: inch(),
   inch_d: inch_d()
 });
-  // stations
-DC.extend(mopt, {
+DC.extend(mopt, { // stations
   s1:   station({fg: mopt['r1'].fg, anchor: ['start', 'middle']}),
   s3:   station({fg: mopt['r3'].fg, anchor: ['start', 'middle']}),
   s3_1: station({fg: mopt['r3'].fg, anchor: ['end', 'middle']}),
