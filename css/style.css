@@ -6,9 +6,9 @@ input, select, button { border-radius:4px; border:1px solid #afafaf; }
 svg { cursor:pointer; }
 a.nodecor { text-decoration:none; }
 /*dark theme*/
-.bg input, .bg select, .bg button { background-color:#555; color:#eee; }
+.bg input, .bg select, .bg button { background-color:#555; color:#dedede; }
 .bg a,.bg a:active,.bg a:focus { color:#ffbc00; }
-.bg { background-color:#404040; color:#eee; }
+.bg { background-color:#404040; color:#dedede; }
 /**/
 @media all and (max-width:800px){ .mh_f { max-height:75px; position:fixed; width:100%; }}
 @media all and (min-width:800px){ .mh_f { max-width:200px; position:fixed; height:100%; }}
