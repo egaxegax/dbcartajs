@@ -8,7 +8,6 @@ b em { color: #f4c430; }
 #header svg g { fill:#dedede; stroke:#dedede; }
 #header svg g.active { fill:#f4c430; stroke:#f4c430; }
 #header .yin { fill:#777; stroke:#777; }
-.dis { color:rgb(68,71,76); }
-.msgtext { background:rgb(68,71,76); }
-.stripe { background:rgb(68,71,76); }
+.dis { color:rgb(58,61,66); }
+.msgtext { background:rgb(58,61,66); }
 .light { color:#9ac495; }
