@@ -501,8 +501,8 @@ MLBS.map(function(label){
   text.appendChild(document.createTextNode(t));
 });
 DC.scaleCarta( Number(DC.sizeOf()[2])>Number(DC.sizeOf()[3]) ? 0.8 : 1 );
-  // +keyboard press events
-window.addEventListener('keydown', function(e){
+
+window.addEventListener('keydown', function(e){ // +keyboard press events
   switch(e.code){
     case 'ArrowUp':    case 'Numpad8': DC.centerCarta([DC.centerOf()[0]-DC.m.offset[0],    DC.centerOf()[1]-DC.m.offset[1]-10]); break;
     case 'ArrowRight': case 'Numpad6': DC.centerCarta([DC.centerOf()[0]-DC.m.offset[0]+10, DC.centerOf()[1]-DC.m.offset[1]]);    break;
@@ -513,8 +513,8 @@ window.addEventListener('keydown', function(e){
     default: console.log(e.code); break;
   }
 });
-  // add update date
-[].slice.call(document.getElementsByTagName('script')).map(function(scp){
+
+[].slice.call(document.getElementsByTagName('script')).map(function(scp){ // add update date
   if(scp.src.indexOf('mosmetro.js')>-1){
     var mdate = scp.src.split('?')[1];
     mdate = (new Date(2000+parseInt(mdate.slice(0,2)), parseInt(mdate.slice(2,4))-1, parseInt(mdate.slice(4,6))));
