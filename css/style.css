@@ -3,8 +3,7 @@ h1 { font-size: 112.5%; }
 a,a:active,a:focus { color:#3c677b; outline:none; text-decoration-thickness: 0.4px; }
 b,i,em { color:#777; }
 input, select, button { border-radius:4px; border:1px solid #afafaf; }
-svg { cursor:pointer; }
-a.nodecor { text-decoration:none; }
+svg { cursor:pointer; -webkit-tap-highlight-color: transparent; }
 #header a { display:inline-block; }
 /**/
 @media (max-width:800px){ .mh_f { max-height:75px; position:fixed; width:100%; }}

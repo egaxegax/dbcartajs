@@ -11,7 +11,7 @@ egax@bk.ru, 2025.
 <meta name="description" content="Карта, схема метро Киева в 2025 году">
 <meta name="keywords" content="Карта, схема метро Киева, векторная карта метро города Киева">
 <link rel="icon" href="../img/fav.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../css/style.css?250726">
+<link rel="stylesheet" href="../css/style.css?250928">
 <style>html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
 <script src="../js/dbcartasvg.js"></script>
 <script src="../js/alg/bfs.js"></script>
@@ -99,7 +99,7 @@ var MLBS=[
 ];
 var mopt = {};
   //
-function mds(o) { return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*o/100; }
+function mds(o) { return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/2000*o; }
 function clearRoute(){
   while((msel = DC.root.querySelectorAll('.selpath')).length){ DC.vp.removeChild(msel[0]); }
   [].slice.call(DC.root.querySelectorAll('.selected')).map((o) => { DC.attr(o, {class: mopt[o.getAttribute('mclass')].class, fill: mopt[o.getAttribute('mclass')].bg, r: mds(mopt[o.getAttribute('mclass')].size)}); });
@@ -159,11 +159,11 @@ function calcRoute(fromid, toid){
   });
 }
   // define new layers
-function route(o){ return DC.extend({class: 'route', bg: 'none', width: mds(5)}, o||{}); }
+function route(o){ return DC.extend({class: 'route', bg: 'none', width: 5}, o||{}); }
 function river(o){ return route(DC.extend({fg: "#e2fcfc", join: 'round', cap: 'round', labelcolor: '#5555ff'}, o||{})); }
-function inch(o){ return route(DC.extend({fg: '#ddd', join: 'round', cap: 'round', width: mds(4)}, o||{})); }
-function inch_d(o) { return inch(DC.extend({fg: '#eee', width: mds(7)}, o||{})); }
-function station(o){ return DC.extend({class: 'station', bg: 'white', size: mds(4), width: mds(1)}, o||{}); }
+function inch(o){ return route(DC.extend({fg: '#ddd', join: 'round', cap: 'round', width: 4}, o||{})); }
+function inch_d(o) { return inch(DC.extend({fg: '#eee', width: 7}, o||{})); }
+function station(o){ return DC.extend({class: 'station', bg: 'white', size: 4, width: 1}, o||{}); }
   //
 var DC = new dbCartaSvg({
   id: 'mcont',
@@ -175,7 +175,7 @@ DC.extend(DC.root, { // events
   ondblclick: function(){ clearRoute(); }
 });
 DC.extend(mopt, { // lines
-  dnepr_river: river({width: mds(80), rotate: 90}),
+  dnepr_river: river({width: 80, rotate: 90}),
   r1: route({fg: '#44b85c'}),
   r3: route({fg: '#0078bf'}),
   r5: route({fg: '#ed1b35'}),

@@ -12,7 +12,7 @@ egax@bk.ru, 2022-23.
 <meta name="description" content="Карта метро Санкт-Петербурга c расчётом пути. Схема действующих линий и станций петербургского метро в 2023 году">
 <meta name="keywords" content="карта, схема метро петербурга, питера, карта метро петербурга в векторе, spb metro map">
 <link rel="icon" href="../img/fav.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../css/style.css?250726">
+<link rel="stylesheet" href="../css/style.css?250928">
 <style>html,body,table{overflow:hidden;border-collapse:collapse;margin:0;padding:0;width:100%;height:100%}</style>
 <script src="/static/js/metrics.js?250518" data-floor="1"></script>
 </head>
@@ -131,7 +131,7 @@ var MLBS=[
 ];
 var msel, mopt = {}; // define new layers
   // proportional for mobile diag. size ratio
-function mds(o) { return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/15*o/100; }
+function mds(o) { return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*DC.sizeOf()[3])/2000*o; }
   //
 function clearRoute(){
   while((msel = DC.root.querySelectorAll('.selpath')).length){ DC.vp.removeChild(msel[0]); }
@@ -196,7 +196,7 @@ function calcRoute(fromid, toid){
 function route(o){ return DC.extend({class: 'route', bg: 'none', join: 'round', cap: 'round', width: 5, anchor: ['start', 'middle']}, o||{}); }
 function river(o){ return route(DC.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff'}, o||{})); }
 function inch(o) { return route(DC.extend({fg: '#ddd', cap: 'round'}, o||{})); }
-function station(o){ return DC.extend({class: 'station', bg: 'white', size: mds(4), width: mds(1)}, o||{}); }
+function station(o){ return DC.extend({class: 'station', bg: 'white', size: 4, width: 1}, o||{}); }
   //
 var DC = new dbCartaSvg({
   id: 'mcont',
