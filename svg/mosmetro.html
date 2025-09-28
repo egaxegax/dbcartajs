@@ -19,12 +19,13 @@ egax@bk.ru, 2015-25.
 <body>
 <table style="border-collapse:collapse">
 <tr style="height:1px; border-bottom:1px solid #f4f4f4">
-<td width="15%">
+<td>
   <a href="../index.html" title="Метро Москвы (на главную)">
     <h1>Метро Москвы</h1>
   </a>
+  <i id="buildDate" style="font-size:smaller"></i>
 </td>
-<td align="center">
+<td align="right">
   <input type="button" onclick="alert('Выберите названия двух станций для построения маршрута. \nОчистить путь можно по двойному клику')" title="Справка" value="&nbsp;?&nbsp;">
   <input type="button" onclick="DC.savetoimage()" title="Сохранить скриншот..." value="&nbsp;&darr;&nbsp;">
   <select id="cInches" onchange="clchange(this)">
@@ -34,7 +35,7 @@ egax@bk.ru, 2015-25.
   <option id="inch_mck">&#9745; МЦК</option>
   <option id="inch_mcd">&#9745; МЦД</option>
   <option id="inch_ext">&emsp; Строящиеся</option>
-  </select> 
+  </select>&nbsp;
 </td>
 </tr>
 <tr>
@@ -44,7 +45,7 @@ egax@bk.ru, 2015-25.
 </tr>
 </table>
 <script src="../js/dbcartasvg.js"></script>
-<script src="../js/data/mosmetro.js?250927"></script>
+<script src="../js/data/mosmetro.js?250928"></script>
 <script src="../js/alg/bfs.js"></script>
 <script>
 var mopt = {};
@@ -500,6 +501,26 @@ MLBS.map(function(label){
   text.appendChild(document.createTextNode(t));
 });
 DC.scaleCarta( Number(DC.sizeOf()[2])>Number(DC.sizeOf()[3]) ? 0.8 : 1 );
+  // +keyboard press events
+window.addEventListener('keydown', function(e){
+  switch(e.code){
+    case 'ArrowUp':    case 'Numpad8': DC.centerCarta([DC.centerOf()[0]-DC.m.offset[0],    DC.centerOf()[1]-DC.m.offset[1]-10]); break;
+    case 'ArrowRight': case 'Numpad6': DC.centerCarta([DC.centerOf()[0]-DC.m.offset[0]+10, DC.centerOf()[1]-DC.m.offset[1]]);    break;
+    case 'ArrowDown':  case 'Numpad2': DC.centerCarta([DC.centerOf()[0]-DC.m.offset[0],    DC.centerOf()[1]-DC.m.offset[1]+10]); break;
+    case 'ArrowLeft':  case 'Numpad4': DC.centerCarta([DC.centerOf()[0]-DC.m.offset[0]-10, DC.centerOf()[1]-DC.m.offset[1]]);    break;
+    case 'NumpadAdd':                  DC.scaleCarta(DC.m.scale*1.1); break;
+    case 'NumpadSubtract':             DC.scaleCarta(DC.m.scale*0.9); break;
+    default: console.log(e.code); break;
+  }
+});
+  // add update date
+[].slice.call(document.getElementsByTagName('script')).map(function(scp){
+  if(scp.src.indexOf('mosmetro.js')>-1){
+    var mdate = scp.src.split('?')[1];
+    mdate = (new Date(2000+parseInt(mdate.slice(0,2)), parseInt(mdate.slice(2,4))-1, parseInt(mdate.slice(4,6))));
+    document.getElementById('buildDate').innerHTML = `(${mdate.toLocaleDateString(undefined, {weekday:'short', year:'numeric', month:'short', day:'numeric'})})`;
+  }
+});
 
 if(window.addYaRTB_Block) addYaRTB_Block('ya_rtb_0', YA_RTB[6]);
 
