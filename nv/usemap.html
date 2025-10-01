@@ -2,7 +2,7 @@
 <!--
 Population density by country.
 View countries under mouse cursor.
-egax@bk.ru, 2013-23.
+egax@bk.ru, 2013-25.
 -->
 <html lang="ru">
 <head>
@@ -78,7 +78,7 @@ function zoomOne(DV, pts, ev) {
     // load cities in selected country
     for(var i in CITIES[m['label']]) {
       var o = CITIES[m['label']][i];
-      DV.loadCarta([['DotPort', o[0], o[1], o[0]]]);
+      DV.loadCarta([['DotPort', o[0], o[1]]]);
     }
     // help message
     var mcoord = document.getElementById('tcoords');
@@ -153,8 +153,6 @@ function init() {
   col.style.backgroundColor = '#fafffa';
   row.appendChild(col);
   mtab.appendChild(row);
-  col.style.paddingLeft = col.offsetWidth/15 + 'px';
-  col.style.paddingRight = col.offsetWidth/15 + 'px';
   document.body.appendChild(mtab);
 
   // domap tooltip
@@ -225,6 +223,7 @@ function init() {
     projlist.appendChild(el);
   };
   projlist.onchange = proj;
+  projlist.selectedIndex = 2; // miller prj.
   proj();
 };
 
