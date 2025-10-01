@@ -2,7 +2,7 @@
 <!--
 Population density by country. SVG version.
 View countries under mouse cursor.
-egax@bk.ru, 2015-22.
+egax@bk.ru, 2015-25.
 -->
 <html lang="ru">
 <head>
@@ -34,7 +34,7 @@ function infobox(ev) {
     mtip.style.font = '1em arial';
     mtip.style.border = '2px solid rgba(19,64,117,0.5)';
     mtip.style.borderRadius = '4px';
-    mtip.style.backgroundColor = 'rgba(250,250,250,0.9)';
+    mtip.style.backgroundColor = 'rgba(250,250,250,0.4)';
     mtip.style.position = 'absolute';
     mtip.style.zIndex = '10000';
     mtip.style.display = 'none';
@@ -79,7 +79,7 @@ function draw() {
       onmousemove: function(ev){
         DC.doMap(ev, {
           fill: 'rgb(255,127,0)',
-          stroke: 'yellow'
+          stroke: 'transparent'
         });
         var mcntryname = this.getAttribute('class');
         var label = mcntryname;
@@ -88,9 +88,9 @@ function draw() {
         if(INFOCNT[mcntryname][1]) // rusname
           label = '<i>' + INFOCNT[mcntryname][1] + '</i>' + '<br><sup>' + label + '</sup>';
         if(CITIES[mcntryname]) // cities count
-          label += '<br>Крупных городов: <i>' + CITIES[mcntryname].length + '</i>';
+          label += '<br><span style="font-size:smaller">Крупных городов: <i>' + CITIES[mcntryname].length + '</i></span>';
         if(INFOCNT[mcntryname]) // density
-          label += '<br>Плотность населения: <i>' + INFOCNT[mcntryname][0] + '</i>';
+          label += '<br><span style="font-size:smaller">Плотность населения: <i>' + INFOCNT[mcntryname][0] + '</i></span>';
         this.setAttribute('class', label);
       }
     });
@@ -98,8 +98,8 @@ function draw() {
 };
 var DC = new dbCartaSvg({
   id: 'mcont',
-  bg: 'white',
-  sbarpos: 'left'
+  height: document.getElementById('mcont').offsetHeight,
+  // sbarpos: 'left'
 });
 // events
 DC.extend(DC.root, {
@@ -108,6 +108,7 @@ DC.extend(DC.root, {
     infobox(ev); // show/hide tooltip
   }
 });
+DC.changeProject('102'); // miller proj
 draw();
 </script>
 </body>
