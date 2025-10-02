@@ -73,14 +73,12 @@ function draw() {
       class: mcntryname,
       points: DC.interpolateCoords(mcoords, true, 10).join(' '),
       fill: densityColor(mcntryname),
-      stroke: 'transparent'
+      stroke: 'white',
+      'stroke-width': 0.1
     });
     DC.extend(cntry, {
       onmousemove: function(ev){
-        DC.doMap(ev, {
-          fill: 'rgb(255,127,0)',
-          stroke: 'transparent'
-        });
+        DC.doMap(ev, {fill: 'rgb(255,127,0)'});
         var mcntryname = this.getAttribute('class');
         var label = mcntryname;
         if(label.search('<b>') == -1)

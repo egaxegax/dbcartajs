@@ -121,7 +121,7 @@ function init() {
     var pts = DC.interpolateCoords(lonlat, true, 10),
         path = ('M ' + pts[0] + ' L ' + pts).replace(/,/g, ' ');
     DC.append('path', {
-      fill: 'transparent', stroke: '#aaa', 'stroke-dasharray': '4', d: path
+      fill: 'transparent', stroke: '#aaa', 'stroke-width': 0.3, 'stroke-dasharray': '4', d: path
     });    
   });
 
