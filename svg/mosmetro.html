@@ -58,7 +58,7 @@ function mds(o) { return Math.sqrt(DC.sizeOf()[2]*DC.sizeOf()[2]+DC.sizeOf()[3]*
 function find(str){ return [].slice.call(DC.root.querySelectorAll(str)); }
 // layers draw
 function route(o)    { return DC.extend({class: 'route', bg: 'none', join: 'round', cap: 'round', width: 7, anchor: ['start', 'middle']}, o||{}); };
-function route_ext(o){ return route(DC.extend({width: 3, cap: 'butt', dash: [6,4]}, o||{})); };
+function route_ext(o){ return route(DC.extend({width: 3, cap: 'butt', dash: [2,2]}, o||{})); };
 function river(o)    { return route(DC.extend({fg: '#daebf4', cap: 'round', labelcolor: '#5555ff'}, o||{})); };
 function rail(o)     { return route(DC.extend({fg: '#ccc', width: 2}, o||{})); };
 function rail_d(o)   { return rail(DC.extend({fg: '#eee', dash: [8,7]}, o||{})); };
