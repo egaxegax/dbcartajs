@@ -2,7 +2,7 @@ html,body,h1 { font: 16px arial; margin:0; }
 h1 { font-size: 112.5%; }
 a,a:active,a:focus { color:#3c677b; outline:none; text-decoration-thickness: 0.4px; }
 b,i,em { color:#777; }
-input, select, button { border-radius:4px; border:1px solid #afafaf; }
+input, select, button { border-radius:4px; border:1px solid #afafaf; margin:1px 0 0 0;}
 svg { cursor:pointer; -webkit-tap-highlight-color: transparent; }
 #header a { display:inline-block; }
 /**/
