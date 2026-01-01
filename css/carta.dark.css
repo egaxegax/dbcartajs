@@ -4,10 +4,10 @@ a, a:active, a:focus { color:#f4c430; }
 b,i,em { color: #aaa; }
 b em { color: #f4c430; }
 #root { background:rgb(43,45,49); }
-#header { background:rgb(52,55,60); }
+#header { background:rgb(56,59,64); }
 #header svg g { fill:#dedede; stroke:#dedede; }
 #header svg g.active { fill:#f4c430; stroke:#f4c430; }
 #header .yin { fill:#777; stroke:#777; }
-.dis { color:rgb(58,61,66); }
-.msgtext { background:rgb(58,61,66); }
+.dis { color:rgb(56,59,64); }
+.msgtext { background:rgb(56,59,64); }
 .light { color:#9ac495; }
