@@ -1,13 +1,13 @@
 /* light */
-body { background:rgb(40,43,47); color:#dedede; }
+body { background:#222; color:#dedede; }
 a, a:active, a:focus { color:#f4c430; }
 b,i,em { color: #aaa; }
 b em { color: #f4c430; }
-#root { background:rgb(43,45,49); }
-#header { background:rgb(56,59,64); }
+#root { background:#212121; }
+#header { background:#323232; }
 #header svg g { fill:#dedede; stroke:#dedede; }
 #header svg g.active { fill:#f4c430; stroke:#f4c430; }
 #header .yin { fill:#777; stroke:#777; }
-.dis { color:rgb(56,59,64); }
-.msgtext { background:rgb(56,59,64); }
+.dis { color:#323232; }
+.msgtext { background:#323232; }
 .light { color:#9ac495; }
