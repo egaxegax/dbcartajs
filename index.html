@@ -31,7 +31,7 @@
 @media (max-width:800px) { .en { width:160px; } .mw { width:100%; text-align: center; } }
 @media (min-width:800px) { .en { width:260px; } .mw { max-width:280px; margin:0 0 0 80px; } }
 </style>
-<script src="//egaxegax.github.io/static/js/metrics.js?260125"></script>
+<script src="//egaxegax.github.io/static/js/metrics?260114"></script>
 <script>function actionChStyle(p){ document.querySelectorAll("link[href^='css/"+p+"']").forEach(function(e){ localStorage.setItem('THEME_URL_'+window.location.pathname, e.href='css/'+p+(e.href.search(p+'.dark.css')>-1 ? '.css' : '.dark.css')+'?'+(+Date.now())); });}</script>
 <script>(function(t){ if(t=localStorage.getItem('THEME_URL_'+window.location.pathname)){ document.querySelectorAll("link[href^='"+t.slice(0,t.indexOf('.'))+"']").forEach(function(e){ if(e.href.slice(e.href.lastIndexOf('/'),e.href.indexOf('?')) != t.slice(t.lastIndexOf('/'),t.indexOf('?'))) e.href = t; }); }})()</script>
 </head>
@@ -272,7 +272,7 @@
    // reklama
   if(window.addYaRTB_Block) ['ya_rtb_0'/*, 'ya_rtb_1', 'ya_rtb_2'*/].map(function(elid){
     document.getElementById(elid).className = 'inlbl mw mh';
-    addYaRTB_Block(elid, YA_RTB[6]);
+    addYaRTB_Block(elid, YA_RTB['dbcartajs']);
   });
 </script>
 </body>
