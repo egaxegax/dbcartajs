@@ -1,4 +1,4 @@
-html,body,h1 { font: 16px roboto,arial; margin:0; }
+html,body,h1 { font: 16px 'PT Sans',arial; margin:0; }
 h1 { font-size: 112.5%; }
 a,a:active,a:focus { color:#3c677b; outline:none; text-decoration-thickness: 0.4px; }
 b,i,em { color:#777; }
