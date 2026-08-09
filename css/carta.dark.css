@@ -5,9 +5,10 @@ b,i,em { color: #aaa; }
 b em { color: #f4c430; }
 #root { background:#212121; }
 #header { background:#323232; }
-#header svg g { fill:#dedede; stroke:#dedede; }
-#header svg g.active { fill:#f4c430; stroke:#f4c430; }
-#header .yin { fill:#777; stroke:#777; }
+#header em { color:#dedede; }
+#header .active em { color:#f4c430; }
+#header .yin { fill:#fff; stroke:#fff; }
+#header .yang { fill:#777; stroke:#777; }
 .dis { color:#323232; }
 .msgtext { background:#323232; }
 .light { color:#9ac495; }
