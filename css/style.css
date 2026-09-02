@@ -1,18 +1,16 @@
 html,body,h1 { font: 17px 'PT Sans',arial; margin:0; }
-h1 { font-size: 112.5%; }
 a,a:active,a:focus { color:#3c677b; outline:none; text-decoration-thickness: 0.4px; }
 b,i,em { color:#777; }
-input, select, button { border-radius:4px; border:1px solid #afafaf; margin:0; padding:0; font-size:small; }
+input,select,button { border-radius:4px; border:1px solid #afafaf; margin:0; padding:0; font-size:small; }
 svg { cursor:pointer; -webkit-tap-highlight-color: transparent; }
 #root { min-height:100%; }
-#header { text-align:center; margin:0 auto; line-height:27px; }
-#header a { text-decoration:none; -webkit-tap-highlight-color:transparent; display:inline-block; padding:0 10px; font-size:93.75% }
+#header { text-align:center; line-height:30px; height:30px; font-size:smaller; }
+#header a { text-decoration:none; }
+#header * { padding:0 5px; }
 #footer { text-align:center; font-size:small; }
-.en { display:inline-block; }
-.inlbl { display:inline-block; vertical-align:middle; }
-.hspaced { padding:0 4px; }
-.main { margin:0 auto; max-width:830px; }
-.msgtext { padding:5px 10px 2px 10px; margin:0 auto; max-width:800px; }
+.en, .inlbl { display:inline-block; }
+.main { margin:0 auto; max-width:850px; }
+.msgtext { padding:5px 10px 2px 10px; margin:0 auto; max-width:820px; }
 .wrap { padding:0 0 7px 0; border-radius:4px; }
 .nowrap { white-space:nowrap; }
 .scroll { overflow: auto; }
