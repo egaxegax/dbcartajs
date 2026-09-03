@@ -10,8 +10,8 @@
 <meta name="google-site-verification" content="eWwGSnvveM7GniusD-nYN2KXBDPtXBHmhKRezn_TBg8">
 <meta name="yandex-verification" content="bf07f0af8e739c66">
 <link rel="icon" href="img/fav.svg" type="image/svg+xml">
-<link rel="stylesheet" href="css/style.css?260903">
-<link rel="stylesheet" href="css/carta.css?260718">
+<link rel="stylesheet" href="css/style.css?260904">
+<link rel="stylesheet" href="css/carta.css?260904">
 <script src="//egaxegax.github.io/static/js/metrics.js?260405"></script>
 <script>function chStyle(p){ document.querySelectorAll("link[href^='css/"+p+"']").forEach(function(e){ localStorage.setItem('THEME_URL_'+window.location.pathname, e.href='css/'+p+(e.href.search(p+'.dark.css')>-1 ? '.css' : '.dark.css')+'?'+(+Date.now())); });}</script>
 <script>(function(t){ if(t=localStorage.getItem('THEME_URL_'+window.location.pathname)){ document.querySelectorAll("link[href^='"+t.slice(0,t.indexOf('.'))+"']").forEach(function(e){ if(e.href.slice(e.href.lastIndexOf('/'),e.href.indexOf('?')) != t.slice(t.lastIndexOf('/'),t.indexOf('?'))) e.href = t; }); }})()</script>
@@ -25,236 +25,234 @@
 <a title="Мои карты" href="../dbcartajs" class="active"><em>КАРТЫ</em></a>
 <a title="Тема (День/Ночь)" href="" onclick="chStyle('carta')">&nbsp;&#9775;</a>
 </div>
-<div id="root" class="main">
-<div class="main nostripe inlbl">
+<div id="root">
+<div id="ya_rtb_0"></div>
+
+<div id="content">
+<div class="col inlbl">
+<div class="msgtext">
   Схемы метро Москвы и Петербурга с поиском пути, других городов,
   пригородного ж/д транспорта Москвы и МО.
 </div>
-
-<div class="msgtext">
-<div class="inlbl stripe">
-<div class="wrap">
+<div class="msgtext wrap">
+<div class="item">
   <div>&nbsp; Схема метро Москвы </div>
-  <div class="gray en smaller1"><i>&nbsp; Moscow Metro</i></div>
-  <span class="nowrap smaller1"> &nbsp;
+  <div class="inlbl"><i>&nbsp; Moscow Metro</i></div>
+  <div class="rfloat"> &nbsp;
     <a class="light" href="nv/mosmetro.html">Canvas</a> &emsp;
-    <a class="light" href="svg/mosmetro.html" title="Векторная карта метро Москвы">SVG</a> &emsp; 
+    <a class="light" href="svg/mosmetro.html" title="Векторная карта метро Москвы">SVG</a> &nbsp; 
     <!-- <button onclick="location.href='https://dzen.ru/egax.ru?donate=true'" title="Поддержать проект">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="10 23 46 24"><g fill="currentColor"><circle cx="37.5" cy="27.5" r="10"></circle><path d="M17.5 40v-3 c0-.553-.448-1-1-1h-5c-.552 0-1 .447-1 1v17c0 .553.448 1 1 1h5c.552 0 1-.447 1-1v-14 H26c2.791 0 5.189 1.897 5.833 4.615.053.226.254.385.486.385H41c1.103 0 2 .897 2 2s-.897 2-2 2h-9.529c-.276 0-.5.224-.5.5s.224.5.5.5H41c.45 0 .872-.106 1.256-.285.014-.005.029-.004.043-.01l11.423-5.354c.059-.021 1.479-.471 2.165 1.098C56.198 45.919 55.852 46.892 55.063 47.291l-16.767 9.147c-1.236.898-2.963 1.163-4.495.692L17.5 51.616"></path></g></svg>&nbsp;</button> -->
-  </span>
+  </div><p>
 </div>
-<div class="wrap">
+<div class="item">
   <div>&nbsp; Схема ж/д Москвы и МО </div>
-  <div class="gray en smaller1"><i>&nbsp; Moscow Railroad </i></div>
-  <span class="nowrap smaller1"> &nbsp;
+  <div class="inlbl"><i>&nbsp; Moscow Railroad </i></div>
+  <div class="rfloat"> &nbsp;
     <a class="light" href="nv/mosrails.html">Canvas</a> &emsp;
-    <a class="light" href="svg/mosrails.html">SVG</a>
-  </span>
+    <a class="light" href="svg/mosrails.html">SVG</a> &nbsp;
+  </div><p>
 </div>
-<div class="wrap">
+<div class="item">
   <div>&nbsp; Схема метро Петербурга </div>
-  <div class="gray en smaller1"><i>&nbsp; St.Petersburg Metro</i></div>
-  <span class="nowrap smaller1"> &nbsp;
+  <div class="inlbl"><i>&nbsp; St.Petersburg Metro</i></div>
+  <div class="rfloat"> &nbsp;
     <span class="dis">Canvas</span> &emsp;
-    <a class="light" href="svg/metrospb.html">SVG</a> &emsp; 
+    <a class="light" href="svg/metrospb.html">SVG</a> &nbsp; 
     <!-- <button onclick="location.href='https://dzen.ru/egax.ru?donate=true'" title="Поддержать проект">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="10 23 46 24"><g fill="currentColor"><circle cx="37.5" cy="27.5" r="10"></circle><path d="M17.5 40v-3 c0-.553-.448-1-1-1h-5c-.552 0-1 .447-1 1v17c0 .553.448 1 1 1h5c.552 0 1-.447 1-1v-14 H26c2.791 0 5.189 1.897 5.833 4.615.053.226.254.385.486.385H41c1.103 0 2 .897 2 2s-.897 2-2 2h-9.529c-.276 0-.5.224-.5.5s.224.5.5.5H41c.45 0 .872-.106 1.256-.285.014-.005.029-.004.043-.01l11.423-5.354c.059-.021 1.479-.471 2.165 1.098C56.198 45.919 55.852 46.892 55.063 47.291l-16.767 9.147c-1.236.898-2.963 1.163-4.495.692L17.5 51.616"></path></g></svg>&nbsp;</button> -->
-  </span>
+  </div><p>
 </div>
-<div class="wrap">
+<div class="item">
   <div>&nbsp; Схема метро Новосибирска </div>
-  <div class="gray en smaller1"><i>&nbsp; Novosibirsk Metro</i></div>
-  <span class="nowrap smaller1"> &nbsp;
+  <div class="inlbl"><i>&nbsp; Novosibirsk Metro</i></div>
+  <div class="rfloat"> &nbsp;
     <a class="light" href="nv/metro-novosib.html">Canvas</a> &emsp;
-    <a class="light" href="svg/metro-novosib.html">SVG</a>
-  </span>
+    <a class="light" href="svg/metro-novosib.html">SVG</a> &nbsp;
+  </div><p>
 </div>
-<div class="wrap">
+<div class="item">
   <div>&nbsp; Схема метро Киева </div>
-  <div class="gray en smaller1"><i>&nbsp; Kiev Metro</i></div>
-  <span class="nowrap smaller1"> &nbsp;
+  <div class="inlbl"><i>&nbsp; Kiev Metro</i></div>
+  <div class="rfloat"> &nbsp;
     <a class="light" href="nv/metro-kiev.html">Canvas</a> &emsp;
-    <a class="light" href="svg/metro-kiev.html">SVG</a>
-  </span>
+    <a class="light" href="svg/metro-kiev.html">SVG</a> &nbsp;
+  </div><p>
 </div>
-<div class="wrap">
+<div class="item">
   <div>&nbsp; Схема метро Тбилиси </div>
-  <div class="gray en smaller1"><i>&nbsp; Tbilisi Metro</i></div>
-  <span class="nowrap smaller1"> &nbsp;
+  <div class="inlbl"><i>&nbsp; Tbilisi Metro</i></div>
+  <div class="rfloat"> &nbsp;
     <a class="light" href="nv/metro-tbilisi.html">Canvas</a> &emsp;
-    <span class="dis">SVG</span>
-  </span>
+    <span class="dis">SVG</span> &nbsp;
+  </div><p>
 </div>
 </div>
-<div id="ya_rtb_0"></div>
-</div>
-
-<div class="main nostripe inlbl">
-  Просмотр, панорама изображений, использование цветов в <i>canvas</i>, градиента, анимации в <i>svg</i>.
 </div>
 
+<div class="col inlbl">
 <div class="msgtext">
-<div class="inlbl stripe">
-<div class="wrap">
+  Просмотр, панорама и скалирование изображений, использование цветов в <i>canvas</i>, градиента и анимации в <i>svg</i>.
+</div>
+<div class="msgtext wrap">
+<div class="item">
   <div>&nbsp; Просмотровщик картинок </div>
-  <div class="gray en smaller1"><i>&nbsp; Image Viewer</i></div>
-  <span class="nowrap smaller1"> &nbsp;
+  <div class="inlbl"><i>&nbsp; Image Viewer</i></div>
+  <div class="rfloat"> &nbsp;
     <a class="light" href="nv/imgviewer.html">Canvas</a> &emsp;
-    <a class="light" href="svg/imgviewer.html">SVG</a>
-  </span>
+    <a class="light" href="svg/imgviewer.html">SVG</a> &nbsp;
+  </div><p>
 </div>
-<div class="wrap">
+<div class="item">
   <div>&nbsp; Масштабирование картинки </div>
-  <div class="gray en smaller1"><i>&nbsp; Pan Zoom</i></div>
-  <span class="nowrap smaller1"> &nbsp;
+  <div class="inlbl"><i>&nbsp; Pan Zoom</i></div>
+  <div class="rfloat"> &nbsp;
     <span class="dis">Canvas</span> &emsp;
-    <a class="light" href="svg/panzoom.html">SVG</a>
-  </span>
+    <a class="light" href="svg/panzoom.html">SVG</a> &nbsp;
+  </div><p>
 </div>
-<div class="wrap">
+<div class="item">
   <div>&nbsp; Ресайзинг SVG-карты </div>
-  <div class="gray en smaller1"><i>&nbsp; Pan Map</i></div>
-  <span class="nowrap smaller1"> &nbsp;
+  <div class="inlbl"><i>&nbsp; Pan Map</i></div>
+  <div class="rfloat"> &nbsp;
     <span class="dis">Canvas</span> &emsp;
-    <a class="light" href="svg/panmap.html">SVG</a>
-  </span>
+    <a class="light" href="svg/panmap.html">SVG</a> &nbsp;
+  </div><p>
 </div>
-<div class="wrap">
+<div class="item">
   <div>&nbsp; Анимация движения </div>
-  <div class="gray en smaller1"><i>&nbsp; Roller Ball</i></div>
-  <span class="nowrap smaller1"> &nbsp;
+  <div class="inlbl"><i>&nbsp; Roller Ball</i></div>
+  <div class="rfloat"> &nbsp;
     <span class="dis">Canvas</span> &emsp;
-    <a class="light" href="svg/rollerball.html">SVG</a>
-  </span>
+    <a class="light" href="svg/rollerball.html">SVG</a> &nbsp;
+  </div><p>
 </div>
-<div class="wrap">
+<div class="item">
   <div>&nbsp; Настенные часы </div>
-  <div class="gray en smaller1"><i>&nbsp; Wall Clock</i></div>
-  <span class="nowrap smaller1"> &nbsp;
+  <div class="inlbl"><i>&nbsp; Wall Clock</i></div>
+  <div class="rfloat"> &nbsp;
     <span class="dis">Canvas</span> &emsp;
-    <a class="light" href="svg/clock.html">SVG</a>
-  </span>
+    <a class="light" href="svg/clock.html">SVG</a> &nbsp;
+  </div><p>
 </div>
-<div class="wrap">
+<div class="item">
   <div>&nbsp; Футбольные схемы </div>
-  <div class="gray en smaller1"><i>&nbsp; Soccer Schemes</i></div>
-  <span class="nowrap smaller1"> &nbsp;
+  <div class="inlbl"><i>&nbsp; Soccer Schemes</i></div>
+  <div class="rfloat"> &nbsp;
     <a class="light" href="nv/soccerf.html">Canvas</a> &emsp;
-    <span class="dis">SVG</span>
-  </span>
+    <span class="dis">SVG</span> &nbsp;
+  </div><p>
 </div>
 </div>
-<div id="ya_rtb_1"></div>
-</div>
-
-<div class="main nostripe inlbl">
-  Интерактивные карты мира со списками городов и стран в различных проекциях.
-  Идея и стиль позаимствованы с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a>
 </div>
 
-<div class="msgtext"">
-<div class="inlbl stripe">
-<div class="wrap">
-  <div>&nbsp; Атлас мира </div>
-  <div class="gray en smaller1"><i>&nbsp; Atlas</i></div>
-  <span class="nowrap smaller1"> &nbsp;
-    <a class="light" href="nv/atlas.html">Canvas</a> &emsp;
-    <a class="light" href="svg/atlas.html">SVG</a>
-  </span>
-</div>
-<div class="wrap">
-  <div>&nbsp; Города мира </div>
-  <div class="gray en smaller1"><i>&nbsp; Cities</i></div>
-  <span class="nowrap smaller1"> &nbsp;
-    <a class="light" href="nv/cities.html">Canvas</a> &emsp;
-    <span class="dis">SVG</span>
-  </span>
-</div>
-<div class="wrap">
-  <div>&nbsp; Города России без расстояний </div>
-  <div class="gray en smaller1"><i>&nbsp; Russian Cities</i></div>
-  <span class="nowrap smaller1"> &nbsp;
-    <a class="light" href="nv/russ.html">Canvas</a> &emsp;
-    <span class="dis">SVG</span>
-  </span>
-</div>
-<div class="wrap">
-  <div>&nbsp; Страны мира </div>
-  <div class="gray en smaller1"><i>&nbsp; Countries</i></div>
-  <span class="nowrap smaller1"> &nbsp;
-    <a class="light" href="nv/countries.html">Canvas</a> &emsp;
-    <a class="light" href="svg/countries.html">SVG</a>
-  </span>
-</div>
-<div class="wrap">
-  <div>&nbsp; Население мира </div>
-  <div class="gray en smaller1"><i>&nbsp; Population</i></div>
-  <span class="nowrap smaller1"> &nbsp;
-    <a class="light" href="nv/usemap.html">Canvas</a> &emsp;
-    <a class="light" href="svg/usemap.html">SVG</a>
-  </span>
-</div>
-<div class="wrap">
-  <div>&nbsp; Население США </div>
-  <div class="gray en smaller1"><i>&nbsp; Population USA</i></div>
-  <span class="nowrap smaller1"> &nbsp;
-    <span class="dis">Canvas</span> &emsp;
-    <a class="light" href="svg/us.html">SVG</a>
-  </span>
-</div>
-<div class="wrap">
-  <div>&nbsp; Маршруты на карте </div>
-  <div class="gray en smaller1"><i>&nbsp; Routes</i></div>
-  <span class="nowrap smaller1"> &nbsp;
-    <a class="light" href="nv/merc.html">Canvas</a> &emsp;
-    <span class="dis">SVG</span>
-  </span>
-</div>
-</div>
-<div id="ya_rtb_2"></div>
-</div>
-
-<div class="main nostripe inlbl">
-  Отрисовка картинки в канвасе <i>3d</i> с проецированием через шейдеры <i>WebGL</i> на основе примеров с сайта <a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a>.
-  Звездное небо в канвасе <i>2d</i> и <i>3d</i> с использованием скриптов <a href="//github.com/mrdoob/three.js">three.js</a>.
-</div>
-
+<div class="col inlbl">
 <div class="msgtext">
-<div class="inlbl stripe">
-<div class="wrap">
+  Интерактивные карты с городами и странами мира в различных проекциях.
+  Идея заимствована с примеров <a href="http://www.highcharts.com/maps/demo">highmaps</a>
+</div>
+<div class="msgtext wrap">
+<div class="item">
+  <div>&nbsp; Атлас мира </div>
+  <div class="inlbl"><i>&nbsp; Atlas</i></div>
+  <div class="rfloat"> &nbsp;
+    <a class="light" href="nv/atlas.html">Canvas</a> &emsp;
+    <a class="light" href="svg/atlas.html">SVG</a> &nbsp;
+  </div><p>
+</div>
+<div class="item">
+  <div>&nbsp; Города мира </div>
+  <div class="inlbl"><i>&nbsp; Cities</i></div>
+  <div class="rfloat"> &nbsp;
+    <a class="light" href="nv/cities.html">Canvas</a> &emsp;
+    <span class="dis">SVG</span> &nbsp;
+  </div><p>
+</div>
+<div class="item">
+  <div>&nbsp; Города России без расстояний </div>
+  <div class="inlbl"><i>&nbsp; Russian Cities</i></div>
+  <div class="rfloat"> &nbsp;
+    <a class="light" href="nv/russ.html">Canvas</a> &emsp;
+    <span class="dis">SVG</span> &nbsp;
+  </div><p>
+</div>
+<div class="item">
+  <div>&nbsp; Страны мира </div>
+  <div class="inlbl"><i>&nbsp; Countries</i></div>
+  <div class="rfloat"> &nbsp;
+    <a class="light" href="nv/countries.html">Canvas</a> &emsp;
+    <a class="light" href="svg/countries.html">SVG</a> &nbsp;
+  </div><p>
+</div>
+<div class="item">
+  <div>&nbsp; Население мира </div>
+  <div class="inlbl"><i>&nbsp; Population</i></div>
+  <div class="rfloat"> &nbsp;
+    <a class="light" href="nv/usemap.html">Canvas</a> &emsp;
+    <a class="light" href="svg/usemap.html">SVG</a> &nbsp;
+  </div><p>
+</div>
+<div class="item">
+  <div>&nbsp; Население США </div>
+  <div class="inlbl"><i>&nbsp; Population USA</i></div>
+  <div class="rfloat"> &nbsp;
+    <span class="dis">Canvas</span> &emsp;
+    <a class="light" href="svg/us.html">SVG</a> &nbsp;
+  </div><p>
+</div>
+<!-- <div class="item">
+  <div>&nbsp; Маршруты на карте </div>
+  <div class="inlbl"><i>&nbsp; Routes</i></div>
+  <div class="rfloat"> &nbsp;
+    <a class="light" href="nv/merc.html">Canvas</a> &emsp;
+    <span class="dis">SVG</span> &nbsp;
+  </div><p>
+</div> -->
+</div>
+</div>
+
+<div class="col inlbl">
+<div class="msgtext">
+  Рисование в канвасе <i>2d</i> и <i>3d</i> с использованием шейдеров <i>WebGL</i> на основе примеров с <a href="http://vcg.isti.cnr.it/~tarini/spinnableworldmaps/">Spinnable World Maps</a> и 
+  скриптов <a href="//github.com/mrdoob/three.js">three.js</a>.
+</div>
+<div class="msgtext wrap">
+<div class="item">
   <div>&nbsp; Атлас 3D </div>
-  <div class="gray en smaller1"><i>&nbsp; Atlas 3D</i></div>
-  <span class="nowrap smaller1"> &nbsp;
+  <div class="inlbl"><i>&nbsp; Atlas 3D</i></div>
+  <div class="rfloat"> &nbsp;
     <a class="light" href="nv/map3d.html">Canvas</a> &emsp;
-    <span class="dis">SVG</span>
-  </span>
+    <span class="dis">SVG</span> &nbsp;
+  </div><p>
 </div>
-<div class="wrap">
+<div class="item">
   <div>&nbsp; Звездное небо </div>
-  <div class="gray en smaller1"><i>&nbsp; Starry Sky</i></div>
-  <span class="nowrap smaller1"> &nbsp;
+  <div class="inlbl"><i>&nbsp; Starry Sky</i></div>
+  <div class="rfloat"> &nbsp;
     <a class="light" href="nv/starry.html">Canvas</a> &emsp;
-    <span class="dis">SVG</span>
-  </span>
+    <span class="dis">SVG</span> &nbsp;
+  </div><p>
 </div>
-<div class="wrap">
+<div class="item">
   <div>&nbsp; Звездное небо 3D </div>
-  <div class="gray en smaller1"><i>&nbsp; Sky 3D</i></div>
-  <span class="nowrap smaller1"> &nbsp;
+  <div class="inlbl"><i>&nbsp; Sky 3D</i></div>
+  <div class="rfloat"> &nbsp;
     <a class="light" href="nv/sky3d.html">Canvas</a> &emsp;
-    <span class="dis">SVG</span>
-  </span>
+    <span class="dis">SVG</span> &nbsp;
+  </div><p>
+</div>
 </div>
 </div>
 </div>
 
-<div id="footer" class="nostripe">
-  <div class="inlbl"><a href="//github.com/egaxegax/dbcartajs" target="_blank">Проект</a>&emsp;<a title="Поддержать проект" href="//dzen.ru/egax.ru?donate=true">Поддержать</a>&ensp;&copy;</div>
+<br>
+
+<div id="footer">
+  <p><a href="//github.com/egaxegax/dbcartajs" target="_blank">Проект</a>&emsp;<a title="Поддержать проект" href="//dzen.ru/egax.ru?donate=true">Поддержать</a>&ensp;&copy;</p>
 </div>
 
 </div>
 <script>
    // reklama
   if(window.addYaRTB_Block) ['ya_rtb_0'/*, 'ya_rtb_1', 'ya_rtb_2'*/].map(function(elid){
-    document.getElementById(elid).className = 'inlbl mw mh';
     addYaRTB_Block(elid, YA_RTB['dbcartajs']);
   });
 </script>

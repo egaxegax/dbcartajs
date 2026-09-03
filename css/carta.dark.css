@@ -7,8 +7,6 @@ b em { color: #f4c430; }
 #header { background:#323232; }
 #header em { color:#dedede; }
 #header .active em { color:#f4c430; }
-#header .yin { fill:#fff; stroke:#fff; }
-#header .yang { fill:#777; stroke:#777; }
 .dis { color:#323232; }
-.msgtext { background:#323232; }
+.wrap { background:#323232; }
 .light { color:#9ac495; }

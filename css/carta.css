@@ -4,8 +4,5 @@ body { background:#f5f5f5; color:#333; }
 #header { background:#d2e0f0; }
 #header em { color:#777; }
 #header .active em { color:#3c677b; }
-#header .yin { fill:#777; stroke:#777; }
-#header .yang { fill:#fff; stroke:#fff; }
 .dis { color:#fff; }
-.msgtext { background:#fff; }
-.nostripe{ background:#f0f0f0; }
+.wrap { background:#fff; }
