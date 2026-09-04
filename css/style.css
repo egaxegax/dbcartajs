@@ -11,10 +11,10 @@ svg { cursor:pointer; -webkit-tap-highlight-color: transparent; }
 @media (min-width:1150px){ #root { max-width:1150px; } }
 @media (max-width:1150px){ #root { max-width:850px; } }
 #footer { text-align:center; font-size:small; }
-.col { flex:1; min-width:250px; margin-right:5px; }
+.col { flex:1; min-width:250px; margin:5px 5px 0 0; }
 .inlbl { display:inline-block; }
 .rfloat { float:right; }
-.msgtext { padding:5px 10px 5px 10px; }
+.msgtext { padding:5px 10px 10px 10px; }
 .nowrap { white-space:nowrap; }
 .scroll { overflow: auto; }
 .item { font-size:93.75%; }
