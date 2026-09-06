@@ -14,7 +14,7 @@ egax@bk.ru, 2015-25.
 <link rel="icon" href="../img/fav.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../css/style.css?251019">
 <style>html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
-<script src="//egaxegax.github.io/static/js/metrics.js?260405"></script>
+<script src="/static/js/metrics.js?260405"></script>
 </head>
 <body>
 <table style="border-collapse:collapse">
@@ -23,7 +23,7 @@ egax@bk.ru, 2015-25.
   <h1 style="display:inline"><a href="../index.html" title="Метро Москвы (на главную)">Метро Москвы</a></h1>
   <i id="buildDate" style="color:gray; font-size:small; white-space:nowrap;"></i>
 </td>
-<td align="right"> 
+<td> 
   <select id="cInches" onchange="clchange(this)">
   <option disabled selected>Пересадки...</option>
   <option id="inch">&#9745; Метро</option>
@@ -33,9 +33,9 @@ egax@bk.ru, 2015-25.
   <option id="inch_ext">&emsp; Строящиеся</option>
   </select>&nbsp;
   <div style="display:inline-block">
-  <button onclick="alert('Выберите названия двух станций для построения маршрута. \nОчистить путь можно по двойному клику')" title="Справка">&nbsp;<svg width="16" height="16" xmlns="http://www.3.org/2000/svg" viewBox="4 4 16 16"><g stroke="currentColor" fill="none" stroke-linecap="round" stroke-width="2"><path d="M9 10C9 8.64164 10.1503 7 12 7C13.8497 7 15 8.59591 15 10C15 12.1747 12 12.0587 12 14.5" /><path d="M12 18.5V17.5" /></g></svg>&nbsp;</button>
-  <button onclick="DC.savetoimage()" title="Сохранить скриншот...">&nbsp;<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="4 0 18 22"><g stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20L12 4" /><path d="M5 13L12 20L19 13" /></g></svg>&nbsp;</button>
-  <button onclick="location.href='https://dzen.ru/egax.ru?donate=true'" title="Поддержать проект">&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="10 23 46 24"><g fill="currentColor"><circle cx="37.5" cy="27.5" r="10"></circle><path d="M17.5 40v-3 c0-.553-.448-1-1-1h-5c-.552 0-1 .447-1 1v17c0 .553.448 1 1 1h5c.552 0 1-.447 1-1v-14 H26c2.791 0 5.189 1.897 5.833 4.615.053.226.254.385.486.385H41c1.103 0 2 .897 2 2s-.897 2-2 2h-9.529c-.276 0-.5.224-.5.5s.224.5.5.5H41c.45 0 .872-.106 1.256-.285.014-.005.029-.004.043-.01l11.423-5.354c.059-.021 1.479-.471 2.165 1.098C56.198 45.919 55.852 46.892 55.063 47.291l-16.767 9.147c-1.236.898-2.963 1.163-4.495.692L17.5 51.616"></path></g></svg>&nbsp;</button>
+  <button onclick="alert('Выберите названия двух станций для построения маршрута. \nОчистить путь можно по двойному клику')" title="Справка"> &#63; </button>
+  <button onclick="DC.savetoimage()" title="Сделать скриншот"> &#8595; </button>
+  <button onclick="location.href='https://dzen.ru/egax.ru?donate=true'" title="Поддержать проект"> &#8599; </button>
   </div>&nbsp;
 </td>
 </tr>
@@ -46,7 +46,7 @@ egax@bk.ru, 2015-25.
 </tr>
 </table>
 <script src="../js/dbcartasvg.js"></script>
-<script src="../js/data/mosmetro.js?250928"></script>
+<script src="../js/data/mosmetro.js?260906"></script>
 <script src="../js/alg/bfs.js"></script>
 <script>
 var mopt = {};
@@ -188,6 +188,7 @@ DC.extend(mopt, {
   r15:       route(    {fg: '#de62be'}),
   r16:       route(    {fg: '#554d26'}),
   r16_ext:   route_ext({fg: '#554d26'}),
+  r17:       route(    {fg: '#283040'}),
   inch:      inch(),
   inch_d:    inch_d(),
   inch_ext:  inch_ext(),
@@ -254,7 +255,7 @@ DC.extend(mopt, {
   s4_5:      inst_d(  {fg: mopt['r4'].fg}),
   s4_6:      station( {fg: mopt['r4'].fg,    anchor: ['middle','bottom']}),
   s4_7:      station( {fg: mopt['r4'].fg,    anchor: ['end',   'top']}),
-  s4A:       station( {fg: mopt['r4A'].fg,   anchor: ['start', 'middle']}),
+  s4A:       station( {fg: mopt['r4A'].fg,   anchor: ['start', 'bottom']}),
   s4A_1:     inst(    {fg: mopt['r4A'].fg,   anchor: ['start', 'bottom']}),
   s4A_2:     inst(    {fg: mopt['r4A'].fg,   anchor: ['end',   'middle']}),
   s5:        inst(    {fg: mopt['r5'].fg}),
@@ -347,6 +348,10 @@ DC.extend(mopt, {
   s16_1:     inst(    {fg: mopt['r16'].fg,   anchor: ['start', 'top']}),
   s16_2:     inst_d(  {fg: mopt['r16'].fg,   anchor: ['start', 'bottom']}),
   s16_3:     station( {fg: mopt['r16'].fg,   anchor: ['middle','top']}),
+  s17:       station( {fg: mopt['r17'].fg,   anchor: ['middle','bottom']}),
+  s17_1:     inst(    {fg: mopt['r17'].fg,   bg: mopt['r11'].bg, anchor: ['start', 'top']}),
+  s17_2:     inst(    {fg: mopt['r17'].fg,   bg: mopt['r14'].bg, anchor: ['start']}),
+  s17_3:     station( {fg: mopt['r17'].fg,   anchor: ['end']}),
   smcd1:     st_mcd(  {fg: mopt['rmcd1'].fg, anchor: ['start', 'middle']}),
   smcd1_1:   inst_mcd({fg: mopt['rmcd1'].fg}),
   smcd2:     st_mcd(  {fg: mopt['rmcd2'].fg}),

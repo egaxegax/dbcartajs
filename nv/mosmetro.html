@@ -14,12 +14,12 @@ egax@bk.ru, 2013-25.
 <link rel="icon" href="../img/fav.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../css/style.css?250726">
 <style>html,body,table{overflow:hidden;margin:0;padding:0;width:100%;height:100%}</style>
-<script src="//egaxegax.github.io/static/js/metrics.js?260405"></script>
+<script src="/static/js/metrics.js?260906"></script>
 </head>
 <body>
 <table style="border-collapse:collapse">
 <tr style="height:1px; border-bottom:1px solid #f4f4f4">
-<td width="40%" valign="center">
+<td width="30%" class="nowrap" valign="center">
   <a href="../index.html" title="Метро Москвы (на главную)">
     <h1>Метро Москвы</h1>
   </a>
@@ -213,6 +213,7 @@ DV.extend(DV.mopt, {
   r15:       route(    {fg: '#de62be'}),
   r16:       route(    {fg: '#554d26'}),
   r16_ext:   route_ext({fg: '#554d26'}),
+  r17:       route(    {fg: '#283040'}),
   inch:      inch(),
   inch_d:    inch_d(),
   inch_ext:  inch_ext(),
@@ -279,7 +280,7 @@ DV.extend(DV.mopt, {
   s4_5:      inst_d(  {fg: DV.mopt['r4'].fg}),
   s4_6:      station( {fg: DV.mopt['r4'].fg,    anchor: ['center','bottom']}),
   s4_7:      station( {fg: DV.mopt['r4'].fg,    anchor: ['end',   'top']}),
-  s4A:       station( {fg: DV.mopt['r4A'].fg,   anchor: ['start', 'middle']}),
+  s4A:       station( {fg: DV.mopt['r4A'].fg,   anchor: ['start', 'bottom']}),
   s4A_1:     inst(    {fg: DV.mopt['r4A'].fg,   anchor: ['start', 'bottom']}),
   s4A_2:     inst(    {fg: DV.mopt['r4A'].fg,   anchor: ['end',   'middle']}),
   s5:        inst(    {fg: DV.mopt['r5'].fg}),
@@ -372,6 +373,10 @@ DV.extend(DV.mopt, {
   s16_1:     inst(    {fg: DV.mopt['r16'].fg,   anchor: ['start', 'top']}),
   s16_2:     inst_d(  {fg: DV.mopt['r16'].fg,   anchor: ['start', 'bottom']}),
   s16_3:     station( {fg: DV.mopt['r16'].fg,   anchor: ['center','top']}),
+  s17:       station( {fg: DV.mopt['r17'].fg,   anchor: ['middle','bottom']}),
+  s17_1:     inst(    {fg: DV.mopt['r17'].fg,   bg: DV.mopt['r11'].bg, anchor: ['start', 'top']}),
+  s17_2:     inst(    {fg: DV.mopt['r17'].fg,   bg: DV.mopt['r14'].bg, anchor: ['start']}),
+  s17_3:     station( {fg: DV.mopt['r17'].fg,   anchor: ['end','middle']}),
   smcd1:     st_mcd(  {fg: DV.mopt['rmcd1'].fg, anchor: ['start', 'middle']}),
   smcd1_1:   inst_mcd({fg: DV.mopt['rmcd1'].fg}),
   smcd2:     st_mcd(  {fg: DV.mopt['rmcd2'].fg}),
