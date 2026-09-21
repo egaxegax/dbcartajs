@@ -5,7 +5,7 @@ input,select,button { border-radius:4px; border:1px solid #afafaf; background: t
 svg { cursor:pointer; -webkit-tap-highlight-color: transparent; }
 #header { text-align:center; line-height:30px; height:30px; font-size:smaller; }
 #header a { text-decoration:none; }
-#header * { padding:0 5px; }
+#header * { padding:0 5px; display:inline-block; }
 #root { min-height:calc(100vh - 30px); margin:0px auto 0px auto; }
 #content { display:flex; flex-wrap:wrap; }
 @media (min-width:1150px){ #root { max-width:1150px; } }
