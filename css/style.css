@@ -3,7 +3,7 @@ a,a:active,a:focus { color:#3c677b; outline:none; text-decoration-thickness: 0.4
 b,i,em { color:#777; }
 input,select,button { border-radius:4px; border:1px solid #afafaf; background: transparent; margin:0; padding:0 5px; font-size:small; }
 svg { cursor:pointer; -webkit-tap-highlight-color: transparent; }
-#header { text-align:center; line-height:30px; height:30px; font-size:smaller; }
+#header { text-align:center; line-height:25px; height:25px; font-size:smaller; }
 #header a { text-decoration:none; }
 #header * { padding:0 5px; display:inline-block; }
 #root { min-height:calc(100vh - 30px); margin:0px auto 0px auto; }
